@@ -1,6 +1,9 @@
+import { ThemeToggle } from "@/components/theme-toggle";
+
 export default function HomePage() {
   return (
     <main className="page-shell">
+      <ThemeToggle />
       <section aria-labelledby="page-title">
         <p className="eyebrow">Fridgy</p>
         <h1 id="page-title">Gotowe do developmentu.</h1>
