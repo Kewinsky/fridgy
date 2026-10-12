@@ -3,9 +3,10 @@ export default function HomePage() {
     <main className="page-shell">
       <section aria-labelledby="page-title">
         <p className="eyebrow">Fridgy</p>
-        <h1 id="page-title">Ready for development.</h1>
+        <h1 id="page-title">Gotowe do developmentu.</h1>
         <p className="summary">
-          The web application is set up and ready for its first feature.
+          Aplikacja webowa i połączenie z Supabase są przygotowane pod pierwszą
+          funkcję.
         </p>
       </section>
     </main>
