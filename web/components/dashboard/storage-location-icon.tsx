@@ -1,26 +1,22 @@
-import {
-  LayoutGridIcon,
-  PackageIcon,
-  RefrigeratorIcon,
-  SnowflakeIcon,
-} from "lucide-react";
-
 import type { StorageLocation } from "@/lib/demo-data";
+import { cn } from "@/lib/utils";
 
-const icons = {
-  Wszystkie: LayoutGridIcon,
-  Lodówka: RefrigeratorIcon,
-  Zamrażarka: SnowflakeIcon,
-  Spiżarnia: PackageIcon,
+export const storageLocationEmojis = {
+  Lodówka: "🧊",
+  Zamrażarka: "❄️",
+  Spiżarnia: "🥫",
 } as const;
 
 export function StorageLocationIcon({
   location,
   className,
 }: {
-  location: StorageLocation | "Wszystkie";
+  location: StorageLocation;
   className?: string;
 }) {
-  const Icon = icons[location];
-  return <Icon className={className} aria-hidden="true" />;
+  return (
+    <span className={cn("text-base leading-none", className)} aria-hidden="true">
+      {storageLocationEmojis[location]}
+    </span>
+  );
 }

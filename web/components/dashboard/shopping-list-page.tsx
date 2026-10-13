@@ -6,6 +6,14 @@ import { toast } from "sonner";
 
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
   formatShoppingList,
@@ -49,6 +57,7 @@ export function ShoppingListPage() {
     getServerShoppingListSnapshot,
   );
   const [name, setName] = useState("");
+  const [clearDialogOpen, setClearDialogOpen] = useState(false);
 
   function updateItems(update: (current: ShoppingItem[]) => ShoppingItem[]) {
     writeShoppingList(window.localStorage, update(items));
@@ -68,6 +77,12 @@ export function ShoppingListPage() {
 
   function removeItem(id: string) {
     updateItems((current) => current.filter((item) => item.id !== id));
+  }
+
+  function clearList() {
+    updateItems(() => []);
+    setClearDialogOpen(false);
+    toast.success("Lista zakupów została wyczyszczona.");
   }
 
   async function shareList() {
@@ -100,9 +115,19 @@ export function ShoppingListPage() {
         title="Lista zakupów"
         description="Krótka lista rzeczy, których brakuje w domu. Udostępniana lista pomija kupione produkty."
         actions={
-          <Button variant="outline" className="h-11" onClick={shareList}>
-            <Share2Icon aria-hidden="true" /> Udostępnij
-          </Button>
+          <>
+            <Button variant="outline" className="h-11" onClick={shareList}>
+              <Share2Icon aria-hidden="true" /> Udostępnij
+            </Button>
+            <Button
+              variant="destructive"
+              className="h-11"
+              disabled={!items.length}
+              onClick={() => setClearDialogOpen(true)}
+            >
+              <Trash2Icon aria-hidden="true" /> Wyczyść
+            </Button>
+          </>
         }
       />
       <section className="app-card mx-auto max-w-2xl p-5 sm:p-6">
@@ -136,6 +161,36 @@ export function ShoppingListPage() {
           <div className="py-12 text-center"><ShoppingBasketIcon className="mx-auto text-muted-foreground" aria-hidden="true" /><p className="mt-3 font-bold">Lista jest pusta</p></div>
         ) : null}
       </section>
+
+      <Dialog open={clearDialogOpen} onOpenChange={setClearDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Wyczyścić listę zakupów?</DialogTitle>
+            <DialogDescription>
+              Wszystkie produkty z listy zostaną usunięte. Tej operacji nie
+              można cofnąć.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              className="h-11"
+              onClick={() => setClearDialogOpen(false)}
+            >
+              Anuluj
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              className="h-11"
+              onClick={clearList}
+            >
+              <Trash2Icon aria-hidden="true" /> Wyczyść listę
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

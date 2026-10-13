@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   ChefHatIcon,
+  BookOpenCheckIcon,
   HomeIcon,
   LeafIcon,
   ListChecksIcon,
@@ -19,19 +20,55 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const navigation = [
-  { href: "/dashboard", label: "Przegląd", shortLabel: "Start", icon: HomeIcon },
-  { href: "/dashboard/zapasy", label: "Moje zapasy", shortLabel: "Zapasy", icon: ShoppingBasketIcon },
-  { href: "/dashboard/co-ugotowac", label: "Co ugotować?", shortLabel: "Ugotuj", icon: ChefHatIcon },
-  { href: "/dashboard/lista-zakupow", label: "Lista zakupów", shortLabel: "Lista", icon: ListChecksIcon },
-  { href: "/dashboard/ustawienia", label: "Ustawienia", shortLabel: "Ustawienia", icon: SettingsIcon },
+  {
+    href: "/dashboard",
+    label: "Przegląd",
+    shortLabel: "Start",
+    icon: HomeIcon,
+  },
+  {
+    href: "/dashboard/zapasy",
+    label: "Moje zapasy",
+    shortLabel: "Zapasy",
+    icon: ShoppingBasketIcon,
+  },
+  {
+    href: "/dashboard/co-ugotowac",
+    label: "Co ugotować?",
+    shortLabel: "Ugotuj",
+    icon: ChefHatIcon,
+  },
+  {
+    href: "/dashboard/moje-przepisy",
+    label: "Moje przepisy",
+    shortLabel: "Przepisy",
+    icon: BookOpenCheckIcon,
+  },
+  {
+    href: "/dashboard/lista-zakupow",
+    label: "Lista zakupów",
+    shortLabel: "Lista",
+    icon: ListChecksIcon,
+  },
+  {
+    href: "/dashboard/ustawienia",
+    label: "Ustawienia",
+    shortLabel: "Ustawienia",
+    icon: SettingsIcon,
+  },
 ] as const;
 
 const mobileNavigation = [
   navigation[0],
   navigation[1],
-  { href: "/dashboard/dodaj-paragon", label: "Dodaj paragon", shortLabel: "Paragon", icon: ReceiptTextIcon },
+  {
+    href: "/dashboard/dodaj-paragon",
+    label: "Dodaj paragon",
+    shortLabel: "Paragon",
+    icon: ReceiptTextIcon,
+  },
   navigation[2],
-  navigation[3],
+  navigation[4],
 ] as const;
 
 export function DashboardShell({
@@ -43,6 +80,14 @@ export function DashboardShell({
 }) {
   const pathname = usePathname();
   const initial = email.charAt(0).toUpperCase();
+
+  if (pathname.startsWith("/dashboard/gotowanie/")) {
+    return (
+      <main className="min-h-dvh bg-background px-4 py-6 text-foreground sm:px-7 sm:py-10">
+        {children}
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-dvh bg-background text-foreground">
@@ -57,14 +102,20 @@ export function DashboardShell({
         <div className="px-5">
           <Button
             nativeButton={false}
-            render={<Link href="/dashboard/dodaj-paragon" aria-current={pathname.startsWith("/dashboard/dodaj-paragon") ? "page" : undefined} />}
+            render={
+              <Link
+                href="/dashboard/dodaj-paragon"
+                aria-current={
+                  pathname.startsWith("/dashboard/dodaj-paragon")
+                    ? "page"
+                    : undefined
+                }
+              />
+            }
             className="h-11 w-full"
           >
             Dodaj paragon
           </Button>
-          <p className="mt-2 text-center text-[11px] text-muted-foreground">
-            Zdjęcie lub plik PDF
-          </p>
         </div>
 
         <nav aria-label="Główna nawigacja" className="mt-7 space-y-1 px-4">
@@ -94,9 +145,12 @@ export function DashboardShell({
         </nav>
 
         <div className="mt-auto border-t border-border p-5">
-          <p className="truncate text-xs text-muted-foreground">{email}</p>
           <form action={signOut}>
-            <Button type="submit" variant="ghost" className="mt-2 h-11 w-full justify-start px-2">
+            <Button
+              type="submit"
+              variant="ghost"
+              className="w-full justify-start px-2"
+            >
               <LogOutIcon aria-hidden="true" />
               Wyloguj się
             </Button>
@@ -112,7 +166,9 @@ export function DashboardShell({
             </span>
             <span className="font-extrabold">Fridgy</span>
           </Link>
-          <p className="hidden text-sm text-muted-foreground lg:block">Twój dom</p>
+          <p className="hidden text-sm text-muted-foreground lg:block">
+            Twój dom
+          </p>
           <div className="flex items-center gap-2">
             <Link
               href="/dashboard/ustawienia"
@@ -132,9 +188,15 @@ export function DashboardShell({
         </div>
       </div>
 
-      <nav className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-border bg-card px-1 pb-[env(safe-area-inset-bottom)] lg:hidden" aria-label="Mobilna nawigacja">
+      <nav
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-border bg-card px-1 pb-[env(safe-area-inset-bottom)] lg:hidden"
+        aria-label="Mobilna nawigacja"
+      >
         {mobileNavigation.map(({ href, shortLabel, icon: Icon }) => {
-          const active = href === "/dashboard" ? pathname === href : pathname.startsWith(href);
+          const active =
+            href === "/dashboard"
+              ? pathname === href
+              : pathname.startsWith(href);
           return (
             <Link
               key={href}

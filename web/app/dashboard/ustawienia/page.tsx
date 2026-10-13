@@ -12,12 +12,24 @@ export const metadata: Metadata = {
 export default function SettingsPage() {
   return (
     <>
-      <PageHeader eyebrow="Twoje konto" title="Ustawienia" description="Podstawowe preferencje gospodarstwa domowego i wyglądu aplikacji." />
+      <PageHeader
+        eyebrow="Twoje konto"
+        title="Ustawienia"
+        description="Podstawowe preferencje gospodarstwa domowego i wyglądu aplikacji."
+      />
       <div className="grid gap-5 lg:grid-cols-2">
         <section className="app-card divide-y divide-border">
-          <Setting icon={HomeIcon} title="Gospodarstwo domowe" value="Twój dom" />
+          <Setting
+            icon={HomeIcon}
+            title="Gospodarstwo domowe"
+            value="Twój dom"
+          />
           <Setting icon={MapPinIcon} title="Region" value="Polska · PLN" />
-          <Setting icon={BellIcon} title="Przypomnienia" value="Codziennie o 18:00" />
+          <Setting
+            icon={BellIcon}
+            title="Przypomnienia"
+            value="Codziennie o 18:00"
+          />
         </section>
         <section className="app-card p-5">
           <div className="flex items-start gap-4">
@@ -26,17 +38,29 @@ export default function SettingsPage() {
             </span>
             <div>
               <h2 className="text-sm font-bold">Motyw kolorystyczny</h2>
-              <p className="mt-1 text-xs leading-5 text-muted-foreground">Wybierz jasny, ciemny lub automatyczny wygląd aplikacji.</p>
+              <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                Wybierz jasny, ciemny lub automatyczny wygląd aplikacji.
+              </p>
             </div>
           </div>
-          <div className="mt-5"><ThemeSettings /></div>
+          <div className="mt-5">
+            <ThemeSettings />
+          </div>
         </section>
       </div>
     </>
   );
 }
 
-function Setting({ icon: Icon, title, value }: { icon: typeof HomeIcon; title: string; value: string }) {
+function Setting({
+  icon: Icon,
+  title,
+  value,
+}: {
+  icon: typeof HomeIcon;
+  title: string;
+  value: string;
+}) {
   return (
     <div className="flex items-center gap-4 p-5">
       <span className="flex size-10 items-center justify-center rounded-lg bg-secondary text-primary">

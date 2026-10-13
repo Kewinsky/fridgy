@@ -12,9 +12,9 @@ export const productCategories = [
 
 export const productCategoryAppearance: Record<
   string,
-  { emoji: string; className: string }
+  { emoji?: string; className: string }
 > = {
-  Wszystkie: { emoji: "📦", className: "bg-secondary text-primary" },
+  Wszystkie: { className: "bg-secondary text-primary" },
   Owoce: { emoji: "🍎", className: "border-rose-300 bg-rose-100 text-rose-800 dark:border-rose-800 dark:bg-rose-950/60 dark:text-rose-200" },
   Nabiał: { emoji: "🥛", className: "border-sky-300 bg-sky-100 text-sky-800 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-200" },
   Warzywa: { emoji: "🥕", className: "border-emerald-300 bg-emerald-100 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-200" },

@@ -14,6 +14,10 @@ import {
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/dashboard/page-header";
+import {
+  FilterBadgeGroup,
+  type FilterBadgeOption,
+} from "@/components/dashboard/filter-badge-group";
 import { FreshnessLabel } from "@/components/dashboard/freshness-label";
 import {
   productCategories,
@@ -21,8 +25,10 @@ import {
 } from "@/components/dashboard/product-category-options";
 import { ProductEditDialog } from "@/components/dashboard/product-edit-dialog";
 import { ProductVisual } from "@/components/dashboard/product-visual";
-import { StorageLocationIcon } from "@/components/dashboard/storage-location-icon";
-import { Badge } from "@/components/ui/badge";
+import {
+  StorageLocationIcon,
+  storageLocationEmojis,
+} from "@/components/dashboard/storage-location-icon";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -45,64 +51,72 @@ import {
 } from "@/lib/inventory-actions";
 import { cn } from "@/lib/utils";
 
-const locations = ["Wszystkie", "Lodówka", "Zamrażarka", "Spiżarnia"] as const;
-const freshnessFilters: Array<{
-  value: "all" | FreshnessStatus;
-  label: string;
-  className: string;
-}> = [
+type LocationFilter = "Wszystkie" | StorageLocation;
+type CategoryFilter = "Wszystkie" | (typeof productCategories)[number];
+type FreshnessFilter = "all" | FreshnessStatus;
+
+const locationFilters: FilterBadgeOption<LocationFilter>[] = [
+  { value: "Wszystkie", label: "Wszystkie" },
+  { value: "Lodówka", label: "Lodówka", emoji: storageLocationEmojis.Lodówka },
+  { value: "Zamrażarka", label: "Zamrażarka", emoji: storageLocationEmojis.Zamrażarka },
+  { value: "Spiżarnia", label: "Spiżarnia", emoji: storageLocationEmojis.Spiżarnia },
+];
+const categoryFilters: FilterBadgeOption<CategoryFilter>[] = [
+  {
+    value: "Wszystkie",
+    label: "Wszystkie",
+  },
+  ...productCategories.map((category) => ({
+    value: category,
+    label: category,
+    emoji: productCategoryAppearance[category].emoji,
+    className: productCategoryAppearance[category].className,
+  })),
+];
+const freshnessFilters: FilterBadgeOption<FreshnessFilter>[] = [
   {
     value: "all",
-    label: "Wszystkie terminy",
-    className: "border-primary/50 bg-secondary text-primary",
+    label: "Wszystkie",
   },
   {
     value: "overdue",
     label: "Po terminie",
-    className:
-      "border-red-300 bg-red-100 text-red-800 dark:border-red-800 dark:bg-red-950/60 dark:text-red-200",
+    emoji: "⛔",
   },
   {
     value: "today",
     label: "Dzisiaj",
-    className:
-      "border-orange-300 bg-orange-100 text-orange-800 dark:border-orange-800 dark:bg-orange-950/60 dark:text-orange-200",
+    emoji: "🔥",
   },
   {
     value: "soon",
     label: "Wkrótce",
-    className:
-      "border-amber-300 bg-amber-100 text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-200",
+    emoji: "⏳",
   },
   {
     value: "week",
     label: "Ten tydzień",
-    className:
-      "border-blue-300 bg-blue-100 text-blue-800 dark:border-blue-800 dark:bg-blue-950/60 dark:text-blue-200",
+    emoji: "🗓️",
   },
   {
     value: "calm",
     label: "Na spokojnie",
-    className:
-      "border-emerald-300 bg-emerald-100 text-emerald-800 dark:border-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-200",
+    emoji: "🌿",
   },
 ];
 
 export function InventoryPage() {
   const [products, setProducts] = useState(demoProducts);
   const [query, setQuery] = useState("");
-  const [location, setLocation] = useState<"Wszystkie" | StorageLocation>(
-    "Wszystkie",
-  );
-  const [category, setCategory] = useState("Wszystkie");
-  const [freshness, setFreshness] = useState<"all" | FreshnessStatus>("all");
+  const [location, setLocation] = useState<LocationFilter>("Wszystkie");
+  const [category, setCategory] = useState<CategoryFilter>("Wszystkie");
+  const [freshness, setFreshness] = useState<FreshnessFilter>("all");
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const activeProducts = products.filter(
     (product) => product.status === "active",
   );
-  const categories = ["Wszystkie", ...productCategories];
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase("pl");
     return products.filter(
@@ -179,104 +193,50 @@ export function InventoryPage() {
         title="Moje zapasy"
         description={`${activeProducts.length} produktów wraz z informacją, co warto wykorzystać najpierw.`}
         actions={
-          <>
-            <Button
-              variant={editing ? "secondary" : "outline"}
-              className="h-11"
-              onClick={toggleEditing}
-            >
-              {editing ? (
-                <XIcon aria-hidden="true" />
-              ) : (
-                <PencilIcon aria-hidden="true" />
-              )}
-              {editing ? "Anuluj" : "Edytuj"}
-            </Button>
-            <Button
-              nativeButton={false}
-              render={<Link href="/dashboard/co-ugotowac" />}
-              variant="outline"
-              className="hidden h-11 sm:inline-flex"
-            >
-              <ChefHatIcon aria-hidden="true" /> Co ugotować?
-            </Button>
-          </>
+          <Button
+            nativeButton={false}
+            render={<Link href="/dashboard/co-ugotowac" />}
+            variant="outline"
+            className="hidden h-11 sm:inline-flex"
+          >
+            <ChefHatIcon aria-hidden="true" /> Co ugotować?
+          </Button>
         }
       />
 
-      <section className="app-card mb-5 p-4" aria-label="Filtry produktów">
-        <div className="flex flex-col gap-3 lg:flex-row">
-          <label className="relative flex-1">
-            <span className="sr-only">Szukaj produktów</span>
-            <SearchIcon
-              className="absolute left-3 top-3 size-5 text-muted-foreground"
-              aria-hidden="true"
-            />
-            <Input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Szukaj produktu..."
-              className="h-11 pl-10"
-            />
-          </label>
-          <div className="flex gap-2 overflow-x-auto pb-1 lg:pb-0">
-            {locations.map((item) => (
-              <Button
-                key={item}
-                variant={location === item ? "secondary" : "outline"}
-                className="h-11 shrink-0"
-                onClick={() => setLocation(item)}
-              >
-                <StorageLocationIcon location={item} />
-                {item}
-              </Button>
-            ))}
-          </div>
-        </div>
-        <div className="-mx-1 mt-3 flex gap-2 overflow-x-auto p-1">
-          {categories.map((item) => (
-            <Badge
-              key={item}
-              variant="outline"
-              render={<button type="button" aria-pressed={category === item} />}
-              onClick={() => setCategory(item)}
-              className={cn(
-                "h-8 cursor-pointer rounded-full px-3 text-xs font-semibold",
-                (productCategoryAppearance[item] ??
-                  productCategoryAppearance.Wszystkie).className,
-                category === item &&
-                  "ring-2 ring-current ring-offset-1 ring-offset-background",
-              )}
-            >
-              <span aria-hidden="true">
-                {
-                  (productCategoryAppearance[item] ??
-                    productCategoryAppearance.Wszystkie).emoji
-                }
-              </span>
-              {item}
-            </Badge>
-          ))}
-        </div>
-        <div className="-mx-1 mt-3 flex items-center gap-2 overflow-x-auto border-t border-border px-1 pt-3 pb-1">
-          {freshnessFilters.map((item) => (
-            <Badge
-              key={item.value}
-              variant="outline"
-              render={
-                <button type="button" aria-pressed={freshness === item.value} />
-              }
-              onClick={() => setFreshness(item.value)}
-              className={cn(
-                "h-8 cursor-pointer rounded-full px-3 text-xs font-semibold",
-                item.className,
-                freshness === item.value &&
-                  "ring-2 ring-current ring-offset-1 ring-offset-background",
-              )}
-            >
-              {item.label}
-            </Badge>
-          ))}
+      <section className="app-card mb-5 p-3" aria-label="Filtry produktów">
+        <label className="relative block">
+          <span className="sr-only">Szukaj produktów</span>
+          <SearchIcon
+            className="absolute left-3 top-3 size-5 text-muted-foreground"
+            aria-hidden="true"
+          />
+          <Input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Szukaj produktu..."
+            className="h-11 pl-10"
+          />
+        </label>
+        <div className="mt-2 grid divide-y divide-border xl:grid-cols-3 xl:divide-x xl:divide-y-0">
+          <FilterBadgeGroup
+            label="Miejsce przechowywania"
+            options={locationFilters}
+            value={location}
+            onChange={setLocation}
+          />
+          <FilterBadgeGroup
+            label="Kategoria produktu"
+            options={categoryFilters}
+            value={category}
+            onChange={setCategory}
+          />
+          <FilterBadgeGroup
+            label="Termin przydatności"
+            options={freshnessFilters}
+            value={freshness}
+            onChange={setFreshness}
+          />
         </div>
       </section>
 
@@ -354,54 +314,58 @@ export function InventoryPage() {
 
       <section className="app-card px-5">
         <div className="flex items-center justify-between border-b border-border py-4">
-          <h2 className="font-extrabold">{location}</h2>
-          <span className="text-xs text-muted-foreground">
-            {filtered.length} wyników
-          </span>
+          <h2 className="flex flex-wrap items-baseline gap-x-2 font-extrabold">
+            {location}
+            <span className="text-xs font-normal text-muted-foreground">
+              ({filtered.length} produktów)
+            </span>
+          </h2>
+          <Button
+            variant={editing ? "secondary" : "outline"}
+            className="h-11"
+            onClick={toggleEditing}
+          >
+            {editing ? (
+              <XIcon aria-hidden="true" />
+            ) : (
+              <PencilIcon aria-hidden="true" />
+            )}
+            {editing ? "Anuluj" : "Edytuj"}
+          </Button>
         </div>
         {filtered.length ? (
-          filtered.map((product) => (
-            <div
-              key={product.id}
-              className={cn(
-                "flex items-center gap-3 border-b border-border py-3.5 last:border-0 sm:gap-4",
-                selectedIds.has(product.id) && "bg-secondary/40",
-              )}
-            >
-              {editing ? (
-                <label
-                  htmlFor={`select-${product.id}`}
-                  className="flex size-11 shrink-0 cursor-pointer items-center justify-center"
-                >
+          filtered.map((product) =>
+            editing ? (
+              <label
+                key={product.id}
+                htmlFor={`select-${product.id}`}
+                className={cn(
+                  "flex cursor-pointer items-center gap-3 border-b border-border py-3.5 pl-2 transition-colors last:border-0 hover:bg-muted sm:gap-4",
+                  selectedIds.has(product.id) && "bg-secondary/40",
+                )}
+              >
+                <span className="flex size-11 shrink-0 items-center justify-center">
                   <Checkbox
                     id={`select-${product.id}`}
                     checked={selectedIds.has(product.id)}
                     onCheckedChange={() => toggleProduct(product.id)}
                   />
                   <span className="sr-only">Zaznacz {product.name}</span>
-                </label>
-              ) : null}
-              <ProductVisual category={product.category} />
-              <div className="min-w-0 flex-1">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  disabled={editing}
-                  className="h-auto max-w-full justify-start p-0 text-left text-sm font-bold text-foreground hover:bg-transparent hover:text-foreground hover:underline"
-                  onClick={() => setProductToEdit(product)}
-                >
-                  <span className="truncate">{product.name}</span>
-                </Button>
-                <p className="mt-1 truncate text-xs text-muted-foreground">
-                  {product.quantity.toLocaleString("pl-PL")} {product.unit} ·{" "}
-                  {product.storageLocation}
-                </p>
-                <div className="mt-2">
-                  <FreshnessLabel date={product.estimatedUseBy} />
-                </div>
-              </div>
-            </div>
-          ))
+                </span>
+                <ProductRowDetails product={product} />
+              </label>
+            ) : (
+              <Button
+                key={product.id}
+                type="button"
+                variant="ghost"
+                className="h-auto w-full justify-start gap-3 rounded-none border-x-0 border-t-0 border-b border-border py-3.5 pr-0 pl-2 text-left whitespace-normal last:border-0 hover:bg-muted sm:gap-4"
+                onClick={() => setProductToEdit(product)}
+              >
+                <ProductRowDetails product={product} />
+              </Button>
+            ),
+          )
         ) : (
           <div className="py-16 text-center">
             <SearchIcon
@@ -424,6 +388,26 @@ export function InventoryPage() {
           onSave={saveProduct}
         />
       ) : null}
+    </>
+  );
+}
+
+function ProductRowDetails({ product }: { product: DemoProduct }) {
+  return (
+    <>
+      <ProductVisual category={product.category} />
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-bold text-foreground">
+          {product.name}
+        </span>
+        <span className="mt-1 block truncate text-xs text-muted-foreground">
+          {product.quantity.toLocaleString("pl-PL")} {product.unit} ·{" "}
+          {product.storageLocation}
+        </span>
+        <span className="mt-2 block">
+          <FreshnessLabel date={product.estimatedUseBy} />
+        </span>
+      </span>
     </>
   );
 }
