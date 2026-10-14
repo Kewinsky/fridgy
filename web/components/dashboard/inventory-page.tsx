@@ -32,6 +32,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+  updateInventory,
+  useInventory,
+} from "@/components/dashboard/use-inventory";
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -39,7 +43,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import {
-  demoProducts,
   getFreshnessStatus,
   type DemoProduct,
   type FreshnessStatus,
@@ -106,7 +109,7 @@ const freshnessFilters: FilterBadgeOption<FreshnessFilter>[] = [
 ];
 
 export function InventoryPage() {
-  const [products, setProducts] = useState(demoProducts);
+  const products = useInventory();
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState<LocationFilter>("Wszystkie");
   const [category, setCategory] = useState<CategoryFilter>("Wszystkie");
@@ -162,7 +165,7 @@ export function InventoryPage() {
     const frozenUntil = new Date(Date.now() + 45 * 86_400_000)
       .toISOString()
       .slice(0, 10);
-    setProducts((current) =>
+    updateInventory((current) =>
       applyInventoryAction(current, selectedIds, action, frozenUntil),
     );
     toast.success(
@@ -177,7 +180,7 @@ export function InventoryPage() {
   }
 
   function saveProduct(updatedProduct: DemoProduct) {
-    setProducts((current) =>
+    updateInventory((current) =>
       current.map((product) =>
         product.id === updatedProduct.id ? updatedProduct : product,
       ),

@@ -2,14 +2,12 @@
 
 import { useRouter } from "next/navigation";
 import { ChefHatIcon, HeartIcon } from "lucide-react";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import type { Recipe } from "@/lib/demo-recipes";
 import { cn } from "@/lib/utils";
 import {
   changeFavorite,
-  recordCooking,
   useRecipeLibrary,
 } from "@/components/dashboard/use-recipe-library";
 
@@ -17,8 +15,6 @@ export function StartCookingButton({ recipe, className }: { recipe: Recipe; clas
   const router = useRouter();
 
   function startCooking() {
-    recordCooking(recipe);
-    toast.success("Dodano do historii gotowania");
     router.push(`/dashboard/gotowanie/${recipe.slug}`);
   }
 

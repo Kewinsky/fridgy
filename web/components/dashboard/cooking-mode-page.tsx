@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeftIcon, CheckCircle2Icon, ChefHatIcon, ClockIcon, UsersIcon } from "lucide-react";
+import { ArrowLeftIcon, ChefHatIcon, ClockIcon, UsersIcon } from "lucide-react";
 
+import { FinishCookingDialog } from "@/components/dashboard/finish-cooking-dialog";
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -91,9 +92,7 @@ export function CookingModePage({ slug }: { slug: string }) {
           </ol>
         </section>
 
-        <Button className="mt-8 h-12 w-full" onClick={() => router.push("/dashboard/moje-przepisy")}>
-          <CheckCircle2Icon aria-hidden="true" /> Zakończ gotowanie
-        </Button>
+        <FinishCookingDialog recipe={recipe} />
       </main>
     </div>
   );
