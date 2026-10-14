@@ -8,6 +8,7 @@ import { LoginForm } from "@/components/auth/login-form";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { createClient } from "@/lib/supabase/server";
+import { safeAuthPath } from "@/lib/auth-next";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Login");
@@ -17,19 +18,20 @@ export async function generateMetadata(): Promise<Metadata> {
 export const instant = false;
 
 type LoginPageProps = {
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; next?: string }>;
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const t = await getTranslations("Login");
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
+  const params = await searchParams;
+  const nextPath = safeAuthPath(params.next);
 
   if (data?.claims) {
-    redirect("/dashboard");
+    redirect(nextPath);
   }
 
-  const params = await searchParams;
   const initialError = params.error
     ? t("errors.oauth")
     : undefined;
@@ -88,7 +90,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
         <div className="my-auto w-full py-12">
           <div className="app-card mx-auto max-w-md p-6 sm:p-8">
-            <LoginForm initialError={initialError} />
+            <LoginForm initialError={initialError} nextPath={nextPath} />
           </div>
         </div>
       </section>

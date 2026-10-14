@@ -10,6 +10,8 @@ import { SettingsTabs } from "@/components/dashboard/settings-tabs";
 import { ThemeSettings } from "@/components/dashboard/theme-settings";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import packageJson from "@/package.json";
+import { createClient } from "@/lib/supabase/server";
+import type { ProfileSettings } from "@/app/dashboard/settings-actions";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Settings");
@@ -18,6 +20,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function SettingsPage() {
   const t = await getTranslations("Settings");
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getUser();
+  if (!auth.user) return null;
+  const { data: profile, error } = await supabase.from("profiles")
+    .select("*").eq("user_id", auth.user.id).single();
+  if (error || !profile) throw new Error("Could not load settings");
+  const { data: household } = await supabase.from("households")
+    .select("name,owner_id").eq("id", profile.household_id).single();
+  const settings = profile as ProfileSettings;
 
   return (
     <>
@@ -33,9 +44,9 @@ export default async function SettingsPage() {
               <Setting
                 icon={HomeIcon}
                 title={t("household")}
-                value={t("yourHome")}
+                value={household?.name ?? t("yourHome")}
               />
-              <Setting icon={MapPinIcon} title={t("region")} value={t("regionValue")} />
+              <Setting icon={MapPinIcon} title={t("region")} value={settings.currency} />
             </section>
             <div className="grid gap-5">
               <section className="app-card p-5">
@@ -73,9 +84,9 @@ export default async function SettingsPage() {
             </div>
           </div>
         }
-        account={<AccountSettings />}
-        preferences={<PreferenceSettings />}
-        advanced={<AdvancedSettings version={packageJson.version} />}
+        account={<AccountSettings email={auth.user.email ?? ""} googleConnected={Boolean(auth.user.identities?.some((identity) => identity.provider === "google"))} householdName={household?.name ?? ""} isOwner={household?.owner_id === auth.user.id} />}
+        preferences={<PreferenceSettings initialSettings={settings} />}
+        advanced={<AdvancedSettings version={packageJson.version} initialSettings={settings} />}
       />
     </>
   );

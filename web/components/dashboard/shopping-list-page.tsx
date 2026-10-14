@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useState } from "react";
 import { CheckIcon, PlusIcon, Share2Icon, ShoppingBasketIcon, Trash2Icon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/dashboard/page-header";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
+import { localizeStarterShoppingItem } from "@/lib/demo-localization";
+import type { Locale } from "@/i18n/config";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,71 +21,39 @@ import {
 import { Input } from "@/components/ui/input";
 import {
   formatShoppingList,
-  initialShoppingItems,
-  readShoppingList,
-  SHOPPING_LIST_STORAGE_KEY,
-  writeShoppingList,
-  type ShoppingItem,
 } from "@/lib/shopping-list";
-
-const SHOPPING_LIST_CHANGE_EVENT = "fridgy-shopping-list-change";
-let cachedStorageValue: string | null | undefined;
-let cachedItems = initialShoppingItems;
-
-function subscribeToShoppingList(onStoreChange: () => void) {
-  window.addEventListener("storage", onStoreChange);
-  window.addEventListener(SHOPPING_LIST_CHANGE_EVENT, onStoreChange);
-  return () => {
-    window.removeEventListener("storage", onStoreChange);
-    window.removeEventListener(SHOPPING_LIST_CHANGE_EVENT, onStoreChange);
-  };
-}
-
-function getShoppingListSnapshot() {
-  const storageValue = window.localStorage.getItem(SHOPPING_LIST_STORAGE_KEY);
-  if (storageValue !== cachedStorageValue) {
-    cachedStorageValue = storageValue;
-    cachedItems = readShoppingList(window.localStorage);
-  }
-  return cachedItems;
-}
-
-function getServerShoppingListSnapshot() {
-  return initialShoppingItems;
-}
 
 export function ShoppingListPage() {
   const t = useTranslations("ShoppingList");
-  const items = useSyncExternalStore(
-    subscribeToShoppingList,
-    getShoppingListSnapshot,
-    getServerShoppingListSnapshot,
-  );
+  const common = useTranslations("Common");
+  const { shoppingItems: items, updateShoppingItems } = useDashboardData();
+  const locale = useLocale() as Locale;
+  const displayItems = items.map((item) => localizeStarterShoppingItem(item, locale));
   const [name, setName] = useState("");
   const [clearDialogOpen, setClearDialogOpen] = useState(false);
 
-  function updateItems(update: (current: ShoppingItem[]) => ShoppingItem[]) {
-    writeShoppingList(window.localStorage, update(items));
-    window.dispatchEvent(new Event(SHOPPING_LIST_CHANGE_EVENT));
-  }
-
-  function addItem() {
+  async function addItem() {
     const trimmedName = name.trim();
     if (!trimmedName) return;
-    updateItems((current) => [...current, { id: crypto.randomUUID(), name: trimmedName, done: false }]);
+    try {
+      await updateShoppingItems((current) => [...current, { id: crypto.randomUUID(), name: trimmedName, done: false }]);
+    } catch { toast.error(common("saveFailed")); return; }
     setName("");
   }
 
-  function toggleItem(id: string) {
-    updateItems((current) => current.map((item) => item.id === id ? { ...item, done: !item.done } : item));
+  async function toggleItem(id: string) {
+    try { await updateShoppingItems((current) => current.map((item) => item.id === id ? { ...item, done: !item.done } : item)); }
+    catch { toast.error(common("saveFailed")); }
   }
 
-  function removeItem(id: string) {
-    updateItems((current) => current.filter((item) => item.id !== id));
+  async function removeItem(id: string) {
+    try { await updateShoppingItems((current) => current.filter((item) => item.id !== id)); }
+    catch { toast.error(common("saveFailed")); }
   }
 
-  function clearList() {
-    updateItems(() => []);
+  async function clearList() {
+    try { await updateShoppingItems(() => []); }
+    catch { toast.error(common("saveFailed")); return; }
     setClearDialogOpen(false);
     toast.success(t("toasts.cleared"));
   }
@@ -98,10 +69,10 @@ export function ShoppingListPage() {
       if (typeof navigator.share === "function") {
         await navigator.share({
           title: t("shareTitle"),
-          text: formatShoppingList(items, false, t("shareTitle")),
+          text: formatShoppingList(displayItems, false, t("shareTitle")),
         });
       } else {
-        await navigator.clipboard.writeText(formatShoppingList(items, true, t("shareTitle")));
+        await navigator.clipboard.writeText(formatShoppingList(displayItems, true, t("shareTitle")));
         toast.success(t("toasts.copied"));
       }
     } catch (error) {
@@ -145,7 +116,7 @@ export function ShoppingListPage() {
           <Button className="h-11" onClick={addItem}><PlusIcon aria-hidden="true" /> <span className="hidden sm:inline">{t("add")}</span></Button>
         </div>
         <div className="mt-5">
-          {items.map((item) => (
+          {displayItems.map((item) => (
             <div key={item.id} className="flex min-h-16 items-center gap-2 border-b border-border py-2 last:border-0">
               <Button type="button" variant="ghost" onClick={() => toggleItem(item.id)} className="min-h-11 min-w-0 flex-1 justify-start gap-3 px-1 text-left">
                 <span className={item.done ? "flex size-6 shrink-0 items-center justify-center rounded-md border border-primary bg-primary text-primary-foreground" : "flex size-6 shrink-0 items-center justify-center rounded-md border border-input"}>

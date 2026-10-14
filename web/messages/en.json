@@ -1,6 +1,14 @@
 {
   "Common": {
-    "changeLanguage": "Change language"
+    "changeLanguage": "Change language",
+    "saved": "Changes saved.",
+    "saveFailed": "Could not save changes. Please try again."
+  },
+  "Invitation": {
+    "title": "Join a household",
+    "description": "You will see the shared inventory and shopping list. Your personal recipes will stay in your account.",
+    "accept": "Join household",
+    "error": "Could not accept the invitation. Check the email address or link expiry. Export your own inventory before joining."
   },
   "Metadata": {
     "description": "Manage your food at home and waste less."
@@ -126,7 +134,8 @@
       "google": {
         "title": "Google account",
         "description": "The account used for quick sign-in.",
-        "connected": "Connected"
+        "connected": "Connected",
+        "notConnected": "Not connected"
       },
       "household": {
         "title": "Household name",
@@ -137,10 +146,21 @@
       },
       "invite": {
         "title": "Invite a household member",
-        "description": "Send an invitation to manage inventory together.",
+        "description": "Create a link for this email address and share it with your household member.",
         "emailLabel": "Household member's email",
         "placeholder": "member@example.com",
-        "action": "Invite"
+        "action": "Create invitation",
+        "created": "Your invitation link is ready to share.",
+        "linkLabel": "Invitation link",
+        "copy": "Copy link",
+        "copied": "Link copied."
+      },
+      "transfer": {
+        "title": "Transfer household ownership",
+        "description": "Give another member ownership before deleting your account.",
+        "emailLabel": "Member's email address",
+        "placeholder": "member@example.com",
+        "action": "Transfer ownership"
       },
       "sessions": {
         "title": "Active sessions",
@@ -157,7 +177,8 @@
         "title": "Permanently delete the account?",
         "description": "Your account, inventory, recipes and cooking history will be deleted. This action cannot be undone.",
         "cancel": "Cancel",
-        "confirm": "Delete account"
+        "confirm": "Delete account",
+        "ownerHasMembers": "Transfer household ownership to another member first."
       }
     },
     "advanced": {
@@ -187,11 +208,11 @@
       },
       "demo": {
         "title": "Demo data",
-        "description": "Restore the initial sample products, recipes and shopping list.",
+        "description": "Restore the initial sample products and shopping list.",
         "dialog": {
           "open": "Reset demo data",
           "title": "Reset demo data?",
-          "description": "Current demo data will be replaced with the initial set. Your real data will not be affected.",
+          "description": "Sample products and list items will be restored. Your own data will stay. Available only to a household with one member.",
           "cancel": "Cancel",
           "confirm": "Reset data"
         }
@@ -643,18 +664,27 @@
     },
     "success": {
       "title": "Receipt is ready",
-      "description": "{count} products verified. Saving to shared inventory will be connected with the Supabase schema.",
+      "description": "{count} products added to the shared inventory.",
       "inventory": "View inventory",
       "another": "Add another receipt"
     },
     "review": {
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
-      "description": "OCR is not connected yet – below is demo data you can edit.",
-      "back": "Back to file",
+      "description": "Enter receipt products and review them before saving.",
+      "back": "Back",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
       "confirm": "Confirm products"
+    },
+    "manual": {
+      "eyebrow": "Step 1 of 2",
+      "title": "Add receipt manually",
+      "description": "Enter products from a receipt and Fridgy will add them to the shared inventory.",
+      "cardTitle": "Receipt products",
+      "cardDescription": "Enter the name, quantity, unit and storage location. Photo and PDF import will come later.",
+      "start": "Enter products",
+      "notice": "Photo and PDF scanning is not available yet."
     },
     "upload": {
       "eyebrow": "Step 1 of 2",

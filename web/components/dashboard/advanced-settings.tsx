@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { toast } from "sonner";
 import {
   BanknoteIcon,
   DatabaseZapIcon,
@@ -9,6 +11,7 @@ import {
   UtensilsIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { resetDemoData, saveProfileSetting, type ProfileSettings } from "@/app/dashboard/settings-actions";
 
 import {
   FieldLabel,
@@ -38,9 +41,21 @@ const cuisineKeys = [
   "middleEastern",
 ] as const;
 
-export function AdvancedSettings({ version }: { version: string }) {
+const cuisineValues = ["Polska", "Włoska", "Azjatycka", "Meksykańska", "Śródziemnomorska", "Bliskowschodnia"] as const;
+
+export function AdvancedSettings({ version, initialSettings }: { version: string; initialSettings: ProfileSettings }) {
   const t = useTranslations("Settings.advanced");
   const recipeT = useTranslations("Recipe.cuisineOptions");
+  const common = useTranslations("Common");
+  const [settings, setSettings] = useState(initialSettings);
+
+  async function save<K extends keyof ProfileSettings>(key: K, value: ProfileSettings[K]) {
+    try {
+      await saveProfileSetting(key, value);
+      setSettings((current) => ({ ...current, [key]: value }));
+      toast.success(common("saved"));
+    } catch { toast.error(common("saveFailed")); }
+  }
 
   return (
     <div>
@@ -55,14 +70,16 @@ export function AdvancedSettings({ version }: { version: string }) {
             <FieldLabel label={t("regional.currencyLabel")}>
               <SettingsDropdown
                 ariaLabel={t("regional.currencyLabel")}
-                defaultValue="PLN"
+                value={settings.currency}
+                onValueChange={(value) => void save("currency", value as ProfileSettings["currency"])}
                 options={["PLN", "EUR", "GBP", "CHF"].map((value) => ({ value, label: value }))}
               />
             </FieldLabel>
             <FieldLabel label={t("regional.dateLabel")}>
               <SettingsDropdown
                 ariaLabel={t("regional.dateLabel")}
-                defaultValue="DD.MM.YYYY"
+                value={settings.date_format}
+                onValueChange={(value) => void save("date_format", value as ProfileSettings["date_format"])}
                 options={["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"].map((value) => ({ value, label: value }))}
               />
             </FieldLabel>
@@ -81,7 +98,10 @@ export function AdvancedSettings({ version }: { version: string }) {
                 key={cuisine}
                 className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-input px-3 py-2 text-sm font-medium"
               >
-                <Checkbox defaultChecked={index < 3} />
+                <Checkbox checked={settings.preferred_cuisines.includes(cuisineValues[index])}
+                  onCheckedChange={(checked) => void save("preferred_cuisines", checked
+                    ? [...settings.preferred_cuisines, cuisineValues[index]]
+                    : settings.preferred_cuisines.filter((value) => value !== cuisineValues[index]))} />
                 {recipeT(cuisine)}
               </label>
             ))}
@@ -100,7 +120,8 @@ export function AdvancedSettings({ version }: { version: string }) {
                 key={option}
                 className="flex min-h-11 cursor-pointer items-start gap-3 rounded-lg border border-input px-3 py-3"
               >
-                <Checkbox defaultChecked={option === "personalization"} className="mt-0.5" />
+                <Checkbox checked={option === "personalization" ? settings.personalization_consent : settings.analytics_consent}
+                  onCheckedChange={(checked) => void save(option === "personalization" ? "personalization_consent" : "analytics_consent", checked === true)} className="mt-0.5" />
                 <span>
                   <span className="block text-sm font-medium">{t(`privacy.options.${option}.title`)}</span>
                   <span className="mt-1 block text-xs leading-5 text-muted-foreground">
@@ -132,6 +153,12 @@ export function AdvancedSettings({ version }: { version: string }) {
 
 function ResetDemoDialog() {
   const t = useTranslations("Settings.advanced.demo.dialog");
+  const common = useTranslations("Common");
+
+  async function reset() {
+    try { await resetDemoData(); window.location.reload(); }
+    catch { toast.error(common("saveFailed")); }
+  }
 
   return (
     <Dialog>
@@ -147,9 +174,9 @@ function ResetDemoDialog() {
           <DialogClose render={<Button type="button" variant="outline" className="h-11" />}>
             {t("cancel")}
           </DialogClose>
-          <DialogClose render={<Button type="button" variant="destructive" className="h-11" />}>
+          <Button type="button" variant="destructive" className="h-11" onClick={reset}>
             <RotateCcwIcon aria-hidden="true" /> {t("confirm")}
-          </DialogClose>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

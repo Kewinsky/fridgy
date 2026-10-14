@@ -12,9 +12,10 @@ import { createClient } from "@/lib/supabase/client";
 
 type LoginFormProps = {
   initialError?: string;
+  nextPath?: string;
 };
 
-export function LoginForm({ initialError }: LoginFormProps) {
+export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormProps) {
   const t = useTranslations("Login");
   const router = useRouter();
   const [email, setEmail] = useState("");
@@ -32,7 +33,7 @@ export function LoginForm({ initialError }: LoginFormProps) {
     const { error: authError } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
         shouldCreateUser: true,
       },
     });
@@ -65,7 +66,7 @@ export function LoginForm({ initialError }: LoginFormProps) {
       return;
     }
 
-    router.replace("/dashboard");
+    router.replace(nextPath);
     router.refresh();
   }
 
@@ -77,7 +78,7 @@ export function LoginForm({ initialError }: LoginFormProps) {
     const { error: authError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback?next=/dashboard`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
       },
     });
 

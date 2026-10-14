@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import {
   BellRingIcon,
   CheckIcon,
@@ -20,9 +21,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { saveProfileSetting, type ProfileSettings } from "@/app/dashboard/settings-actions";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 
-export function PreferenceSettings() {
+export function PreferenceSettings({ initialSettings }: { initialSettings: ProfileSettings }) {
   const t = useTranslations("Settings.preferences");
+  const common = useTranslations("Common");
+  const [settings, setSettings] = useState(initialSettings);
+  const { setDeductionMode } = useDashboardData();
+
+  async function save<K extends keyof ProfileSettings>(key: K, value: ProfileSettings[K]) {
+    try {
+      await saveProfileSetting(key, value);
+      setSettings((current) => ({ ...current, [key]: value }));
+      if (key === "deduction_mode") setDeductionMode(value as ProfileSettings["deduction_mode"]);
+      toast.success(common("saved"));
+    } catch { toast.error(common("saveFailed")); }
+  }
 
   return (
     <div>
@@ -38,7 +53,11 @@ export function PreferenceSettings() {
                 key={option}
                 className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-input px-3 py-2 text-sm font-medium"
               >
-                <Checkbox defaultChecked />
+                <Checkbox checked={settings.notification_days.includes(({ sameDay: 0, oneDay: 1, threeDays: 3 } as const)[option])}
+                  onCheckedChange={(checked) => {
+                    const day = ({ sameDay: 0, oneDay: 1, threeDays: 3 } as const)[option];
+                    void save("notification_days", checked ? [...settings.notification_days, day] : settings.notification_days.filter((value) => value !== day));
+                  }} />
                 {t(`expiry.options.${option}`)}
               </label>
             ))}
@@ -54,17 +73,22 @@ export function PreferenceSettings() {
             <FieldLabel label={t("diet.typeLabel")}>
               <SettingsDropdown
                 ariaLabel={t("diet.typeLabel")}
-                defaultValue="none"
+                value={settings.diet}
+                onValueChange={(value) => void save("diet", value as ProfileSettings["diet"])}
                 options={(["none", "vegetarian", "vegan", "pescatarian"] as const).map(
                   (value) => ({ value, label: t(`diet.options.${value}`) }),
                 )}
               />
             </FieldLabel>
             <FieldLabel label={t("diet.allergiesLabel")}>
-              <Input aria-label={t("diet.allergiesLabel")} className="h-11" placeholder={t("diet.allergiesPlaceholder")} />
+              <Input aria-label={t("diet.allergiesLabel")} className="h-11" placeholder={t("diet.allergiesPlaceholder")}
+                value={settings.allergies} onChange={(event) => setSettings((current) => ({ ...current, allergies: event.target.value }))}
+                onBlur={() => void save("allergies", settings.allergies)} />
             </FieldLabel>
             <FieldLabel label={t("diet.excludedLabel")}>
-              <Input aria-label={t("diet.excludedLabel")} className="h-11" placeholder={t("diet.excludedPlaceholder")} />
+              <Input aria-label={t("diet.excludedLabel")} className="h-11" placeholder={t("diet.excludedPlaceholder")}
+                value={settings.excluded_ingredients} onChange={(event) => setSettings((current) => ({ ...current, excluded_ingredients: event.target.value }))}
+                onBlur={() => void save("excluded_ingredients", settings.excluded_ingredients)} />
             </FieldLabel>
           </div>
         </PreferenceCard>
@@ -77,7 +101,8 @@ export function PreferenceSettings() {
           <FieldLabel label={t("deduction.label")}>
             <SettingsDropdown
               ariaLabel={t("deduction.label")}
-              defaultValue="ask"
+              value={settings.deduction_mode}
+              onValueChange={(value) => void save("deduction_mode", value as ProfileSettings["deduction_mode"])}
               options={(["always", "never", "ask"] as const).map((value) => ({
                 value,
                 label: t(`deduction.options.${value}`),
@@ -94,7 +119,8 @@ export function PreferenceSettings() {
           <FieldLabel label={t("receipt.label")}>
             <SettingsDropdown
               ariaLabel={t("receipt.label")}
-              defaultValue="review"
+              value={settings.receipt_mode}
+              onValueChange={(value) => void save("receipt_mode", value as ProfileSettings["receipt_mode"])}
               options={(["automatic", "review"] as const).map((value) => ({
                 value,
                 label: t(`receipt.options.${value}`),
@@ -148,13 +174,18 @@ export function FieldLabel({ label, children }: { label: string; children: React
 export function SettingsDropdown({
   ariaLabel,
   defaultValue,
+  value: controlledValue,
+  onValueChange,
   options,
 }: {
   ariaLabel: string;
-  defaultValue: string;
+  defaultValue?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
   options: Array<{ value: string; label: string }>;
 }) {
-  const [value, setValue] = useState(defaultValue);
+  const [localValue, setValue] = useState(defaultValue ?? options[0]?.value ?? "");
+  const value = controlledValue ?? localValue;
   const selectedLabel = options.find((option) => option.value === value)?.label;
 
   return (
@@ -174,7 +205,7 @@ export function SettingsDropdown({
       />
       <DropdownMenuContent align="start" className="min-w-(--anchor-width)">
         {options.map((option) => (
-          <DropdownMenuItem key={option.value} onClick={() => setValue(option.value)}>
+          <DropdownMenuItem key={option.value} onClick={() => onValueChange ? onValueChange(option.value) : setValue(option.value)}>
             <span className="flex-1">{option.label}</span>
             {value === option.value ? <CheckIcon aria-hidden="true" /> : null}
           </DropdownMenuItem>

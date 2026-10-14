@@ -1,6 +1,7 @@
 import type { Locale } from "@/i18n/config";
 import type { DemoProduct } from "@/lib/demo-data";
 import type { Recipe } from "@/lib/demo-recipes";
+import type { ShoppingItem } from "@/lib/shopping-list";
 
 type RecipeCopy = { title: string; description: string; ingredients: string[] };
 
@@ -46,6 +47,20 @@ const productNames: Record<Exclude<Locale, "pl">, string[]> = {
   es: ["Frambuesas", "Leche 2 %", "Espinacas baby", "Pechuga de pollo", "Yogur natural", "Tomates", "Guisantes congelados", "Salmón atlántico", "Pan de centeno", "Pasta penne", "Garbanzos"],
 };
 
+const starterProducts: Record<Exclude<Locale, "pl">, Record<string, string>> = {
+  en: { milk: "2% milk", eggs: "Eggs", tomatoes: "Tomatoes", pasta: "Pasta", peas: "Frozen peas" },
+  de: { milk: "Milch 2 %", eggs: "Eier", tomatoes: "Tomaten", pasta: "Nudeln", peas: "Tiefkühlerbsen" },
+  fr: { milk: "Lait 2 %", eggs: "Œufs", tomatoes: "Tomates", pasta: "Pâtes", peas: "Petits pois surgelés" },
+  es: { milk: "Leche 2 %", eggs: "Huevos", tomatoes: "Tomates", pasta: "Pasta", peas: "Guisantes congelados" },
+};
+
+const starterShopping: Record<Exclude<Locale, "pl">, Record<string, string>> = {
+  en: { bananas: "Bananas", coffee: "Coffee beans", water: "Sparkling water" },
+  de: { bananas: "Bananen", coffee: "Kaffeebohnen", water: "Sprudelwasser" },
+  fr: { bananas: "Bananes", coffee: "Café en grains", water: "Eau gazeuse" },
+  es: { bananas: "Plátanos", coffee: "Café en grano", water: "Agua con gas" },
+};
+
 export function localizeDemoRecipe(recipe: Recipe, locale: Locale): Recipe {
   if (locale === "pl") return recipe;
   const copy = recipeCopy[locale][recipe.slug];
@@ -54,7 +69,16 @@ export function localizeDemoRecipe(recipe: Recipe, locale: Locale): Recipe {
 }
 
 export function localizeDemoProduct(product: DemoProduct, locale: Locale): DemoProduct {
+  if (locale !== "pl" && product.seedKey) {
+    return { ...product, name: starterProducts[locale][product.seedKey] ?? product.name };
+  }
   if (locale === "pl" || !product.id.startsWith("p")) return product;
   const index = Number(product.id.slice(1));
   return { ...product, name: productNames[locale][index] ?? product.name };
+}
+
+export function localizeStarterShoppingItem(item: ShoppingItem, locale: Locale): ShoppingItem {
+  return locale !== "pl" && item.seedKey
+    ? { ...item, name: starterShopping[locale][item.seedKey] ?? item.name }
+    : item;
 }

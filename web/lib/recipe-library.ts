@@ -29,15 +29,12 @@ export type RecipeDraft = {
   steps: string;
 };
 
-export const RECIPE_LIBRARY_STORAGE_KEY = "fridgy-recipe-library";
 export const emptyRecipeLibrary: RecipeLibrary = {
   version: 1,
   customRecipes: [],
   favoriteSlugs: [],
   history: [],
 };
-
-type RecipeLibraryStorage = Pick<Storage, "getItem" | "setItem">;
 
 export function isCustomRecipe(value: unknown): value is CustomRecipe {
   if (!value || typeof value !== "object") return false;
@@ -64,48 +61,6 @@ export function isCustomRecipe(value: unknown): value is CustomRecipe {
     recipe.steps.every((step) => typeof step === "string") &&
     typeof recipe.createdAt === "string"
   );
-}
-
-function isCookingRecord(value: unknown): value is CookingRecord {
-  if (!value || typeof value !== "object") return false;
-  const record = value as CookingRecord;
-  return (
-    typeof record.id === "string" &&
-    typeof record.recipeSlug === "string" &&
-    typeof record.recipeTitle === "string" &&
-    typeof record.cuisine === "string" &&
-    typeof record.cookedAt === "string" &&
-    !Number.isNaN(Date.parse(record.cookedAt))
-  );
-}
-
-export function readRecipeLibrary(storage: RecipeLibraryStorage): RecipeLibrary {
-  const saved = storage.getItem(RECIPE_LIBRARY_STORAGE_KEY);
-  if (!saved) return emptyRecipeLibrary;
-
-  try {
-    const data: unknown = JSON.parse(saved);
-    if (!data || typeof data !== "object") return emptyRecipeLibrary;
-    const library = data as Partial<RecipeLibrary>;
-    return {
-      version: 1,
-      customRecipes: Array.isArray(library.customRecipes)
-        ? library.customRecipes.filter(isCustomRecipe)
-        : [],
-      favoriteSlugs: Array.isArray(library.favoriteSlugs)
-        ? library.favoriteSlugs.filter((slug): slug is string => typeof slug === "string")
-        : [],
-      history: Array.isArray(library.history)
-        ? library.history.filter(isCookingRecord)
-        : [],
-    };
-  } catch {
-    return emptyRecipeLibrary;
-  }
-}
-
-export function writeRecipeLibrary(storage: RecipeLibraryStorage, library: RecipeLibrary) {
-  storage.setItem(RECIPE_LIBRARY_STORAGE_KEY, JSON.stringify(library));
 }
 
 export function toggleFavorite(library: RecipeLibrary, slug: string): RecipeLibrary {

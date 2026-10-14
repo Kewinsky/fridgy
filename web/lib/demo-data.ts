@@ -10,6 +10,7 @@ export type DemoProduct = {
   storageLocation: StorageLocation;
   estimatedUseBy: string;
   status: ProductStatus;
+  seedKey?: string;
 };
 
 const demoProductSeed: Omit<DemoProduct, "status">[] = [

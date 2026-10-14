@@ -1,3 +1,5 @@
+"use client";
+
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
@@ -12,6 +14,7 @@ import {
 } from "lucide-react";
 
 import { AddMissingItemsButton } from "@/components/dashboard/add-missing-items-button";
+import { useInventory } from "@/components/dashboard/use-inventory";
 import {
   DeleteRecipeDialog,
   EditRecipeDialog,
@@ -30,6 +33,7 @@ import { getMissingIngredients, type Recipe } from "@/lib/demo-recipes";
 import { localizeDemoRecipe } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
+import { matchRecipeToInventory } from "@/lib/inventory-store";
 
 export function RecipeDetail({
   recipe,
@@ -45,8 +49,9 @@ export function RecipeDetail({
   showCookingStats?: boolean;
 }) {
   const t = useTranslations("Recipe");
-  const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
-  const missing = getMissingIngredients(recipe);
+  const matchedRecipe = matchRecipeToInventory(recipe, useInventory());
+  const displayRecipe = localizeDemoRecipe(matchedRecipe, useLocale() as Locale);
+  const missing = getMissingIngredients(matchedRecipe);
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
 
   return (
@@ -128,7 +133,7 @@ export function RecipeDetail({
                 </p>
               </div>
               <AddMissingItemsButton
-                names={missing.map((ingredient) => ingredient.name)}
+                names={getMissingIngredients(displayRecipe).map((ingredient) => ingredient.name)}
                 className="mt-4 w-full"
               />
             </>

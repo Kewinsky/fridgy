@@ -1,6 +1,14 @@
 {
   "Common": {
-    "changeLanguage": "Zmień język"
+    "changeLanguage": "Zmień język",
+    "saved": "Zapisano zmiany.",
+    "saveFailed": "Nie udało się zapisać zmian. Spróbuj ponownie."
+  },
+  "Invitation": {
+    "title": "Dołącz do gospodarstwa domowego",
+    "description": "Po dołączeniu zobaczysz wspólne zapasy i listę zakupów. Twoje osobiste przepisy pozostaną na koncie.",
+    "accept": "Dołącz",
+    "error": "Nie można przyjąć zaproszenia. Sprawdź adres e-mail lub ważność linku. Jeśli masz własne zapasy, wyeksportuj je przed dołączeniem."
   },
   "Metadata": {
     "description": "Domowe zapasy bez marnowania."
@@ -126,7 +134,8 @@
       "google": {
         "title": "Konto Google",
         "description": "Konto używane do szybkiego logowania.",
-        "connected": "Połączono"
+        "connected": "Połączono",
+        "notConnected": "Niepołączone"
       },
       "household": {
         "title": "Nazwa gospodarstwa domowego",
@@ -137,10 +146,21 @@
       },
       "invite": {
         "title": "Zaproś domownika",
-        "description": "Wyślij zaproszenie do wspólnego zarządzania zapasami.",
+        "description": "Utwórz link dla podanego adresu e-mail i udostępnij go domownikowi.",
         "emailLabel": "Adres e-mail domownika",
         "placeholder": "domownik@example.com",
-        "action": "Zaproś"
+        "action": "Utwórz zaproszenie",
+        "created": "Link zaproszenia jest gotowy do udostępnienia.",
+        "linkLabel": "Link zaproszenia",
+        "copy": "Kopiuj link",
+        "copied": "Skopiowano link."
+      },
+      "transfer": {
+        "title": "Przenieś własność gospodarstwa",
+        "description": "Przekaż rolę właściciela domownikowi przed usunięciem swojego konta.",
+        "emailLabel": "Adres e-mail domownika",
+        "placeholder": "domownik@example.com",
+        "action": "Przenieś własność"
       },
       "sessions": {
         "title": "Aktywne sesje",
@@ -157,7 +177,8 @@
         "title": "Trwale usunąć konto?",
         "description": "Usunięte zostaną konto, zapasy, przepisy i historia gotowania. Tej operacji nie można cofnąć.",
         "cancel": "Anuluj",
-        "confirm": "Usuń konto"
+        "confirm": "Usuń konto",
+        "ownerHasMembers": "Najpierw przenieś własność gospodarstwa na innego domownika."
       }
     },
     "advanced": {
@@ -187,11 +208,11 @@
       },
       "demo": {
         "title": "Dane demonstracyjne",
-        "description": "Przywróć początkowe przykładowe produkty, przepisy i listę zakupów.",
+        "description": "Przywróć początkowe przykładowe produkty i listę zakupów.",
         "dialog": {
           "open": "Resetuj dane demo",
           "title": "Zresetować dane demonstracyjne?",
-          "description": "Bieżące dane demonstracyjne zostaną zastąpione początkowym zestawem. Twoje prawdziwe dane nie będą objęte tą operacją.",
+          "description": "Przykładowe produkty i pozycje listy zostaną zastąpione początkowym zestawem. Twoje własne dane pozostaną bez zmian. Dostępne tylko w jednoosobowym gospodarstwie.",
           "cancel": "Anuluj",
           "confirm": "Resetuj dane"
         }
@@ -643,18 +664,27 @@
     },
     "success": {
       "title": "Paragon jest gotowy",
-      "description": "Zweryfikowano {count} produktów. Zapis do wspólnych zapasów zostanie podłączony razem ze schematem Supabase.",
+      "description": "Dodano {count} produktów do wspólnych zapasów.",
       "inventory": "Zobacz zapasy",
       "another": "Dodaj kolejny paragon"
     },
     "review": {
       "eyebrow": "Krok 2 z 2",
       "title": "Sprawdź produkty",
-      "description": "OCR nie jest jeszcze podłączony – poniżej widzisz dane demonstracyjne, które możesz poprawić.",
-      "back": "Wróć do pliku",
+      "description": "Wpisz produkty z paragonu i sprawdź dane przed zapisaniem.",
+      "back": "Wróć",
       "addProduct": "Dodaj produkt",
       "checkData": "Sprawdź dane przed zatwierdzeniem.",
       "confirm": "Zatwierdź produkty"
+    },
+    "manual": {
+      "eyebrow": "Krok 1 z 2",
+      "title": "Dodaj paragon ręcznie",
+      "description": "Wpisz produkty z paragonu, a Fridgy doda je do wspólnych zapasów.",
+      "cardTitle": "Produkty z paragonu",
+      "cardDescription": "Podaj nazwę, ilość, jednostkę i miejsce przechowywania. Zdjęcia i PDF obsłużymy później.",
+      "start": "Wpisz produkty",
+      "notice": "Odczyt zdjęć i PDF nie jest jeszcze dostępny."
     },
     "upload": {
       "eyebrow": "Krok 1 z 2",

@@ -1,7 +1,5 @@
 import type { Recipe } from "./demo-recipes.ts";
-import { demoProducts, type DemoProduct } from "./demo-data.ts";
-
-export const INVENTORY_STORAGE_KEY = "fridgy-inventory";
+import type { DemoProduct } from "./demo-data.ts";
 
 export type InventoryDeduction = {
   productId: string;
@@ -13,53 +11,6 @@ export type InventoryDeductionSuggestion = InventoryDeduction & {
   selected: boolean;
 };
 
-type InventoryStorage = Pick<Storage, "getItem" | "setItem">;
-
-function isProduct(value: unknown): value is DemoProduct {
-  if (!value || typeof value !== "object") return false;
-  const product = value as DemoProduct;
-  return (
-    typeof product.id === "string" &&
-    typeof product.name === "string" &&
-    typeof product.quantity === "number" &&
-    Number.isFinite(product.quantity) &&
-    product.quantity >= 0 &&
-    typeof product.unit === "string" &&
-    typeof product.category === "string" &&
-    ["Lodówka", "Zamrażarka", "Spiżarnia"].includes(product.storageLocation) &&
-    typeof product.estimatedUseBy === "string" &&
-    ["active", "consumed"].includes(product.status)
-  );
-}
-
-export function readInventory(storage: InventoryStorage): DemoProduct[] {
-  const saved = storage.getItem(INVENTORY_STORAGE_KEY);
-  if (!saved) return demoProducts;
-
-  try {
-    const data: unknown = JSON.parse(saved);
-    if (!data || typeof data !== "object") return demoProducts;
-    const inventory = data as { version?: unknown; products?: unknown };
-    return inventory.version === 1 &&
-      Array.isArray(inventory.products) &&
-      inventory.products.every(isProduct)
-      ? inventory.products
-      : demoProducts;
-  } catch {
-    return demoProducts;
-  }
-}
-
-export function writeInventory(
-  storage: InventoryStorage,
-  products: DemoProduct[],
-) {
-  storage.setItem(
-    INVENTORY_STORAGE_KEY,
-    JSON.stringify({ version: 1, products }),
-  );
-}
-
 export function suggestRecipeDeductions(
   recipe: Pick<Recipe, "ingredients">,
   products: DemoProduct[],
@@ -68,7 +19,7 @@ export function suggestRecipeDeductions(
     const product = products.find(
       (item) =>
         item.status === "active" &&
-        normalize(item.name) === normalize(ingredient.name),
+        productNameMatches(item.name, ingredient.name),
     );
     if (!product) return [];
 
@@ -88,6 +39,24 @@ export function suggestRecipeDeductions(
       },
     ];
   });
+}
+
+export function matchRecipeToInventory(recipe: Recipe, products: DemoProduct[]): Recipe {
+  return {
+    ...recipe,
+    ingredients: recipe.ingredients.map((ingredient) => ({
+      ...ingredient,
+      available: products.some((product) =>
+        product.status === "active" && product.quantity > 0 &&
+        productNameMatches(product.name, ingredient.name)),
+    })),
+  };
+}
+
+function productNameMatches(productName: string, ingredientName: string) {
+  const product = normalize(productName);
+  const ingredient = normalize(ingredientName);
+  return product === ingredient || product.startsWith(`${ingredient} `) || ingredient.startsWith(`${product} `);
 }
 
 export function applyInventoryDeductions(

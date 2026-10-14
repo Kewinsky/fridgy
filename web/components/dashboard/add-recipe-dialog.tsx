@@ -6,9 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import {
-  deleteCustomRecipe,
-  saveCustomRecipe,
-  updateCustomRecipe,
+  useRecipeLibraryActions,
 } from "@/components/dashboard/use-recipe-library";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -72,11 +70,13 @@ export function EditRecipeDialog({ recipe }: { recipe: CustomRecipe }) {
 
 function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const t = useTranslations("RecipeForm");
+  const common = useTranslations("Common");
   const editing = Boolean(recipe);
   const fieldId = useId();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(() => getInitialForm(recipe));
   const [error, setError] = useState("");
+  const { saveCustomRecipe, updateCustomRecipe } = useRecipeLibraryActions();
 
   function update(field: keyof RecipeFormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
@@ -90,7 +90,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
     setOpen(nextOpen);
   }
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!form.title.trim() || !form.ingredients.trim() || !form.steps.trim()) {
       setError(t("errors.required"));
@@ -111,8 +111,13 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
       recipe?.createdAt ?? new Date().toISOString(),
     );
 
-    if (editing) updateCustomRecipe(customRecipe);
-    else saveCustomRecipe(customRecipe);
+    try {
+      if (editing) await updateCustomRecipe(customRecipe);
+      else await saveCustomRecipe(customRecipe);
+    } catch {
+      setError(common("saveFailed"));
+      return;
+    }
     setOpen(false);
     toast.success(editing ? t("toasts.updated") : t("toasts.created"));
   }
@@ -307,11 +312,18 @@ function LinkRecipeForm({ close }: { close: () => void }) {
 
 export function DeleteRecipeDialog({ recipe }: { recipe: CustomRecipe }) {
   const t = useTranslations("RecipeForm");
+  const common = useTranslations("Common");
   const [open, setOpen] = useState(false);
+  const { deleteCustomRecipe } = useRecipeLibraryActions();
 
-  function removeRecipe() {
+  async function removeRecipe() {
+    try {
+      await deleteCustomRecipe(recipe.slug);
+    } catch {
+      toast.error(common("saveFailed"));
+      return;
+    }
     setOpen(false);
-    deleteCustomRecipe(recipe.slug);
     toast.success(t("toasts.deleted"));
   }
 

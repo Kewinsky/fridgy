@@ -1,6 +1,14 @@
 {
   "Common": {
-    "changeLanguage": "Cambiar idioma"
+    "changeLanguage": "Cambiar idioma",
+    "saved": "Cambios guardados.",
+    "saveFailed": "No se pudieron guardar los cambios. Inténtalo de nuevo."
+  },
+  "Invitation": {
+    "title": "Unirse a un hogar",
+    "description": "Verás el inventario y la lista de compras compartidos. Tus recetas personales seguirán en tu cuenta.",
+    "accept": "Unirse al hogar",
+    "error": "No se pudo aceptar la invitación. Comprueba el correo y la fecha de vencimiento. Exporta tu inventario antes de unirte."
   },
   "Metadata": {
     "description": "Gestiona tus alimentos en casa y desperdicia menos."
@@ -126,7 +134,8 @@
       "google": {
         "title": "Cuenta de Google",
         "description": "La cuenta usada para iniciar sesión rápidamente.",
-        "connected": "Conectada"
+        "connected": "Conectada",
+        "notConnected": "No conectada"
       },
       "household": {
         "title": "Nombre del hogar",
@@ -137,10 +146,21 @@
       },
       "invite": {
         "title": "Invitar a un miembro",
-        "description": "Envía una invitación para gestionar juntos las provisiones.",
+        "description": "Crea un enlace para este correo y compártelo con la persona invitada.",
         "emailLabel": "Correo del miembro",
         "placeholder": "miembro@example.com",
-        "action": "Invitar"
+        "action": "Crear invitación",
+        "created": "El enlace de invitación está listo para compartir.",
+        "linkLabel": "Enlace de invitación",
+        "copy": "Copiar enlace",
+        "copied": "Enlace copiado."
+      },
+      "transfer": {
+        "title": "Transferir la propiedad del hogar",
+        "description": "Da la propiedad a otro miembro antes de eliminar tu cuenta.",
+        "emailLabel": "Correo electrónico del miembro",
+        "placeholder": "miembro@example.com",
+        "action": "Transferir la propiedad"
       },
       "sessions": {
         "title": "Sesiones activas",
@@ -157,7 +177,8 @@
         "title": "¿Eliminar la cuenta definitivamente?",
         "description": "Se eliminarán la cuenta, las provisiones, las recetas y el historial de cocina. Esta acción no se puede deshacer.",
         "cancel": "Cancelar",
-        "confirm": "Eliminar cuenta"
+        "confirm": "Eliminar cuenta",
+        "ownerHasMembers": "Transfiere primero la propiedad del hogar a otra persona."
       }
     },
     "advanced": {
@@ -187,11 +208,11 @@
       },
       "demo": {
         "title": "Datos de demostración",
-        "description": "Restaura los productos, recetas y la lista de compras de ejemplo.",
+        "description": "Restaura los productos y la lista de compras de ejemplo.",
         "dialog": {
           "open": "Restablecer datos de demostración",
           "title": "¿Restablecer los datos de demostración?",
-          "description": "Los datos de demostración actuales se sustituirán por el conjunto inicial. Tus datos reales no se verán afectados.",
+          "description": "Se restaurarán los productos y artículos de ejemplo. Tus datos propios seguirán intactos. Solo disponible para hogares de una persona.",
           "cancel": "Cancelar",
           "confirm": "Restablecer datos"
         }
@@ -643,18 +664,27 @@
     },
     "success": {
       "title": "Receipt is ready",
-      "description": "{count} products verified. Saving to shared inventory will be connected with the Supabase schema.",
+      "description": "Se añadieron {count} productos al inventario compartido.",
       "inventory": "View inventory",
       "another": "Add another receipt"
     },
     "review": {
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
-      "description": "OCR is not connected yet – below is demo data you can edit.",
-      "back": "Back to file",
+      "description": "Introduce los productos del recibo y revísalos antes de guardar.",
+      "back": "Volver",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
       "confirm": "Confirm products"
+    },
+    "manual": {
+      "eyebrow": "Paso 1 de 2",
+      "title": "Añadir recibo manualmente",
+      "description": "Introduce los productos del recibo para añadirlos al inventario compartido.",
+      "cardTitle": "Productos del recibo",
+      "cardDescription": "Introduce nombre, cantidad, unidad y lugar de almacenamiento. Las fotos y los PDF llegarán más adelante.",
+      "start": "Introducir productos",
+      "notice": "El escaneo de fotos y PDF todavía no está disponible."
     },
     "upload": {
       "eyebrow": "Step 1 of 2",

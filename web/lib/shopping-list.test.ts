@@ -2,9 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
-  addShoppingItems,
+  mergeShoppingItems,
   formatShoppingList,
-  readShoppingList,
 } from "./shopping-list.ts";
 
 test("formats only products that still need to be bought", () => {
@@ -25,18 +24,14 @@ test("formats only products that still need to be bought", () => {
 });
 
 test("adds new products and restores completed products", () => {
-  const values = new Map<string, string>();
-  const storage = {
-    getItem: (key: string) => values.get(key) ?? null,
-    setItem: (key: string, value: string) => values.set(key, value),
-  };
-
-  assert.equal(
-    addShoppingItems(storage, ["Cytryna", "cytryna", "Banany", "Woda gazowana"]),
-    2,
-  );
+  const result = mergeShoppingItems([
+    { id: "1", name: "Banany", done: false },
+    { id: "2", name: "Kawa ziarnista", done: false },
+    { id: "3", name: "Woda gazowana", done: true },
+  ], ["Cytryna", "cytryna", "Banany", "Woda gazowana"]);
+  assert.equal(result.changedCount, 2);
   assert.deepEqual(
-    readShoppingList(storage).map(({ name, done }) => ({ name, done })),
+    result.items.map(({ name, done }) => ({ name, done })),
     [
       { name: "Banany", done: false },
       { name: "Kawa ziarnista", done: false },

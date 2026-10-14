@@ -1,6 +1,14 @@
 {
   "Common": {
-    "changeLanguage": "Changer de langue"
+    "changeLanguage": "Changer de langue",
+    "saved": "Modifications enregistrées.",
+    "saveFailed": "Impossible d'enregistrer les modifications. Réessayez."
+  },
+  "Invitation": {
+    "title": "Rejoindre un foyer",
+    "description": "Vous verrez les réserves et la liste de courses partagées. Vos recettes personnelles resteront sur votre compte.",
+    "accept": "Rejoindre le foyer",
+    "error": "Impossible d'accepter l'invitation. Vérifiez l'adresse e-mail et la date d'expiration. Exportez vos réserves avant de rejoindre."
   },
   "Metadata": {
     "description": "Gérez vos aliments à la maison et gaspillez moins."
@@ -126,7 +134,8 @@
       "google": {
         "title": "Compte Google",
         "description": "Le compte utilisé pour une connexion rapide.",
-        "connected": "Connecté"
+        "connected": "Connecté",
+        "notConnected": "Non connecté"
       },
       "household": {
         "title": "Nom du foyer",
@@ -137,10 +146,21 @@
       },
       "invite": {
         "title": "Inviter un membre",
-        "description": "Envoyez une invitation pour gérer les provisions ensemble.",
+        "description": "Créez un lien pour cette adresse e-mail et partagez-le avec un membre du foyer.",
         "emailLabel": "Adresse e-mail du membre",
         "placeholder": "membre@example.com",
-        "action": "Inviter"
+        "action": "Créer une invitation",
+        "created": "Le lien d'invitation est prêt à être partagé.",
+        "linkLabel": "Lien d'invitation",
+        "copy": "Copier le lien",
+        "copied": "Lien copié."
+      },
+      "transfer": {
+        "title": "Transférer la propriété du foyer",
+        "description": "Confiez la propriété à un autre membre avant de supprimer votre compte.",
+        "emailLabel": "Adresse e-mail du membre",
+        "placeholder": "membre@example.com",
+        "action": "Transférer la propriété"
       },
       "sessions": {
         "title": "Sessions actives",
@@ -157,7 +177,8 @@
         "title": "Supprimer définitivement le compte ?",
         "description": "Le compte, les provisions, les recettes et l'historique de cuisine seront supprimés. Cette action est irréversible.",
         "cancel": "Annuler",
-        "confirm": "Supprimer le compte"
+        "confirm": "Supprimer le compte",
+        "ownerHasMembers": "Transférez d'abord la propriété du foyer à un autre membre."
       }
     },
     "advanced": {
@@ -187,11 +208,11 @@
       },
       "demo": {
         "title": "Données de démonstration",
-        "description": "Restaurez les produits, recettes et la liste de courses d'exemple.",
+        "description": "Restaurez les produits et la liste de courses d'exemple.",
         "dialog": {
           "open": "Réinitialiser les données de démonstration",
           "title": "Réinitialiser les données de démonstration ?",
-          "description": "Les données de démonstration actuelles seront remplacées par le jeu initial. Vos données réelles ne seront pas modifiées.",
+          "description": "Les produits et articles d'exemple seront restaurés. Vos propres données resteront intactes. Disponible uniquement pour un foyer d'une personne.",
           "cancel": "Annuler",
           "confirm": "Réinitialiser"
         }
@@ -643,18 +664,27 @@
     },
     "success": {
       "title": "Receipt is ready",
-      "description": "{count} products verified. Saving to shared inventory will be connected with the Supabase schema.",
+      "description": "{count} produits ont été ajoutés aux réserves partagées.",
       "inventory": "View inventory",
       "another": "Add another receipt"
     },
     "review": {
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
-      "description": "OCR is not connected yet – below is demo data you can edit.",
-      "back": "Back to file",
+      "description": "Saisissez les produits du reçu et vérifiez-les avant de les enregistrer.",
+      "back": "Retour",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
       "confirm": "Confirm products"
+    },
+    "manual": {
+      "eyebrow": "Étape 1 sur 2",
+      "title": "Ajouter un reçu manuellement",
+      "description": "Saisissez les produits du reçu pour les ajouter aux réserves partagées.",
+      "cardTitle": "Produits du reçu",
+      "cardDescription": "Indiquez le nom, la quantité, l'unité et le lieu de stockage. Les photos et PDF viendront plus tard.",
+      "start": "Saisir les produits",
+      "notice": "La lecture des photos et PDF n'est pas encore disponible."
     },
     "upload": {
       "eyebrow": "Step 1 of 2",

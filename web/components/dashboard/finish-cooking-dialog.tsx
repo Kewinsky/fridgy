@@ -7,10 +7,9 @@ import { CheckCircle2Icon } from "lucide-react";
 import { toast } from "sonner";
 
 import {
-  consumeInventory,
   useInventory,
 } from "@/components/dashboard/use-inventory";
-import { recordCooking } from "@/components/dashboard/use-recipe-library";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -32,9 +31,11 @@ import {
 
 export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
   const t = useTranslations("FinishCooking");
+  const common = useTranslations("Common");
   const locale = useLocale();
   const router = useRouter();
   const products = useInventory();
+  const { finishCooking, deductionMode } = useDashboardData();
   const [open, setOpen] = useState(false);
   const [deductions, setDeductions] = useState<
     InventoryDeductionSuggestion[]
@@ -60,16 +61,26 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
     );
   }
 
-  function finishCooking() {
-    consumeInventory(
-      deductions
-        .filter((deduction) => deduction.selected && deduction.amount > 0)
-        .map(({ amount, productId }) => ({ amount, productId })),
-    );
-    recordCooking(recipe);
+  async function complete(deductionsToApply: InventoryDeductionSuggestion[]) {
+    try {
+      await finishCooking(recipe,
+        deductionsToApply
+          .filter((deduction) => deduction.selected && deduction.amount > 0)
+          .map(({ amount, productId }) => ({ amount, productId })),
+      );
+    } catch {
+      toast.error(common("saveFailed"));
+      return;
+    }
     setOpen(false);
     toast.success(t("success"));
     router.push("/dashboard/moje-przepisy");
+  }
+
+  if (deductionMode !== "ask") {
+    return <Button className="mt-8 h-12 w-full" onClick={() => void complete(
+      deductionMode === "always" ? suggestRecipeDeductions(recipe, products) : [],
+    )}><CheckCircle2Icon aria-hidden="true" /> {t("open")}</Button>;
   }
 
   return (
@@ -168,7 +179,7 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
           >
             {t("cancel")}
           </Button>
-          <Button type="button" className="h-11" onClick={finishCooking}>
+          <Button type="button" className="h-11" onClick={() => void complete(deductions)}>
             {t("confirm")}
           </Button>
         </DialogFooter>

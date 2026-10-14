@@ -35,8 +35,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  updateInventory,
   useInventory,
+  useInventoryActions,
 } from "@/components/dashboard/use-inventory";
 import {
   DropdownMenu,
@@ -65,8 +65,10 @@ type FreshnessFilter = "all" | FreshnessStatus;
 
 export function InventoryPage() {
   const t = useTranslations("Inventory");
+  const common = useTranslations("Common");
   const locale = useLocale() as Locale;
   const products = useInventory();
+  const { updateInventory } = useInventoryActions();
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState<LocationFilter>("Wszystkie");
   const [category, setCategory] = useState<CategoryFilter>("Wszystkie");
@@ -142,14 +144,19 @@ export function InventoryPage() {
     });
   }
 
-  function runBulkAction(action: InventoryAction) {
+  async function runBulkAction(action: InventoryAction) {
     if (!selectedIds.size) return;
     const frozenUntil = new Date(Date.now() + 45 * 86_400_000)
       .toISOString()
       .slice(0, 10);
-    updateInventory((current) =>
-      applyInventoryAction(current, selectedIds, action, frozenUntil),
-    );
+    try {
+      await updateInventory((current) =>
+        applyInventoryAction(current, selectedIds, action, frozenUntil),
+      );
+    } catch {
+      toast.error(common("saveFailed"));
+      return;
+    }
     toast.success(
       action.type === "consume"
         ? t("toasts.consumed")
@@ -163,12 +170,22 @@ export function InventoryPage() {
     setEditing(false);
   }
 
-  function saveProduct(updatedProduct: DemoProduct) {
-    updateInventory((current) =>
-      current.map((product) =>
-        product.id === updatedProduct.id ? updatedProduct : product,
-      ),
-    );
+  async function saveProduct(updatedProduct: DemoProduct) {
+    const original = products.find((product) => product.id === updatedProduct.id);
+    const unchangedName = original && updatedProduct.name === localizeDemoProduct(original, locale).name;
+    const productToSave = unchangedName
+      ? { ...updatedProduct, name: original.name, seedKey: original.seedKey }
+      : { ...updatedProduct, seedKey: undefined };
+    try {
+      await updateInventory((current) =>
+        current.map((product) =>
+          product.id === updatedProduct.id ? productToSave : product,
+        ),
+      );
+    } catch {
+      toast.error(common("saveFailed"));
+      return;
+    }
     setProductToEdit(null);
     toast.success(t("toasts.saved"));
   }

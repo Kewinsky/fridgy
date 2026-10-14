@@ -1,6 +1,14 @@
 {
   "Common": {
-    "changeLanguage": "Sprache ändern"
+    "changeLanguage": "Sprache ändern",
+    "saved": "Änderungen gespeichert.",
+    "saveFailed": "Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen."
+  },
+  "Invitation": {
+    "title": "Einem Haushalt beitreten",
+    "description": "Du siehst dann die gemeinsamen Vorräte und die Einkaufsliste. Deine eigenen Rezepte bleiben in deinem Konto.",
+    "accept": "Haushalt beitreten",
+    "error": "Einladung konnte nicht angenommen werden. Prüfe E-Mail-Adresse und Ablaufdatum. Exportiere eigene Vorräte vor dem Beitritt."
   },
   "Metadata": {
     "description": "Lebensmittel zu Hause verwalten und weniger verschwenden."
@@ -126,7 +134,8 @@
       "google": {
         "title": "Google-Konto",
         "description": "Das Konto für die schnelle Anmeldung.",
-        "connected": "Verbunden"
+        "connected": "Verbunden",
+        "notConnected": "Nicht verbunden"
       },
       "household": {
         "title": "Name des Haushalts",
@@ -137,10 +146,21 @@
       },
       "invite": {
         "title": "Haushaltsmitglied einladen",
-        "description": "Sende eine Einladung zur gemeinsamen Vorratsverwaltung.",
+        "description": "Erstelle einen Link für diese E-Mail-Adresse und teile ihn mit deinem Haushaltsmitglied.",
         "emailLabel": "E-Mail des Haushaltsmitglieds",
         "placeholder": "mitglied@example.com",
-        "action": "Einladen"
+        "action": "Einladung erstellen",
+        "created": "Der Einladungslink kann jetzt geteilt werden.",
+        "linkLabel": "Einladungslink",
+        "copy": "Link kopieren",
+        "copied": "Link kopiert."
+      },
+      "transfer": {
+        "title": "Haushaltseigentum übertragen",
+        "description": "Übertrage die Eigentümerrolle an ein Mitglied, bevor du dein Konto löschst.",
+        "emailLabel": "E-Mail-Adresse des Mitglieds",
+        "placeholder": "mitglied@example.com",
+        "action": "Eigentum übertragen"
       },
       "sessions": {
         "title": "Aktive Sitzungen",
@@ -157,7 +177,8 @@
         "title": "Konto dauerhaft löschen?",
         "description": "Konto, Vorräte, Rezepte und Kochverlauf werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
         "cancel": "Abbrechen",
-        "confirm": "Konto löschen"
+        "confirm": "Konto löschen",
+        "ownerHasMembers": "Übertrage zuerst die Haushaltsleitung an ein anderes Mitglied."
       }
     },
     "advanced": {
@@ -187,11 +208,11 @@
       },
       "demo": {
         "title": "Demo-Daten",
-        "description": "Stelle die ursprünglichen Beispielprodukte, Rezepte und die Einkaufsliste wieder her.",
+        "description": "Stelle die Beispielprodukte und die Einkaufsliste wieder her.",
         "dialog": {
           "open": "Demo-Daten zurücksetzen",
           "title": "Demo-Daten zurücksetzen?",
-          "description": "Die aktuellen Demo-Daten werden durch den ursprünglichen Satz ersetzt. Deine echten Daten bleiben unverändert.",
+          "description": "Beispielprodukte und Listeneinträge werden wiederhergestellt. Eigene Daten bleiben erhalten. Nur für Haushalte mit einem Mitglied verfügbar.",
           "cancel": "Abbrechen",
           "confirm": "Daten zurücksetzen"
         }
@@ -643,18 +664,27 @@
     },
     "success": {
       "title": "Receipt is ready",
-      "description": "{count} products verified. Saving to shared inventory will be connected with the Supabase schema.",
+      "description": "{count} Produkte wurden zu den gemeinsamen Vorräten hinzugefügt.",
       "inventory": "View inventory",
       "another": "Add another receipt"
     },
     "review": {
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
-      "description": "OCR is not connected yet – below is demo data you can edit.",
-      "back": "Back to file",
+      "description": "Trage die Produkte vom Kassenbon ein und prüfe sie vor dem Speichern.",
+      "back": "Zurück",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
       "confirm": "Confirm products"
+    },
+    "manual": {
+      "eyebrow": "Schritt 1 von 2",
+      "title": "Kassenbon manuell hinzufügen",
+      "description": "Trage Produkte vom Kassenbon ein. Fridgy fügt sie den gemeinsamen Vorräten hinzu.",
+      "cardTitle": "Produkte vom Kassenbon",
+      "cardDescription": "Trage Name, Menge, Einheit und Lagerort ein. Fotos und PDF folgen später.",
+      "start": "Produkte eintragen",
+      "notice": "Das Scannen von Fotos und PDF ist noch nicht verfügbar."
     },
     "upload": {
       "eyebrow": "Step 1 of 2",

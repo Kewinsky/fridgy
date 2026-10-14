@@ -1,23 +1,26 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { addDays, format } from "date-fns";
 import Link from "next/link";
 import {
   CheckIcon,
   ChevronDownIcon,
-  FileImageIcon,
   PlusIcon,
   ReceiptTextIcon,
   Trash2Icon,
-  UploadIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
 import { PageHeader } from "@/components/dashboard/page-header";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
+import { productCategories, productCategoryAppearance, productCategoryMessageKeys, type ProductCategory } from "@/components/dashboard/product-category-options";
+import { saveManualReceipt } from "@/app/dashboard/data-actions";
 import { StorageLocationIcon } from "@/components/dashboard/storage-location-icon";
 import { storageLocationMessageKeys } from "@/components/dashboard/storage-location-icon";
 import { Button } from "@/components/ui/button";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -35,8 +38,12 @@ type ReceiptItem = {
   quantity: string;
   unit: string;
   storageLocation: StorageLocation;
+  category: ProductCategory;
+  estimatedUseBy: string;
   price: string;
 };
+
+function defaultUseBy() { return format(addDays(new Date(), 7), "yyyy-MM-dd"); }
 
 function getSampleItems(t: ReturnType<typeof useTranslations<"Receipt">>): ReceiptItem[] {
   return [
@@ -46,6 +53,8 @@ function getSampleItems(t: ReturnType<typeof useTranslations<"Receipt">>): Recei
     quantity: "1",
     unit: "l",
     storageLocation: "Lodówka",
+    category: "Nabiał",
+    estimatedUseBy: defaultUseBy(),
     price: "3,49",
   },
   {
@@ -54,6 +63,8 @@ function getSampleItems(t: ReturnType<typeof useTranslations<"Receipt">>): Recei
     quantity: "0,62",
     unit: "kg",
     storageLocation: "Lodówka",
+    category: "Warzywa",
+    estimatedUseBy: defaultUseBy(),
     price: "8,67",
   },
   {
@@ -62,27 +73,22 @@ function getSampleItems(t: ReturnType<typeof useTranslations<"Receipt">>): Recei
     quantity: "0,54",
     unit: "kg",
     storageLocation: "Lodówka",
+    category: "Mięso",
+    estimatedUseBy: defaultUseBy(),
     price: "13,49",
   },
   ];
 }
-const allowedFileTypes = new Set([
-  "image/jpeg",
-  "image/png",
-  "image/heic",
-  "application/pdf",
-]);
-const maxFileSize = 20 * 1024 * 1024;
 const locations: StorageLocation[] = ["Lodówka", "Zamrażarka", "Spiżarnia"];
 
 export function ReceiptPage() {
   const t = useTranslations("Receipt");
+  const common = useTranslations("Common");
   const inventoryT = useTranslations("Inventory");
   const sampleItems = getSampleItems(t);
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState<Step>("upload");
-  const [fileName, setFileName] = useState("");
   const [items, setItems] = useState<ReceiptItem[]>(sampleItems);
+  const { refreshInventory } = useDashboardData();
 
   function updateItem(id: string, patch: Partial<ReceiptItem>) {
     setItems((current) =>
@@ -99,17 +105,19 @@ export function ReceiptPage() {
         quantity: "1",
         unit: "szt.",
         storageLocation: "Lodówka",
+        category: "Przetwory",
+        estimatedUseBy: defaultUseBy(),
         price: "",
       },
     ]);
   }
 
-  function confirmItems() {
+  async function confirmItems() {
     if (
       !items.length ||
       items.some(
         (item) =>
-          !item.name.trim() || !item.quantity.trim() || !item.unit.trim(),
+          !item.name.trim() || !item.quantity.trim() || !item.unit.trim() || !item.estimatedUseBy,
       )
     ) {
       toast.error(t("toasts.incomplete"));
@@ -125,22 +133,21 @@ export function ReceiptPage() {
       toast.error(t("toasts.invalidQuantity"));
       return;
     }
-    setStep("success");
-  }
-
-  function selectFile(file: File | undefined) {
-    if (!file) return;
-    if (!allowedFileTypes.has(file.type)) {
-      toast.error(t("toasts.invalidFile"));
-      if (fileInputRef.current) fileInputRef.current.value = "";
-      return;
+    try {
+      await saveManualReceipt(items.map((item) => ({
+        name: item.name.trim(),
+        quantity: Number(item.quantity.replace(",", ".")),
+        unit: item.unit.trim(),
+        storageLocation: item.storageLocation,
+        category: item.category,
+        estimatedUseBy: item.estimatedUseBy,
+        price: item.price,
+      })));
+      await refreshInventory();
+      setStep("success");
+    } catch {
+      toast.error(common("saveFailed"));
     }
-    if (file.size > maxFileSize) {
-      toast.error(t("toasts.fileTooLarge"));
-      if (fileInputRef.current) fileInputRef.current.value = "";
-      return;
-    }
-    setFileName(file.name);
   }
 
   if (step === "success") {
@@ -165,7 +172,6 @@ export function ReceiptPage() {
             variant="outline"
             className="h-11"
             onClick={() => {
-              setFileName("");
               setItems(sampleItems);
               setStep("upload");
             }}
@@ -339,6 +345,26 @@ export function ReceiptPage() {
               >
                 <Trash2Icon aria-hidden="true" />
               </Button>
+              <div className="grid gap-3 sm:grid-cols-2 lg:col-span-6">
+                <div className="grid gap-2">
+                  <Label htmlFor={`receipt-category-${item.id}`}>{inventoryT("editDialog.category")}</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger id={`receipt-category-${item.id}`} render={<Button type="button" variant="outline" className="h-11 w-full justify-between px-3 font-normal">
+                      <span>{productCategoryAppearance[item.category].emoji} {inventoryT(`categories.${productCategoryMessageKeys[item.category]}`)}</span>
+                      <ChevronDownIcon aria-hidden="true" />
+                    </Button>} />
+                    <DropdownMenuContent align="start" className="min-w-(--anchor-width)">
+                      {productCategories.map((category) => <DropdownMenuItem key={category} onClick={() => updateItem(item.id, { category })}>
+                        {productCategoryAppearance[category].emoji} {inventoryT(`categories.${productCategoryMessageKeys[category]}`)}
+                      </DropdownMenuItem>)}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor={`receipt-date-${item.id}`}>{inventoryT("editDialog.date")}</Label>
+                  <DatePicker id={`receipt-date-${item.id}`} value={item.estimatedUseBy} onValueChange={(estimatedUseBy) => updateItem(item.id, { estimatedUseBy })} />
+                </div>
+              </div>
             </div>
           ))}
           <div className="p-4">
@@ -370,46 +396,28 @@ export function ReceiptPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <PageHeader
-        eyebrow={t("upload.eyebrow")}
-        title={t("upload.title")}
-        description={t("upload.description")}
+        eyebrow={t("manual.eyebrow")}
+        title={t("manual.title")}
+        description={t("manual.description")}
       />
       <section className="app-card p-5 sm:p-7">
-        <div className="subtle-grid flex min-h-72 flex-col items-center justify-center rounded-xl border-2 border-dashed border-input bg-muted/30 px-5 text-center">
+        <div className="subtle-grid flex min-h-52 flex-col items-center justify-center rounded-xl border border-input bg-muted/30 px-5 text-center">
           <span className="flex size-14 items-center justify-center rounded-full bg-card text-primary shadow-sm">
-            <UploadIcon className="size-6" aria-hidden="true" />
+            <ReceiptTextIcon className="size-6" aria-hidden="true" />
           </span>
-          <h2 className="mt-5 text-lg font-extrabold">{t("upload.fileTitle")}</h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            {t("upload.formats")}
-          </p>
-          <Input
-            ref={fileInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/heic,application/pdf"
-            className="sr-only"
-            onChange={(event) => selectFile(event.target.files?.[0])}
-          />
-          <Button
-            className="mt-5 h-11"
-            onClick={() => fileInputRef.current?.click()}
-          >
-            <FileImageIcon aria-hidden="true" /> {t("upload.selectFile")}
-          </Button>
-          {fileName ? (
-            <p className="mt-3 text-sm font-semibold text-primary">
-              {t("upload.selected", { fileName })}
-            </p>
-          ) : null}
+          <h2 className="mt-5 text-lg font-extrabold">{t("manual.cardTitle")}</h2>
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">{t("manual.cardDescription")}</p>
         </div>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
           <Button
             className="h-11"
-            disabled={!fileName}
-            onClick={() => setStep("review")}
+            onClick={() => {
+              setItems([{ id: crypto.randomUUID(), name: "", quantity: "1", unit: "szt.", storageLocation: "Lodówka", category: "Przetwory", estimatedUseBy: defaultUseBy(), price: "" }]);
+              setStep("review");
+            }}
           >
-            <ReceiptTextIcon aria-hidden="true" /> {t("upload.review")}
+            <ReceiptTextIcon aria-hidden="true" /> {t("manual.start")}
           </Button>
           <Button
             variant="outline"
@@ -423,7 +431,7 @@ export function ReceiptPage() {
           </Button>
         </div>
         <p className="mt-4 text-center text-xs leading-5 text-muted-foreground">
-          {t("upload.notice")}
+          {t("manual.notice")}
         </p>
       </section>
     </div>

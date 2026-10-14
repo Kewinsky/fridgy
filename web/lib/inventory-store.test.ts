@@ -5,6 +5,7 @@ import type { Recipe } from "./demo-recipes.ts";
 import type { DemoProduct } from "./demo-data.ts";
 import {
   applyInventoryDeductions,
+  matchRecipeToInventory,
   suggestRecipeDeductions,
 } from "./inventory-store.ts";
 
@@ -65,4 +66,19 @@ test("reduces stock and marks an empty product as consumed", () => {
   assert.equal(result[0].status, "active");
   assert.equal(result[1].quantity, 0);
   assert.equal(result[1].status, "consumed");
+});
+
+test("recipe availability follows active inventory rather than demo flags", () => {
+  const currentRecipe: Recipe = {
+    slug: "pasta", title: "Pasta", description: "", time: 20, difficulty: "Łatwy",
+    calories: 0, cuisine: "Włoska", servings: 2, steps: [],
+    ingredients: [
+      { name: "Makaron penne", amount: "200 g", available: false },
+      { name: "Pomidory malinowe", amount: "2 szt.", available: false },
+      { name: "Ser", amount: "50 g", available: true },
+    ],
+  };
+  const matched = matchRecipeToInventory(currentRecipe, products);
+  assert.deepEqual(matched.ingredients.map((item) => item.available), [true, true, false]);
+  assert.deepEqual(currentRecipe.ingredients.map((item) => item.available), [false, false, true]);
 });

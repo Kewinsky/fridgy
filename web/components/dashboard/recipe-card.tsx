@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import {
@@ -13,6 +15,7 @@ import {
 } from "@/components/dashboard/add-recipe-dialog";
 import { AddMissingItemsButton } from "@/components/dashboard/add-missing-items-button";
 import { FavoriteRecipeButton } from "@/components/dashboard/recipe-actions";
+import { useInventory } from "@/components/dashboard/use-inventory";
 import { difficultyMessageKeys } from "@/components/dashboard/recipe-options";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,6 +26,7 @@ import {
 import { localizeDemoRecipe } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
+import { matchRecipeToInventory } from "@/lib/inventory-store";
 
 export function RecipeCard({
   recipe,
@@ -34,11 +38,12 @@ export function RecipeCard({
   servings?: number;
 }) {
   const t = useTranslations("Recipe");
-  const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
+  const matchedRecipe = matchRecipeToInventory(recipe, useInventory());
+  const displayRecipe = localizeDemoRecipe(matchedRecipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
-  const missing = suggestion ? getMissingIngredients(recipe) : [];
-  const match = suggestion ? getRecipeMatch(recipe) : null;
+  const missing = suggestion ? getMissingIngredients(matchedRecipe) : [];
+  const match = suggestion ? getRecipeMatch(matchedRecipe) : null;
   const href = customRecipe
     ? `/dashboard/moje-przepisy/${recipe.slug}`
     : `/dashboard/co-ugotowac/${recipe.slug}`;

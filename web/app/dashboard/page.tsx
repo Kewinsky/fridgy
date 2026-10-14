@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import {
   ArrowRightIcon,
   LeafIcon,
@@ -11,6 +11,12 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { FreshnessLabel } from "@/components/dashboard/freshness-label";
+import { getFreshnessStatus } from "@/lib/demo-data";
+import { localizeDemoProduct } from "@/lib/demo-localization";
+import type { Locale } from "@/i18n/config";
+import { loadDashboardData } from "@/lib/dashboard-data";
+import { createClient } from "@/lib/supabase/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Dashboard");
@@ -19,6 +25,15 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function DashboardPage() {
   const t = await getTranslations("Dashboard");
+  const locale = await getLocale() as Locale;
+  const supabase = await createClient();
+  const { data: auth } = await supabase.auth.getClaims();
+  if (!auth?.claims) return null;
+  const { products, shoppingItems } = await loadDashboardData(supabase, auth.claims.sub);
+  const activeProducts = products.filter((product) => product.status === "active");
+  const expiringProducts = activeProducts.filter((product) =>
+    ["overdue", "today", "soon"].includes(getFreshnessStatus(product.estimatedUseBy)),
+  ).sort((first, second) => first.estimatedUseBy.localeCompare(second.estimatedUseBy));
 
   return (
     <>
@@ -38,9 +53,9 @@ export default async function DashboardPage() {
       </section>
 
       <section aria-label={t("summary")} className="mt-5 grid gap-3 sm:grid-cols-3">
-        <Metric icon={PackageCheckIcon} value="0" label={t("productsAtHome")} />
-        <Metric icon={SparklesIcon} value="0" label={t("useSoon")} />
-        <Metric icon={ListChecksIcon} value="0" label={t("shoppingList")} />
+        <Metric icon={PackageCheckIcon} value={String(activeProducts.length)} label={t("productsAtHome")} />
+        <Metric icon={SparklesIcon} value={String(expiringProducts.length)} label={t("useSoon")} />
+        <Metric icon={ListChecksIcon} value={String(shoppingItems.filter((item) => !item.done).length)} label={t("shoppingList")} />
       </section>
 
       <div className="mt-7 grid gap-5 xl:grid-cols-[1.4fr_1fr]">
@@ -54,15 +69,20 @@ export default async function DashboardPage() {
               {t("view")} <ArrowRightIcon className="size-4" aria-hidden="true" />
             </Link>
           </div>
-          <div className="py-12 text-center">
-            <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-fresh-soft text-fresh">
-              <LeafIcon aria-hidden="true" />
-            </span>
-            <p className="mt-4 font-bold">{t("emptyTitle")}</p>
-            <p className="mx-auto mt-1 max-w-sm text-sm leading-6 text-muted-foreground">
-              {t("emptyDescription")}
-            </p>
-          </div>
+          {expiringProducts.length ? (
+            <ul className="mt-5 divide-y divide-border">
+              {expiringProducts.slice(0, 5).map((product) => <li key={product.id} className="flex flex-wrap items-center justify-between gap-2 py-3">
+                <span className="font-semibold">{localizeDemoProduct(product, locale).name}</span>
+                <FreshnessLabel date={product.estimatedUseBy} />
+              </li>)}
+            </ul>
+          ) : (
+            <div className="py-12 text-center">
+              <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-fresh-soft text-fresh"><LeafIcon aria-hidden="true" /></span>
+              <p className="mt-4 font-bold">{t("emptyTitle")}</p>
+              <p className="mx-auto mt-1 max-w-sm text-sm leading-6 text-muted-foreground">{t("emptyDescription")}</p>
+            </div>
+          )}
         </section>
 
         <section className="app-card p-5 sm:p-6">

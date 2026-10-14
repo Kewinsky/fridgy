@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { addShoppingItems } from "@/lib/shopping-list";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
+import { mergeShoppingItems } from "@/lib/shopping-list";
 import { cn } from "@/lib/utils";
 
 export function AddMissingItemsButton({
@@ -16,14 +17,18 @@ export function AddMissingItemsButton({
   className?: string;
 }) {
   const t = useTranslations("AddMissingItems");
+  const common = useTranslations("Common");
+  const { shoppingItems, updateShoppingItems } = useDashboardData();
 
-  function addItems() {
-    const added = addShoppingItems(window.localStorage, names);
+  async function addItems() {
+    const added = mergeShoppingItems(shoppingItems, names).changedCount;
     if (!added) {
       toast.info(t("alreadyAdded"));
       return;
     }
-
+    try {
+      await updateShoppingItems((current) => mergeShoppingItems(current, names).items);
+    } catch { toast.error(common("saveFailed")); return; }
     toast.success(t("success", { count: added }));
   }
 
