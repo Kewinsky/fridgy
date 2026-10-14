@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { ChefHatIcon, HeartIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import {
 } from "@/components/dashboard/use-recipe-library";
 
 export function StartCookingButton({ recipe, className }: { recipe: Recipe; className?: string }) {
+  const t = useTranslations("Recipe");
   const router = useRouter();
 
   function startCooking() {
@@ -20,12 +22,13 @@ export function StartCookingButton({ recipe, className }: { recipe: Recipe; clas
 
   return (
     <Button className={cn("h-11", className)} onClick={startCooking}>
-      <ChefHatIcon aria-hidden="true" /> Gotuj!
+      <ChefHatIcon aria-hidden="true" /> {t("cook")}
     </Button>
   );
 }
 
 export function FavoriteRecipeButton({ slug, compact = false }: { slug: string; compact?: boolean }) {
+  const t = useTranslations("Recipe");
   const library = useRecipeLibrary();
   const favorite = library.favoriteSlugs.includes(slug);
 
@@ -35,12 +38,12 @@ export function FavoriteRecipeButton({ slug, compact = false }: { slug: string; 
       variant={favorite ? "destructive" : "outline"}
       size={compact ? "icon-lg" : "default"}
       className={compact ? "size-11" : "h-11"}
-      aria-label={favorite ? "Usuń z ulubionych" : "Dodaj do ulubionych"}
+      aria-label={favorite ? t("removeFavorite") : t("addFavorite")}
       aria-pressed={favorite}
       onClick={() => changeFavorite(slug)}
     >
       <HeartIcon className={cn(favorite && "fill-current")} aria-hidden="true" />
-      {compact ? null : favorite ? "W ulubionych" : "Dodaj do ulubionych"}
+      {compact ? null : favorite ? t("favorite") : t("addFavorite")}
     </Button>
   );
 }

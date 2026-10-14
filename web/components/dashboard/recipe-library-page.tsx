@@ -7,17 +7,21 @@ import {
   HistoryIcon,
   UtensilsIcon,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { AddRecipeDialog } from "@/components/dashboard/add-recipe-dialog";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsScrollableList, TabsTrigger } from "@/components/ui/tabs";
 import { demoRecipes, type Recipe } from "@/lib/demo-recipes";
 import { getFavoriteCuisine } from "@/lib/recipe-library";
+import { cuisineMessageKeys, isCuisine } from "@/components/dashboard/recipe-options";
 
 export function RecipeLibraryPage() {
+  const t = useTranslations("RecipeLibrary");
+  const recipeT = useTranslations("Recipe");
   const library = useRecipeLibrary();
   const allRecipes = [...library.customRecipes, ...demoRecipes];
   const favoriteRecipes = allRecipes.filter((recipe) =>
@@ -28,51 +32,55 @@ export function RecipeLibraryPage() {
   )
     .map((slug) => allRecipes.find((recipe) => recipe.slug === slug))
     .filter((recipe): recipe is Recipe => recipe !== undefined);
+  const favoriteCuisine = getFavoriteCuisine(library);
+  const favoriteCuisineLabel = isCuisine(favoriteCuisine)
+    ? recipeT(`cuisineOptions.${cuisineMessageKeys[favoriteCuisine]}`)
+    : t("noData");
 
   return (
     <>
       <PageHeader
-        eyebrow="Twoja książka kucharska"
-        title="Moje przepisy"
-        description="Zapisuj ulubione dania, dodawaj własne przepisy i wracaj do historii gotowania."
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("description")}
         actions={<AddRecipeDialog />}
       />
 
       <section
-        aria-label="Podsumowanie przepisów"
+        aria-label={t("summary")}
         className="mb-6 grid gap-3 sm:grid-cols-3"
       >
         <Metric
           icon={HistoryIcon}
           value={`${library.history.length}`}
-          label="wszystkich ugotowań"
+          label={t("allCookings")}
         />
         <Metric
           icon={HeartIcon}
           value={`${favoriteRecipes.length}`}
-          label="ulubionych przepisów"
+          label={t("favoriteRecipes")}
         />
         <Metric
           icon={UtensilsIcon}
-          value={getFavoriteCuisine(library)}
-          label="najczęstsza kuchnia"
+          value={favoriteCuisineLabel}
+          label={t("favoriteCuisine")}
         />
       </section>
 
       <Tabs defaultValue="history">
-        <TabsList>
-          <TabsTrigger value="favorites">
-            <HeartIcon aria-hidden="true" /> Ulubione
+        <TabsScrollableList>
+          <TabsTrigger value="favorites" className="h-9 px-3">
+            <HeartIcon aria-hidden="true" /> {t("tabs.favorites")}
           </TabsTrigger>
-          <TabsTrigger value="custom">
-            <BookOpenIcon aria-hidden="true" /> Moje
+          <TabsTrigger value="custom" className="h-9 px-3">
+            <BookOpenIcon aria-hidden="true" /> {t("tabs.custom")}
           </TabsTrigger>
-          <TabsTrigger value="history">
-            <HistoryIcon aria-hidden="true" /> Historia
+          <TabsTrigger value="history" className="h-9 px-3">
+            <HistoryIcon aria-hidden="true" /> {t("tabs.history")}
           </TabsTrigger>
-        </TabsList>
+        </TabsScrollableList>
 
-        <TabsContent value="favorites">
+        <TabsContent value="favorites" className="pt-3">
           {favoriteRecipes.length ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {favoriteRecipes.map((recipe) => (
@@ -82,13 +90,13 @@ export function RecipeLibraryPage() {
           ) : (
             <EmptyState
               icon={HeartIcon}
-              title="Brak ulubionych"
-              description="Dodaj sercem przepisy, do których chcesz szybko wracać."
+              title={t("emptyFavorites.title")}
+              description={t("emptyFavorites.description")}
             />
           )}
         </TabsContent>
 
-        <TabsContent value="custom">
+        <TabsContent value="custom" className="pt-3">
           {library.customRecipes.length ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {library.customRecipes.map((recipe) => (
@@ -98,14 +106,14 @@ export function RecipeLibraryPage() {
           ) : (
             <EmptyState
               icon={BookOpenIcon}
-              title="Nie masz jeszcze własnych przepisów"
-              description="Dodaj rodzinny przepis albo danie, które chcesz zachować."
+              title={t("emptyCustom.title")}
+              description={t("emptyCustom.description")}
               actionNode={<AddRecipeDialog />}
             />
           )}
         </TabsContent>
 
-        <TabsContent value="history">
+        <TabsContent value="history" className="pt-3">
           {historyRecipes.length ? (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {historyRecipes.map((recipe) => (
@@ -115,10 +123,10 @@ export function RecipeLibraryPage() {
           ) : (
             <EmptyState
               icon={HistoryIcon}
-              title="Historia jest jeszcze pusta"
-              description="Otwórz przepis i wybierz „Gotuj!”, aby zapisać pierwsze przygotowanie."
+              title={t("emptyHistory.title")}
+              description={t("emptyHistory.description")}
               href="/dashboard/co-ugotowac"
-              action="Znajdź przepis"
+              action={t("emptyHistory.action")}
             />
           )}
         </TabsContent>

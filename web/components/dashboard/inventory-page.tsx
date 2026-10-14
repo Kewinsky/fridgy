@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import {
   CheckCheckIcon,
   ChefHatIcon,
@@ -22,12 +23,14 @@ import { FreshnessLabel } from "@/components/dashboard/freshness-label";
 import {
   productCategories,
   productCategoryAppearance,
+  productCategoryMessageKeys,
 } from "@/components/dashboard/product-category-options";
 import { ProductEditDialog } from "@/components/dashboard/product-edit-dialog";
 import { ProductVisual } from "@/components/dashboard/product-visual";
 import {
   StorageLocationIcon,
   storageLocationEmojis,
+  storageLocationMessageKeys,
 } from "@/components/dashboard/storage-location-icon";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -48,6 +51,8 @@ import {
   type FreshnessStatus,
   type StorageLocation,
 } from "@/lib/demo-data";
+import { localizeDemoProduct } from "@/lib/demo-localization";
+import type { Locale } from "@/i18n/config";
 import {
   applyInventoryAction,
   type InventoryAction,
@@ -58,57 +63,9 @@ type LocationFilter = "Wszystkie" | StorageLocation;
 type CategoryFilter = "Wszystkie" | (typeof productCategories)[number];
 type FreshnessFilter = "all" | FreshnessStatus;
 
-const locationFilters: FilterBadgeOption<LocationFilter>[] = [
-  { value: "Wszystkie", label: "Wszystkie" },
-  { value: "Lodówka", label: "Lodówka", emoji: storageLocationEmojis.Lodówka },
-  { value: "Zamrażarka", label: "Zamrażarka", emoji: storageLocationEmojis.Zamrażarka },
-  { value: "Spiżarnia", label: "Spiżarnia", emoji: storageLocationEmojis.Spiżarnia },
-];
-const categoryFilters: FilterBadgeOption<CategoryFilter>[] = [
-  {
-    value: "Wszystkie",
-    label: "Wszystkie",
-  },
-  ...productCategories.map((category) => ({
-    value: category,
-    label: category,
-    emoji: productCategoryAppearance[category].emoji,
-    className: productCategoryAppearance[category].className,
-  })),
-];
-const freshnessFilters: FilterBadgeOption<FreshnessFilter>[] = [
-  {
-    value: "all",
-    label: "Wszystkie",
-  },
-  {
-    value: "overdue",
-    label: "Po terminie",
-    emoji: "⛔",
-  },
-  {
-    value: "today",
-    label: "Dzisiaj",
-    emoji: "🔥",
-  },
-  {
-    value: "soon",
-    label: "Wkrótce",
-    emoji: "⏳",
-  },
-  {
-    value: "week",
-    label: "Ten tydzień",
-    emoji: "🗓️",
-  },
-  {
-    value: "calm",
-    label: "Na spokojnie",
-    emoji: "🌿",
-  },
-];
-
 export function InventoryPage() {
+  const t = useTranslations("Inventory");
+  const locale = useLocale() as Locale;
   const products = useInventory();
   const [query, setQuery] = useState("");
   const [location, setLocation] = useState<LocationFilter>("Wszystkie");
@@ -117,11 +74,36 @@ export function InventoryPage() {
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const locationFilters: FilterBadgeOption<LocationFilter>[] = [
+    { value: "Wszystkie", label: t("all") },
+    ...(["Lodówka", "Zamrażarka", "Spiżarnia"] as const).map((value) => ({
+      value,
+      label: t(`locations.${storageLocationMessageKeys[value]}`),
+      emoji: storageLocationEmojis[value],
+    })),
+  ];
+  const categoryFilters: FilterBadgeOption<CategoryFilter>[] = [
+    { value: "Wszystkie", label: t("all") },
+    ...productCategories.map((value) => ({
+      value,
+      label: t(`categories.${productCategoryMessageKeys[value]}`),
+      emoji: productCategoryAppearance[value].emoji,
+      className: productCategoryAppearance[value].className,
+    })),
+  ];
+  const freshnessFilters: FilterBadgeOption<FreshnessFilter>[] = [
+    { value: "all", label: t("all") },
+    { value: "overdue", label: t("freshness.overdue"), emoji: "⛔" },
+    { value: "today", label: t("freshness.today"), emoji: "🔥" },
+    { value: "soon", label: t("freshness.soon"), emoji: "⏳" },
+    { value: "week", label: t("freshness.week"), emoji: "🗓️" },
+    { value: "calm", label: t("freshness.calm"), emoji: "🌿" },
+  ];
   const activeProducts = products.filter(
     (product) => product.status === "active",
   );
   const filtered = useMemo(() => {
-    const normalizedQuery = query.trim().toLocaleLowerCase("pl");
+    const normalizedQuery = query.trim().toLocaleLowerCase(locale);
     return products.filter(
       (product) =>
         product.status === "active" &&
@@ -129,9 +111,9 @@ export function InventoryPage() {
         (category === "Wszystkie" || product.category === category) &&
         (freshness === "all" ||
           getFreshnessStatus(product.estimatedUseBy) === freshness) &&
-        product.name.toLocaleLowerCase("pl").includes(normalizedQuery),
+        localizeDemoProduct(product, locale).name.toLocaleLowerCase(locale).includes(normalizedQuery),
     );
-  }, [category, freshness, location, products, query]);
+  }, [category, freshness, locale, location, products, query]);
   const allVisibleSelected =
     filtered.length > 0 &&
     filtered.every((product) => selectedIds.has(product.id));
@@ -170,10 +152,12 @@ export function InventoryPage() {
     );
     toast.success(
       action.type === "consume"
-        ? "Oznaczono produkty jako zużyte."
+        ? t("toasts.consumed")
         : action.type === "move"
-          ? `Przeniesiono produkty do: ${action.location.toLocaleLowerCase("pl")}.`
-          : "Usunięto produkty z zapasów.",
+          ? t("toasts.moved", {
+              location: t(`locations.${storageLocationMessageKeys[action.location]}`),
+            })
+          : t("toasts.removed"),
     );
     setSelectedIds(new Set());
     setEditing(false);
@@ -186,15 +170,15 @@ export function InventoryPage() {
       ),
     );
     setProductToEdit(null);
-    toast.success("Zapisano zmiany produktu.");
+    toast.success(t("toasts.saved"));
   }
 
   return (
     <>
       <PageHeader
-        eyebrow="Twoja kuchnia"
-        title="Moje zapasy"
-        description={`${activeProducts.length} produktów wraz z informacją, co warto wykorzystać najpierw.`}
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("description", { count: activeProducts.length })}
         actions={
           <Button
             nativeButton={false}
@@ -202,14 +186,14 @@ export function InventoryPage() {
             variant="outline"
             className="hidden h-11 sm:inline-flex"
           >
-            <ChefHatIcon aria-hidden="true" /> Co ugotować?
+            <ChefHatIcon aria-hidden="true" /> {t("cook")}
           </Button>
         }
       />
 
-      <section className="app-card mb-5 p-3" aria-label="Filtry produktów">
+      <section className="app-card mb-5 p-3" aria-label={t("filters.label")}>
         <label className="relative block">
-          <span className="sr-only">Szukaj produktów</span>
+          <span className="sr-only">{t("search")}</span>
           <SearchIcon
             className="absolute left-3 top-3 size-5 text-muted-foreground"
             aria-hidden="true"
@@ -217,25 +201,25 @@ export function InventoryPage() {
           <Input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Szukaj produktu..."
+            placeholder={t("searchPlaceholder")}
             className="h-11 pl-10"
           />
         </label>
         <div className="mt-2 grid divide-y divide-border xl:grid-cols-3 xl:divide-x xl:divide-y-0">
           <FilterBadgeGroup
-            label="Miejsce przechowywania"
+            label={t("filters.location")}
             options={locationFilters}
             value={location}
             onChange={setLocation}
           />
           <FilterBadgeGroup
-            label="Kategoria produktu"
+            label={t("filters.category")}
             options={categoryFilters}
             value={category}
             onChange={setCategory}
           />
           <FilterBadgeGroup
-            label="Termin przydatności"
+            label={t("filters.freshness")}
             options={freshnessFilters}
             value={freshness}
             onChange={setFreshness}
@@ -246,7 +230,7 @@ export function InventoryPage() {
       {editing ? (
         <section
           className="app-card mb-5 flex flex-col gap-3 p-4 sm:flex-row sm:items-center"
-          aria-label="Działania zbiorcze"
+          aria-label={t("bulk.label")}
         >
           <label
             htmlFor="select-visible-products"
@@ -258,9 +242,9 @@ export function InventoryPage() {
               onCheckedChange={toggleVisible}
             />
             <span className="text-sm font-semibold">
-              Zaznaczono: {selectedIds.size}
+              {t("bulk.selected", { count: selectedIds.size })}
             </span>
-            <span className="sr-only">Zaznacz wszystkie widoczne produkty</span>
+            <span className="sr-only">{t("bulk.selectAll")}</span>
           </label>
           <div className="flex flex-wrap gap-2">
             <Button
@@ -268,14 +252,14 @@ export function InventoryPage() {
               disabled={!selectedIds.size}
               onClick={() => runBulkAction({ type: "consume" })}
             >
-              <CheckCheckIcon aria-hidden="true" /> Zużyte
+              <CheckCheckIcon aria-hidden="true" /> {t("bulk.consumed")}
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger
                 disabled={!selectedIds.size}
                 render={
                   <Button variant="outline" className="h-11">
-                    <PackageIcon aria-hidden="true" /> Przenieś do
+                    <PackageIcon aria-hidden="true" /> {t("bulk.moveTo")}
                   </Button>
                 }
               />
@@ -285,21 +269,21 @@ export function InventoryPage() {
                     runBulkAction({ type: "move", location: "Lodówka" })
                   }
                 >
-                  <StorageLocationIcon location="Lodówka" /> Lodówka
+                  <StorageLocationIcon location="Lodówka" /> {t("locations.fridge")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
                     runBulkAction({ type: "move", location: "Zamrażarka" })
                   }
                 >
-                  <StorageLocationIcon location="Zamrażarka" /> Zamrażarka
+                  <StorageLocationIcon location="Zamrażarka" /> {t("locations.freezer")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
                     runBulkAction({ type: "move", location: "Spiżarnia" })
                   }
                 >
-                  <StorageLocationIcon location="Spiżarnia" /> Spiżarnia
+                  <StorageLocationIcon location="Spiżarnia" /> {t("locations.pantry")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -309,7 +293,7 @@ export function InventoryPage() {
               disabled={!selectedIds.size}
               onClick={() => runBulkAction({ type: "remove" })}
             >
-              <Trash2Icon aria-hidden="true" /> Usuń
+              <Trash2Icon aria-hidden="true" /> {t("delete")}
             </Button>
           </div>
         </section>
@@ -318,9 +302,11 @@ export function InventoryPage() {
       <section className="app-card px-5">
         <div className="flex items-center justify-between border-b border-border py-4">
           <h2 className="flex flex-wrap items-baseline gap-x-2 font-extrabold">
-            {location}
+            {location === "Wszystkie"
+              ? t("all")
+              : t(`locations.${storageLocationMessageKeys[location]}`)}
             <span className="text-xs font-normal text-muted-foreground">
-              ({filtered.length} produktów)
+              ({t("productCount", { count: filtered.length })})
             </span>
           </h2>
           <Button
@@ -333,7 +319,7 @@ export function InventoryPage() {
             ) : (
               <PencilIcon aria-hidden="true" />
             )}
-            {editing ? "Anuluj" : "Edytuj"}
+            {editing ? t("cancel") : t("edit")}
           </Button>
         </div>
         {filtered.length ? (
@@ -353,7 +339,7 @@ export function InventoryPage() {
                     checked={selectedIds.has(product.id)}
                     onCheckedChange={() => toggleProduct(product.id)}
                   />
-                  <span className="sr-only">Zaznacz {product.name}</span>
+                  <span className="sr-only">{t("selectProduct", { name: product.name })}</span>
                 </span>
                 <ProductRowDetails product={product} />
               </label>
@@ -363,7 +349,7 @@ export function InventoryPage() {
                 type="button"
                 variant="ghost"
                 className="h-auto w-full justify-start gap-3 rounded-none border-x-0 border-t-0 border-b border-border py-3.5 pr-0 pl-2 text-left whitespace-normal last:border-0 hover:bg-muted sm:gap-4"
-                onClick={() => setProductToEdit(product)}
+                onClick={() => setProductToEdit(localizeDemoProduct(product, locale))}
               >
                 <ProductRowDetails product={product} />
               </Button>
@@ -375,9 +361,9 @@ export function InventoryPage() {
               className="mx-auto text-muted-foreground"
               aria-hidden="true"
             />
-            <p className="mt-3 font-bold">Nie znaleziono produktów</p>
+            <p className="mt-3 font-bold">{t("empty.title")}</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Zmień wyszukiwanie lub wybrane filtry.
+              {t("empty.description")}
             </p>
           </div>
         )}
@@ -396,16 +382,20 @@ export function InventoryPage() {
 }
 
 function ProductRowDetails({ product }: { product: DemoProduct }) {
+  const t = useTranslations("Inventory");
+  const locale = useLocale() as Locale;
+  const displayProduct = localizeDemoProduct(product, locale);
+
   return (
     <>
       <ProductVisual category={product.category} />
       <span className="min-w-0 flex-1">
         <span className="block truncate text-sm font-bold text-foreground">
-          {product.name}
+          {displayProduct.name}
         </span>
         <span className="mt-1 block truncate text-xs text-muted-foreground">
-          {product.quantity.toLocaleString("pl-PL")} {product.unit} ·{" "}
-          {product.storageLocation}
+          {product.quantity.toLocaleString(locale)} {product.unit} ·{" "}
+          {t(`locations.${storageLocationMessageKeys[product.storageLocation]}`)}
         </span>
         <span className="mt-2 block">
           <FreshnessLabel date={product.estimatedUseBy} />

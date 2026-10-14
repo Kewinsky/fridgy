@@ -2,6 +2,7 @@
 
 import { useState, useSyncExternalStore } from "react";
 import { CheckIcon, PlusIcon, Share2Icon, ShoppingBasketIcon, Trash2Icon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/dashboard/page-header";
@@ -51,6 +52,7 @@ function getServerShoppingListSnapshot() {
 }
 
 export function ShoppingListPage() {
+  const t = useTranslations("ShoppingList");
   const items = useSyncExternalStore(
     subscribeToShoppingList,
     getShoppingListSnapshot,
@@ -82,42 +84,42 @@ export function ShoppingListPage() {
   function clearList() {
     updateItems(() => []);
     setClearDialogOpen(false);
-    toast.success("Lista zakupów została wyczyszczona.");
+    toast.success(t("toasts.cleared"));
   }
 
   async function shareList() {
     const pendingItems = items.filter((item) => !item.done);
     if (!pendingItems.length) {
-      toast.info("Nie ma produktów do udostępnienia.");
+      toast.info(t("toasts.nothingToShare"));
       return;
     }
 
     try {
       if (typeof navigator.share === "function") {
         await navigator.share({
-          title: "Lista zakupów – Fridgy",
-          text: formatShoppingList(items, false),
+          title: t("shareTitle"),
+          text: formatShoppingList(items, false, t("shareTitle")),
         });
       } else {
-        await navigator.clipboard.writeText(formatShoppingList(items));
-        toast.success("Lista została skopiowana.");
+        await navigator.clipboard.writeText(formatShoppingList(items, true, t("shareTitle")));
+        toast.success(t("toasts.copied"));
       }
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
-      toast.error("Nie udało się udostępnić listy.");
+      toast.error(t("toasts.shareError"));
     }
   }
 
   return (
     <>
       <PageHeader
-        eyebrow="Przy następnych zakupach"
-        title="Lista zakupów"
-        description="Krótka lista rzeczy, których brakuje w domu. Udostępniana lista pomija kupione produkty."
+        eyebrow={t("eyebrow")}
+        title={t("title")}
+        description={t("description")}
         actions={
           <>
             <Button variant="outline" className="h-11" onClick={shareList}>
-              <Share2Icon aria-hidden="true" /> Udostępnij
+              <Share2Icon aria-hidden="true" /> {t("share")}
             </Button>
             <Button
               variant="destructive"
@@ -125,7 +127,7 @@ export function ShoppingListPage() {
               disabled={!items.length}
               onClick={() => setClearDialogOpen(true)}
             >
-              <Trash2Icon aria-hidden="true" /> Wyczyść
+              <Trash2Icon aria-hidden="true" /> {t("clear")}
             </Button>
           </>
         }
@@ -136,11 +138,11 @@ export function ShoppingListPage() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             onKeyDown={(event) => { if (event.key === "Enter") addItem(); }}
-            placeholder="Dodaj do listy..."
-            aria-label="Nowy produkt"
+            placeholder={t("placeholder")}
+            aria-label={t("newItem")}
             className="h-11"
           />
-          <Button className="h-11" onClick={addItem}><PlusIcon aria-hidden="true" /> <span className="hidden sm:inline">Dodaj</span></Button>
+          <Button className="h-11" onClick={addItem}><PlusIcon aria-hidden="true" /> <span className="hidden sm:inline">{t("add")}</span></Button>
         </div>
         <div className="mt-5">
           {items.map((item) => (
@@ -151,24 +153,23 @@ export function ShoppingListPage() {
                 </span>
                 <span className={item.done ? "truncate text-muted-foreground line-through" : "truncate font-semibold"}>{item.name}</span>
               </Button>
-              <Button type="button" variant="destructive" size="icon-lg" className="size-11" onClick={() => removeItem(item.id)} aria-label={`Usuń ${item.name}`} title={`Usuń ${item.name}`}>
+              <Button type="button" variant="destructive" size="icon-lg" className="size-11" onClick={() => removeItem(item.id)} aria-label={t("removeItem", { name: item.name })} title={t("removeItem", { name: item.name })}>
                 <Trash2Icon aria-hidden="true" />
               </Button>
             </div>
           ))}
         </div>
         {!items.length ? (
-          <div className="py-12 text-center"><ShoppingBasketIcon className="mx-auto text-muted-foreground" aria-hidden="true" /><p className="mt-3 font-bold">Lista jest pusta</p></div>
+          <div className="py-12 text-center"><ShoppingBasketIcon className="mx-auto text-muted-foreground" aria-hidden="true" /><p className="mt-3 font-bold">{t("empty")}</p></div>
         ) : null}
       </section>
 
       <Dialog open={clearDialogOpen} onOpenChange={setClearDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Wyczyścić listę zakupów?</DialogTitle>
+            <DialogTitle>{t("clearDialog.title")}</DialogTitle>
             <DialogDescription>
-              Wszystkie produkty z listy zostaną usunięte. Tej operacji nie
-              można cofnąć.
+              {t("clearDialog.description")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -178,7 +179,7 @@ export function ShoppingListPage() {
               className="h-11"
               onClick={() => setClearDialogOpen(false)}
             >
-              Anuluj
+              {t("cancel")}
             </Button>
             <Button
               type="button"
@@ -186,7 +187,7 @@ export function ShoppingListPage() {
               className="h-11"
               onClick={clearList}
             >
-              <Trash2Icon aria-hidden="true" /> Wyczyść listę
+              <Trash2Icon aria-hidden="true" /> {t("clearDialog.confirm")}
             </Button>
           </DialogFooter>
         </DialogContent>

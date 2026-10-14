@@ -1,0 +1,696 @@
+{
+  "Common": {
+    "changeLanguage": "Changer de langue"
+  },
+  "Metadata": {
+    "description": "Gérez vos aliments à la maison et gaspillez moins."
+  },
+  "Landing": {
+    "metaTitle": "Gérez vos aliments et gaspillez moins",
+    "metaDescription": "Transformez vos tickets en inventaire organisé et utilisez les aliments à temps.",
+    "login": "Se connecter",
+    "eyebrow": "Votre cuisine sous contrôle",
+    "title": "Moins de gaspillage. Plus avec ce que vous avez déjà.",
+    "description": "Fridgy organise vos aliments, surveille les dates et suggère quoi cuisiner. Sans tableurs ni vérifications constantes du réfrigérateur.",
+    "start": "Commencer",
+    "howItWorks": "Voir comment ça marche",
+    "loginHint": "Sans mot de passe. Connexion par code e-mail ou avec Google.",
+    "today": "Aujourd'hui",
+    "yourHome": "Votre foyer",
+    "addReceipt": "Ajouter les achats depuis un ticket",
+    "addReceiptDescription": "Prenez une photo et Fridgy vous aidera à organiser vos produits.",
+    "productsAtHome": "produits à la maison",
+    "useSoon": "à utiliser bientôt",
+    "rhythm": "Un rythme simple",
+    "sectionTitle": "Des courses à un bon repas",
+    "benefitReceiptTitle": "Un scan met de l'ordre",
+    "benefitReceiptDescription": "Ajoutez vos achats en un scan au lieu de saisir chaque produit.",
+    "benefitDatesTitle": "Sachez quoi utiliser en premier",
+    "benefitDatesDescription": "Fridgy vous rappelle les produits qui ne doivent plus attendre.",
+    "benefitCookingTitle": "Cuisinez avec ce que vous avez",
+    "benefitCookingDescription": "Recevez des idées de repas adaptées à votre inventaire.",
+    "ctaTitle": "Commencez avec ce qui se trouve dans votre réfrigérateur.",
+    "ctaDescription": "Un seul endroit pour les aliments, les dates et les idées de repas.",
+    "ctaButton": "Ouvrir Fridgy",
+    "footer": "Gérez vos aliments à la maison et gaspillez moins."
+  },
+  "Navigation": {
+    "overview": "Vue d'ensemble",
+    "overviewShort": "Accueil",
+    "inventory": "Mes réserves",
+    "inventoryShort": "Réserves",
+    "cook": "Que cuisiner ?",
+    "cookShort": "Cuisiner",
+    "recipes": "Mes recettes",
+    "recipesShort": "Recettes",
+    "shopping": "Liste de courses",
+    "shoppingShort": "Liste",
+    "settings": "Paramètres",
+    "settingsShort": "Paramètres",
+    "receipt": "Ajouter un ticket",
+    "receiptShort": "Ticket",
+    "mainNavigation": "Navigation principale",
+    "mobileNavigation": "Navigation mobile",
+    "yourHome": "Votre foyer",
+    "signOut": "Se déconnecter"
+  },
+  "Settings": {
+    "metaTitle": "Paramètres",
+    "metaDescription": "Paramètres du compte et du foyer.",
+    "eyebrow": "Votre compte",
+    "title": "Paramètres",
+    "description": "Préférences de base du foyer et apparence de l'application.",
+    "household": "Foyer",
+    "yourHome": "Votre foyer",
+    "region": "Région",
+    "regionValue": "Pologne · PLN",
+    "reminders": "Rappels",
+    "remindersValue": "Tous les jours à 18:00",
+    "language": "Langue de l'application",
+    "languageDescription": "Choisissez la langue de l'interface Fridgy.",
+    "theme": "Thème de couleur",
+    "themeDescription": "Choisissez une apparence claire, sombre ou automatique.",
+    "preferences": {
+      "expiry": {
+        "title": "Notifications de péremption",
+        "description": "Choisissez quand Fridgy doit vous rappeler une date limite proche.",
+        "options": {
+          "sameDay": "Le jour de la date limite",
+          "oneDay": "1 jour avant",
+          "threeDays": "3 jours avant"
+        }
+      },
+      "diet": {
+        "title": "Préférences alimentaires",
+        "description": "Ces informations sont utilisées pour suggérer des recettes.",
+        "typeLabel": "Régime alimentaire",
+        "allergiesLabel": "Allergies",
+        "allergiesPlaceholder": "p. ex. noix, céleri",
+        "excludedLabel": "Ingrédients exclus",
+        "excludedPlaceholder": "p. ex. olives, coriandre",
+        "options": {
+          "none": "Aucune restriction",
+          "vegetarian": "Végétarien",
+          "vegan": "Végétalien",
+          "pescatarian": "Pescétarien"
+        }
+      },
+      "deduction": {
+        "title": "Déduction des ingrédients",
+        "description": "Choisissez ce qui se passe après avoir cuisiné.",
+        "label": "Après la cuisson",
+        "options": {
+          "always": "Déduire automatiquement",
+          "never": "Ne pas déduire",
+          "ask": "Toujours demander"
+        }
+      },
+      "receipt": {
+        "title": "Produits du reçu",
+        "description": "Choisissez ce qui se passe après la lecture d'un reçu.",
+        "label": "Après la lecture",
+        "options": {
+          "automatic": "Ajouter automatiquement",
+          "review": "Demander une vérification"
+        }
+      }
+    },
+    "account": {
+      "login": {
+        "title": "Connexion",
+        "description": "Votre adresse e-mail et votre méthode de connexion actuelle.",
+        "emailLabel": "Adresse e-mail",
+        "methodLabel": "Méthode de connexion",
+        "emailCode": "Code envoyé par e-mail"
+      },
+      "google": {
+        "title": "Compte Google",
+        "description": "Le compte utilisé pour une connexion rapide.",
+        "connected": "Connecté"
+      },
+      "household": {
+        "title": "Nom du foyer",
+        "description": "Le nom visible par tous les membres du foyer.",
+        "nameLabel": "Nom",
+        "defaultName": "Votre foyer",
+        "save": "Enregistrer"
+      },
+      "invite": {
+        "title": "Inviter un membre",
+        "description": "Envoyez une invitation pour gérer les provisions ensemble.",
+        "emailLabel": "Adresse e-mail du membre",
+        "placeholder": "membre@example.com",
+        "action": "Inviter"
+      },
+      "sessions": {
+        "title": "Sessions actives",
+        "description": "Fermez les sessions Fridgy sur vos autres appareils.",
+        "action": "Se déconnecter de tous les appareils"
+      },
+      "data": {
+        "title": "Données et compte",
+        "description": "Téléchargez une copie de vos données ou supprimez définitivement le compte.",
+        "export": "Exporter les données"
+      },
+      "deleteDialog": {
+        "open": "Supprimer le compte",
+        "title": "Supprimer définitivement le compte ?",
+        "description": "Le compte, les provisions, les recettes et l'historique de cuisine seront supprimés. Cette action est irréversible.",
+        "cancel": "Annuler",
+        "confirm": "Supprimer le compte"
+      }
+    },
+    "advanced": {
+      "regional": {
+        "title": "Devise et format de date",
+        "description": "Formats utilisés pour les prix, les reçus et les dates des produits.",
+        "currencyLabel": "Devise",
+        "dateLabel": "Format de date"
+      },
+      "cuisines": {
+        "title": "Cuisines préférées",
+        "description": "Elles permettent de mieux adapter les suggestions dans « Que cuisiner ? »."
+      },
+      "privacy": {
+        "title": "Confidentialité et analyse des données",
+        "description": "Choisissez comment Fridgy peut utiliser les données de l'application.",
+        "options": {
+          "personalization": {
+            "title": "Suggestions personnalisées",
+            "description": "Utiliser les provisions et l'historique de cuisine pour adapter les recettes."
+          },
+          "analytics": {
+            "title": "Analyse anonyme",
+            "description": "Partager des données d'utilisation anonymes pour améliorer l'application."
+          }
+        }
+      },
+      "demo": {
+        "title": "Données de démonstration",
+        "description": "Restaurez les produits, recettes et la liste de courses d'exemple.",
+        "dialog": {
+          "open": "Réinitialiser les données de démonstration",
+          "title": "Réinitialiser les données de démonstration ?",
+          "description": "Les données de démonstration actuelles seront remplacées par le jeu initial. Vos données réelles ne seront pas modifiées.",
+          "cancel": "Annuler",
+          "confirm": "Réinitialiser"
+        }
+      },
+      "about": {
+        "title": "À propos de l'application",
+        "description": "Version de l'application web actuellement utilisée.",
+        "version": "Version de l'application"
+      }
+    },
+    "tabs": {
+      "general": "Général",
+      "account": "Compte et foyer",
+      "preferences": "Préférences",
+      "advanced": "Données et personnalisation"
+    }
+  },
+  "Theme": {
+    "light": "Clair",
+    "dark": "Sombre",
+    "system": "Système",
+    "toggle": "Changer le thème de couleur"
+  },
+  "Login": {
+    "metaTitle": "Connexion",
+    "metaDescription": "Connectez-vous à Fridgy avec un code e-mail ou un compte Google.",
+    "eyebrow": "Tout au même endroit",
+    "sideTitle": "Vos réserves sont toujours à portée de main.",
+    "receiptBenefit": "Ajout rapide des produits depuis un ticket",
+    "ideasBenefit": "Des idées adaptées au contenu de votre cuisine",
+    "home": "Page d'accueil",
+    "changeEmail": "Changer l'adresse e-mail",
+    "checkInbox": "Consultez votre boîte de réception",
+    "codeSent": "Nous avons envoyé un code à {email}.",
+    "loginCode": "Code de connexion",
+    "signIn": "Se connecter",
+    "welcome": "Bienvenue sur Fridgy",
+    "welcomeDescription": "Connectez-vous sans mot de passe et retrouvez vos réserves.",
+    "email": "Adresse e-mail",
+    "sendCode": "Envoyer le code",
+    "or": "ou",
+    "google": "Continuer avec Google",
+    "terms": "En vous connectant, vous acceptez les conditions d'utilisation de Fridgy.",
+    "errors": {
+      "oauth": "La connexion a échoué. Réessayez.",
+      "sendCode": "Impossible d'envoyer le code. Réessayez.",
+      "invalidCode": "Le code est incorrect ou a expiré.",
+      "google": "Impossible de démarrer la connexion avec Google."
+    }
+  },
+  "Dashboard": {
+    "metaTitle": "Aperçu",
+    "metaDescription": "Aperçu de vos provisions et des tâches importantes.",
+    "eyebrow": "Bonjour",
+    "title": "Votre cuisine en un coup d'œil",
+    "description": "Consultez vos provisions et planifiez votre prochain repas.",
+    "addReceipt": "Ajouter un reçu",
+    "summary": "Résumé",
+    "productsAtHome": "produits à la maison",
+    "useSoon": "à utiliser bientôt",
+    "shoppingList": "sur la liste de courses",
+    "first": "En priorité",
+    "worthUsing": "À utiliser bientôt",
+    "view": "Voir",
+    "emptyTitle": "Tout est sous contrôle",
+    "emptyDescription": "Aucun produit urgent pour le moment.",
+    "firstSteps": "Premières étapes",
+    "prepareKitchen": "Configurer Fridgy",
+    "stepReceipt": "Ajouter votre premier reçu",
+    "stepProducts": "Vérifier et organiser les produits",
+    "stepCooking": "Trouver une idée de repas"
+  },
+  "Inventory": {
+    "metaTitle": "My inventory",
+    "metaDescription": "Search and organise your home inventory.",
+    "all": "Tous",
+    "eyebrow": "Ce que vous avez chez vous",
+    "title": "Mes provisions",
+    "description": "{count, plural, one {# active product} other {# active products}}",
+    "cook": "Que cuisiner ?",
+    "search": "Rechercher des produits",
+    "searchPlaceholder": "Rechercher un produit...",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "edit": "Modifier",
+    "selectProduct": "Select {name}",
+    "productCount": "{count, plural, one {# product} other {# products}}",
+    "locations": {
+      "fridge": "Réfrigérateur",
+      "freezer": "Congélateur",
+      "pantry": "Garde-manger"
+    },
+    "categories": {
+      "fruit": "Fruits",
+      "dairy": "Produits laitiers",
+      "vegetables": "Légumes",
+      "meat": "Viande",
+      "frozen": "Surgelés",
+      "fish": "Poisson",
+      "bakery": "Boulangerie",
+      "dryGoods": "Produits secs",
+      "preserves": "Conserves"
+    },
+    "freshness": {
+      "overdue": "Périmé",
+      "today": "Aujourd'hui",
+      "soon": "Bientôt",
+      "week": "Cette semaine",
+      "calm": "Encore du temps",
+      "overdueLong": "Produit périmé",
+      "todayLong": "À utiliser aujourd'hui",
+      "soonLong": "À utiliser bientôt",
+      "weekLong": "À utiliser cette semaine",
+      "calmLong": "Longue conservation",
+      "estimatedDate": "Date estimée : {date}"
+    },
+    "filters": {
+      "label": "Filtres des provisions",
+      "location": "Emplacement",
+      "category": "Catégorie",
+      "freshness": "Date limite"
+    },
+    "bulk": {
+      "label": "Bulk actions",
+      "selected": "Selected: {count}",
+      "selectAll": "Select all",
+      "consumed": "Mark as used",
+      "moveTo": "Move to"
+    },
+    "toasts": {
+      "consumed": "Products marked as used.",
+      "moved": "Products moved.",
+      "removed": "Products deleted.",
+      "saved": "Product changes saved."
+    },
+    "empty": {
+      "title": "Aucun produit correspondant",
+      "description": "Modifiez les filtres ou la recherche."
+    },
+    "editDialog": {
+      "title": "Edit product",
+      "description": "Change the details of one product.",
+      "name": "Name",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "unitPlaceholder": "e.g. pcs",
+      "category": "Category",
+      "location": "Location",
+      "date": "Use-by date",
+      "cancel": "Cancel",
+      "save": "Save changes",
+      "errors": {
+        "required": "Enter a name, quantity and unit.",
+        "quantity": "Quantity must be greater than zero."
+      }
+    }
+  },
+  "DatePicker": {
+    "selectDate": "Select a date",
+    "previousMonth": "Previous month",
+    "nextMonth": "Next month",
+    "calendar": "Calendar"
+  },
+  "Cooking": {
+    "metaTitle": "Que cuisiner ?",
+    "metaDescription": "Trouvez une idée de plat avec ce que vous avez chez vous.",
+    "eyebrow": "Des idées adaptées à vos envies",
+    "title": "Que cuisiner ?",
+    "description": "Répondez à quelques questions et nous vous proposerons des recettes adaptées.",
+    "myRecipes": "Mes recettes",
+    "changeAnswers": "Modifier les réponses",
+    "servings": "{count, plural, one {# portion} other {# portions}}",
+    "fewerPeople": "Moins de personnes",
+    "morePeople": "Plus de personnes",
+    "demoNotice": "Ces suggestions de démonstration reposent sur vos réponses.",
+    "showSuggestions": "Afficher les suggestions",
+    "questionProgress": "Question {number} sur 6",
+    "questions": {
+      "meal": "Quel repas préparez-vous ?",
+      "time": "De combien de temps disposez-vous ?",
+      "servings": "Pour combien de personnes cuisinez-vous ?",
+      "craving": "De quoi avez-vous envie ?",
+      "diet": "Avez-vous des préférences alimentaires ?",
+      "shopping": "Pouvez-vous acheter des ingrédients supplémentaires ?",
+      "saved": "Faut-il tenir compte des plats enregistrés ?"
+    },
+    "options": {
+      "meals": {
+        "breakfast": "Petit-déjeuner",
+        "lunch": "Déjeuner",
+        "dinner": "Dîner",
+        "snack": "En-cas",
+        "any": "Peu importe"
+      },
+      "times": {
+        "15": "Jusqu'à 15 min",
+        "30": "Jusqu'à 30 min",
+        "60": "Jusqu'à 60 min",
+        "any": "Peu importe"
+      },
+      "cravings": {
+        "light": "Quelque chose de léger",
+        "protein": "Riche en protéines",
+        "comfort": "Un plat réconfortant",
+        "world": "Saveurs du monde",
+        "simple": "Simple",
+        "surprise": "Surprenez-moi"
+      },
+      "diets": {
+        "any": "Aucune",
+        "vegetarian": "Végétarien",
+        "vegan": "Végétalien",
+        "glutenFree": "Sans gluten",
+        "lactoseFree": "Sans lactose"
+      },
+      "shopping": {
+        "none": "Seulement ce que j'ai",
+        "two": "Jusqu'à 2 ingrédients",
+        "any": "Je peux faire des courses"
+      },
+      "saved": {
+        "include": "Oui",
+        "newOnly": "Uniquement des nouveautés",
+        "any": "Peu importe"
+      }
+    },
+    "empty": {
+      "title": "Aucune nouvelle suggestion",
+      "description": "Modifiez vos réponses ou incluez les plats enregistrés."
+    },
+    "more": {
+      "title": "Vous souhaitez plus d'idées ?",
+      "description": "Générez trois suggestions supplémentaires. Les précédentes resteront visibles.",
+      "button": "Proposer autre chose",
+      "count": "{count} suggestions affichées"
+    }
+  },
+  "Recipe": {
+    "minutes": "{count} min",
+    "servings": "{count, plural, one {# portion} other {# portions}}",
+    "difficultyOptions": {
+      "veryEasy": "Très facile",
+      "easy": "Facile",
+      "medium": "Moyen",
+      "custom": "Recette personnelle"
+    },
+    "cuisineOptions": {
+      "home": "Familiale",
+      "polish": "Polonaise",
+      "italian": "Italienne",
+      "asian": "Asiatique",
+      "mexican": "Mexicaine",
+      "mediterranean": "Méditerranéenne",
+      "middleEastern": "Moyen-Orient",
+      "american": "Américaine",
+      "european": "Européenne",
+      "other": "Autre"
+    },
+    "match": "Vous avez {available} ingrédients sur {total}",
+    "missingNames": "Il manque : {names}",
+    "allIngredients": "Vous avez tous les ingrédients",
+    "viewRecipe": "Voir la recette",
+    "recipe": "Recette",
+    "demoRecipe": "Recette de démonstration",
+    "back": "Retour",
+    "time": "Temps",
+    "servingsLabel": "Portions",
+    "cuisine": "Cuisine",
+    "difficulty": "Difficulté",
+    "preparation": "Préparation",
+    "ingredients": "Ingrédients",
+    "missingCount": "{count, plural, one {# ingrédient manquant} other {# ingrédients manquants}}",
+    "missingDescription": "Ajoutez les produits manquants à la liste de courses.",
+    "cook": "Cuisiner !",
+    "removeFavorite": "Retirer des favoris",
+    "addFavorite": "Ajouter aux favoris",
+    "favorite": "Recette favorite"
+  },
+  "CookingMode": {
+    "metaTitle": "Cooking mode",
+    "metaDescription": "A focused step-by-step recipe view.",
+    "notFound": "Recipe not found.",
+    "exit": "Exit cooking mode",
+    "progress": "{completed} of {total} steps",
+    "stepCompleted": "Mark step {number} as complete"
+  },
+  "FinishCooking": {
+    "success": "Cooking saved and inventory updated.",
+    "open": "Dish ready",
+    "title": "Finish cooking?",
+    "description": "Save this cooking session and select products to deduct from inventory.",
+    "deductProduct": "Deduct {name}",
+    "productSummary": "Recipe: {recipeAmount}. In inventory: {quantity} {unit}.",
+    "productAmount": "Amount of {name}",
+    "noMatches": "No matching inventory products found.",
+    "cancel": "Cancel",
+    "confirm": "Save and deduct"
+  },
+  "RecipeStats": {
+    "label": "Cooking history",
+    "count": "Cooked {count}×",
+    "lastCooked": "Last cooked: {date}",
+    "never": "Not cooked yet"
+  },
+  "RecipeLibrary": {
+    "metaTitle": "Mes recettes",
+    "metaDescription": "Favourite recipes, your dishes and cooking history.",
+    "eyebrow": "Votre livre de cuisine",
+    "title": "Mes recettes",
+    "description": "Save favourite dishes, add your own recipes and return to your cooking history.",
+    "summary": "Recipe summary",
+    "allCookings": "total cooking sessions",
+    "favoriteRecipes": "favourite recipes",
+    "favoriteCuisine": "top cuisine",
+    "noData": "No data",
+    "tabs": {
+      "favorites": "Favoris",
+      "custom": "Les miens",
+      "history": "Historique"
+    },
+    "emptyFavorites": {
+      "title": "No favourites",
+      "description": "Use the heart to save recipes you want to return to."
+    },
+    "emptyCustom": {
+      "title": "No custom recipes yet",
+      "description": "Add a family recipe or a dish you want to keep."
+    },
+    "emptyHistory": {
+      "title": "History is empty",
+      "description": "Open a recipe and select 'Cook!' to save your first cooking session.",
+      "action": "Find a recipe"
+    },
+    "notFound": {
+      "title": "Recipe not found",
+      "description": "This recipe is no longer in your library.",
+      "action": "Back to recipes"
+    },
+    "yourRecipe": "Your recipe"
+  },
+  "RecipeForm": {
+    "add": "Add recipe",
+    "editLabel": "Edit {title}",
+    "deleteLabel": "Delete {title}",
+    "editTitle": "Edit recipe",
+    "addTitle": "Add your own recipe",
+    "description": "Enter each ingredient and step on a new line. Separate the amount with |.",
+    "name": "Recipe name",
+    "recipeDescription": "Description",
+    "cuisine": "Cuisine",
+    "time": "Time (min)",
+    "servings": "Servings",
+    "ingredients": "Ingredients",
+    "ingredientsPlaceholder": "Pasta | 200 g\nTomatoes | 2 pcs",
+    "preparation": "Preparation",
+    "stepsPlaceholder": "Cook the pasta.\nPrepare the sauce.",
+    "cancel": "Cancel",
+    "saveChanges": "Save changes",
+    "save": "Save recipe",
+    "deleteTitle": "Delete recipe?",
+    "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
+    "delete": "Delete recipe",
+    "errors": {
+      "required": "Enter a name, ingredients and preparation steps."
+    },
+    "toasts": {
+      "updated": "Recipe changes saved",
+      "created": "Recipe saved",
+      "deleted": "Recipe deleted"
+    },
+    "addDescription": "Ajoutez une recette manuellement ou préparez son importation à partir d'un lien.",
+    "tabs": {
+      "manual": "Manuellement",
+      "link": "Depuis un lien"
+    },
+    "link": {
+      "title": "Ajouter une recette depuis un lien",
+      "description": "À l'avenir, Fridgy pourra lire les ingrédients et les étapes depuis une page ou une vidéo. Collez un lien pour afficher le parcours prévu.",
+      "supported": "Sources prévues",
+      "label": "Lien vers la recette ou la vidéo",
+      "placeholder": "https://instagram.com/reel/...",
+      "action": "Importer la recette",
+      "comingSoon": "L'importation de recettes depuis un lien sera bientôt disponible.",
+      "error": "Saisissez un lien valide commençant par http:// ou https://.",
+      "sources": {
+        "website": "Site web",
+        "instagram": "Instagram Reels",
+        "tiktok": "TikTok",
+        "youtube": "YouTube"
+      }
+    }
+  },
+  "ShoppingList": {
+    "metaTitle": "Liste de courses",
+    "metaDescription": "Une liste de courses simple pour la maison.",
+    "eyebrow": "Pour vos prochaines courses",
+    "title": "Liste de courses",
+    "description": "Une courte liste des produits qui manquent à la maison. Les produits déjà achetés sont ignorés lors du partage.",
+    "share": "Partager",
+    "clear": "Vider",
+    "placeholder": "Ajouter à la liste...",
+    "newItem": "Nouveau produit",
+    "add": "Ajouter",
+    "removeItem": "Supprimer {name}",
+    "empty": "La liste est vide",
+    "cancel": "Annuler",
+    "shareTitle": "Liste de courses – Fridgy",
+    "clearDialog": {
+      "title": "Vider la liste de courses ?",
+      "description": "Tous les produits seront supprimés. Cette action est irréversible.",
+      "confirm": "Vider la liste"
+    },
+    "toasts": {
+      "cleared": "La liste de courses a été vidée.",
+      "nothingToShare": "Aucun produit à partager.",
+      "copied": "La liste a été copiée.",
+      "shareError": "Impossible de partager la liste."
+    }
+  },
+  "AddMissingItems": {
+    "button": "Ajouter les ingrédients manquants",
+    "alreadyAdded": "Ces produits sont déjà sur la liste de courses.",
+    "success": "{count, plural, one {Le produit manquant a été ajouté à la liste de courses.} other {# produits manquants ont été ajoutés à la liste de courses.}}"
+  },
+  "Receipt": {
+    "metaTitle": "Ajouter un reçu",
+    "metaDescription": "Add products to inventory from a receipt.",
+    "productCount": "{count, plural, one {# product} other {# products}}",
+    "remove": "Remove {name}",
+    "fields": {
+      "product": "Produit",
+      "productPlaceholder": "Product name",
+      "productFallback": "product",
+      "quantity": "Quantité",
+      "unit": "Unité",
+      "location": "Emplacement",
+      "price": "Prix"
+    },
+    "demo": {
+      "milk": "2% milk",
+      "tomatoes": "Raspberry tomatoes",
+      "chicken": "Chicken breast"
+    },
+    "toasts": {
+      "incomplete": "Enter the name, quantity and unit for every product.",
+      "invalidQuantity": "Every quantity must be a number greater than zero.",
+      "invalidFile": "Select a JPG, PNG, HEIC or PDF file.",
+      "fileTooLarge": "The file can be up to 20 MB."
+    },
+    "success": {
+      "title": "Receipt is ready",
+      "description": "{count} products verified. Saving to shared inventory will be connected with the Supabase schema.",
+      "inventory": "View inventory",
+      "another": "Add another receipt"
+    },
+    "review": {
+      "eyebrow": "Step 2 of 2",
+      "title": "Review products",
+      "description": "OCR is not connected yet – below is demo data you can edit.",
+      "back": "Back to file",
+      "addProduct": "Add product",
+      "checkData": "Review the data before confirming.",
+      "confirm": "Confirm products"
+    },
+    "upload": {
+      "eyebrow": "Step 1 of 2",
+      "title": "Ajouter un reçu",
+      "description": "Select a receipt photo or PDF to prepare products for review.",
+      "fileTitle": "Select receipt file",
+      "formats": "JPG, PNG, HEIC or PDF · max. 20 MB",
+      "selectFile": "Select photo or PDF",
+      "selected": "Selected: {fileName}",
+      "review": "Go to review",
+      "useSample": "Use sample receipt",
+      "notice": "At this stage, the file is not uploaded or analysed. OCR integration will be added separately."
+    }
+  },
+  "Errors": {
+    "notFound": {
+      "label": "Erreur 404",
+      "title": "Page introuvable",
+      "description": "The address may have changed or the page no longer exists. Return home and try again.",
+      "action": "Back to home"
+    },
+    "page": {
+      "label": "Something went wrong",
+      "title": "Could not open the page",
+      "description": "Try again. If the problem continues, return to the home page.",
+      "code": "Error code: {code}",
+      "retry": "Réessayer",
+      "home": "Accueil"
+    },
+    "dashboard": {
+      "label": "Dashboard error",
+      "title": "Could not load this section",
+      "description": "Your data was not changed. Try again or return to overview.",
+      "code": "Error code: {code}",
+      "retry": "Réessayer",
+      "overview": "Overview"
+    }
+  }
+}

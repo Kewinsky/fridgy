@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import {
   addMonths,
   eachDayOfInterval,
@@ -14,14 +15,14 @@ import {
   startOfWeek,
   subMonths,
 } from "date-fns";
-import { pl } from "date-fns/locale";
+import { de, enUS, es, fr, pl } from "date-fns/locale";
 import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 
-const weekDays = ["Pn", "Wt", "Śr", "Cz", "Pt", "Sb", "Nd"];
+const dateLocales = { pl, en: enUS, de, fr, es } as const;
 
 export function DatePicker({
   id,
@@ -32,6 +33,9 @@ export function DatePicker({
   value: string;
   onValueChange: (value: string) => void;
 }) {
+  const locale = useLocale();
+  const t = useTranslations("DatePicker");
+  const dateLocale = dateLocales[locale as keyof typeof dateLocales] ?? pl;
   const selectedDate = value ? parseISO(value) : undefined;
   const [open, setOpen] = useState(false);
   const [month, setMonth] = useState(selectedDate ?? new Date());
@@ -39,6 +43,7 @@ export function DatePicker({
     start: startOfWeek(startOfMonth(month), { weekStartsOn: 1 }),
     end: endOfWeek(endOfMonth(month), { weekStartsOn: 1 }),
   });
+  const weekDays = days.slice(0, 7);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -47,22 +52,22 @@ export function DatePicker({
         render={
           <Button type="button" variant="outline" className="h-11 w-full justify-start px-3 font-normal">
             <CalendarIcon aria-hidden="true" />
-            {selectedDate ? format(selectedDate, "d MMMM yyyy", { locale: pl }) : "Wybierz datę"}
+            {selectedDate ? format(selectedDate, "d MMMM yyyy", { locale: dateLocale }) : t("selectDate")}
           </Button>
         }
       />
       <PopoverContent align="start" className="w-auto p-3">
         <div className="mb-3 flex items-center justify-between">
-          <Button type="button" variant="ghost" size="icon-lg" aria-label="Poprzedni miesiąc" onClick={() => setMonth((current) => subMonths(current, 1))}>
+          <Button type="button" variant="ghost" size="icon-lg" aria-label={t("previousMonth")} onClick={() => setMonth((current) => subMonths(current, 1))}>
             <ChevronLeftIcon aria-hidden="true" />
           </Button>
-          <p className="text-sm font-bold capitalize">{format(month, "LLLL yyyy", { locale: pl })}</p>
-          <Button type="button" variant="ghost" size="icon-lg" aria-label="Następny miesiąc" onClick={() => setMonth((current) => addMonths(current, 1))}>
+          <p className="text-sm font-bold capitalize">{format(month, "LLLL yyyy", { locale: dateLocale })}</p>
+          <Button type="button" variant="ghost" size="icon-lg" aria-label={t("nextMonth")} onClick={() => setMonth((current) => addMonths(current, 1))}>
             <ChevronRightIcon aria-hidden="true" />
           </Button>
         </div>
-        <div className="grid grid-cols-7 gap-1" role="grid" aria-label="Kalendarz">
-          {weekDays.map((day) => <span key={day} className="flex size-9 items-center justify-center text-xs font-semibold text-muted-foreground">{day}</span>)}
+        <div className="grid grid-cols-7 gap-1" role="grid" aria-label={t("calendar")}>
+          {weekDays.map((day) => <span key={day.toISOString()} className="flex size-9 items-center justify-center text-xs font-semibold text-muted-foreground">{format(day, "EEEEEE", { locale: dateLocale })}</span>)}
           {days.map((day) => {
             const selected = selectedDate ? isSameDay(day, selectedDate) : false;
             return (
@@ -72,7 +77,7 @@ export function DatePicker({
                 variant={selected ? "default" : "ghost"}
                 size="icon-lg"
                 className={cn("size-9 text-xs", !isSameMonth(day, month) && "text-muted-foreground opacity-45")}
-                aria-label={format(day, "d MMMM yyyy", { locale: pl })}
+                aria-label={format(day, "d MMMM yyyy", { locale: dateLocale })}
                 aria-pressed={selected}
                 onClick={() => {
                   onValueChange(format(day, "yyyy-MM-dd"));

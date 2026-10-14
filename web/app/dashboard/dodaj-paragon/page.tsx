@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { ReceiptPage } from "@/components/dashboard/receipt-page";
 
-export const metadata: Metadata = {
-  title: "Dodaj paragon",
-  description: "Dodaj produkty do zapasów na podstawie paragonu.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Receipt");
+  return { title: t("metaTitle"), description: t("metaDescription") };
+}
 
 export default function AddReceiptPage() {
   return <ReceiptPage />;

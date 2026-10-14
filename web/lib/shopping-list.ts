@@ -70,8 +70,12 @@ export function addShoppingItems(storage: ShoppingListStorage, names: string[]) 
   return changedCount;
 }
 
-export function formatShoppingList(items: Pick<ShoppingItem, "name" | "done">[], includeTitle = true) {
+export function formatShoppingList(
+  items: Pick<ShoppingItem, "name" | "done">[],
+  includeTitle = true,
+  title = "Lista zakupów – Fridgy",
+) {
   const pendingItems = items.filter((item) => !item.done);
   const products = pendingItems.map((item) => `- ${item.name}`).join("\n");
-  return includeTitle ? `Lista zakupów – Fridgy\n\n${products}` : products;
+  return includeTitle ? `${title}\n\n${products}` : products;
 }

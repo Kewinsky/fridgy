@@ -1,12 +1,14 @@
 "use client";
 
 import { MoonIcon, SunIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
+  const t = useTranslations("Theme");
 
   function toggleTheme() {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
@@ -18,8 +20,8 @@ export function ThemeToggle() {
       variant="outline"
       size="icon-lg"
       className="fixed top-4 right-4 z-10 size-11 rounded-full shadow-sm sm:top-6 sm:right-6"
-      aria-label="Przełącz motyw kolorystyczny"
-      title="Przełącz motyw kolorystyczny"
+      aria-label={t("toggle")}
+      title={t("toggle")}
       onClick={toggleTheme}
     >
       <MoonIcon className="size-5 dark:hidden" aria-hidden="true" />

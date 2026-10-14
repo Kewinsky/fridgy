@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { ArrowLeftIcon, LeafIcon, ScanLineIcon, SparklesIcon } from "lucide-react";
 
 import { LoginForm } from "@/components/auth/login-form";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { createClient } from "@/lib/supabase/server";
 
-export const metadata: Metadata = {
-  title: "Logowanie",
-  description: "Zaloguj się do Fridgy kodem e-mail lub kontem Google.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Login");
+  return { title: t("metaTitle"), description: t("metaDescription") };
+}
 
 export const instant = false;
 
@@ -19,6 +21,7 @@ type LoginPageProps = {
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
+  const t = await getTranslations("Login");
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
 
@@ -28,7 +31,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
   const params = await searchParams;
   const initialError = params.error
-    ? "Logowanie nie powiodło się. Spróbuj ponownie."
+    ? t("errors.oauth")
     : undefined;
 
   return (
@@ -44,10 +47,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
         <div className="relative my-auto max-w-lg py-12">
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-surface-strong-accent">
-            Wszystko w jednym miejscu
+            {t("eyebrow")}
           </p>
           <h2 className="mt-4 text-5xl font-extrabold leading-tight tracking-[-0.045em]">
-            Twoje zapasy zawsze pod ręką.
+            {t("sideTitle")}
           </h2>
           <div className="mt-10 space-y-4 text-surface-strong-foreground/75">
             <p className="flex items-center gap-3">
@@ -55,14 +58,14 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
                 className="size-5 text-surface-strong-accent"
                 aria-hidden="true"
               />
-              Szybkie dodawanie produktów z paragonu
+              {t("receiptBenefit")}
             </p>
             <p className="flex items-center gap-3">
               <SparklesIcon
                 className="size-5 text-surface-strong-accent"
                 aria-hidden="true"
               />
-              Pomysły dopasowane do zawartości kuchni
+              {t("ideasBenefit")}
             </p>
           </div>
         </div>
@@ -75,9 +78,12 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             className="flex min-h-11 items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeftIcon className="size-4" aria-hidden="true" />
-            Strona główna
+            {t("home")}
           </Link>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher compact />
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="my-auto w-full py-12">

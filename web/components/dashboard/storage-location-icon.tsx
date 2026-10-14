@@ -7,6 +7,12 @@ export const storageLocationEmojis = {
   Spiżarnia: "🥫",
 } as const;
 
+export const storageLocationMessageKeys: Record<StorageLocation, string> = {
+  Lodówka: "fridge",
+  Zamrażarka: "freezer",
+  Spiżarnia: "pantry",
+};
+
 export function StorageLocationIcon({
   location,
   className,

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { CheckCircle2Icon } from "lucide-react";
 import { toast } from "sonner";
 
@@ -30,6 +31,8 @@ import {
 } from "@/lib/inventory-store";
 
 export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
+  const t = useTranslations("FinishCooking");
+  const locale = useLocale();
   const router = useRouter();
   const products = useInventory();
   const [open, setOpen] = useState(false);
@@ -65,7 +68,7 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
     );
     recordCooking(recipe);
     setOpen(false);
-    toast.success("Zapisano gotowanie i zaktualizowano zapasy");
+    toast.success(t("success"));
     router.push("/dashboard/moje-przepisy");
   }
 
@@ -74,16 +77,15 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
       <DialogTrigger
         render={
           <Button className="mt-8 h-12 w-full">
-            <CheckCircle2Icon aria-hidden="true" /> Zakończ gotowanie
+            <CheckCircle2Icon aria-hidden="true" /> {t("open")}
           </Button>
         }
       />
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Podsumuj wykorzystane produkty</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Sprawdź ilości przed odjęciem ich od zapasów. Produkty z
-            niezgodnymi jednostkami nie są zaznaczone automatycznie.
+            {t("description")}
           </DialogDescription>
         </DialogHeader>
 
@@ -107,20 +109,23 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
                     onCheckedChange={(checked) =>
                       updateDeduction(product.id, { selected: checked === true })
                     }
-                    aria-label={`Odejmij ${product.name} od zapasów`}
+                    aria-label={t("deductProduct", { name: product.name })}
                   />
                   <Label htmlFor={`${inputId}-selected`} className="min-w-0">
                     <span className="block truncate font-bold">
                       {product.name}
                     </span>
                     <span className="block text-xs font-normal text-muted-foreground">
-                      Przepis: {deduction.ingredientAmount} · Masz:{" "}
-                      {product.quantity.toLocaleString("pl-PL")} {product.unit}
+                      {t("productSummary", {
+                        recipeAmount: deduction.ingredientAmount,
+                        quantity: product.quantity.toLocaleString(locale),
+                        unit: product.unit,
+                      })}
                     </span>
                   </Label>
                   <div className="relative">
                     <Label htmlFor={inputId} className="sr-only">
-                      Ilość produktu {product.name}
+                      {t("productAmount", { name: product.name })}
                     </Label>
                     <Input
                       id={inputId}
@@ -150,8 +155,7 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
           </div>
         ) : (
           <p className="rounded-lg bg-muted p-4 text-sm text-muted-foreground">
-            Nie znaleziono pasujących produktów w zapasach. Gotowanie nadal
-            zostanie zapisane w historii.
+            {t("noMatches")}
           </p>
         )}
 
@@ -162,10 +166,10 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
             className="h-11"
             onClick={() => setOpen(false)}
           >
-            Anuluj
+            {t("cancel")}
           </Button>
           <Button type="button" className="h-11" onClick={finishCooking}>
-            Potwierdź i zakończ
+            {t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

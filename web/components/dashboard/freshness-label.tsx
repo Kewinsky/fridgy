@@ -1,30 +1,36 @@
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
+
 import { Badge } from "@/components/ui/badge";
 import { formatEstimatedDate, getFreshnessStatus } from "@/lib/demo-data";
 
 const statuses = {
   overdue: {
     emoji: "⛔",
-    label: "Po szacowanym terminie",
+    labelKey: "overdueLong",
   },
   today: {
     emoji: "🔥",
-    label: "Wykorzystaj dzisiaj",
+    labelKey: "todayLong",
   },
   soon: {
     emoji: "⏳",
-    label: "Wykorzystaj wkrótce",
+    labelKey: "soonLong",
   },
   week: {
     emoji: "🗓️",
-    label: "Zaplanuj na ten tydzień",
+    labelKey: "weekLong",
   },
   calm: {
     emoji: "🌿",
-    label: "Na spokojnie",
+    labelKey: "calmLong",
   },
 } as const;
 
 export function FreshnessLabel({ date }: { date: string }) {
+  const t = useTranslations("Inventory.freshness");
+  const locale = useLocale();
   const status = statuses[getFreshnessStatus(date)];
 
   return (
@@ -34,10 +40,10 @@ export function FreshnessLabel({ date }: { date: string }) {
         className="border-transparent bg-secondary text-primary"
       >
         <span aria-hidden="true">{status.emoji}</span>
-        {status.label}
+        {t(status.labelKey)}
       </Badge>
       <span className="text-[11px] text-muted-foreground">
-        Szacowany termin: {formatEstimatedDate(date)}
+        {t("estimatedDate", { date: formatEstimatedDate(date, locale) })}
       </span>
     </span>
   );

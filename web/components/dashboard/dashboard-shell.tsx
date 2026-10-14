@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import {
   ChefHatIcon,
@@ -22,38 +23,38 @@ import { cn } from "@/lib/utils";
 const navigation = [
   {
     href: "/dashboard",
-    label: "Przegląd",
-    shortLabel: "Start",
+    labelKey: "overview",
+    shortLabelKey: "overviewShort",
     icon: HomeIcon,
   },
   {
     href: "/dashboard/zapasy",
-    label: "Moje zapasy",
-    shortLabel: "Zapasy",
+    labelKey: "inventory",
+    shortLabelKey: "inventoryShort",
     icon: ShoppingBasketIcon,
   },
   {
     href: "/dashboard/co-ugotowac",
-    label: "Co ugotować?",
-    shortLabel: "Ugotuj",
+    labelKey: "cook",
+    shortLabelKey: "cookShort",
     icon: ChefHatIcon,
   },
   {
     href: "/dashboard/moje-przepisy",
-    label: "Moje przepisy",
-    shortLabel: "Przepisy",
+    labelKey: "recipes",
+    shortLabelKey: "recipesShort",
     icon: BookOpenCheckIcon,
   },
   {
     href: "/dashboard/lista-zakupow",
-    label: "Lista zakupów",
-    shortLabel: "Lista",
+    labelKey: "shopping",
+    shortLabelKey: "shoppingShort",
     icon: ListChecksIcon,
   },
   {
     href: "/dashboard/ustawienia",
-    label: "Ustawienia",
-    shortLabel: "Ustawienia",
+    labelKey: "settings",
+    shortLabelKey: "settingsShort",
     icon: SettingsIcon,
   },
 ] as const;
@@ -63,8 +64,8 @@ const mobileNavigation = [
   navigation[1],
   {
     href: "/dashboard/dodaj-paragon",
-    label: "Dodaj paragon",
-    shortLabel: "Paragon",
+    labelKey: "receipt",
+    shortLabelKey: "receiptShort",
     icon: ReceiptTextIcon,
   },
   navigation[2],
@@ -79,6 +80,7 @@ export function DashboardShell({
   email: string;
 }) {
   const pathname = usePathname();
+  const t = useTranslations("Navigation");
   const initial = email.charAt(0).toUpperCase();
 
   if (pathname.startsWith("/dashboard/gotowanie/")) {
@@ -114,12 +116,12 @@ export function DashboardShell({
             }
             className="h-11 w-full"
           >
-            Dodaj paragon
+            {t("receipt")}
           </Button>
         </div>
 
-        <nav aria-label="Główna nawigacja" className="mt-7 space-y-1 px-4">
-          {navigation.map(({ href, label, icon: Icon }) => {
+        <nav aria-label={t("mainNavigation")} className="mt-7 space-y-1 px-4">
+          {navigation.map(({ href, labelKey, icon: Icon }) => {
             const active =
               href === "/dashboard"
                 ? pathname === href
@@ -138,7 +140,7 @@ export function DashboardShell({
                 )}
               >
                 <Icon className="size-5" aria-hidden="true" />
-                {label}
+                {t(labelKey)}
               </Link>
             );
           })}
@@ -152,7 +154,7 @@ export function DashboardShell({
               className="w-full justify-start px-2"
             >
               <LogOutIcon aria-hidden="true" />
-              Wyloguj się
+              {t("signOut")}
             </Button>
           </form>
         </div>
@@ -167,13 +169,13 @@ export function DashboardShell({
             <span className="font-extrabold">Fridgy</span>
           </Link>
           <p className="hidden text-sm text-muted-foreground lg:block">
-            Twój dom
+            {t("yourHome")}
           </p>
           <div className="flex items-center gap-2">
             <Link
               href="/dashboard/ustawienia"
               className="flex size-11 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground lg:hidden"
-              aria-label="Ustawienia"
+              aria-label={t("settings")}
             >
               <SettingsIcon className="size-5" aria-hidden="true" />
             </Link>
@@ -190,9 +192,9 @@ export function DashboardShell({
 
       <nav
         className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-border bg-card px-1 pb-[env(safe-area-inset-bottom)] lg:hidden"
-        aria-label="Mobilna nawigacja"
+        aria-label={t("mobileNavigation")}
       >
-        {mobileNavigation.map(({ href, shortLabel, icon: Icon }) => {
+        {mobileNavigation.map(({ href, shortLabelKey, icon: Icon }) => {
           const active =
             href === "/dashboard"
               ? pathname === href
@@ -208,7 +210,7 @@ export function DashboardShell({
               )}
             >
               <Icon className="size-5" aria-hidden="true" />
-              <span className="max-w-full truncate">{shortLabel}</span>
+              <span className="max-w-full truncate">{t(shortLabelKey)}</span>
             </Link>
           );
         })}

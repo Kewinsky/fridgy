@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowRightIcon,
   ChefHatIcon,
@@ -12,12 +13,15 @@ import {
 } from "@/components/dashboard/add-recipe-dialog";
 import { AddMissingItemsButton } from "@/components/dashboard/add-missing-items-button";
 import { FavoriteRecipeButton } from "@/components/dashboard/recipe-actions";
+import { difficultyMessageKeys } from "@/components/dashboard/recipe-options";
 import { Button } from "@/components/ui/button";
 import {
   getMissingIngredients,
   getRecipeMatch,
   type Recipe,
 } from "@/lib/demo-recipes";
+import { localizeDemoRecipe } from "@/lib/demo-localization";
+import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
 
 export function RecipeCard({
@@ -29,6 +33,8 @@ export function RecipeCard({
   variant: "suggestion" | "library";
   servings?: number;
 }) {
+  const t = useTranslations("Recipe");
+  const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
   const missing = suggestion ? getMissingIngredients(recipe) : [];
@@ -44,8 +50,8 @@ export function RecipeCard({
       </div>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h2 className="text-lg font-extrabold">{recipe.title}</h2>
-          <p className="mt-1 text-sm leading-6 text-muted-foreground">{recipe.description}</p>
+          <h2 className="text-lg font-extrabold">{displayRecipe.title}</h2>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">{displayRecipe.description}</p>
         </div>
         <FavoriteRecipeButton slug={recipe.slug} compact />
       </div>
@@ -53,26 +59,26 @@ export function RecipeCard({
       <div className="mt-auto pt-4">
         <div className="flex flex-wrap gap-4 text-xs font-semibold text-muted-foreground">
           <span className="flex items-center gap-1">
-            <ClockIcon className="size-4" aria-hidden="true" /> {recipe.time} min
+            <ClockIcon className="size-4" aria-hidden="true" /> {t("minutes", { count: recipe.time })}
           </span>
           <span className="flex items-center gap-1">
-            <UsersIcon className="size-4" aria-hidden="true" /> {servings} porcje
+            <UsersIcon className="size-4" aria-hidden="true" /> {t("servings", { count: servings })}
           </span>
           <span className="flex items-center gap-1">
-            <ChefHatIcon className="size-4" aria-hidden="true" /> {recipe.difficulty}
+            <ChefHatIcon className="size-4" aria-hidden="true" /> {difficultyMessageKeys[recipe.difficulty] ? t(`difficultyOptions.${difficultyMessageKeys[recipe.difficulty]}`) : recipe.difficulty}
           </span>
         </div>
 
         {match ? (
           <>
-            <p className="mt-4 text-sm font-bold">{match.available} z {match.total} składników masz w domu</p>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label={`Masz ${match.available} z ${match.total} składników`} aria-valuenow={match.available} aria-valuemin={0} aria-valuemax={match.total}>
+            <p className="mt-4 text-sm font-bold">{t("match", { available: match.available, total: match.total })}</p>
+            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label={t("match", { available: match.available, total: match.total })} aria-valuenow={match.available} aria-valuemin={0} aria-valuemax={match.total}>
               <div className="h-full bg-primary" style={{ width: `${(match.available / match.total) * 100}%` }} />
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
               {missing.length
-                ? `Brakuje: ${missing.map((ingredient) => ingredient.name).join(", ")}`
-                : "Masz wszystkie składniki"}
+                ? t("missingNames", { names: getMissingIngredients(displayRecipe).map((ingredient) => ingredient.name).join(", ") })
+                : t("allIngredients")}
             </p>
           </>
         ) : null}
@@ -81,7 +87,7 @@ export function RecipeCard({
           <div className="grid min-w-0 flex-1 gap-2">
             {suggestion && missing.length ? (
               <AddMissingItemsButton
-                names={missing.map((ingredient) => ingredient.name)}
+                names={getMissingIngredients(displayRecipe).map((ingredient) => ingredient.name)}
                 className="w-full"
               />
             ) : null}
@@ -90,7 +96,7 @@ export function RecipeCard({
               render={<Link href={href} />}
               className="h-11 w-full"
             >
-              Zobacz przepis <ArrowRightIcon aria-hidden="true" />
+              {t("viewRecipe")} <ArrowRightIcon aria-hidden="true" />
             </Button>
           </div>
           {!suggestion && customRecipe ? (

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowLeftIcon,
   CheckCircle2Icon,
@@ -17,15 +18,22 @@ import {
 } from "@/components/dashboard/add-recipe-dialog";
 import { FavoriteRecipeButton, StartCookingButton } from "@/components/dashboard/recipe-actions";
 import { RecipeCookingStats } from "@/components/dashboard/recipe-cooking-stats";
+import {
+  cuisineMessageKeys,
+  difficultyMessageKeys,
+  isCuisine,
+} from "@/components/dashboard/recipe-options";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getMissingIngredients, type Recipe } from "@/lib/demo-recipes";
+import { localizeDemoRecipe } from "@/lib/demo-localization";
+import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
 
 export function RecipeDetail({
   recipe,
-  eyebrow = "Przepis",
+  eyebrow,
   backHref,
   showFavoriteAction = true,
   showCookingStats = false,
@@ -36,15 +44,17 @@ export function RecipeDetail({
   showFavoriteAction?: boolean;
   showCookingStats?: boolean;
 }) {
+  const t = useTranslations("Recipe");
+  const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
   const missing = getMissingIngredients(recipe);
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
 
   return (
     <>
       <PageHeader
-        eyebrow={eyebrow}
-        title={recipe.title}
-        description={recipe.description}
+        eyebrow={eyebrow ?? t("recipe")}
+        title={displayRecipe.title}
+        description={displayRecipe.description}
         actions={
           <Button
             nativeButton={false}
@@ -52,7 +62,7 @@ export function RecipeDetail({
             variant="outline"
             className="h-11"
           >
-            <ArrowLeftIcon aria-hidden="true" /> Wróć
+            <ArrowLeftIcon aria-hidden="true" /> {t("back")}
           </Button>
         }
       />
@@ -64,19 +74,19 @@ export function RecipeDetail({
               <ChefHatIcon className="size-16" aria-hidden="true" />
             </div>
             <div className="grid grid-cols-2 gap-3 p-5 sm:grid-cols-4">
-              <RecipeFact icon={<ClockIcon />} label="Czas" value={`${recipe.time} min`} />
-              <RecipeFact icon={<UsersIcon />} label="Porcje" value={`${recipe.servings}`} />
-              <RecipeFact icon={<Globe2Icon />} label="Kuchnia" value={recipe.cuisine} />
-              <RecipeFact icon={<ChefHatIcon />} label="Poziom" value={recipe.difficulty} />
+              <RecipeFact icon={<ClockIcon />} label={t("time")} value={t("minutes", { count: recipe.time })} />
+              <RecipeFact icon={<UsersIcon />} label={t("servingsLabel")} value={`${recipe.servings}`} />
+              <RecipeFact icon={<Globe2Icon />} label={t("cuisine")} value={isCuisine(recipe.cuisine) ? t(`cuisineOptions.${cuisineMessageKeys[recipe.cuisine]}`) : recipe.cuisine} />
+              <RecipeFact icon={<ChefHatIcon />} label={t("difficulty")} value={difficultyMessageKeys[recipe.difficulty] ? t(`difficultyOptions.${difficultyMessageKeys[recipe.difficulty]}`) : recipe.difficulty} />
             </div>
           </section>
 
           {showCookingStats ? <RecipeCookingStats slug={recipe.slug} /> : null}
 
           <section className="app-card p-5 sm:p-6">
-            <h2 className="text-xl font-extrabold">Przygotowanie</h2>
+            <h2 className="text-xl font-extrabold">{t("preparation")}</h2>
             <ol className="mt-5 space-y-5">
-              {recipe.steps.map((step, index) => (
+              {displayRecipe.steps.map((step, index) => (
                 <li key={`${index}-${step}`} className="flex gap-4">
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-foreground">
                     {index + 1}
@@ -90,11 +100,11 @@ export function RecipeDetail({
 
         <aside className="app-card h-fit p-5 sm:p-6">
           <div className="flex items-center justify-between gap-3">
-            <h2 className="text-xl font-extrabold">Składniki</h2>
-            <Badge variant="secondary">{recipe.servings} porcje</Badge>
+            <h2 className="text-xl font-extrabold">{t("ingredients")}</h2>
+            <Badge variant="secondary">{t("servings", { count: recipe.servings })}</Badge>
           </div>
           <ul className="mt-4 divide-y divide-border">
-            {recipe.ingredients.map((ingredient, index) => (
+            {displayRecipe.ingredients.map((ingredient, index) => (
               <li key={`${index}-${ingredient.name}`} className="flex min-h-14 items-center gap-3 py-2">
                 {ingredient.available ? (
                   <CheckCircle2Icon className="size-5 shrink-0 text-fresh" aria-hidden="true" />
@@ -111,10 +121,10 @@ export function RecipeDetail({
             <>
               <div className="mt-5 rounded-lg bg-muted p-4">
                 <p className="text-sm font-bold">
-                  {missing.length === 1 ? "Brakuje 1 produktu" : `Brakuje ${missing.length} produktów`}
+                  {t("missingCount", { count: missing.length })}
                 </p>
                 <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                  Brakujące składniki możesz od razu zapisać na liście zakupów.
+                  {t("missingDescription")}
                 </p>
               </div>
               <AddMissingItemsButton

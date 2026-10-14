@@ -1,36 +1,35 @@
 "use client";
 
 import { CalendarClockIcon, HistoryIcon } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
 import { getCookingCount } from "@/lib/recipe-library";
 
-const dateFormatter = new Intl.DateTimeFormat("pl-PL", {
-  dateStyle: "medium",
-});
-
 export function RecipeCookingStats({ slug }: { slug: string }) {
+  const t = useTranslations("RecipeStats");
+  const format = useFormatter();
   const library = useRecipeLibrary();
   const count = getCookingCount(library, slug);
   const latest = library.history.find((record) => record.recipeSlug === slug);
 
   return (
     <section
-      aria-label="Historia gotowania"
+      aria-label={t("label")}
       className="app-card grid gap-3 p-5 sm:grid-cols-2"
     >
       <Stat
         icon={HistoryIcon}
-        label="Liczba ugotowań"
+        label={t("count")}
         value={`${count}×`}
       />
       <Stat
         icon={CalendarClockIcon}
-        label="Ostatnio ugotowano"
+        label={t("lastCooked")}
         value={
           latest
-            ? dateFormatter.format(new Date(latest.cookedAt))
-            : "Jeszcze nie gotowano"
+            ? format.dateTime(new Date(latest.cookedAt), { dateStyle: "medium" })
+            : t("never")
         }
       />
     </section>

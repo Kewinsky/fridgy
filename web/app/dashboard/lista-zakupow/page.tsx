@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { ShoppingListPage } from "@/components/dashboard/shopping-list-page";
 
-export const metadata: Metadata = {
-  title: "Lista zakupów",
-  description: "Prosta lista zakupów dla domu.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("ShoppingList");
+  return { title: t("metaTitle"), description: t("metaDescription") };
+}
 
 export default function ShoppingListRoute() {
   return <ShoppingListPage />;

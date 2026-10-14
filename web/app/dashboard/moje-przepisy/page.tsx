@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { getTranslations } from "next-intl/server";
 
 import { RecipeLibraryPage } from "@/components/dashboard/recipe-library-page";
 
-export const metadata: Metadata = {
-  title: "Moje przepisy",
-  description: "Ulubione przepisy, własne dania i historia gotowania.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("RecipeLibrary");
+  return { title: t("metaTitle"), description: t("metaDescription") };
+}
 
 export default function RecipeLibraryRoute() {
   return <RecipeLibraryPage />;

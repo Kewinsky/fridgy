@@ -1,6 +1,7 @@
 "use client";
 
 import { ShoppingCartIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -14,18 +15,16 @@ export function AddMissingItemsButton({
   names: string[];
   className?: string;
 }) {
+  const t = useTranslations("AddMissingItems");
+
   function addItems() {
     const added = addShoppingItems(window.localStorage, names);
     if (!added) {
-      toast.info("Te produkty są już na liście zakupów.");
+      toast.info(t("alreadyAdded"));
       return;
     }
 
-    toast.success(
-      added === 1
-        ? "Dodano brakujący produkt do listy zakupów."
-        : `Dodano ${added} brakujące produkty do listy zakupów.`,
-    );
+    toast.success(t("success", { count: added }));
   }
 
   return (
@@ -36,7 +35,7 @@ export function AddMissingItemsButton({
       onClick={addItems}
     >
       <ShoppingCartIcon aria-hidden="true" />
-      Dodaj brakujące
+      {t("button")}
     </Button>
   );
 }

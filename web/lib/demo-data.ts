@@ -45,8 +45,8 @@ export function getFreshnessStatus(estimatedUseBy: string, now = new Date()): Fr
   return "calm";
 }
 
-export function formatEstimatedDate(date: string) {
-  return new Intl.DateTimeFormat("pl-PL", {
+export function formatEstimatedDate(date: string, locale = "pl-PL") {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",

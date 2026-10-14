@@ -12,9 +12,11 @@ import {
   UploadIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 import { PageHeader } from "@/components/dashboard/page-header";
 import { StorageLocationIcon } from "@/components/dashboard/storage-location-icon";
+import { storageLocationMessageKeys } from "@/components/dashboard/storage-location-icon";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,10 +38,11 @@ type ReceiptItem = {
   price: string;
 };
 
-const sampleItems: ReceiptItem[] = [
+function getSampleItems(t: ReturnType<typeof useTranslations<"Receipt">>): ReceiptItem[] {
+  return [
   {
     id: "r1",
-    name: "Mleko 2%",
+    name: t("demo.milk"),
     quantity: "1",
     unit: "l",
     storageLocation: "Lodówka",
@@ -47,7 +50,7 @@ const sampleItems: ReceiptItem[] = [
   },
   {
     id: "r2",
-    name: "Pomidory malinowe",
+    name: t("demo.tomatoes"),
     quantity: "0,62",
     unit: "kg",
     storageLocation: "Lodówka",
@@ -55,13 +58,14 @@ const sampleItems: ReceiptItem[] = [
   },
   {
     id: "r3",
-    name: "Pierś z kurczaka",
+    name: t("demo.chicken"),
     quantity: "0,54",
     unit: "kg",
     storageLocation: "Lodówka",
     price: "13,49",
   },
-];
+  ];
+}
 const allowedFileTypes = new Set([
   "image/jpeg",
   "image/png",
@@ -72,6 +76,9 @@ const maxFileSize = 20 * 1024 * 1024;
 const locations: StorageLocation[] = ["Lodówka", "Zamrażarka", "Spiżarnia"];
 
 export function ReceiptPage() {
+  const t = useTranslations("Receipt");
+  const inventoryT = useTranslations("Inventory");
+  const sampleItems = getSampleItems(t);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [step, setStep] = useState<Step>("upload");
   const [fileName, setFileName] = useState("");
@@ -105,7 +112,7 @@ export function ReceiptPage() {
           !item.name.trim() || !item.quantity.trim() || !item.unit.trim(),
       )
     ) {
-      toast.error("Uzupełnij nazwę, ilość i jednostkę każdego produktu.");
+      toast.error(t("toasts.incomplete"));
       return;
     }
     if (
@@ -115,7 +122,7 @@ export function ReceiptPage() {
           Number(item.quantity.replace(",", ".")) <= 0,
       )
     ) {
-      toast.error("Każda ilość musi być liczbą większą od zera.");
+      toast.error(t("toasts.invalidQuantity"));
       return;
     }
     setStep("success");
@@ -124,12 +131,12 @@ export function ReceiptPage() {
   function selectFile(file: File | undefined) {
     if (!file) return;
     if (!allowedFileTypes.has(file.type)) {
-      toast.error("Wybierz plik JPG, PNG, HEIC lub PDF.");
+      toast.error(t("toasts.invalidFile"));
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
     if (file.size > maxFileSize) {
-      toast.error("Plik może mieć maksymalnie 20 MB.");
+      toast.error(t("toasts.fileTooLarge"));
       if (fileInputRef.current) fileInputRef.current.value = "";
       return;
     }
@@ -142,10 +149,9 @@ export function ReceiptPage() {
         <span className="flex size-20 items-center justify-center rounded-full bg-fresh-soft text-fresh">
           <CheckIcon className="size-9" aria-hidden="true" />
         </span>
-        <h1 className="mt-6 text-3xl font-extrabold">Paragon jest gotowy</h1>
+        <h1 className="mt-6 text-3xl font-extrabold">{t("success.title")}</h1>
         <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
-          Zweryfikowano {items.length} produktów. Zapis do wspólnych zapasów
-          zostanie podłączony razem ze schematem Supabase.
+          {t("success.description", { count: items.length })}
         </p>
         <div className="mt-7 flex flex-wrap justify-center gap-2">
           <Button
@@ -153,7 +159,7 @@ export function ReceiptPage() {
             render={<Link href="/dashboard/zapasy" />}
             className="h-11"
           >
-            Zobacz zapasy
+            {t("success.inventory")}
           </Button>
           <Button
             variant="outline"
@@ -164,7 +170,7 @@ export function ReceiptPage() {
               setStep("upload");
             }}
           >
-            Dodaj kolejny paragon
+            {t("success.another")}
           </Button>
         </div>
       </section>
@@ -175,27 +181,27 @@ export function ReceiptPage() {
     return (
       <>
         <PageHeader
-          eyebrow="Krok 2 z 2"
-          title="Sprawdź produkty"
-          description="OCR nie jest jeszcze podłączony – poniżej widzisz dane demonstracyjne, które możesz poprawić."
+          eyebrow={t("review.eyebrow")}
+          title={t("review.title")}
+          description={t("review.description")}
           actions={
             <Button
               variant="outline"
               className="h-11"
               onClick={() => setStep("upload")}
             >
-              Wróć do pliku
+              {t("review.back")}
             </Button>
           }
         />
 
         <section className="app-card overflow-hidden">
           <div className="hidden grid-cols-[1fr_92px_92px_150px_92px_44px] gap-3 border-b border-border bg-muted/50 px-5 py-3 text-xs font-bold text-muted-foreground lg:grid">
-            <span>Produkt</span>
-            <span>Ilość</span>
-            <span>Jednostka</span>
-            <span>Miejsce</span>
-            <span>Cena</span>
+            <span>{t("fields.product")}</span>
+            <span>{t("fields.quantity")}</span>
+            <span>{t("fields.unit")}</span>
+            <span>{t("fields.location")}</span>
+            <span>{t("fields.price")}</span>
             <span />
           </div>
           {items.map((item) => (
@@ -208,7 +214,7 @@ export function ReceiptPage() {
                   htmlFor={`receipt-name-${item.id}`}
                   className="lg:sr-only"
                 >
-                  Produkt
+                  {t("fields.product")}
                 </Label>
                 <Input
                   id={`receipt-name-${item.id}`}
@@ -216,7 +222,7 @@ export function ReceiptPage() {
                   onChange={(event) =>
                     updateItem(item.id, { name: event.target.value })
                   }
-                  placeholder="Nazwa produktu"
+                  placeholder={t("fields.productPlaceholder")}
                   className="h-11"
                 />
               </div>
@@ -225,7 +231,7 @@ export function ReceiptPage() {
                   htmlFor={`receipt-quantity-${item.id}`}
                   className="lg:sr-only"
                 >
-                  Ilość
+                  {t("fields.quantity")}
                 </Label>
                 <Input
                   id={`receipt-quantity-${item.id}`}
@@ -242,7 +248,7 @@ export function ReceiptPage() {
                   htmlFor={`receipt-unit-${item.id}`}
                   className="lg:sr-only"
                 >
-                  Jednostka
+                  {t("fields.unit")}
                 </Label>
                 <Input
                   id={`receipt-unit-${item.id}`}
@@ -258,7 +264,7 @@ export function ReceiptPage() {
                   htmlFor={`receipt-location-${item.id}`}
                   className="lg:sr-only"
                 >
-                  Miejsce
+                  {t("fields.location")}
                 </Label>
                 <DropdownMenu>
                   <DropdownMenuTrigger
@@ -272,7 +278,7 @@ export function ReceiptPage() {
                       >
                         <span className="flex min-w-0 items-center gap-2">
                           <StorageLocationIcon location={item.storageLocation} />
-                          <span className="truncate">{item.storageLocation}</span>
+                          <span className="truncate">{inventoryT(`locations.${storageLocationMessageKeys[item.storageLocation]}`)}</span>
                         </span>
                         <ChevronDownIcon
                           className="text-muted-foreground"
@@ -293,7 +299,7 @@ export function ReceiptPage() {
                         }
                       >
                         <StorageLocationIcon location={location} />
-                        <span className="flex-1">{location}</span>
+                        <span className="flex-1">{inventoryT(`locations.${storageLocationMessageKeys[location]}`)}</span>
                         {item.storageLocation === location ? (
                           <CheckIcon aria-hidden="true" />
                         ) : null}
@@ -307,7 +313,7 @@ export function ReceiptPage() {
                   htmlFor={`receipt-price-${item.id}`}
                   className="lg:sr-only"
                 >
-                  Cena
+                  {t("fields.price")}
                 </Label>
                 <Input
                   id={`receipt-price-${item.id}`}
@@ -329,7 +335,7 @@ export function ReceiptPage() {
                     current.filter((currentItem) => currentItem.id !== item.id),
                   )
                 }
-                aria-label={`Usuń ${item.name || "produkt"}`}
+                aria-label={t("remove", { name: item.name || t("fields.productFallback") })}
               >
                 <Trash2Icon aria-hidden="true" />
               </Button>
@@ -337,16 +343,16 @@ export function ReceiptPage() {
           ))}
           <div className="p-4">
             <Button variant="ghost" className="h-11" onClick={addItem}>
-              <PlusIcon aria-hidden="true" /> Dodaj produkt
+              <PlusIcon aria-hidden="true" /> {t("review.addProduct")}
             </Button>
           </div>
         </section>
 
         <div className="sticky bottom-20 mt-5 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card/95 p-4 shadow-lg backdrop-blur lg:bottom-4">
           <div>
-            <p className="font-extrabold">{items.length} produktów</p>
+            <p className="font-extrabold">{t("productCount", { count: items.length })}</p>
             <p className="text-xs text-muted-foreground">
-              Sprawdź dane przed zatwierdzeniem.
+              {t("review.checkData")}
             </p>
           </div>
           <Button
@@ -354,7 +360,7 @@ export function ReceiptPage() {
             disabled={!items.length}
             onClick={confirmItems}
           >
-            <CheckIcon aria-hidden="true" /> Zatwierdź produkty
+            <CheckIcon aria-hidden="true" /> {t("review.confirm")}
           </Button>
         </div>
       </>
@@ -364,18 +370,18 @@ export function ReceiptPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <PageHeader
-        eyebrow="Krok 1 z 2"
-        title="Dodaj paragon"
-        description="Wybierz zdjęcie lub PDF paragonu, aby przygotować produkty do sprawdzenia."
+        eyebrow={t("upload.eyebrow")}
+        title={t("upload.title")}
+        description={t("upload.description")}
       />
       <section className="app-card p-5 sm:p-7">
         <div className="subtle-grid flex min-h-72 flex-col items-center justify-center rounded-xl border-2 border-dashed border-input bg-muted/30 px-5 text-center">
           <span className="flex size-14 items-center justify-center rounded-full bg-card text-primary shadow-sm">
             <UploadIcon className="size-6" aria-hidden="true" />
           </span>
-          <h2 className="mt-5 text-lg font-extrabold">Wybierz plik paragonu</h2>
+          <h2 className="mt-5 text-lg font-extrabold">{t("upload.fileTitle")}</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            JPG, PNG, HEIC lub PDF · maks. 20 MB
+            {t("upload.formats")}
           </p>
           <Input
             ref={fileInputRef}
@@ -388,11 +394,11 @@ export function ReceiptPage() {
             className="mt-5 h-11"
             onClick={() => fileInputRef.current?.click()}
           >
-            <FileImageIcon aria-hidden="true" /> Wybierz zdjęcie lub PDF
+            <FileImageIcon aria-hidden="true" /> {t("upload.selectFile")}
           </Button>
           {fileName ? (
             <p className="mt-3 text-sm font-semibold text-primary">
-              Wybrano: {fileName}
+              {t("upload.selected", { fileName })}
             </p>
           ) : null}
         </div>
@@ -403,7 +409,7 @@ export function ReceiptPage() {
             disabled={!fileName}
             onClick={() => setStep("review")}
           >
-            <ReceiptTextIcon aria-hidden="true" /> Przejdź do weryfikacji
+            <ReceiptTextIcon aria-hidden="true" /> {t("upload.review")}
           </Button>
           <Button
             variant="outline"
@@ -413,12 +419,11 @@ export function ReceiptPage() {
               setStep("review");
             }}
           >
-            Użyj przykładowego paragonu
+            {t("upload.useSample")}
           </Button>
         </div>
         <p className="mt-4 text-center text-xs leading-5 text-muted-foreground">
-          Na tym etapie plik nie jest wysyłany ani analizowany. Integrację OCR
-          dodamy osobno.
+          {t("upload.notice")}
         </p>
       </section>
     </div>

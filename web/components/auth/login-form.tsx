@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon, LoaderCircleIcon, MailIcon } from "lucide-react";
 
@@ -14,6 +15,7 @@ type LoginFormProps = {
 };
 
 export function LoginForm({ initialError }: LoginFormProps) {
+  const t = useTranslations("Login");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -38,7 +40,7 @@ export function LoginForm({ initialError }: LoginFormProps) {
     setPending(false);
 
     if (authError) {
-      setError("Nie udało się wysłać kodu. Spróbuj ponownie.");
+      setError(t("errors.sendCode"));
       return;
     }
 
@@ -59,7 +61,7 @@ export function LoginForm({ initialError }: LoginFormProps) {
 
     if (authError) {
       setPending(false);
-      setError("Kod jest nieprawidłowy lub wygasł.");
+      setError(t("errors.invalidCode"));
       return;
     }
 
@@ -81,7 +83,7 @@ export function LoginForm({ initialError }: LoginFormProps) {
 
     if (authError) {
       setPending(false);
-      setError("Nie udało się rozpocząć logowania przez Google.");
+      setError(t("errors.google"));
     }
   }
 
@@ -99,20 +101,20 @@ export function LoginForm({ initialError }: LoginFormProps) {
           }}
         >
           <ArrowLeftIcon className="size-4" aria-hidden="true" />
-          Zmień adres e-mail
+          {t("changeEmail")}
         </Button>
 
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight">
-            Sprawdź skrzynkę
+            {t("checkInbox")}
           </h1>
           <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Wysłaliśmy kod na <strong className="text-foreground">{email}</strong>.
+            {t("codeSent", { email })}
           </p>
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="code">Kod logowania</Label>
+          <Label htmlFor="code">{t("loginCode")}</Label>
           <Input
             id="code"
             name="code"
@@ -146,7 +148,7 @@ export function LoginForm({ initialError }: LoginFormProps) {
           {pending ? (
             <LoaderCircleIcon className="animate-spin" aria-hidden="true" />
           ) : null}
-          Zaloguj się
+          {t("signIn")}
         </Button>
       </form>
     );
@@ -155,15 +157,15 @@ export function LoginForm({ initialError }: LoginFormProps) {
   return (
     <div>
       <div>
-        <h1 className="text-3xl font-extrabold tracking-tight">Witaj we Fridgy</h1>
+        <h1 className="text-3xl font-extrabold tracking-tight">{t("welcome")}</h1>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
-          Zaloguj się bez hasła i wróć do swoich zapasów.
+          {t("welcomeDescription")}
         </p>
       </div>
 
       <form onSubmit={sendCode} className="mt-7 space-y-5">
         <div className="space-y-2">
-          <Label htmlFor="email">Adres e-mail</Label>
+          <Label htmlFor="email">{t("email")}</Label>
           <div className="relative">
             <MailIcon
               className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
@@ -197,13 +199,13 @@ export function LoginForm({ initialError }: LoginFormProps) {
           {pending ? (
             <LoaderCircleIcon className="animate-spin" aria-hidden="true" />
           ) : null}
-          Wyślij kod
+          {t("sendCode")}
         </Button>
       </form>
 
       <div className="my-6 flex items-center gap-3 text-xs text-muted-foreground">
         <span className="h-px flex-1 bg-border" />
-        lub
+        {t("or")}
         <span className="h-px flex-1 bg-border" />
       </div>
 
@@ -214,11 +216,11 @@ export function LoginForm({ initialError }: LoginFormProps) {
         disabled={pending}
         onClick={signInWithGoogle}
       >
-        Kontynuuj z Google
+        {t("google")}
       </Button>
 
       <p className="mt-6 text-center text-xs leading-5 text-muted-foreground">
-        Logując się, akceptujesz zasady korzystania z Fridgy.
+        {t("terms")}
       </p>
     </div>
   );

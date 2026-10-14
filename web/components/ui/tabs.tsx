@@ -78,4 +78,15 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   )
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }
+function TabsScrollableList({
+  className,
+  ...props
+}: React.ComponentProps<typeof TabsList>) {
+  return (
+    <div className="-mx-1 overflow-x-auto px-1 py-1">
+      <TabsList className={cn("h-11! min-w-max", className)} {...props} />
+    </div>
+  )
+}
+
+export { Tabs, TabsList, TabsScrollableList, TabsTrigger, TabsContent, tabsListVariants }

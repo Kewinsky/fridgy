@@ -10,6 +10,20 @@ export const productCategories = [
   "Przetwory",
 ] as const;
 
+export type ProductCategory = (typeof productCategories)[number];
+
+export const productCategoryMessageKeys: Record<ProductCategory, string> = {
+  Owoce: "fruit",
+  Nabiał: "dairy",
+  Warzywa: "vegetables",
+  Mięso: "meat",
+  Mrożonki: "frozen",
+  Ryby: "fish",
+  Pieczywo: "bakery",
+  Sypkie: "dryGoods",
+  Przetwory: "preserves",
+};
+
 export const productCategoryAppearance: Record<
   string,
   { emoji?: string; className: string }
