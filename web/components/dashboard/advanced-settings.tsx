@@ -8,7 +8,6 @@ import {
   InfoIcon,
   RotateCcwIcon,
   ShieldCheckIcon,
-  UtensilsIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { resetDemoData, saveProfileSetting, type ProfileSettings } from "@/app/dashboard/settings-actions";
@@ -32,20 +31,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-const cuisineKeys = [
-  "polish",
-  "italian",
-  "asian",
-  "mexican",
-  "mediterranean",
-  "middleEastern",
-] as const;
-
-const cuisineValues = ["Polska", "Włoska", "Azjatycka", "Meksykańska", "Śródziemnomorska", "Bliskowschodnia"] as const;
-
 export function AdvancedSettings({ version, initialSettings }: { version: string; initialSettings: ProfileSettings }) {
   const t = useTranslations("Settings.advanced");
-  const recipeT = useTranslations("Recipe.cuisineOptions");
   const common = useTranslations("Common");
   const [settings, setSettings] = useState(initialSettings);
 
@@ -83,28 +70,6 @@ export function AdvancedSettings({ version, initialSettings }: { version: string
                 options={["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"].map((value) => ({ value, label: value }))}
               />
             </FieldLabel>
-          </div>
-        </PreferenceCard>
-
-        <PreferenceCard
-          icon={UtensilsIcon}
-          title={t("cuisines.title")}
-          description={t("cuisines.description")}
-          className="lg:col-span-2"
-        >
-          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
-            {cuisineKeys.map((cuisine, index) => (
-              <label
-                key={cuisine}
-                className="flex min-h-11 cursor-pointer items-center gap-3 rounded-lg border border-input px-3 py-2 text-sm font-medium"
-              >
-                <Checkbox checked={settings.preferred_cuisines.includes(cuisineValues[index])}
-                  onCheckedChange={(checked) => void save("preferred_cuisines", checked
-                    ? [...settings.preferred_cuisines, cuisineValues[index]]
-                    : settings.preferred_cuisines.filter((value) => value !== cuisineValues[index]))} />
-                {recipeT(cuisine)}
-              </label>
-            ))}
           </div>
         </PreferenceCard>
 

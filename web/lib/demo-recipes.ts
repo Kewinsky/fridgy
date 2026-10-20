@@ -3,21 +3,49 @@ export type Recipe = {
   title: string;
   description: string;
   time: number;
+  activeTime?: number;
   difficulty: string;
-  calories: number;
+  calories?: number;
+  macros?: { protein: number; carbs: number; fat: number };
+  nutritionSource?: "estimate" | "author";
+  allergens?: RecipeAllergen[];
+  dietTags?: Array<"vegetarian" | "vegan" | "pescatarian">;
   cuisine: string;
   servings: number;
-  ingredients: Array<{
-    name: string;
-    amount: string;
-    available: boolean;
-  }>;
+  ingredients: RecipeIngredient[];
   steps: string[];
 };
 
+export const recipeAllergens = [
+  "gluten", "crustaceans", "eggs", "fish", "peanuts", "soy", "milk",
+  "nuts", "celery", "mustard", "sesame", "sulphites", "lupin", "molluscs",
+] as const;
+export type RecipeAllergen = (typeof recipeAllergens)[number];
+
+export type RecipeIngredient = {
+  name: string;
+  amount: string;
+  quantity?: number;
+  unit?: string;
+  available: boolean;
+};
+
+export function parseIngredientAmount(amount: string): { quantity: number; unit: string } | null {
+  const match = amount.trim().match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
+  if (!match) return null;
+  const quantity = Number(match[1].replace(",", "."));
+  return Number.isFinite(quantity) && quantity > 0 ? { quantity, unit: match[2].trim() } : null;
+}
+
+export function getIngredientQuantity(ingredient: RecipeIngredient) {
+  return typeof ingredient.quantity === "number" && Number.isFinite(ingredient.quantity) && ingredient.quantity > 0 && ingredient.unit
+    ? { quantity: ingredient.quantity, unit: ingredient.unit }
+    : typeof ingredient.amount === "string" ? parseIngredientAmount(ingredient.amount) : null;
+}
+
 export type DemoRecipe = Recipe;
 
-export const demoRecipes: DemoRecipe[] = [
+const rawDemoRecipes: DemoRecipe[] = [
   {
     slug: "makaron-ze-szpinakiem",
     title: "Makaron ze szpinakiem",
@@ -25,6 +53,7 @@ export const demoRecipes: DemoRecipe[] = [
     time: 25,
     difficulty: "Łatwy",
     calories: 620,
+    macros: { protein: 23, carbs: 76, fat: 25 },
     cuisine: "Włoska",
     servings: 2,
     ingredients: [
@@ -48,6 +77,7 @@ export const demoRecipes: DemoRecipe[] = [
     time: 35,
     difficulty: "Łatwy",
     calories: 540,
+    macros: { protein: 48, carbs: 53, fat: 15 },
     cuisine: "Domowa",
     servings: 2,
     ingredients: [
@@ -71,6 +101,7 @@ export const demoRecipes: DemoRecipe[] = [
     time: 20,
     difficulty: "Bardzo łatwy",
     calories: 470,
+    macros: { protein: 18, carbs: 54, fat: 20 },
     cuisine: "Bliskowschodnia",
     servings: 2,
     ingredients: [
@@ -94,6 +125,7 @@ export const demoRecipes: DemoRecipe[] = [
     time: 30,
     difficulty: "Łatwy",
     calories: 510,
+    macros: { protein: 23, carbs: 48, fat: 25 },
     cuisine: "Bliskowschodnia",
     servings: 2,
     ingredients: [
@@ -117,6 +149,7 @@ export const demoRecipes: DemoRecipe[] = [
     time: 20,
     difficulty: "Bardzo łatwy",
     calories: 560,
+    macros: { protein: 21, carbs: 62, fat: 25 },
     cuisine: "Polska",
     servings: 2,
     ingredients: [
@@ -140,6 +173,7 @@ export const demoRecipes: DemoRecipe[] = [
     time: 30,
     difficulty: "Średni",
     calories: 590,
+    macros: { protein: 39, carbs: 25, fat: 37 },
     cuisine: "Europejska",
     servings: 2,
     ingredients: [
@@ -158,6 +192,25 @@ export const demoRecipes: DemoRecipe[] = [
   },
 ];
 
+const demoDetails: Record<string, Pick<Recipe, "activeTime" | "allergens" | "dietTags">> = {
+  "makaron-ze-szpinakiem": { activeTime: 15, allergens: ["gluten", "milk"], dietTags: ["vegetarian"] },
+  "kurczak-z-warzywami": { activeTime: 20, allergens: [], dietTags: [] },
+  "miska-z-ciecierzyca": { activeTime: 15, allergens: ["milk"], dietTags: ["vegetarian"] },
+  "szakszuka-z-ciecierzyca": { activeTime: 15, allergens: ["eggs"], dietTags: ["vegetarian"] },
+  "chrupiace-zapiekanki": { activeTime: 12, allergens: ["gluten", "milk"], dietTags: ["vegetarian"] },
+  "losos-z-groszkiem": { activeTime: 15, allergens: ["fish", "milk"], dietTags: ["pescatarian"] },
+};
+
+export const demoRecipes: DemoRecipe[] = rawDemoRecipes.map((recipe) => ({
+  ...recipe,
+  ...demoDetails[recipe.slug],
+  nutritionSource: "estimate",
+  ingredients: recipe.ingredients.map((ingredient) => ({
+    ...ingredient,
+    ...parseIngredientAmount(ingredient.amount),
+  })),
+}));
+
 export function getMissingIngredients(recipe: DemoRecipe) {
   return recipe.ingredients.filter((ingredient) => !ingredient.available);
 }
@@ -165,5 +218,9 @@ export function getMissingIngredients(recipe: DemoRecipe) {
 export function getRecipeMatch(recipe: DemoRecipe) {
   const available = recipe.ingredients.filter((ingredient) => ingredient.available).length;
   return { available, total: recipe.ingredients.length };
+}
+
+export function filterRecipesByCuisine<T extends Recipe>(recipes: T[], cuisine: string): T[] {
+  return cuisine === "any" ? recipes : recipes.filter((recipe) => recipe.cuisine === cuisine);
 }
 

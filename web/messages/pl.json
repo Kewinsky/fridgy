@@ -188,10 +188,6 @@
         "currencyLabel": "Waluta",
         "dateLabel": "Format daty"
       },
-      "cuisines": {
-        "title": "Preferowane kuchnie",
-        "description": "Pomagają lepiej dopasować propozycje w sekcji „Co ugotować”."
-      },
       "privacy": {
         "title": "Prywatność i analiza danych",
         "description": "Wybierz, w jaki sposób Fridgy może wykorzystywać dane aplikacji.",
@@ -389,13 +385,13 @@
     "morePeople": "Więcej osób",
     "demoNotice": "To demonstracyjne propozycje oparte na Twoich odpowiedziach.",
     "showSuggestions": "Pokaż propozycje",
-    "questionProgress": "Pytanie {number} z 6",
+    "questionProgress": "Pytanie {number} z 7",
     "questions": {
       "meal": "Jaki posiłek przygotowujesz?",
       "time": "Ile masz czasu?",
       "servings": "Dla ilu osób gotujesz?",
       "craving": "Na co masz ochotę?",
-      "diet": "Czy masz wymagania dietetyczne?",
+      "cuisine": "Na jaką kuchnię masz ochotę?",
       "shopping": "Czy możesz dokupić składniki?",
       "saved": "Czy brać pod uwagę zapisane dania?"
     },
@@ -421,13 +417,7 @@
         "simple": "Prosto",
         "surprise": "Zaskocz mnie"
       },
-      "diets": {
-        "any": "Brak",
-        "vegetarian": "Wegetariańska",
-        "vegan": "Wegańska",
-        "glutenFree": "Bez glutenu",
-        "lactoseFree": "Bez laktozy"
-      },
+      "cuisines": { "any": "Bez znaczenia" },
       "shopping": {
         "none": "Tylko to, co mam",
         "two": "Do 2 składników",
@@ -479,11 +469,30 @@
     "demoRecipe": "Przepis demo",
     "back": "Wróć",
     "time": "Czas",
+    "totalTime": "Czas całkowity",
     "servingsLabel": "Porcje",
     "cuisine": "Kuchnia",
     "difficulty": "Poziom trudności",
     "preparation": "Przygotowanie",
     "ingredients": "Składniki",
+    "nutrition": {
+      "title": "Wartości na 1 porcję",
+      "estimate": "Szacunkowe wartości – zależą od użytych produktów i wielkości porcji.",
+      "author": "Wartości podane przez autora przepisu – nie są automatycznie weryfikowane.",
+      "missing": "Brak danych o wartościach odżywczych dla tego przepisu.",
+      "card": "Około {calories} kcal na porcję",
+      "calories": "Kalorie",
+      "protein": "Białko",
+      "carbs": "Węglowodany",
+      "fat": "Tłuszcze"
+    },
+    "allergens": {
+      "title": "Alergeny w składnikach",
+      "unknown": "Brak danych o alergenach.",
+      "noneDeclared": "W składnikach tego przepisu nie oznaczono alergenów.",
+      "options": {"gluten":"Zboża z glutenem","crustaceans":"Skorupiaki","eggs":"Jaja","fish":"Ryby","peanuts":"Orzeszki ziemne","soy":"Soja","milk":"Mleko","nuts":"Orzechy","celery":"Seler","mustard":"Gorczyca","sesame":"Sezam","sulphites":"Siarczyny","lupin":"Łubin","molluscs":"Mięczaki"}
+    },
+    "diet": {"conflict":"Możliwa niezgodność z Twoimi preferencjami: {reason}.","options":{"vegetarian":"wegetariański","vegan":"wegański","pescatarian":"peskatariański"}},
     "missingCount": "Brakuje {count, plural, one {# składnika} few {# składników} other {# składników}}",
     "missingDescription": "Dodaj brakujące produkty do listy zakupów.",
     "cook": "Gotuj!",
@@ -513,8 +522,8 @@
   },
   "RecipeStats": {
     "label": "Historia gotowania",
-    "count": "Ugotowano {count}×",
-    "lastCooked": "Ostatnio: {date}",
+    "count": "Ugotowano",
+    "lastCooked": "Ostatnio",
     "never": "Jeszcze nie gotowano"
   },
   "RecipeLibrary": {

@@ -188,10 +188,6 @@
         "currencyLabel": "Currency",
         "dateLabel": "Date format"
       },
-      "cuisines": {
-        "title": "Preferred cuisines",
-        "description": "These help improve suggestions in 'What should I cook?'."
-      },
       "privacy": {
         "title": "Privacy and data analysis",
         "description": "Choose how Fridgy may use application data.",
@@ -389,13 +385,13 @@
     "morePeople": "More people",
     "demoNotice": "These are demo suggestions based on your answers.",
     "showSuggestions": "Show suggestions",
-    "questionProgress": "Question {number} of 6",
+    "questionProgress": "Question {number} of 7",
     "questions": {
       "meal": "Which meal are you preparing?",
       "time": "How much time do you have?",
       "servings": "How many people are you cooking for?",
       "craving": "What do you feel like eating?",
-      "diet": "Any dietary needs?",
+      "cuisine": "Which cuisine are you in the mood for?",
       "shopping": "Can you buy extra ingredients?",
       "saved": "Should saved dishes be included?"
     },
@@ -421,13 +417,7 @@
         "simple": "Simple",
         "surprise": "Surprise me"
       },
-      "diets": {
-        "any": "None",
-        "vegetarian": "Vegetarian",
-        "vegan": "Vegan",
-        "glutenFree": "Gluten-free",
-        "lactoseFree": "Lactose-free"
-      },
+      "cuisines": { "any": "Any" },
       "shopping": {
         "none": "Only what I have",
         "two": "Up to 2 items",
@@ -479,11 +469,25 @@
     "demoRecipe": "Demo recipe",
     "back": "Back",
     "time": "Time",
+    "totalTime": "Total time",
     "servingsLabel": "Servings",
     "cuisine": "Cuisine",
     "difficulty": "Difficulty",
     "preparation": "Preparation",
     "ingredients": "Ingredients",
+    "nutrition": {
+      "title": "Nutrition per serving",
+      "estimate": "Estimates vary with the products used and portion size.",
+      "author": "Values entered by the recipe author – they are not checked automatically.",
+      "missing": "No nutrition data is available for this recipe.",
+      "card": "About {calories} kcal per serving",
+      "calories": "Calories",
+      "protein": "Protein",
+      "carbs": "Carbs",
+      "fat": "Fat"
+    },
+    "allergens": {"title":"Allergens in ingredients","unknown":"No allergen data is available.","noneDeclared":"No allergens are listed for this recipe's ingredients.","options":{"gluten":"Cereals containing gluten","crustaceans":"Crustaceans","eggs":"Eggs","fish":"Fish","peanuts":"Peanuts","soy":"Soy","milk":"Milk","nuts":"Tree nuts","celery":"Celery","mustard":"Mustard","sesame":"Sesame","sulphites":"Sulphites","lupin":"Lupin","molluscs":"Molluscs"}},
+    "diet": {"conflict":"Possible conflict with your preferences: {reason}.","options":{"vegetarian":"vegetarian","vegan":"vegan","pescatarian":"pescatarian"}},
     "missingCount": "{count, plural, one {# ingredient missing} other {# ingredients missing}}",
     "missingDescription": "Add missing products to the shopping list.",
     "cook": "Cook!",
@@ -513,8 +517,8 @@
   },
   "RecipeStats": {
     "label": "Cooking history",
-    "count": "Cooked {count}×",
-    "lastCooked": "Last cooked: {date}",
+    "count": "Cooked",
+    "lastCooked": "Last cooked",
     "never": "Not cooked yet"
   },
   "RecipeLibrary": {

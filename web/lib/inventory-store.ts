@@ -1,4 +1,4 @@
-import type { Recipe } from "./demo-recipes.ts";
+import { getIngredientQuantity, type Recipe } from "./demo-recipes.ts";
 import type { DemoProduct } from "./demo-data.ts";
 
 export type InventoryDeduction = {
@@ -23,7 +23,7 @@ export function suggestRecipeDeductions(
     );
     if (!product) return [];
 
-    const parsedAmount = parseAmount(ingredient.amount);
+    const parsedAmount = getIngredientQuantity(ingredient);
     const compatible =
       parsedAmount !== null &&
       normalizeUnit(parsedAmount.unit) === normalizeUnit(product.unit);
@@ -79,15 +79,6 @@ export function applyInventoryDeductions(
       status: quantity === 0 ? ("consumed" as const) : product.status,
     };
   });
-}
-
-function parseAmount(value: string) {
-  const match = value.trim().match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
-  if (!match) return null;
-  return {
-    quantity: Number(match[1].replace(",", ".")),
-    unit: match[2],
-  };
 }
 
 function normalize(value: string) {

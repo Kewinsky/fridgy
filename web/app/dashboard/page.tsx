@@ -15,8 +15,7 @@ import { FreshnessLabel } from "@/components/dashboard/freshness-label";
 import { getFreshnessStatus } from "@/lib/demo-data";
 import { localizeDemoProduct } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
-import { loadDashboardData } from "@/lib/dashboard-data";
-import { createClient } from "@/lib/supabase/server";
+import { getCurrentDashboard } from "@/lib/dashboard-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Dashboard");
@@ -26,10 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DashboardPage() {
   const t = await getTranslations("Dashboard");
   const locale = await getLocale() as Locale;
-  const supabase = await createClient();
-  const { data: auth } = await supabase.auth.getClaims();
-  if (!auth?.claims) return null;
-  const { products, shoppingItems } = await loadDashboardData(supabase, auth.claims.sub);
+  const { initialData: { products, shoppingItems } } = await getCurrentDashboard();
   const activeProducts = products.filter((product) => product.status === "active");
   const expiringProducts = activeProducts.filter((product) =>
     ["overdue", "today", "soon"].includes(getFreshnessStatus(product.estimatedUseBy)),

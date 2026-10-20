@@ -15,8 +15,6 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("metaTitle"), description: t("metaDescription") };
 }
 
-export const instant = false;
-
 type LoginPageProps = {
   searchParams: Promise<{ error?: string; next?: string }>;
 };

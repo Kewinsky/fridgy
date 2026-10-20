@@ -16,6 +16,7 @@ type DashboardStore = DashboardData & {
   updateRecipeLibrary: (update: (current: RecipeLibrary) => RecipeLibrary) => Promise<void>;
   finishCooking: (recipe: Pick<Recipe, "slug" | "title" | "cuisine">, deductions: Array<{ productId: string; amount: number }>) => Promise<void>;
   setDeductionMode: (mode: DashboardData["deductionMode"]) => void;
+  setDietPreferences: (preferences: Pick<DashboardData, "diet" | "allergies" | "excludedIngredients">) => void;
 };
 
 const DashboardContext = createContext<DashboardStore | null>(null);
@@ -25,6 +26,7 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
   const [shoppingItems, setShoppingItems] = useState(initialData.shoppingItems);
   const [recipeLibrary, setRecipeLibrary] = useState(initialData.recipeLibrary);
   const [deductionMode, setDeductionMode] = useState(initialData.deductionMode);
+  const [dietPreferences, setDietPreferences] = useState({ diet: initialData.diet, allergies: initialData.allergies, excludedIngredients: initialData.excludedIngredients });
 
   useEffect(() => {
     function refreshOnFocus() {
@@ -34,6 +36,7 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
         setShoppingItems(data.shoppingItems);
         setRecipeLibrary(data.recipeLibrary);
         setDeductionMode(data.deductionMode);
+        setDietPreferences({ diet: data.diet, allergies: data.allergies, excludedIngredients: data.excludedIngredients });
       }).catch(() => {});
     }
     window.addEventListener("focus", refreshOnFocus);
@@ -80,8 +83,8 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
 
   return (
     <DashboardContext.Provider value={{
-      ...initialData, products, shoppingItems, recipeLibrary, deductionMode,
-      updateInventory, refreshInventory, updateShoppingItems, updateRecipeLibrary, finishCooking, setDeductionMode,
+      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, deductionMode,
+      updateInventory, refreshInventory, updateShoppingItems, updateRecipeLibrary, finishCooking, setDeductionMode, setDietPreferences,
     }}>
       {children}
     </DashboardContext.Provider>

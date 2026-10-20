@@ -28,13 +28,20 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
   const t = useTranslations("Settings.preferences");
   const common = useTranslations("Common");
   const [settings, setSettings] = useState(initialSettings);
-  const { setDeductionMode } = useDashboardData();
+  const { setDeductionMode, setDietPreferences, diet, allergies, excludedIngredients } = useDashboardData();
 
   async function save<K extends keyof ProfileSettings>(key: K, value: ProfileSettings[K]) {
     try {
       await saveProfileSetting(key, value);
       setSettings((current) => ({ ...current, [key]: value }));
       if (key === "deduction_mode") setDeductionMode(value as ProfileSettings["deduction_mode"]);
+      if (key === "diet" || key === "allergies" || key === "excluded_ingredients") {
+        setDietPreferences({
+          diet: key === "diet" ? value as ProfileSettings["diet"] : diet,
+          allergies: key === "allergies" ? value as string : allergies,
+          excludedIngredients: key === "excluded_ingredients" ? value as string : excludedIngredients,
+        });
+      }
       toast.success(common("saved"));
     } catch { toast.error(common("saveFailed")); }
   }

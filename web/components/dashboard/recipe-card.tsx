@@ -16,17 +16,21 @@ import {
 import { AddMissingItemsButton } from "@/components/dashboard/add-missing-items-button";
 import { FavoriteRecipeButton } from "@/components/dashboard/recipe-actions";
 import { useInventory } from "@/components/dashboard/use-inventory";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { difficultyMessageKeys } from "@/components/dashboard/recipe-options";
 import { Button } from "@/components/ui/button";
 import {
   getMissingIngredients,
   getRecipeMatch,
+  recipeAllergens,
   type Recipe,
 } from "@/lib/demo-recipes";
 import { localizeDemoRecipe } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
 import { matchRecipeToInventory } from "@/lib/inventory-store";
+import { getRecipePreferenceConflicts } from "@/lib/recipe-preferences";
+import { cn } from "@/lib/utils";
 
 export function RecipeCard({
   recipe,
@@ -38,18 +42,27 @@ export function RecipeCard({
   servings?: number;
 }) {
   const t = useTranslations("Recipe");
+  const preferences = useDashboardData();
   const matchedRecipe = matchRecipeToInventory(recipe, useInventory());
   const displayRecipe = localizeDemoRecipe(matchedRecipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
   const missing = suggestion ? getMissingIngredients(matchedRecipe) : [];
   const match = suggestion ? getRecipeMatch(matchedRecipe) : null;
+  const conflicts = getRecipePreferenceConflicts(displayRecipe, preferences, Object.fromEntries(
+    recipeAllergens.map((allergen) => [allergen, t(`allergens.options.${allergen}`)]),
+  ));
+  const conflictReasons = [
+    ...(conflicts.dietConflict ? [t(`diet.options.${preferences.diet as "vegetarian" | "vegan" | "pescatarian"}`)] : []),
+    ...conflicts.matchingAllergens.map((allergen) => t(`allergens.options.${allergen}`)),
+    ...conflicts.matchingIngredients,
+  ];
   const href = customRecipe
     ? `/dashboard/moje-przepisy/${recipe.slug}`
     : `/dashboard/co-ugotowac/${recipe.slug}`;
 
   return (
-    <article className="app-card flex flex-col p-5">
+    <article className={cn("app-card flex flex-col p-5", suggestion && conflictReasons.length && "border-destructive/60")}>
       <div className="mb-4 flex h-24 items-center justify-center rounded-lg bg-secondary text-primary">
         <ChefHatIcon className="size-9" aria-hidden="true" />
       </div>
@@ -64,7 +77,7 @@ export function RecipeCard({
       <div className="mt-auto pt-4">
         <div className="flex flex-wrap gap-4 text-xs font-semibold text-muted-foreground">
           <span className="flex items-center gap-1">
-            <ClockIcon className="size-4" aria-hidden="true" /> {t("minutes", { count: recipe.time })}
+            <ClockIcon className="size-4" aria-hidden="true" /> {t("totalTime")}: {t("minutes", { count: recipe.time })}
           </span>
           <span className="flex items-center gap-1">
             <UsersIcon className="size-4" aria-hidden="true" /> {t("servings", { count: servings })}
@@ -73,6 +86,20 @@ export function RecipeCard({
             <ChefHatIcon className="size-4" aria-hidden="true" /> {difficultyMessageKeys[recipe.difficulty] ? t(`difficultyOptions.${difficultyMessageKeys[recipe.difficulty]}`) : recipe.difficulty}
           </span>
         </div>
+
+        {recipe.macros && recipe.calories && recipe.calories > 0 ? (
+          <p className="mt-3 text-xs font-semibold text-muted-foreground">
+            {t("nutrition.card", { calories: recipe.calories })}
+          </p>
+        ) : null}
+
+        {suggestion && conflictReasons.length ? (
+          <p className="mt-3 rounded-lg bg-destructive/10 p-3 text-xs font-semibold text-destructive" role="alert">
+            {t("diet.conflict", { reason: conflictReasons.join(", ") })}
+          </p>
+        ) : suggestion && preferences.allergies.trim() && recipe.allergens === undefined ? (
+          <p className="mt-3 text-xs font-semibold text-muted-foreground">{t("allergens.unknown")}</p>
+        ) : null}
 
         {match ? (
           <>

@@ -15,6 +15,7 @@ import {
 
 import { AddMissingItemsButton } from "@/components/dashboard/add-missing-items-button";
 import { useInventory } from "@/components/dashboard/use-inventory";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import {
   DeleteRecipeDialog,
   EditRecipeDialog,
@@ -29,11 +30,12 @@ import {
 import { PageHeader } from "@/components/dashboard/page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getMissingIngredients, type Recipe } from "@/lib/demo-recipes";
+import { getMissingIngredients, recipeAllergens, type Recipe } from "@/lib/demo-recipes";
 import { localizeDemoRecipe } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
 import { matchRecipeToInventory } from "@/lib/inventory-store";
+import { getRecipePreferenceConflicts } from "@/lib/recipe-preferences";
 
 export function RecipeDetail({
   recipe,
@@ -53,6 +55,15 @@ export function RecipeDetail({
   const displayRecipe = localizeDemoRecipe(matchedRecipe, useLocale() as Locale);
   const missing = getMissingIngredients(matchedRecipe);
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
+  const preferences = useDashboardData();
+  const conflicts = getRecipePreferenceConflicts(displayRecipe, preferences, Object.fromEntries(
+    recipeAllergens.map((allergen) => [allergen, t(`allergens.options.${allergen}`)]),
+  ));
+  const conflictReasons = [
+    ...(conflicts.dietConflict ? [t(`diet.options.${preferences.diet as "vegetarian" | "vegan" | "pescatarian"}`)] : []),
+    ...conflicts.matchingAllergens.map((allergen) => t(`allergens.options.${allergen}`)),
+    ...conflicts.matchingIngredients,
+  ];
 
   return (
     <>
@@ -79,7 +90,7 @@ export function RecipeDetail({
               <ChefHatIcon className="size-16" aria-hidden="true" />
             </div>
             <div className="grid grid-cols-2 gap-3 p-5 sm:grid-cols-4">
-              <RecipeFact icon={<ClockIcon />} label={t("time")} value={t("minutes", { count: recipe.time })} />
+              <RecipeFact icon={<ClockIcon />} label={t("totalTime")} value={t("minutes", { count: recipe.time })} />
               <RecipeFact icon={<UsersIcon />} label={t("servingsLabel")} value={`${recipe.servings}`} />
               <RecipeFact icon={<Globe2Icon />} label={t("cuisine")} value={isCuisine(recipe.cuisine) ? t(`cuisineOptions.${cuisineMessageKeys[recipe.cuisine]}`) : recipe.cuisine} />
               <RecipeFact icon={<ChefHatIcon />} label={t("difficulty")} value={difficultyMessageKeys[recipe.difficulty] ? t(`difficultyOptions.${difficultyMessageKeys[recipe.difficulty]}`) : recipe.difficulty} />
@@ -87,6 +98,48 @@ export function RecipeDetail({
           </section>
 
           {showCookingStats ? <RecipeCookingStats slug={recipe.slug} /> : null}
+
+          <section className="app-card p-5 sm:p-6" aria-label={t("nutrition.title")}>
+            <h2 className="text-lg font-extrabold">{t("nutrition.title")}</h2>
+            {recipe.macros && recipe.calories && recipe.calories > 0 ? (
+              <>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {t(recipe.nutritionSource === "author" ? "nutrition.author" : "nutrition.estimate")}
+                </p>
+                <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  {([
+                    ["calories", recipe.calories, "kcal"],
+                    ["protein", recipe.macros.protein, "g"],
+                    ["carbs", recipe.macros.carbs, "g"],
+                    ["fat", recipe.macros.fat, "g"],
+                  ] as const).map(([key, value, unit]) => (
+                    <div key={key} className="rounded-lg bg-muted p-3">
+                      <dt className="text-xs text-muted-foreground">{t(`nutrition.${key}`)}</dt>
+                      <dd className="mt-1 text-lg font-bold">{value} {unit}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </>
+            ) : <p className="mt-4 text-sm text-muted-foreground">{t("nutrition.missing")}</p>}
+          </section>
+
+          <section className="app-card p-5 sm:p-6">
+            <h2 className="text-lg font-extrabold">{t("allergens.title")}</h2>
+            {recipe.allergens === undefined ? (
+              <p className="mt-3 text-sm text-muted-foreground">{t("allergens.unknown")}</p>
+            ) : recipe.allergens.length ? (
+              <div className="mt-3 flex flex-wrap gap-2">
+                {recipe.allergens.map((allergen) => <Badge key={allergen} variant="outline">{t(`allergens.options.${allergen}`)}</Badge>)}
+              </div>
+            ) : (
+              <p className="mt-3 text-sm text-muted-foreground">{t("allergens.noneDeclared")}</p>
+            )}
+            {conflictReasons.length ? (
+              <p className="mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm font-semibold text-destructive" role="alert">
+                {t("diet.conflict", { reason: conflictReasons.join(", ") })}
+              </p>
+            ) : null}
+          </section>
 
           <section className="app-card p-5 sm:p-6">
             <h2 className="text-xl font-extrabold">{t("preparation")}</h2>

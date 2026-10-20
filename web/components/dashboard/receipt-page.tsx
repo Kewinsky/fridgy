@@ -16,6 +16,7 @@ import { useTranslations } from "next-intl";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { productCategories, productCategoryAppearance, productCategoryMessageKeys, type ProductCategory } from "@/components/dashboard/product-category-options";
+import { ProductUnitSelect } from "@/components/dashboard/product-unit-select";
 import { saveManualReceipt } from "@/app/dashboard/data-actions";
 import { StorageLocationIcon } from "@/components/dashboard/storage-location-icon";
 import { storageLocationMessageKeys } from "@/components/dashboard/storage-location-icon";
@@ -256,13 +257,10 @@ export function ReceiptPage() {
                 >
                   {t("fields.unit")}
                 </Label>
-                <Input
+                <ProductUnitSelect
                   id={`receipt-unit-${item.id}`}
                   value={item.unit}
-                  onChange={(event) =>
-                    updateItem(item.id, { unit: event.target.value })
-                  }
-                  className="h-11"
+                  onValueChange={(unit) => updateItem(item.id, { unit })}
                 />
               </div>
               <div className="grid gap-2">

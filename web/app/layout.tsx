@@ -6,8 +6,6 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 
-export const instant = false;
-
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Metadata");
   return {

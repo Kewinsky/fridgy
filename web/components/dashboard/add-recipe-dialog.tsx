@@ -53,9 +53,7 @@ function getInitialForm(recipe?: CustomRecipe): RecipeFormState {
     cuisine: recipe?.cuisine ?? "Inna",
     time: String(recipe?.time ?? 30),
     servings: String(recipe?.servings ?? 2),
-    ingredients: recipe?.ingredients
-      .map((ingredient) => `${ingredient.name} | ${ingredient.amount}`)
-      .join("\n") ?? "",
+    ingredients: recipe?.ingredients.map((ingredient) => `${ingredient.name} | ${ingredient.amount}`).join("\n") ?? "",
     steps: recipe?.steps.join("\n") ?? "",
   };
 }
@@ -76,6 +74,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(() => getInitialForm(recipe));
   const [error, setError] = useState("");
+  const [saving, setSaving] = useState(false);
   const { saveCustomRecipe, updateCustomRecipe } = useRecipeLibraryActions();
 
   function update(field: keyof RecipeFormState, value: string) {
@@ -92,31 +91,40 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!form.title.trim() || !form.ingredients.trim() || !form.steps.trim()) {
+    if (!form.title.trim() || !form.ingredients.trim() || !form.steps.trim() || form.ingredients.split("\n").some((line) => line.trim() && !line.split("|")[0].trim())) {
       setError(t("errors.required"));
       return;
     }
+
+    const totalTime = Math.max(1, Number(form.time) || 1);
 
     const customRecipe = createCustomRecipe(
       {
         title: form.title,
         description: form.description,
         cuisine: form.cuisine,
-        time: Math.max(1, Number(form.time) || 1),
+        time: totalTime,
+        activeTime: recipe?.activeTime && recipe.activeTime <= totalTime ? recipe.activeTime : undefined,
         servings: Math.max(1, Number(form.servings) || 1),
         ingredients: form.ingredients,
         steps: form.steps,
+        nutrition: recipe?.macros && recipe.calories ? { calories: recipe.calories, ...recipe.macros } : undefined,
+        allergens: recipe?.allergens,
+        dietTags: recipe?.dietTags,
       },
       recipe?.slug ?? `${slugifyRecipeTitle(form.title) || "przepis"}-${crypto.randomUUID().slice(0, 8)}`,
       recipe?.createdAt ?? new Date().toISOString(),
     );
 
+    setSaving(true);
     try {
       if (editing) await updateCustomRecipe(customRecipe);
       else await saveCustomRecipe(customRecipe);
     } catch {
       setError(common("saveFailed"));
       return;
+    } finally {
+      setSaving(false);
     }
     setOpen(false);
     toast.success(editing ? t("toasts.updated") : t("toasts.created"));
@@ -148,6 +156,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
             fieldId={fieldId}
             form={form}
             error={error}
+            saving={saving}
             update={update}
             submit={submit}
             close={() => setOpen(false)}
@@ -168,6 +177,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
                 fieldId={fieldId}
                 form={form}
                 error={error}
+                saving={saving}
                 update={update}
                 submit={submit}
                 close={() => setOpen(false)}
@@ -188,6 +198,7 @@ function ManualRecipeForm({
   fieldId,
   form,
   error,
+  saving,
   update,
   submit,
   close,
@@ -196,6 +207,7 @@ function ManualRecipeForm({
   fieldId: string;
   form: RecipeFormState;
   error: string;
+  saving: boolean;
   update: (field: keyof RecipeFormState, value: string) => void;
   submit: (event: FormEvent<HTMLFormElement>) => void;
   close: () => void;
@@ -241,17 +253,17 @@ function ManualRecipeForm({
                 <Input id={`${fieldId}-servings`} type="number" min="1" className="h-11" value={form.servings} onChange={(event) => update("servings", event.target.value)} />
               </Field>
             </div>
-            <Field label={t("ingredients")} htmlFor={`${fieldId}-ingredients`}>
+            <Field label={t("ingredients")} htmlFor={`${fieldId}-ingredients`} className="sm:col-span-2">
               <Textarea id={`${fieldId}-ingredients`} placeholder={t("ingredientsPlaceholder")} value={form.ingredients} onChange={(event) => update("ingredients", event.target.value)} />
             </Field>
-            <Field label={t("preparation")} htmlFor={`${fieldId}-steps`}>
+            <Field label={t("preparation")} htmlFor={`${fieldId}-steps`} className="sm:col-span-2">
               <Textarea id={`${fieldId}-steps`} placeholder={t("stepsPlaceholder")} value={form.steps} onChange={(event) => update("steps", event.target.value)} />
             </Field>
           </div>
           {error ? <p role="alert" className="text-sm font-semibold text-destructive">{error}</p> : null}
           <DialogFooter>
             <Button type="button" variant="outline" className="h-11" onClick={close}>{t("cancel")}</Button>
-            <Button type="submit" className="h-11">{editing ? t("saveChanges") : t("save")}</Button>
+            <Button type="submit" className="h-11" disabled={saving} aria-busy={saving}>{editing ? t("saveChanges") : t("save")}</Button>
           </DialogFooter>
     </form>
   );

@@ -112,7 +112,7 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
               return (
                 <div
                   key={product.id}
-                  className="grid grid-cols-[auto_minmax(0,1fr)_7rem] items-center gap-3 rounded-lg border border-border p-3"
+                  className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-lg border border-border p-3 sm:grid-cols-[auto_minmax(0,1fr)_7rem]"
                 >
                   <Checkbox
                     id={`${inputId}-selected`}
@@ -123,7 +123,7 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
                     aria-label={t("deductProduct", { name: product.name })}
                   />
                   <Label htmlFor={`${inputId}-selected`} className="min-w-0">
-                    <span className="block truncate font-bold">
+                    <span className="block break-words font-bold">
                       {product.name}
                     </span>
                     <span className="block text-xs font-normal text-muted-foreground">
@@ -134,7 +134,7 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
                       })}
                     </span>
                   </Label>
-                  <div className="relative">
+                  <div className="relative col-span-2 sm:col-span-1">
                     <Label htmlFor={inputId} className="sr-only">
                       {t("productAmount", { name: product.name })}
                     </Label>

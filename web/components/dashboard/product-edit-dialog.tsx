@@ -10,6 +10,7 @@ import {
   productCategoryMessageKeys,
   type ProductCategory,
 } from "@/components/dashboard/product-category-options";
+import { ProductUnitSelect } from "@/components/dashboard/product-unit-select";
 import {
   StorageLocationIcon,
   storageLocationMessageKeys,
@@ -103,7 +104,7 @@ export function ProductEditDialog({
             </div>
             <div className="grid gap-2">
               <Label htmlFor="product-unit">{t("unit")}</Label>
-              <Input id="product-unit" value={unit} onChange={(event) => setUnit(event.target.value)} placeholder={t("unitPlaceholder")} className="h-11" />
+              <ProductUnitSelect id="product-unit" value={unit} onValueChange={setUnit} />
             </div>
           </div>
 

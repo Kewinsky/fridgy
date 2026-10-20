@@ -1,4 +1,4 @@
-import type { Recipe } from "@/lib/demo-recipes";
+import { getIngredientQuantity, parseIngredientAmount, recipeAllergens, type Recipe, type RecipeAllergen } from "./demo-recipes.ts";
 
 export type CustomRecipe = Recipe & {
   createdAt: string;
@@ -24,9 +24,13 @@ export type RecipeDraft = {
   description: string;
   cuisine: string;
   time: number;
+  activeTime?: number;
   servings: number;
   ingredients: string;
   steps: string;
+  nutrition?: { calories: number; protein: number; carbs: number; fat: number };
+  allergens?: RecipeAllergen[];
+  dietTags?: Recipe["dietTags"];
 };
 
 export const emptyRecipeLibrary: RecipeLibrary = {
@@ -45,7 +49,7 @@ export function isCustomRecipe(value: unknown): value is CustomRecipe {
     typeof recipe.description === "string" &&
     typeof recipe.time === "number" &&
     typeof recipe.difficulty === "string" &&
-    typeof recipe.calories === "number" &&
+    (recipe.calories === undefined || typeof recipe.calories === "number") &&
     typeof recipe.cuisine === "string" &&
     typeof recipe.servings === "number" &&
     Array.isArray(recipe.ingredients) &&
@@ -54,7 +58,7 @@ export function isCustomRecipe(value: unknown): value is CustomRecipe {
         ingredient &&
         typeof ingredient === "object" &&
         typeof ingredient.name === "string" &&
-        typeof ingredient.amount === "string" &&
+        (typeof ingredient.amount === "string" || getIngredientQuantity(ingredient) !== null) &&
         typeof ingredient.available === "boolean",
     ) &&
     Array.isArray(recipe.steps) &&
@@ -129,18 +133,11 @@ export function getFavoriteCuisine(library: RecipeLibrary) {
 }
 
 export function createCustomRecipe(draft: RecipeDraft, slug: string, createdAt: string): CustomRecipe {
-  const ingredients = draft.ingredients
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean)
-    .map((line) => {
-      const [name, ...amountParts] = line.split("|");
-      return {
-        name: name.trim(),
-        amount: amountParts.join("|").trim() || "do smaku",
-        available: true,
-      };
-    });
+  const ingredients = draft.ingredients.split("\n").map((line) => line.trim()).filter(Boolean).map((line) => {
+    const [name, ...amountParts] = line.split("|");
+    const amount = amountParts.join("|").trim() || "do smaku";
+    return { name: name.trim(), amount, ...parseIngredientAmount(amount), available: true };
+  });
   const steps = draft.steps.split("\n").map((step) => step.trim()).filter(Boolean);
 
   return {
@@ -149,9 +146,16 @@ export function createCustomRecipe(draft: RecipeDraft, slug: string, createdAt: 
     description: draft.description.trim() || "Twój własny przepis.",
     cuisine: draft.cuisine,
     time: draft.time,
+    activeTime: draft.activeTime,
     servings: draft.servings,
     difficulty: "Własny przepis",
-    calories: 0,
+    ...(draft.nutrition ? {
+      calories: draft.nutrition.calories,
+      macros: { protein: draft.nutrition.protein, carbs: draft.nutrition.carbs, fat: draft.nutrition.fat },
+      nutritionSource: "author" as const,
+    } : {}),
+    ...(draft.allergens ? { allergens: draft.allergens.filter((allergen) => recipeAllergens.includes(allergen)) } : {}),
+    ...(draft.dietTags ? { dietTags: draft.dietTags } : {}),
     ingredients,
     steps,
     createdAt,

@@ -188,10 +188,6 @@
         "currencyLabel": "Devise",
         "dateLabel": "Format de date"
       },
-      "cuisines": {
-        "title": "Cuisines préférées",
-        "description": "Elles permettent de mieux adapter les suggestions dans « Que cuisiner ? »."
-      },
       "privacy": {
         "title": "Confidentialité et analyse des données",
         "description": "Choisissez comment Fridgy peut utiliser les données de l'application.",
@@ -389,13 +385,13 @@
     "morePeople": "Plus de personnes",
     "demoNotice": "Ces suggestions de démonstration reposent sur vos réponses.",
     "showSuggestions": "Afficher les suggestions",
-    "questionProgress": "Question {number} sur 6",
+    "questionProgress": "Question {number} sur 7",
     "questions": {
       "meal": "Quel repas préparez-vous ?",
       "time": "De combien de temps disposez-vous ?",
       "servings": "Pour combien de personnes cuisinez-vous ?",
       "craving": "De quoi avez-vous envie ?",
-      "diet": "Avez-vous des préférences alimentaires ?",
+      "cuisine": "Quelle cuisine vous ferait plaisir ?",
       "shopping": "Pouvez-vous acheter des ingrédients supplémentaires ?",
       "saved": "Faut-il tenir compte des plats enregistrés ?"
     },
@@ -421,13 +417,7 @@
         "simple": "Simple",
         "surprise": "Surprenez-moi"
       },
-      "diets": {
-        "any": "Aucune",
-        "vegetarian": "Végétarien",
-        "vegan": "Végétalien",
-        "glutenFree": "Sans gluten",
-        "lactoseFree": "Sans lactose"
-      },
+      "cuisines": { "any": "Peu importe" },
       "shopping": {
         "none": "Seulement ce que j'ai",
         "two": "Jusqu'à 2 ingrédients",
@@ -479,11 +469,25 @@
     "demoRecipe": "Recette de démonstration",
     "back": "Retour",
     "time": "Temps",
+    "totalTime": "Temps total",
     "servingsLabel": "Portions",
     "cuisine": "Cuisine",
     "difficulty": "Difficulté",
     "preparation": "Préparation",
     "ingredients": "Ingrédients",
+    "nutrition": {
+      "title": "Valeurs par portion",
+      "estimate": "Estimations variables selon les ingrédients et la taille de la portion.",
+      "author": "Valeurs saisies par l'auteur de la recette – non vérifiées automatiquement.",
+      "missing": "Aucune donnée nutritionnelle disponible pour cette recette.",
+      "card": "Environ {calories} kcal par portion",
+      "calories": "Calories",
+      "protein": "Protéines",
+      "carbs": "Glucides",
+      "fat": "Lipides"
+    },
+    "allergens": {"title":"Allergènes dans les ingrédients","unknown":"Aucune donnée sur les allergènes.","noneDeclared":"Aucun allergène n'est indiqué pour les ingrédients de cette recette.","options":{"gluten":"Céréales contenant du gluten","crustaceans":"Crustacés","eggs":"Œufs","fish":"Poissons","peanuts":"Arachides","soy":"Soja","milk":"Lait","nuts":"Fruits à coque","celery":"Céleri","mustard":"Moutarde","sesame":"Sésame","sulphites":"Sulfites","lupin":"Lupin","molluscs":"Mollusques"}},
+    "diet": {"conflict":"Conflit possible avec vos préférences : {reason}.","options":{"vegetarian":"végétarienne","vegan":"végane","pescatarian":"pescétarienne"}},
     "missingCount": "{count, plural, one {# ingrédient manquant} other {# ingrédients manquants}}",
     "missingDescription": "Ajoutez les produits manquants à la liste de courses.",
     "cook": "Cuisiner !",
@@ -513,8 +517,8 @@
   },
   "RecipeStats": {
     "label": "Cooking history",
-    "count": "Cooked {count}×",
-    "lastCooked": "Last cooked: {date}",
+    "count": "Préparé",
+    "lastCooked": "Dernière préparation",
     "never": "Not cooked yet"
   },
   "RecipeLibrary": {
@@ -559,14 +563,14 @@
     "deleteLabel": "Delete {title}",
     "editTitle": "Edit recipe",
     "addTitle": "Add your own recipe",
-    "description": "Enter each ingredient and step on a new line. Separate the amount with |.",
+    "description": "Saisissez chaque ingrédient et chaque étape sur une ligne. Séparez la quantité avec |.",
     "name": "Recipe name",
     "recipeDescription": "Description",
     "cuisine": "Cuisine",
     "time": "Time (min)",
     "servings": "Servings",
     "ingredients": "Ingredients",
-    "ingredientsPlaceholder": "Pasta | 200 g\nTomatoes | 2 pcs",
+    "ingredientsPlaceholder": "Pâtes | 200 g\nTomates | 2 pièces",
     "preparation": "Preparation",
     "stepsPlaceholder": "Cook the pasta.\nPrepare the sauce.",
     "cancel": "Cancel",
@@ -576,7 +580,7 @@
     "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
     "delete": "Delete recipe",
     "errors": {
-      "required": "Enter a name, ingredients and preparation steps."
+      "required": "Saisissez un nom, des ingrédients et les étapes de préparation."
     },
     "toasts": {
       "updated": "Recipe changes saved",

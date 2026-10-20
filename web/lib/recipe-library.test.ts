@@ -36,7 +36,7 @@ test("toggles favorites without duplicates", () => {
   assert.deepEqual(toggleFavorite(added, "ramen").favoriteSlugs, []);
 });
 
-test("creates a recipe from line-based ingredients and steps", () => {
+test("parses line-based ingredients into structured quantities", () => {
   const recipe = createCustomRecipe(
     {
       title: "  Tosty  ",
@@ -53,8 +53,9 @@ test("creates a recipe from line-based ingredients and steps", () => {
 
   assert.equal(recipe.title, "Tosty");
   assert.equal(recipe.cuisine, "Polska");
-  assert.deepEqual(recipe.ingredients[0], { name: "Chleb", amount: "4 kromki", available: true });
+  assert.deepEqual(recipe.ingredients[0], { name: "Chleb", quantity: 4, unit: "kromki", amount: "4 kromki", available: true });
   assert.deepEqual(recipe.steps, ["Posmaruj chleb.", "Podpiecz."]);
+  assert.equal(recipe.calories, undefined);
 });
 
 test("updates and removes custom recipes without deleting cooking history", () => {
@@ -85,4 +86,27 @@ test("updates and removes custom recipes without deleting cooking history", () =
   assert.deepEqual(removed.customRecipes, []);
   assert.deepEqual(removed.favoriteSlugs, []);
   assert.equal(removed.history.length, 1);
+});
+
+test("keeps an old unquantified ingredient when editing a recipe", () => {
+  const recipe = createCustomRecipe({
+    title: "Soup", description: "", cuisine: "Domowa", time: 20, servings: 2,
+    ingredients: "Salt | szczypta",
+    steps: "Season.",
+  }, "soup", "2026-10-13T10:00:00.000Z");
+  assert.equal(recipe.ingredients[0].amount, "szczypta");
+  assert.equal(recipe.ingredients[0].quantity, undefined);
+});
+
+test("stores manually entered nutrition, allergens and active time", () => {
+  const recipe = createCustomRecipe({
+    title: "Egg toast", description: "", cuisine: "Domowa", time: 15, activeTime: 8, servings: 1,
+    ingredients: "Eggs | 2 pcs", steps: "Cook.",
+    nutrition: { calories: 300, protein: 18, carbs: 20, fat: 16 }, allergens: ["eggs"], dietTags: ["vegetarian"],
+  }, "egg-toast", "2026-10-13T10:00:00.000Z");
+  assert.equal(recipe.activeTime, 8);
+  assert.equal(recipe.nutritionSource, "author");
+  assert.equal(recipe.macros?.protein, 18);
+  assert.deepEqual(recipe.allergens, ["eggs"]);
+  assert.deepEqual(recipe.dietTags, ["vegetarian"]);
 });

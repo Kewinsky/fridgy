@@ -59,10 +59,10 @@ export default async function SettingsPage() {
                     <p className="mt-1 text-xs leading-5 text-muted-foreground">
                       {t("languageDescription")}
                     </p>
-                    <div className="mt-5">
-                      <LanguageSwitcher />
-                    </div>
                   </div>
+                </div>
+                <div className="mt-5">
+                  <LanguageSwitcher />
                 </div>
               </section>
               <section className="app-card p-5">

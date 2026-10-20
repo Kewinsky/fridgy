@@ -5,8 +5,6 @@ import { z } from "zod";
 import { AcceptInvitationButton } from "@/app/invite/[token]/accept-button";
 import { createClient } from "@/lib/supabase/server";
 
-export const instant = false;
-
 export default async function InvitationPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   if (!z.uuid().safeParse(token).success) notFound();

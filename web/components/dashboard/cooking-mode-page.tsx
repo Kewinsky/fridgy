@@ -62,7 +62,7 @@ export function CookingModePage({ slug }: { slug: string }) {
         </div>
         <h1 className="mt-4 text-3xl font-extrabold sm:text-4xl">{recipe.title}</h1>
         <div className="mt-4 flex flex-wrap gap-2">
-          <Badge variant="secondary"><ClockIcon aria-hidden="true" /> {recipeT("minutes", { count: recipe.time })}</Badge>
+          <Badge variant="secondary"><ClockIcon aria-hidden="true" /> {recipeT("totalTime")}: {recipeT("minutes", { count: recipe.time })}</Badge>
           <Badge variant="outline"><UsersIcon aria-hidden="true" /> {recipeT("servings", { count: recipe.servings })}</Badge>
           <Badge variant="outline">{isCuisine(recipe.cuisine) ? recipeT(`cuisineOptions.${cuisineMessageKeys[recipe.cuisine]}`) : recipe.cuisine}</Badge>
         </div>

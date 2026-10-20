@@ -2,30 +2,39 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { BookOpenCheckIcon, CheckIcon, ChefHatIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
 
 import { PageHeader } from "@/components/dashboard/page-header";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Button } from "@/components/ui/button";
-import { demoRecipes } from "@/lib/demo-recipes";
+import { demoRecipes, filterRecipesByCuisine, recipeAllergens, type Recipe } from "@/lib/demo-recipes";
+import { localizeDemoRecipe } from "@/lib/demo-localization";
+import { getRecipePreferenceConflicts } from "@/lib/recipe-preferences";
+import type { Locale } from "@/i18n/config";
+import { cuisineMessageKeys, cuisines as recipeCuisines } from "@/components/dashboard/recipe-options";
 import { cn } from "@/lib/utils";
 
 const meals = ["breakfast", "lunch", "dinner", "snack", "any"] as const;
 const times = ["15", "30", "60", "any"] as const;
 const cravings = ["light", "protein", "comfort", "world", "simple", "surprise"] as const;
-const diets = ["any", "vegetarian", "vegan", "glutenFree", "lactoseFree"] as const;
+const cuisines = ["any", ...recipeCuisines] as const;
 const shoppingOptions = ["none", "two", "any"] as const;
 const savedRecipeOptions = ["include", "newOnly", "any"] as const;
 export function CookingPage() {
   const t = useTranslations("Cooking");
+  const recipeT = useTranslations("Recipe.cuisineOptions");
+  const allergenT = useTranslations("Recipe.allergens.options");
+  const locale = useLocale() as Locale;
   const library = useRecipeLibrary();
+  const preferences = useDashboardData();
   const [meal, setMeal] = useState<(typeof meals)[number]>("any");
   const [time, setTime] = useState<(typeof times)[number]>("30");
   const [servings, setServings] = useState(2);
   const [craving, setCraving] = useState<(typeof cravings)[number]>("surprise");
-  const [diet, setDiet] = useState<(typeof diets)[number]>("any");
+  const [cuisine, setCuisine] = useState<(typeof cuisines)[number]>("any");
   const [shopping, setShopping] = useState<(typeof shoppingOptions)[number]>("two");
   const [savedRecipes, setSavedRecipes] = useState<(typeof savedRecipeOptions)[number]>("include");
   const [showRecipes, setShowRecipes] = useState(false);
@@ -37,11 +46,18 @@ export function CookingPage() {
   const rememberedDemoRecipes = [...demoRecipes].sort(
     (first, second) => Number(usedRecipeSlugs.has(second.slug)) - Number(usedRecipeSlugs.has(first.slug)),
   );
-  const candidateRecipes = savedRecipes === "include"
+  const savedCandidates = savedRecipes === "include"
     ? [...library.customRecipes, ...rememberedDemoRecipes]
     : savedRecipes === "newOnly"
       ? demoRecipes.filter((recipe) => !usedRecipeSlugs.has(recipe.slug))
       : demoRecipes;
+  const allergenLabels = Object.fromEntries(recipeAllergens.map((allergen) => [allergen, allergenT(allergen)]));
+  function conflictCount(recipe: Recipe) {
+    const conflicts = getRecipePreferenceConflicts(localizeDemoRecipe(recipe, locale), preferences, allergenLabels);
+    return conflicts.matchingAllergens.length + conflicts.matchingIngredients.length + Number(conflicts.dietConflict);
+  }
+  const candidateRecipes = [...filterRecipesByCuisine(savedCandidates, cuisine)]
+    .sort((first, second) => conflictCount(first) - conflictCount(second));
   const visibleRecipes = candidateRecipes.slice(0, visibleRecipeCount);
 
   return (
@@ -61,7 +77,7 @@ export function CookingPage() {
         <>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-muted-foreground">
-              {t(`options.meals.${meal}`)} · {t(`options.times.${time}`)} · {t("servings", { count: servings })} · {t(`options.cravings.${craving}`)} · {t(`options.diets.${diet}`)} · {t(`options.saved.${savedRecipes}`)}
+              {t(`options.meals.${meal}`)} · {t(`options.times.${time}`)} · {t("servings", { count: servings })} · {t(`options.cravings.${craving}`)} · {cuisine === "any" ? t("options.cuisines.any") : recipeT(cuisineMessageKeys[cuisine])} · {t(`options.saved.${savedRecipes}`)}
             </p>
             <Button
               variant="outline"
@@ -136,8 +152,8 @@ export function CookingPage() {
             <Question number="4" title={t("questions.craving")}>
               <Chips options={cravings} value={craving} onChange={setCraving} getLabel={(value) => t(`options.cravings.${value}`)} />
             </Question>
-            <Question number="5" title={t("questions.diet")}>
-              <Chips options={diets} value={diet} onChange={setDiet} getLabel={(value) => t(`options.diets.${value}`)} />
+            <Question number="5" title={t("questions.cuisine")}>
+              <Chips options={cuisines} value={cuisine} onChange={setCuisine} getLabel={(value) => value === "any" ? t("options.cuisines.any") : recipeT(cuisineMessageKeys[value])} />
             </Question>
             <Question number="6" title={t("questions.shopping")}>
               <Chips options={shoppingOptions} value={shopping} onChange={setShopping} getLabel={(value) => t(`options.shopping.${value}`)} />

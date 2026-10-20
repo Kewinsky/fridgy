@@ -1,16 +1,35 @@
+import "server-only";
+
+import { cache } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { redirect } from "next/navigation";
 
 import type { DemoProduct } from "@/lib/demo-data";
 import { emptyRecipeLibrary, type RecipeLibrary } from "@/lib/recipe-library";
 import type { ShoppingItem } from "@/lib/shopping-list";
+import { createClient } from "@/lib/supabase/server";
 
 export type DashboardData = {
   householdId: string;
   deductionMode: "always" | "never" | "ask";
+  diet: "none" | "vegetarian" | "vegan" | "pescatarian";
+  allergies: string;
+  excludedIngredients: string;
   products: DemoProduct[];
   shoppingItems: ShoppingItem[];
   recipeLibrary: RecipeLibrary;
 };
+
+export const getCurrentDashboard = cache(async () => {
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getClaims();
+  if (error || !data?.claims) redirect("/login");
+
+  return {
+    initialData: await loadDashboardData(supabase, data.claims.sub),
+    email: typeof data.claims.email === "string" ? data.claims.email : "Twoje konto",
+  };
+});
 
 export function productFromRow(row: Record<string, unknown>): DemoProduct {
   return {
@@ -43,7 +62,7 @@ export function productToRow(product: DemoProduct, householdId: string) {
 
 export async function loadDashboardData(supabase: SupabaseClient, userId: string): Promise<DashboardData> {
   const { data: profile, error: profileError } = await supabase
-    .from("profiles").select("household_id,deduction_mode").eq("user_id", userId).single();
+    .from("profiles").select("household_id,deduction_mode,diet,allergies,excluded_ingredients").eq("user_id", userId).single();
   if (profileError || !profile) throw new Error("Profile is missing. Apply the Supabase migration.");
 
   const householdId = profile.household_id as string;
@@ -57,6 +76,9 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
   return {
     householdId,
     deductionMode: profile.deduction_mode as DashboardData["deductionMode"],
+    diet: profile.diet as DashboardData["diet"],
+    allergies: String(profile.allergies ?? ""),
+    excludedIngredients: String(profile.excluded_ingredients ?? ""),
     products: (products.data ?? []).map(productFromRow),
     shoppingItems: (shopping.data ?? []).map((item) => ({ id: item.id, name: item.name, done: item.done,
       ...(item.seed_key ? { seedKey: item.seed_key } : {}),

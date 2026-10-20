@@ -67,7 +67,7 @@ export function RecipeLibraryPage() {
         />
       </section>
 
-      <Tabs defaultValue="history">
+      <Tabs defaultValue="favorites">
         <TabsScrollableList>
           <TabsTrigger value="favorites" className="h-9 px-3">
             <HeartIcon aria-hidden="true" /> {t("tabs.favorites")}

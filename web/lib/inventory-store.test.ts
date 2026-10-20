@@ -56,6 +56,13 @@ test("suggests only deductions with compatible units", () => {
   ]);
 });
 
+test("uses structured ingredient quantity before the legacy display amount", () => {
+  const structured = { ingredients: [{ name: "Makaron", quantity: 125, unit: "g", amount: "old value", available: true }] } satisfies Pick<Recipe, "ingredients">;
+  assert.deepEqual(suggestRecipeDeductions(structured, products)[0], {
+    productId: "p1", ingredientAmount: "old value", amount: 125, selected: true,
+  });
+});
+
 test("reduces stock and marks an empty product as consumed", () => {
   const result = applyInventoryDeductions(products, [
     { productId: "p1", amount: 200 },

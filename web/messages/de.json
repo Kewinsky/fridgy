@@ -188,10 +188,6 @@
         "currencyLabel": "Währung",
         "dateLabel": "Datumsformat"
       },
-      "cuisines": {
-        "title": "Bevorzugte Küchen",
-        "description": "Damit werden Vorschläge unter „Was soll ich kochen?“ besser angepasst."
-      },
       "privacy": {
         "title": "Datenschutz und Datenanalyse",
         "description": "Wähle, wie Fridgy App-Daten verwenden darf.",
@@ -389,13 +385,13 @@
     "morePeople": "Mehr Personen",
     "demoNotice": "Dies sind Demo-Vorschläge auf Grundlage deiner Antworten.",
     "showSuggestions": "Vorschläge anzeigen",
-    "questionProgress": "Frage {number} von 6",
+    "questionProgress": "Frage {number} von 7",
     "questions": {
       "meal": "Welche Mahlzeit möchtest du zubereiten?",
       "time": "Wie viel Zeit hast du?",
       "servings": "Für wie viele Personen kochst du?",
       "craving": "Worauf hast du Appetit?",
-      "diet": "Gibt es besondere Ernährungswünsche?",
+      "cuisine": "Auf welche Küche hast du Lust?",
       "shopping": "Kannst du zusätzliche Zutaten einkaufen?",
       "saved": "Sollen gespeicherte Gerichte berücksichtigt werden?"
     },
@@ -421,13 +417,7 @@
         "simple": "Einfach",
         "surprise": "Überrasche mich"
       },
-      "diets": {
-        "any": "Keine",
-        "vegetarian": "Vegetarisch",
-        "vegan": "Vegan",
-        "glutenFree": "Glutenfrei",
-        "lactoseFree": "Laktosefrei"
-      },
+      "cuisines": { "any": "Egal" },
       "shopping": {
         "none": "Nur vorhandene Zutaten",
         "two": "Bis zu 2 Zutaten",
@@ -479,11 +469,25 @@
     "demoRecipe": "Demo-Rezept",
     "back": "Zurück",
     "time": "Zeit",
+    "totalTime": "Gesamtzeit",
     "servingsLabel": "Portionen",
     "cuisine": "Küche",
     "difficulty": "Schwierigkeit",
     "preparation": "Zubereitung",
     "ingredients": "Zutaten",
+    "nutrition": {
+      "title": "Nährwerte pro Portion",
+      "estimate": "Schätzwerte – abhängig von Zutaten und Portionsgröße.",
+      "author": "Vom Rezeptautor eingetragene Werte – nicht automatisch geprüft.",
+      "missing": "Für dieses Rezept sind keine Nährwerte verfügbar.",
+      "card": "Etwa {calories} kcal pro Portion",
+      "calories": "Kalorien",
+      "protein": "Eiweiß",
+      "carbs": "Kohlenhydrate",
+      "fat": "Fett"
+    },
+    "allergens": {"title":"Allergene in den Zutaten","unknown":"Keine Angaben zu Allergenen verfügbar.","noneDeclared":"Für die Zutaten dieses Rezepts sind keine Allergene angegeben.","options":{"gluten":"Glutenhaltiges Getreide","crustaceans":"Krebstiere","eggs":"Eier","fish":"Fisch","peanuts":"Erdnüsse","soy":"Soja","milk":"Milch","nuts":"Schalenfrüchte","celery":"Sellerie","mustard":"Senf","sesame":"Sesam","sulphites":"Sulfite","lupin":"Lupinen","molluscs":"Weichtiere"}},
+    "diet": {"conflict":"Möglicher Konflikt mit deinen Wünschen: {reason}.","options":{"vegetarian":"vegetarisch","vegan":"vegan","pescatarian":"pescetarisch"}},
     "missingCount": "{count, plural, one {# Zutat fehlt} other {# Zutaten fehlen}}",
     "missingDescription": "Füge die fehlenden Produkte zur Einkaufsliste hinzu.",
     "cook": "Kochen!",
@@ -513,8 +517,8 @@
   },
   "RecipeStats": {
     "label": "Cooking history",
-    "count": "Cooked {count}×",
-    "lastCooked": "Last cooked: {date}",
+    "count": "Gekocht",
+    "lastCooked": "Zuletzt gekocht",
     "never": "Not cooked yet"
   },
   "RecipeLibrary": {
@@ -559,14 +563,14 @@
     "deleteLabel": "Delete {title}",
     "editTitle": "Edit recipe",
     "addTitle": "Add your own recipe",
-    "description": "Enter each ingredient and step on a new line. Separate the amount with |.",
+    "description": "Schreibe jede Zutat und jeden Schritt in eine eigene Zeile. Trenne die Menge mit | ab.",
     "name": "Recipe name",
     "recipeDescription": "Description",
     "cuisine": "Cuisine",
     "time": "Time (min)",
     "servings": "Servings",
     "ingredients": "Ingredients",
-    "ingredientsPlaceholder": "Pasta | 200 g\nTomatoes | 2 pcs",
+    "ingredientsPlaceholder": "Nudeln | 200 g\nTomaten | 2 Stück",
     "preparation": "Preparation",
     "stepsPlaceholder": "Cook the pasta.\nPrepare the sauce.",
     "cancel": "Cancel",
@@ -576,7 +580,7 @@
     "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
     "delete": "Delete recipe",
     "errors": {
-      "required": "Enter a name, ingredients and preparation steps."
+      "required": "Gib einen Namen, Zutaten und Zubereitungsschritte ein."
     },
     "toasts": {
       "updated": "Recipe changes saved",
