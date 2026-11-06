@@ -25,8 +25,8 @@
     "loginHint": "Sin contraseña. Accede con un código por e-mail o con Google.",
     "today": "Hoy",
     "yourHome": "Tu hogar",
-    "addReceipt": "Añade compras desde un recibo",
-    "addReceiptDescription": "Haz una foto y Fridgy te ayudará a organizar los productos.",
+    "addReceipt": "Añadir productos!",
+    "addReceiptDescription": "Introduce productos y organiza el inventario compartido.",
     "productsAtHome": "productos en casa",
     "useSoon": "para usar pronto",
     "rhythm": "Una rutina sencilla",
@@ -55,8 +55,8 @@
     "shoppingShort": "Lista",
     "settings": "Ajustes",
     "settingsShort": "Ajustes",
-    "receipt": "Añadir recibo",
-    "receiptShort": "Recibo",
+    "receipt": "Añadir productos",
+    "receiptShort": "Añadir",
     "mainNavigation": "Navegación principal",
     "mobileNavigation": "Navegación móvil",
     "yourHome": "Tu hogar",
@@ -68,12 +68,6 @@
     "eyebrow": "Tu cuenta",
     "title": "Ajustes",
     "description": "Preferencias básicas del hogar y de la apariencia de la aplicación.",
-    "household": "Hogar",
-    "yourHome": "Tu hogar",
-    "region": "Región",
-    "regionValue": "Polonia · PLN",
-    "reminders": "Recordatorios",
-    "remindersValue": "Todos los días a las 18:00",
     "language": "Idioma de la aplicación",
     "languageDescription": "Elige el idioma de la interfaz de Fridgy.",
     "theme": "Tema de color",
@@ -124,25 +118,19 @@
       }
     },
     "account": {
+      "groups": { "account": "Cuenta", "household": "Hogar" },
       "login": {
         "title": "Inicio de sesión",
-        "description": "Tu correo electrónico y el método de acceso actual.",
-        "emailLabel": "Correo electrónico",
-        "methodLabel": "Método de acceso",
-        "emailCode": "Código enviado por correo"
-      },
-      "google": {
-        "title": "Cuenta de Google",
-        "description": "La cuenta usada para iniciar sesión rápidamente.",
-        "connected": "Conectada",
-        "notConnected": "No conectada"
+        "description": "El correo electrónico vinculado a tu cuenta.",
+        "emailLabel": "Correo electrónico"
       },
       "household": {
         "title": "Nombre del hogar",
         "description": "El nombre visible para todos los miembros del hogar.",
         "nameLabel": "Nombre",
         "defaultName": "Tu hogar",
-        "save": "Guardar"
+        "save": "Guardar",
+        "cancel": "Cancelar"
       },
       "invite": {
         "title": "Invitar a un miembro",
@@ -222,8 +210,7 @@
     "tabs": {
       "general": "General",
       "account": "Cuenta y hogar",
-      "preferences": "Preferencias",
-      "advanced": "Datos y personalización"
+      "preferences": "Preferencias"
     }
   },
   "Theme": {
@@ -265,7 +252,7 @@
     "eyebrow": "Buenos días",
     "title": "Tu cocina de un vistazo",
     "description": "Revisa tus provisiones y planifica la próxima comida.",
-    "addReceipt": "Añadir recibo",
+    "addReceipt": "Añadir productos",
     "summary": "Resumen",
     "productsAtHome": "productos en casa",
     "useSoon": "para usar pronto",
@@ -277,7 +264,7 @@
     "emptyDescription": "Ahora mismo no tienes productos urgentes.",
     "firstSteps": "Primeros pasos",
     "prepareKitchen": "Configura Fridgy",
-    "stepReceipt": "Añade tu primer recibo",
+    "stepReceipt": "Añade tus primeros productos",
     "stepProducts": "Revisa y organiza los productos",
     "stepCooking": "Encuentra una idea para cocinar"
   },
@@ -417,7 +404,9 @@
         "simple": "Sencillo",
         "surprise": "Sorpréndeme"
       },
-      "cuisines": { "any": "Me da igual" },
+      "cuisines": {
+        "any": "Me da igual"
+      },
       "shopping": {
         "none": "Solo lo que tengo",
         "two": "Hasta 2 ingredientes",
@@ -486,8 +475,35 @@
       "carbs": "Carbohidratos",
       "fat": "Grasas"
     },
-    "allergens": {"title":"Alérgenos en los ingredientes","unknown":"No hay datos sobre alérgenos.","noneDeclared":"No se indican alérgenos para los ingredientes de esta receta.","options":{"gluten":"Cereales con gluten","crustaceans":"Crustáceos","eggs":"Huevos","fish":"Pescado","peanuts":"Cacahuetes","soy":"Soja","milk":"Leche","nuts":"Frutos de cáscara","celery":"Apio","mustard":"Mostaza","sesame":"Sésamo","sulphites":"Sulfitos","lupin":"Altramuces","molluscs":"Moluscos"}},
-    "diet": {"conflict":"Posible conflicto con tus preferencias: {reason}.","options":{"vegetarian":"vegetariana","vegan":"vegana","pescatarian":"pescetariana"}},
+    "allergens": {
+      "title": "Alérgenos en los ingredientes",
+      "unknown": "No hay datos sobre alérgenos.",
+      "noneDeclared": "No se indican alérgenos para los ingredientes de esta receta.",
+      "options": {
+        "gluten": "Cereales con gluten",
+        "crustaceans": "Crustáceos",
+        "eggs": "Huevos",
+        "fish": "Pescado",
+        "peanuts": "Cacahuetes",
+        "soy": "Soja",
+        "milk": "Leche",
+        "nuts": "Frutos de cáscara",
+        "celery": "Apio",
+        "mustard": "Mostaza",
+        "sesame": "Sésamo",
+        "sulphites": "Sulfitos",
+        "lupin": "Altramuces",
+        "molluscs": "Moluscos"
+      }
+    },
+    "diet": {
+      "conflict": "Posible conflicto con tus preferencias: {reason}.",
+      "options": {
+        "vegetarian": "vegetariana",
+        "vegan": "vegana",
+        "pescatarian": "pescetariana"
+      }
+    },
     "missingCount": "{count, plural, one {Falta # ingrediente} other {Faltan # ingredientes}}",
     "missingDescription": "Añade los productos que faltan a la lista de compras.",
     "cook": "¡Cocinar!",
@@ -642,8 +658,8 @@
     "success": "{count, plural, one {El producto que faltaba se ha añadido a la lista de compras.} other {Se han añadido # productos a la lista de compras.}}"
   },
   "Receipt": {
-    "metaTitle": "Añadir recibo",
-    "metaDescription": "Add products to inventory from a receipt.",
+    "metaTitle": "Añadir productos",
+    "metaDescription": "Añade productos manualmente o desde una foto del recibo.",
     "productCount": "{count, plural, one {# product} other {# products}}",
     "remove": "Remove {name}",
     "fields": {
@@ -663,19 +679,32 @@
     "toasts": {
       "incomplete": "Enter the name, quantity and unit for every product.",
       "invalidQuantity": "Every quantity must be a number greater than zero.",
-      "invalidFile": "Select a JPG, PNG, HEIC or PDF file.",
-      "fileTooLarge": "The file can be up to 20 MB."
+      "invalidFile": "Elige una imagen JPG, PNG, WebP, HEIC o HEIF válida.",
+      "emptyFile": "El archivo seleccionado está vacío.",
+      "fileTooLarge": "La imagen puede tener como máximo {maxMb} MB."
+    },
+    "analysis": {
+      "title": "Preparando productos",
+      "description": "Pronto podrás revisar y editar la lista de productos.",
+      "progress": "Progreso de preparación de productos",
+      "cancel": "Cancelar",
+      "stages": {
+        "reading": "Leyendo la imagen",
+        "recognizing": "Reconociendo productos",
+        "categorizing": "Clasificando productos"
+      }
     },
     "success": {
-      "title": "Receipt is ready",
-      "description": "Se añadieron {count} productos al inventario compartido.",
-      "inventory": "View inventory",
-      "another": "Add another receipt"
+      "title": "Inventario actualizado",
+      "description": "{count, plural, one {Se añadió # producto al inventario compartido.} other {Se añadieron # productos al inventario compartido.}}",
+      "inventory": "Ver inventario",
+      "another": "Añadir más productos"
     },
     "review": {
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
-      "description": "Introduce los productos del recibo y revísalos antes de guardar.",
+      "description": "Revisa los productos antes de guardarlos.",
+      "demoNotice": "Estos son productos de ejemplo, no resultados de tu foto. Si los confirmas, se añadirán al inventario.",
       "back": "Volver",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
@@ -683,24 +712,16 @@
     },
     "manual": {
       "eyebrow": "Paso 1 de 2",
-      "title": "Añadir recibo manualmente",
-      "description": "Introduce los productos del recibo para añadirlos al inventario compartido.",
-      "cardTitle": "Productos del recibo",
-      "cardDescription": "Introduce nombre, cantidad, unidad y lugar de almacenamiento. Las fotos y los PDF llegarán más adelante.",
-      "start": "Introducir productos",
-      "notice": "El escaneo de fotos y PDF todavía no está disponible."
+      "title": "Añadir productos",
+      "description": "Elige cómo añadir productos al inventario compartido.",
+      "start": "Añadir productos manualmente"
     },
     "upload": {
-      "eyebrow": "Step 1 of 2",
-      "title": "Añadir recibo",
-      "description": "Select a receipt photo or PDF to prepare products for review.",
-      "fileTitle": "Select receipt file",
-      "formats": "JPG, PNG, HEIC or PDF · max. 20 MB",
-      "selectFile": "Select photo or PDF",
-      "selected": "Selected: {fileName}",
-      "review": "Go to review",
-      "useSample": "Use sample receipt",
-      "notice": "At this stage, the file is not uploaded or analysed. OCR integration will be added separately."
+      "description": "Añade una foto del recibo desde el teléfono o el ordenador y después revisa los productos.",
+      "fileTitle": "Subir recibo",
+      "formats": "JPG, PNG, WebP, HEIC o HEIF · máx. {maxMb} MB",
+      "selectFile": "Elegir foto",
+      "notice": "En esta versión, la imagen permanece en tu dispositivo – el análisis muestra un ejemplo."
     }
   },
   "Errors": {

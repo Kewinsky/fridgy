@@ -11,7 +11,7 @@ import {
   LeafIcon,
   ListChecksIcon,
   LogOutIcon,
-  ReceiptTextIcon,
+  PackagePlusIcon,
   SettingsIcon,
   ShoppingBasketIcon,
 } from "lucide-react";
@@ -63,10 +63,10 @@ const mobileNavigation = [
   navigation[0],
   navigation[1],
   {
-    href: "/dashboard/dodaj-paragon",
+    href: "/dashboard/dodaj-produkty",
     labelKey: "receipt",
     shortLabelKey: "receiptShort",
-    icon: ReceiptTextIcon,
+    icon: PackagePlusIcon,
   },
   navigation[2],
   navigation[4],
@@ -106,9 +106,9 @@ export function DashboardShell({
             nativeButton={false}
             render={
               <Link
-                href="/dashboard/dodaj-paragon"
+                href="/dashboard/dodaj-produkty"
                 aria-current={
-                  pathname.startsWith("/dashboard/dodaj-paragon")
+                  pathname.startsWith("/dashboard/dodaj-produkty")
                     ? "page"
                     : undefined
                 }

@@ -5,8 +5,8 @@ import {
   ArrowRightIcon,
   LeafIcon,
   ListChecksIcon,
+  PackagePlusIcon,
   PackageCheckIcon,
-  ScanLineIcon,
   SparklesIcon,
 } from "lucide-react";
 
@@ -41,8 +41,8 @@ export default async function DashboardPage() {
           <p className="mt-3 text-sm leading-6 text-surface-strong-foreground/75">
             {t("description")}
           </p>
-          <Button nativeButton={false} render={<Link href="/dashboard/dodaj-paragon" />} className="mt-6 h-11">
-            <ScanLineIcon aria-hidden="true" />
+          <Button nativeButton={false} render={<Link href="/dashboard/dodaj-produkty" />} className="mt-6 h-11">
+            <PackagePlusIcon aria-hidden="true" />
             {t("addReceipt")}
           </Button>
         </div>

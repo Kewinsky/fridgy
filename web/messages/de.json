@@ -25,8 +25,8 @@
     "loginHint": "Ohne Passwort. Anmeldung mit E-Mail-Code oder Google.",
     "today": "Heute",
     "yourHome": "Dein Zuhause",
-    "addReceipt": "Einkäufe vom Kassenbon hinzufügen",
-    "addReceiptDescription": "Mach ein Foto und Fridgy hilft dir, deine Produkte zu ordnen.",
+    "addReceipt": "Produkte hinzufügen!",
+    "addReceiptDescription": "Trage Produkte ein und verwalte eure gemeinsamen Vorräte.",
     "productsAtHome": "Produkte zu Hause",
     "useSoon": "bald verbrauchen",
     "rhythm": "Einfacher Ablauf",
@@ -55,8 +55,8 @@
     "shoppingShort": "Liste",
     "settings": "Einstellungen",
     "settingsShort": "Einstellungen",
-    "receipt": "Kassenbon hinzufügen",
-    "receiptShort": "Kassenbon",
+    "receipt": "Produkte hinzufügen",
+    "receiptShort": "Neu",
     "mainNavigation": "Hauptnavigation",
     "mobileNavigation": "Mobile Navigation",
     "yourHome": "Dein Zuhause",
@@ -68,12 +68,6 @@
     "eyebrow": "Dein Konto",
     "title": "Einstellungen",
     "description": "Grundlegende Einstellungen für deinen Haushalt und das Aussehen der App.",
-    "household": "Haushalt",
-    "yourHome": "Dein Zuhause",
-    "region": "Region",
-    "regionValue": "Polen · PLN",
-    "reminders": "Erinnerungen",
-    "remindersValue": "Täglich um 18:00 Uhr",
     "language": "App-Sprache",
     "languageDescription": "Wähle die Sprache der Fridgy-Oberfläche.",
     "theme": "Farbschema",
@@ -124,25 +118,19 @@
       }
     },
     "account": {
+      "groups": { "account": "Konto", "household": "Haushalt" },
       "login": {
         "title": "Anmeldung",
-        "description": "Deine E-Mail-Adresse und die aktuelle Anmeldemethode.",
-        "emailLabel": "E-Mail-Adresse",
-        "methodLabel": "Anmeldemethode",
-        "emailCode": "Code per E-Mail"
-      },
-      "google": {
-        "title": "Google-Konto",
-        "description": "Das Konto für die schnelle Anmeldung.",
-        "connected": "Verbunden",
-        "notConnected": "Nicht verbunden"
+        "description": "Die mit deinem Konto verknüpfte E-Mail-Adresse.",
+        "emailLabel": "E-Mail-Adresse"
       },
       "household": {
         "title": "Name des Haushalts",
         "description": "Dieser Name ist für alle Haushaltsmitglieder sichtbar.",
         "nameLabel": "Name",
         "defaultName": "Dein Zuhause",
-        "save": "Speichern"
+        "save": "Speichern",
+        "cancel": "Abbrechen"
       },
       "invite": {
         "title": "Haushaltsmitglied einladen",
@@ -222,8 +210,7 @@
     "tabs": {
       "general": "Allgemein",
       "account": "Konto und Haushalt",
-      "preferences": "Einstellungen",
-      "advanced": "Daten und Personalisierung"
+      "preferences": "Einstellungen"
     }
   },
   "Theme": {
@@ -265,7 +252,7 @@
     "eyebrow": "Guten Tag",
     "title": "Deine Küche auf einen Blick",
     "description": "Prüfe deine Vorräte und plane die nächste Mahlzeit.",
-    "addReceipt": "Kassenbon hinzufügen",
+    "addReceipt": "Produkte hinzufügen",
     "summary": "Zusammenfassung",
     "productsAtHome": "Produkte zu Hause",
     "useSoon": "bald verbrauchen",
@@ -277,7 +264,7 @@
     "emptyDescription": "Zurzeit gibt es keine dringenden Produkte.",
     "firstSteps": "Erste Schritte",
     "prepareKitchen": "Fridgy einrichten",
-    "stepReceipt": "Ersten Kassenbon hinzufügen",
+    "stepReceipt": "Erste Produkte hinzufügen",
     "stepProducts": "Produkte prüfen und ordnen",
     "stepCooking": "Eine Essensidee finden"
   },
@@ -417,7 +404,9 @@
         "simple": "Einfach",
         "surprise": "Überrasche mich"
       },
-      "cuisines": { "any": "Egal" },
+      "cuisines": {
+        "any": "Egal"
+      },
       "shopping": {
         "none": "Nur vorhandene Zutaten",
         "two": "Bis zu 2 Zutaten",
@@ -486,8 +475,35 @@
       "carbs": "Kohlenhydrate",
       "fat": "Fett"
     },
-    "allergens": {"title":"Allergene in den Zutaten","unknown":"Keine Angaben zu Allergenen verfügbar.","noneDeclared":"Für die Zutaten dieses Rezepts sind keine Allergene angegeben.","options":{"gluten":"Glutenhaltiges Getreide","crustaceans":"Krebstiere","eggs":"Eier","fish":"Fisch","peanuts":"Erdnüsse","soy":"Soja","milk":"Milch","nuts":"Schalenfrüchte","celery":"Sellerie","mustard":"Senf","sesame":"Sesam","sulphites":"Sulfite","lupin":"Lupinen","molluscs":"Weichtiere"}},
-    "diet": {"conflict":"Möglicher Konflikt mit deinen Wünschen: {reason}.","options":{"vegetarian":"vegetarisch","vegan":"vegan","pescatarian":"pescetarisch"}},
+    "allergens": {
+      "title": "Allergene in den Zutaten",
+      "unknown": "Keine Angaben zu Allergenen verfügbar.",
+      "noneDeclared": "Für die Zutaten dieses Rezepts sind keine Allergene angegeben.",
+      "options": {
+        "gluten": "Glutenhaltiges Getreide",
+        "crustaceans": "Krebstiere",
+        "eggs": "Eier",
+        "fish": "Fisch",
+        "peanuts": "Erdnüsse",
+        "soy": "Soja",
+        "milk": "Milch",
+        "nuts": "Schalenfrüchte",
+        "celery": "Sellerie",
+        "mustard": "Senf",
+        "sesame": "Sesam",
+        "sulphites": "Sulfite",
+        "lupin": "Lupinen",
+        "molluscs": "Weichtiere"
+      }
+    },
+    "diet": {
+      "conflict": "Möglicher Konflikt mit deinen Wünschen: {reason}.",
+      "options": {
+        "vegetarian": "vegetarisch",
+        "vegan": "vegan",
+        "pescatarian": "pescetarisch"
+      }
+    },
     "missingCount": "{count, plural, one {# Zutat fehlt} other {# Zutaten fehlen}}",
     "missingDescription": "Füge die fehlenden Produkte zur Einkaufsliste hinzu.",
     "cook": "Kochen!",
@@ -642,8 +658,8 @@
     "success": "{count, plural, one {Fehlendes Produkt wurde zur Einkaufsliste hinzugefügt.} other {# fehlende Produkte wurden zur Einkaufsliste hinzugefügt.}}"
   },
   "Receipt": {
-    "metaTitle": "Kassenbon hinzufügen",
-    "metaDescription": "Add products to inventory from a receipt.",
+    "metaTitle": "Produkte hinzufügen",
+    "metaDescription": "Produkte manuell oder mit einem Kassenbonfoto hinzufügen.",
     "productCount": "{count, plural, one {# product} other {# products}}",
     "remove": "Remove {name}",
     "fields": {
@@ -663,19 +679,32 @@
     "toasts": {
       "incomplete": "Enter the name, quantity and unit for every product.",
       "invalidQuantity": "Every quantity must be a number greater than zero.",
-      "invalidFile": "Select a JPG, PNG, HEIC or PDF file.",
-      "fileTooLarge": "The file can be up to 20 MB."
+      "invalidFile": "Wähle ein gültiges JPG-, PNG-, WebP-, HEIC- oder HEIF-Bild.",
+      "emptyFile": "Die ausgewählte Datei ist leer.",
+      "fileTooLarge": "Das Bild darf höchstens {maxMb} MB groß sein."
+    },
+    "analysis": {
+      "title": "Produkte werden vorbereitet",
+      "description": "Gleich kannst du die Produktliste prüfen und bearbeiten.",
+      "progress": "Fortschritt der Produktvorbereitung",
+      "cancel": "Abbrechen",
+      "stages": {
+        "reading": "Bild wird geladen",
+        "recognizing": "Produkte werden erkannt",
+        "categorizing": "Produkte werden kategorisiert"
+      }
     },
     "success": {
-      "title": "Receipt is ready",
-      "description": "{count} Produkte wurden zu den gemeinsamen Vorräten hinzugefügt.",
-      "inventory": "View inventory",
-      "another": "Add another receipt"
+      "title": "Vorräte ergänzt",
+      "description": "{count, plural, one {# Produkt wurde zu den gemeinsamen Vorräten hinzugefügt.} other {# Produkte wurden zu den gemeinsamen Vorräten hinzugefügt.}}",
+      "inventory": "Vorräte ansehen",
+      "another": "Weitere Produkte hinzufügen"
     },
     "review": {
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
-      "description": "Trage die Produkte vom Kassenbon ein und prüfe sie vor dem Speichern.",
+      "description": "Prüfe die Produkte vor dem Speichern.",
+      "demoNotice": "Das sind Beispielprodukte, keine Ergebnisse deines Fotos. Wenn du sie bestätigst, werden sie zu deinen Vorräten hinzugefügt.",
       "back": "Zurück",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
@@ -683,24 +712,16 @@
     },
     "manual": {
       "eyebrow": "Schritt 1 von 2",
-      "title": "Kassenbon manuell hinzufügen",
-      "description": "Trage Produkte vom Kassenbon ein. Fridgy fügt sie den gemeinsamen Vorräten hinzu.",
-      "cardTitle": "Produkte vom Kassenbon",
-      "cardDescription": "Trage Name, Menge, Einheit und Lagerort ein. Fotos und PDF folgen später.",
-      "start": "Produkte eintragen",
-      "notice": "Das Scannen von Fotos und PDF ist noch nicht verfügbar."
+      "title": "Produkte hinzufügen",
+      "description": "Wähle aus, wie du Produkte zu den gemeinsamen Vorräten hinzufügen möchtest.",
+      "start": "Produkte manuell hinzufügen"
     },
     "upload": {
-      "eyebrow": "Step 1 of 2",
-      "title": "Kassenbon hinzufügen",
-      "description": "Select a receipt photo or PDF to prepare products for review.",
-      "fileTitle": "Select receipt file",
-      "formats": "JPG, PNG, HEIC or PDF · max. 20 MB",
-      "selectFile": "Select photo or PDF",
-      "selected": "Selected: {fileName}",
-      "review": "Go to review",
-      "useSample": "Use sample receipt",
-      "notice": "At this stage, the file is not uploaded or analysed. OCR integration will be added separately."
+      "description": "Lade ein Kassenbonfoto vom Handy oder Computer hoch. Prüfe danach die Produktliste.",
+      "fileTitle": "Kassenbon hochladen",
+      "formats": "JPG, PNG, WebP, HEIC oder HEIF · max. {maxMb} MB",
+      "selectFile": "Foto auswählen",
+      "notice": "In dieser Version bleibt das Bild auf deinem Gerät – die Analyse zeigt Beispieldaten."
     }
   },
   "Errors": {

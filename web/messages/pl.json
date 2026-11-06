@@ -25,8 +25,8 @@
     "loginHint": "Bez hasła. Logowanie kodem e-mail lub kontem Google.",
     "today": "Dzisiaj",
     "yourHome": "Twój dom",
-    "addReceipt": "Dodaj zakupy z paragonu",
-    "addReceiptDescription": "Zrób zdjęcie, a Fridgy pomoże uporządkować produkty.",
+    "addReceipt": "Dodaj produkty!",
+    "addReceiptDescription": "Wpisz produkty i uporządkuj wspólne zapasy.",
     "productsAtHome": "produkty w domu",
     "useSoon": "do wykorzystania",
     "rhythm": "Prosty rytm",
@@ -55,8 +55,8 @@
     "shoppingShort": "Lista",
     "settings": "Ustawienia",
     "settingsShort": "Ustawienia",
-    "receipt": "Dodaj paragon",
-    "receiptShort": "Paragon",
+    "receipt": "Dodaj produkty",
+    "receiptShort": "Dodaj",
     "mainNavigation": "Główna nawigacja",
     "mobileNavigation": "Mobilna nawigacja",
     "yourHome": "Twój dom",
@@ -68,12 +68,6 @@
     "eyebrow": "Twoje konto",
     "title": "Ustawienia",
     "description": "Podstawowe preferencje gospodarstwa domowego i wyglądu aplikacji.",
-    "household": "Gospodarstwo domowe",
-    "yourHome": "Twój dom",
-    "region": "Region",
-    "regionValue": "Polska · PLN",
-    "reminders": "Przypomnienia",
-    "remindersValue": "Codziennie o 18:00",
     "language": "Język aplikacji",
     "languageDescription": "Wybierz język interfejsu Fridgy.",
     "theme": "Motyw kolorystyczny",
@@ -124,25 +118,19 @@
       }
     },
     "account": {
+      "groups": { "account": "Konto", "household": "Dom" },
       "login": {
         "title": "Logowanie",
-        "description": "Adres e-mail i aktualna metoda logowania.",
-        "emailLabel": "Adres e-mail",
-        "methodLabel": "Sposób logowania",
-        "emailCode": "Kod wysyłany e-mailem"
-      },
-      "google": {
-        "title": "Konto Google",
-        "description": "Konto używane do szybkiego logowania.",
-        "connected": "Połączono",
-        "notConnected": "Niepołączone"
+        "description": "Adres e-mail powiązany z kontem.",
+        "emailLabel": "Adres e-mail"
       },
       "household": {
         "title": "Nazwa gospodarstwa domowego",
         "description": "Nazwa widoczna dla wszystkich domowników.",
         "nameLabel": "Nazwa",
         "defaultName": "Twój dom",
-        "save": "Zapisz"
+        "save": "Zapisz",
+        "cancel": "Anuluj"
       },
       "invite": {
         "title": "Zaproś domownika",
@@ -222,8 +210,7 @@
     "tabs": {
       "general": "Ogólne",
       "account": "Konto i dom",
-      "preferences": "Preferencje",
-      "advanced": "Dane i personalizacja"
+      "preferences": "Preferencje"
     }
   },
   "Theme": {
@@ -265,7 +252,7 @@
     "eyebrow": "Dzień dobry",
     "title": "Twoja kuchnia w skrócie",
     "description": "Sprawdź zapasy i zaplanuj kolejny posiłek.",
-    "addReceipt": "Dodaj paragon",
+    "addReceipt": "Dodaj produkty",
     "summary": "Podsumowanie",
     "productsAtHome": "produktów w domu",
     "useSoon": "do wykorzystania",
@@ -277,7 +264,7 @@
     "emptyDescription": "Nie masz teraz pilnych produktów.",
     "firstSteps": "Pierwsze kroki",
     "prepareKitchen": "Przygotuj Fridgy do działania",
-    "stepReceipt": "Dodaj pierwszy paragon",
+    "stepReceipt": "Dodaj pierwsze produkty",
     "stepProducts": "Sprawdź i uporządkuj produkty",
     "stepCooking": "Znajdź pomysł na posiłek"
   },
@@ -417,7 +404,9 @@
         "simple": "Prosto",
         "surprise": "Zaskocz mnie"
       },
-      "cuisines": { "any": "Bez znaczenia" },
+      "cuisines": {
+        "any": "Bez znaczenia"
+      },
       "shopping": {
         "none": "Tylko to, co mam",
         "two": "Do 2 składników",
@@ -490,9 +479,31 @@
       "title": "Alergeny w składnikach",
       "unknown": "Brak danych o alergenach.",
       "noneDeclared": "W składnikach tego przepisu nie oznaczono alergenów.",
-      "options": {"gluten":"Zboża z glutenem","crustaceans":"Skorupiaki","eggs":"Jaja","fish":"Ryby","peanuts":"Orzeszki ziemne","soy":"Soja","milk":"Mleko","nuts":"Orzechy","celery":"Seler","mustard":"Gorczyca","sesame":"Sezam","sulphites":"Siarczyny","lupin":"Łubin","molluscs":"Mięczaki"}
+      "options": {
+        "gluten": "Zboża z glutenem",
+        "crustaceans": "Skorupiaki",
+        "eggs": "Jaja",
+        "fish": "Ryby",
+        "peanuts": "Orzeszki ziemne",
+        "soy": "Soja",
+        "milk": "Mleko",
+        "nuts": "Orzechy",
+        "celery": "Seler",
+        "mustard": "Gorczyca",
+        "sesame": "Sezam",
+        "sulphites": "Siarczyny",
+        "lupin": "Łubin",
+        "molluscs": "Mięczaki"
+      }
     },
-    "diet": {"conflict":"Możliwa niezgodność z Twoimi preferencjami: {reason}.","options":{"vegetarian":"wegetariański","vegan":"wegański","pescatarian":"peskatariański"}},
+    "diet": {
+      "conflict": "Możliwa niezgodność z Twoimi preferencjami: {reason}.",
+      "options": {
+        "vegetarian": "wegetariański",
+        "vegan": "wegański",
+        "pescatarian": "peskatariański"
+      }
+    },
     "missingCount": "Brakuje {count, plural, one {# składnika} few {# składników} other {# składników}}",
     "missingDescription": "Dodaj brakujące produkty do listy zakupów.",
     "cook": "Gotuj!",
@@ -647,8 +658,8 @@
     "success": "{count, plural, one {Dodano brakujący produkt do listy zakupów.} few {Dodano # brakujące produkty do listy zakupów.} other {Dodano # brakujących produktów do listy zakupów.}}"
   },
   "Receipt": {
-    "metaTitle": "Dodaj paragon",
-    "metaDescription": "Dodaj produkty do zapasów na podstawie paragonu.",
+    "metaTitle": "Dodaj produkty",
+    "metaDescription": "Dodaj produkty ręcznie lub ze zdjęcia paragonu.",
     "productCount": "{count, plural, one {# produkt} few {# produkty} other {# produktów}}",
     "remove": "Usuń {name}",
     "fields": {
@@ -668,19 +679,32 @@
     "toasts": {
       "incomplete": "Uzupełnij nazwę, ilość i jednostkę każdego produktu.",
       "invalidQuantity": "Każda ilość musi być liczbą większą od zera.",
-      "invalidFile": "Wybierz plik JPG, PNG, HEIC lub PDF.",
-      "fileTooLarge": "Plik może mieć maksymalnie 20 MB."
+      "invalidFile": "Wybierz prawidłowe zdjęcie JPG, PNG, WebP, HEIC lub HEIF.",
+      "emptyFile": "Wybrany plik jest pusty.",
+      "fileTooLarge": "Zdjęcie może mieć maksymalnie {maxMb} MB."
+    },
+    "analysis": {
+      "title": "Przygotowujemy produkty",
+      "description": "Za chwilę zobaczysz listę produktów do sprawdzenia i edycji.",
+      "progress": "Postęp przygotowania produktów",
+      "cancel": "Anuluj",
+      "stages": {
+        "reading": "Wczytywanie zdjęcia",
+        "recognizing": "Rozpoznawanie produktów",
+        "categorizing": "Kategoryzowanie produktów"
+      }
     },
     "success": {
-      "title": "Paragon jest gotowy",
-      "description": "Dodano {count} produktów do wspólnych zapasów.",
+      "title": "Zapasy uzupełnione",
+      "description": "{count, plural, one {Dodano # produkt do wspólnych zapasów.} few {Dodano # produkty do wspólnych zapasów.} other {Dodano # produktów do wspólnych zapasów.}}",
       "inventory": "Zobacz zapasy",
-      "another": "Dodaj kolejny paragon"
+      "another": "Dodaj kolejne produkty"
     },
     "review": {
       "eyebrow": "Krok 2 z 2",
       "title": "Sprawdź produkty",
-      "description": "Wpisz produkty z paragonu i sprawdź dane przed zapisaniem.",
+      "description": "Sprawdź dane produktów przed zapisaniem.",
+      "demoNotice": "To przykładowe produkty, a nie wynik analizy przesłanego zdjęcia. Jeśli je zatwierdzisz, zostaną dodane do zapasów.",
       "back": "Wróć",
       "addProduct": "Dodaj produkt",
       "checkData": "Sprawdź dane przed zatwierdzeniem.",
@@ -688,24 +712,16 @@
     },
     "manual": {
       "eyebrow": "Krok 1 z 2",
-      "title": "Dodaj paragon ręcznie",
-      "description": "Wpisz produkty z paragonu, a Fridgy doda je do wspólnych zapasów.",
-      "cardTitle": "Produkty z paragonu",
-      "cardDescription": "Podaj nazwę, ilość, jednostkę i miejsce przechowywania. Zdjęcia i PDF obsłużymy później.",
-      "start": "Wpisz produkty",
-      "notice": "Odczyt zdjęć i PDF nie jest jeszcze dostępny."
+      "title": "Dodaj produkty",
+      "description": "Wybierz sposób dodania produktów do wspólnych zapasów.",
+      "start": "Dodaj produkty ręcznie"
     },
     "upload": {
-      "eyebrow": "Krok 1 z 2",
-      "title": "Dodaj paragon",
-      "description": "Wybierz zdjęcie lub PDF paragonu, aby przygotować produkty do sprawdzenia.",
-      "fileTitle": "Wybierz plik paragonu",
-      "formats": "JPG, PNG, HEIC lub PDF · maks. 20 MB",
-      "selectFile": "Wybierz zdjęcie lub PDF",
-      "selected": "Wybrano: {fileName}",
-      "review": "Przejdź do weryfikacji",
-      "useSample": "Użyj przykładowego paragonu",
-      "notice": "Na tym etapie plik nie jest wysyłany ani analizowany. Integrację OCR dodamy osobno."
+      "description": "Dodaj zdjęcie paragonu z telefonu lub komputera. Potem sprawdzisz listę produktów.",
+      "fileTitle": "Prześlij paragon",
+      "formats": "JPG, PNG, WebP, HEIC lub HEIF · maks. {maxMb} MB",
+      "selectFile": "Wybierz zdjęcie",
+      "notice": "W tej wersji zdjęcie pozostaje na urządzeniu – analiza pokazuje przykładowy wynik."
     }
   },
   "Errors": {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { HomeIcon, LanguagesIcon, MapPinIcon, PaletteIcon } from "lucide-react";
+import { LanguagesIcon, PaletteIcon } from "lucide-react";
 
 import { PageHeader } from "@/components/dashboard/page-header";
 import { AccountSettings } from "@/components/dashboard/account-settings";
@@ -40,76 +40,44 @@ export default async function SettingsPage() {
       <SettingsTabs
         general={
           <div className="grid gap-5 lg:grid-cols-2">
-            <section className="app-card divide-y divide-border">
-              <Setting
-                icon={HomeIcon}
-                title={t("household")}
-                value={household?.name ?? t("yourHome")}
-              />
-              <Setting icon={MapPinIcon} title={t("region")} value={settings.currency} />
+            <section className="app-card p-5">
+              <div className="flex items-start gap-4">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
+                  <LanguagesIcon className="size-5" aria-hidden="true" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-sm font-bold">{t("language")}</h2>
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                    {t("languageDescription")}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-5">
+                <LanguageSwitcher />
+              </div>
             </section>
-            <div className="grid gap-5">
-              <section className="app-card p-5">
-                <div className="flex items-start gap-4">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
-                    <LanguagesIcon className="size-5" aria-hidden="true" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <h2 className="text-sm font-bold">{t("language")}</h2>
-                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                      {t("languageDescription")}
-                    </p>
-                  </div>
+            <section className="app-card p-5">
+              <div className="flex items-start gap-4">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
+                  <PaletteIcon className="size-5" aria-hidden="true" />
+                </span>
+                <div>
+                  <h2 className="text-sm font-bold">{t("theme")}</h2>
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">
+                    {t("themeDescription")}
+                  </p>
                 </div>
-                <div className="mt-5">
-                  <LanguageSwitcher />
-                </div>
-              </section>
-              <section className="app-card p-5">
-                <div className="flex items-start gap-4">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
-                    <PaletteIcon className="size-5" aria-hidden="true" />
-                  </span>
-                  <div>
-                    <h2 className="text-sm font-bold">{t("theme")}</h2>
-                    <p className="mt-1 text-xs leading-5 text-muted-foreground">
-                      {t("themeDescription")}
-                    </p>
-                  </div>
-                </div>
-                <div className="mt-5">
-                  <ThemeSettings />
-                </div>
-              </section>
-            </div>
+              </div>
+              <div className="mt-5">
+                <ThemeSettings />
+              </div>
+            </section>
+            <AdvancedSettings version={packageJson.version} initialSettings={settings} />
           </div>
         }
-        account={<AccountSettings email={auth.user.email ?? ""} googleConnected={Boolean(auth.user.identities?.some((identity) => identity.provider === "google"))} householdName={household?.name ?? ""} isOwner={household?.owner_id === auth.user.id} />}
+        account={<AccountSettings key={household?.name ?? ""} email={auth.user.email ?? ""} householdName={household?.name ?? ""} isOwner={household?.owner_id === auth.user.id} />}
         preferences={<PreferenceSettings initialSettings={settings} />}
-        advanced={<AdvancedSettings version={packageJson.version} initialSettings={settings} />}
       />
     </>
-  );
-}
-
-function Setting({
-  icon: Icon,
-  title,
-  value,
-}: {
-  icon: typeof HomeIcon;
-  title: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center gap-4 p-5">
-      <span className="flex size-10 items-center justify-center rounded-lg bg-secondary text-primary">
-        <Icon className="size-5" aria-hidden="true" />
-      </span>
-      <div>
-        <p className="text-sm font-bold">{title}</p>
-        <p className="mt-1 text-xs text-muted-foreground">{value}</p>
-      </div>
-    </div>
   );
 }

@@ -25,8 +25,8 @@
     "loginHint": "No password. Sign in with an email code or Google.",
     "today": "Today",
     "yourHome": "Your home",
-    "addReceipt": "Add shopping from a receipt",
-    "addReceiptDescription": "Take a photo and Fridgy will help organise your products.",
+    "addReceipt": "Add products!",
+    "addReceiptDescription": "Enter products and organise your shared inventory.",
     "productsAtHome": "products at home",
     "useSoon": "to use soon",
     "rhythm": "A simple routine",
@@ -55,8 +55,8 @@
     "shoppingShort": "List",
     "settings": "Settings",
     "settingsShort": "Settings",
-    "receipt": "Add receipt",
-    "receiptShort": "Receipt",
+    "receipt": "Add products",
+    "receiptShort": "Add",
     "mainNavigation": "Main navigation",
     "mobileNavigation": "Mobile navigation",
     "yourHome": "Your home",
@@ -68,12 +68,6 @@
     "eyebrow": "Your account",
     "title": "Settings",
     "description": "Basic preferences for your household and the app appearance.",
-    "household": "Household",
-    "yourHome": "Your home",
-    "region": "Region",
-    "regionValue": "Poland · PLN",
-    "reminders": "Reminders",
-    "remindersValue": "Every day at 18:00",
     "language": "App language",
     "languageDescription": "Choose the language of the Fridgy interface.",
     "theme": "Colour theme",
@@ -124,25 +118,19 @@
       }
     },
     "account": {
+      "groups": { "account": "Account", "household": "Home" },
       "login": {
         "title": "Sign-in",
-        "description": "Your email address and current sign-in method.",
-        "emailLabel": "Email address",
-        "methodLabel": "Sign-in method",
-        "emailCode": "Code sent by email"
-      },
-      "google": {
-        "title": "Google account",
-        "description": "The account used for quick sign-in.",
-        "connected": "Connected",
-        "notConnected": "Not connected"
+        "description": "The email address linked to your account.",
+        "emailLabel": "Email address"
       },
       "household": {
         "title": "Household name",
         "description": "The name shown to all household members.",
         "nameLabel": "Name",
         "defaultName": "Your home",
-        "save": "Save"
+        "save": "Save",
+        "cancel": "Cancel"
       },
       "invite": {
         "title": "Invite a household member",
@@ -222,8 +210,7 @@
     "tabs": {
       "general": "General",
       "account": "Account and home",
-      "preferences": "Preferences",
-      "advanced": "Data and personalisation"
+      "preferences": "Preferences"
     }
   },
   "Theme": {
@@ -265,7 +252,7 @@
     "eyebrow": "Good to see you",
     "title": "Your kitchen at a glance",
     "description": "Check your inventory and plan your next meal.",
-    "addReceipt": "Add receipt",
+    "addReceipt": "Add products",
     "summary": "Summary",
     "productsAtHome": "products at home",
     "useSoon": "use soon",
@@ -277,7 +264,7 @@
     "emptyDescription": "You have no urgent products right now.",
     "firstSteps": "First steps",
     "prepareKitchen": "Prepare Fridgy",
-    "stepReceipt": "Add your first receipt",
+    "stepReceipt": "Add your first products",
     "stepProducts": "Review and organise products",
     "stepCooking": "Find a meal idea"
   },
@@ -417,7 +404,9 @@
         "simple": "Simple",
         "surprise": "Surprise me"
       },
-      "cuisines": { "any": "Any" },
+      "cuisines": {
+        "any": "Any"
+      },
       "shopping": {
         "none": "Only what I have",
         "two": "Up to 2 items",
@@ -486,8 +475,35 @@
       "carbs": "Carbs",
       "fat": "Fat"
     },
-    "allergens": {"title":"Allergens in ingredients","unknown":"No allergen data is available.","noneDeclared":"No allergens are listed for this recipe's ingredients.","options":{"gluten":"Cereals containing gluten","crustaceans":"Crustaceans","eggs":"Eggs","fish":"Fish","peanuts":"Peanuts","soy":"Soy","milk":"Milk","nuts":"Tree nuts","celery":"Celery","mustard":"Mustard","sesame":"Sesame","sulphites":"Sulphites","lupin":"Lupin","molluscs":"Molluscs"}},
-    "diet": {"conflict":"Possible conflict with your preferences: {reason}.","options":{"vegetarian":"vegetarian","vegan":"vegan","pescatarian":"pescatarian"}},
+    "allergens": {
+      "title": "Allergens in ingredients",
+      "unknown": "No allergen data is available.",
+      "noneDeclared": "No allergens are listed for this recipe's ingredients.",
+      "options": {
+        "gluten": "Cereals containing gluten",
+        "crustaceans": "Crustaceans",
+        "eggs": "Eggs",
+        "fish": "Fish",
+        "peanuts": "Peanuts",
+        "soy": "Soy",
+        "milk": "Milk",
+        "nuts": "Tree nuts",
+        "celery": "Celery",
+        "mustard": "Mustard",
+        "sesame": "Sesame",
+        "sulphites": "Sulphites",
+        "lupin": "Lupin",
+        "molluscs": "Molluscs"
+      }
+    },
+    "diet": {
+      "conflict": "Possible conflict with your preferences: {reason}.",
+      "options": {
+        "vegetarian": "vegetarian",
+        "vegan": "vegan",
+        "pescatarian": "pescatarian"
+      }
+    },
     "missingCount": "{count, plural, one {# ingredient missing} other {# ingredients missing}}",
     "missingDescription": "Add missing products to the shopping list.",
     "cook": "Cook!",
@@ -642,8 +658,8 @@
     "success": "{count, plural, one {Missing product added to the shopping list.} other {# missing products added to the shopping list.}}"
   },
   "Receipt": {
-    "metaTitle": "Add receipt",
-    "metaDescription": "Add products to inventory from a receipt.",
+    "metaTitle": "Add products",
+    "metaDescription": "Add products manually or from a receipt photo.",
     "productCount": "{count, plural, one {# product} other {# products}}",
     "remove": "Remove {name}",
     "fields": {
@@ -663,19 +679,32 @@
     "toasts": {
       "incomplete": "Enter the name, quantity and unit for every product.",
       "invalidQuantity": "Every quantity must be a number greater than zero.",
-      "invalidFile": "Select a JPG, PNG, HEIC or PDF file.",
-      "fileTooLarge": "The file can be up to 20 MB."
+      "invalidFile": "Select a valid JPG, PNG, WebP, HEIC or HEIF image.",
+      "emptyFile": "The selected file is empty.",
+      "fileTooLarge": "The image can be up to {maxMb} MB."
+    },
+    "analysis": {
+      "title": "Preparing products",
+      "description": "You will soon see a list of products to review and edit.",
+      "progress": "Product preparation progress",
+      "cancel": "Cancel",
+      "stages": {
+        "reading": "Reading the image",
+        "recognizing": "Recognizing products",
+        "categorizing": "Categorizing products"
+      }
     },
     "success": {
-      "title": "Receipt is ready",
-      "description": "{count} products added to the shared inventory.",
+      "title": "Inventory updated",
+      "description": "{count, plural, one {Added # product to the shared inventory.} other {Added # products to the shared inventory.}}",
       "inventory": "View inventory",
-      "another": "Add another receipt"
+      "another": "Add more products"
     },
     "review": {
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
-      "description": "Enter receipt products and review them before saving.",
+      "description": "Review the products before saving them.",
+      "demoNotice": "These are sample products, not results from your photo. If you confirm them, they will be added to your inventory.",
       "back": "Back",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
@@ -683,24 +712,16 @@
     },
     "manual": {
       "eyebrow": "Step 1 of 2",
-      "title": "Add receipt manually",
-      "description": "Enter products from a receipt and Fridgy will add them to the shared inventory.",
-      "cardTitle": "Receipt products",
-      "cardDescription": "Enter the name, quantity, unit and storage location. Photo and PDF import will come later.",
-      "start": "Enter products",
-      "notice": "Photo and PDF scanning is not available yet."
+      "title": "Add products",
+      "description": "Choose how to add products to your shared inventory.",
+      "start": "Add products manually"
     },
     "upload": {
-      "eyebrow": "Step 1 of 2",
-      "title": "Add receipt",
-      "description": "Select a receipt photo or PDF to prepare products for review.",
-      "fileTitle": "Select receipt file",
-      "formats": "JPG, PNG, HEIC or PDF · max. 20 MB",
-      "selectFile": "Select photo or PDF",
-      "selected": "Selected: {fileName}",
-      "review": "Go to review",
-      "useSample": "Use sample receipt",
-      "notice": "At this stage, the file is not uploaded or analysed. OCR integration will be added separately."
+      "description": "Add a receipt photo from your phone or computer. Then review the product list.",
+      "fileTitle": "Upload receipt",
+      "formats": "JPG, PNG, WebP, HEIC or HEIF · max. {maxMb} MB",
+      "selectFile": "Select photo",
+      "notice": "In this version, the image stays on your device – analysis shows sample results."
     }
   },
   "Errors": {
