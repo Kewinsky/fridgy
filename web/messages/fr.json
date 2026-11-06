@@ -1,6 +1,9 @@
 {
   "Common": {
     "changeLanguage": "Changer de langue",
+    "saving": "Enregistrement…",
+    "adding": "Ajout…",
+    "deleting": "Suppression…",
     "saved": "Modifications enregistrées.",
     "saveFailed": "Impossible d'enregistrer les modifications. Réessayez."
   },
@@ -60,6 +63,10 @@
     "mainNavigation": "Navigation principale",
     "mobileNavigation": "Navigation mobile",
     "yourHome": "Votre foyer",
+    "selectHousehold": "Choisir un foyer",
+    "owner": "Propriétaire",
+    "member": "Membre",
+    "householdSwitchSoon": "D'autres foyers bientôt disponibles",
     "signOut": "Se déconnecter"
   },
   "Settings": {
@@ -72,7 +79,20 @@
     "languageDescription": "Choisissez la langue de l'interface Fridgy.",
     "theme": "Thème de couleur",
     "themeDescription": "Choisissez une apparence claire, sombre ou automatique.",
+    "householdUi": {
+      "title": "Votre foyer",
+      "description": "Consultez votre rôle et vos droits dans le foyer actuel.",
+      "unknown": "Foyer",
+      "owner": "Propriétaire",
+      "member": "Membre",
+      "ownerRights": "Vous pouvez gérer les réserves et les courses, inviter des membres et renommer le foyer. Le propriétaire ne peut pas quitter le foyer.",
+      "memberRights": "Vous pouvez gérer les réserves et les courses partagées ainsi que vos recettes. Vous pourrez quitter le foyer lorsque cette fonction sera disponible.",
+      "leave": "Quitter le foyer",
+      "leaveSoon": "Quitter le foyer sera disponible après l'ajout du support côté serveur."
+    },
     "preferences": {
+      "cancel": "Annuler",
+      "save": "Enregistrer les modifications",
       "expiry": {
         "title": "Notifications de péremption",
         "description": "Choisissez quand Fridgy doit vous rappeler une date limite proche.",
@@ -143,13 +163,6 @@
         "copy": "Copier le lien",
         "copied": "Lien copié."
       },
-      "transfer": {
-        "title": "Transférer la propriété du foyer",
-        "description": "Confiez la propriété à un autre membre avant de supprimer votre compte.",
-        "emailLabel": "Adresse e-mail du membre",
-        "placeholder": "membre@example.com",
-        "action": "Transférer la propriété"
-      },
       "sessions": {
         "title": "Sessions actives",
         "description": "Fermez les sessions Fridgy sur vos autres appareils.",
@@ -166,7 +179,7 @@
         "description": "Le compte, les provisions, les recettes et l'historique de cuisine seront supprimés. Cette action est irréversible.",
         "cancel": "Annuler",
         "confirm": "Supprimer le compte",
-        "ownerHasMembers": "Transférez d'abord la propriété du foyer à un autre membre."
+        "ownerHasMembers": "Le propriétaire ne peut pas supprimer son compte tant que d'autres membres sont dans le foyer."
       }
     },
     "advanced": {

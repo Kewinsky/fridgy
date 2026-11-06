@@ -7,6 +7,8 @@ import { usePathname } from "next/navigation";
 import {
   ChefHatIcon,
   BookOpenCheckIcon,
+  CheckIcon,
+  ChevronDownIcon,
   HomeIcon,
   LeafIcon,
   ListChecksIcon,
@@ -18,6 +20,7 @@ import {
 
 import { signOut } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -75,9 +78,13 @@ const mobileNavigation = [
 export function DashboardShell({
   children,
   email,
+  householdName,
+  isHouseholdOwner,
 }: {
   children: ReactNode;
   email: string;
+  householdName: string;
+  isHouseholdOwner: boolean;
 }) {
   const pathname = usePathname();
   const t = useTranslations("Navigation");
@@ -100,6 +107,29 @@ export function DashboardShell({
           </span>
           <span className="text-xl font-extrabold">Fridgy</span>
         </Link>
+
+        <div className="mb-5 px-5">
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={
+                <Button type="button" variant="outline" className="h-auto min-h-12 w-full justify-between gap-2 px-3 py-2 text-left font-normal" aria-label={t("selectHousehold")}>
+                  <span className="min-w-0">
+                    <span className="block truncate font-semibold">{householdName}</span>
+                    <span className="block text-xs text-muted-foreground">{t(isHouseholdOwner ? "owner" : "member")}</span>
+                  </span>
+                  <ChevronDownIcon className="shrink-0 text-muted-foreground" aria-hidden="true" />
+                </Button>
+              }
+            />
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem>
+                <span className="min-w-0 flex-1 truncate">{householdName}</span>
+                <CheckIcon aria-hidden="true" />
+              </DropdownMenuItem>
+              <DropdownMenuItem disabled>{t("householdSwitchSoon")}</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
         <div className="px-5">
           <Button
@@ -169,7 +199,7 @@ export function DashboardShell({
             <span className="font-extrabold">Fridgy</span>
           </Link>
           <p className="hidden text-sm text-muted-foreground lg:block">
-            {t("yourHome")}
+            {householdName}
           </p>
           <div className="flex items-center gap-2">
             <Link

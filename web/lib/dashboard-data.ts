@@ -25,9 +25,16 @@ export const getCurrentDashboard = cache(async () => {
   const { data, error } = await supabase.auth.getClaims();
   if (error || !data?.claims) redirect("/login");
 
+  const initialData = await loadDashboardData(supabase, data.claims.sub);
+  const { data: household, error: householdError } = await supabase.from("households")
+    .select("name,owner_id").eq("id", initialData.householdId).single();
+  if (householdError || !household) throw new Error("Could not load household");
+
   return {
-    initialData: await loadDashboardData(supabase, data.claims.sub),
+    initialData,
     email: typeof data.claims.email === "string" ? data.claims.email : "Twoje konto",
+    householdName: household.name as string,
+    isHouseholdOwner: household.owner_id === data.claims.sub,
   };
 });
 

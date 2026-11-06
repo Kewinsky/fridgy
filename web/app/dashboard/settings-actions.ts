@@ -22,6 +22,15 @@ const profileSettings = z.object({
 });
 
 export type ProfileSettings = z.infer<typeof profileSettings>;
+const preferenceSettings = profileSettings.pick({
+  notification_days: true,
+  diet: true,
+  allergies: true,
+  excluded_ingredients: true,
+  deduction_mode: true,
+  receipt_mode: true,
+});
+export type PreferenceSettingsValues = z.infer<typeof preferenceSettings>;
 
 async function currentUser() {
   const supabase = await createClient();
@@ -35,6 +44,13 @@ export async function saveProfileSetting<K extends keyof ProfileSettings>(key: K
   const valid = profileSettings.shape[key].parse(value);
   const { supabase, user } = await currentUser();
   const { error } = await supabase.from("profiles").update({ [key]: valid }).eq("user_id", user.id);
+  if (error) throw new Error(error.message);
+}
+
+export async function savePreferenceSettings(settings: PreferenceSettingsValues) {
+  const validSettings = preferenceSettings.parse(settings);
+  const { supabase, user } = await currentUser();
+  const { error } = await supabase.from("profiles").update(validSettings).eq("user_id", user.id);
   if (error) throw new Error(error.message);
 }
 
@@ -60,13 +76,6 @@ export async function createHouseholdInvitation(email: string) {
   }).select("token").single();
   if (error || !data) throw new Error(error?.message ?? "Invitation failed");
   return data.token as string;
-}
-
-export async function transferHouseholdOwnership(email: string) {
-  const validEmail = z.email().max(254).parse(email.trim().toLowerCase());
-  const { supabase } = await currentUser();
-  const { error } = await supabase.rpc("transfer_fridgy_household_owner", { target_email: validEmail });
-  if (error) throw new Error(error.message);
 }
 
 export async function exportAccountData() {

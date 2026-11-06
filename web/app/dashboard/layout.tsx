@@ -5,7 +5,7 @@ import { DashboardDataProvider } from "@/components/dashboard/dashboard-data-pro
 import { getCurrentDashboard } from "@/lib/dashboard-data";
 
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
-  const { initialData, email } = await getCurrentDashboard();
+  const { initialData, email, householdName, isHouseholdOwner } = await getCurrentDashboard();
 
-  return <DashboardDataProvider initialData={initialData}><DashboardShell email={email}>{children}</DashboardShell></DashboardDataProvider>;
+  return <DashboardDataProvider initialData={initialData}><DashboardShell email={email} householdName={householdName} isHouseholdOwner={isHouseholdOwner}>{children}</DashboardShell></DashboardDataProvider>;
 }

@@ -1,6 +1,9 @@
 {
   "Common": {
     "changeLanguage": "Sprache ändern",
+    "saving": "Wird gespeichert…",
+    "adding": "Wird hinzugefügt…",
+    "deleting": "Wird gelöscht…",
     "saved": "Änderungen gespeichert.",
     "saveFailed": "Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen."
   },
@@ -60,6 +63,10 @@
     "mainNavigation": "Hauptnavigation",
     "mobileNavigation": "Mobile Navigation",
     "yourHome": "Dein Zuhause",
+    "selectHousehold": "Haushalt wählen",
+    "owner": "Eigentümer",
+    "member": "Mitglied",
+    "householdSwitchSoon": "Weitere Haushalte bald verfügbar",
     "signOut": "Abmelden"
   },
   "Settings": {
@@ -72,7 +79,20 @@
     "languageDescription": "Wähle die Sprache der Fridgy-Oberfläche.",
     "theme": "Farbschema",
     "themeDescription": "Wähle ein helles, dunkles oder automatisches Erscheinungsbild.",
+    "householdUi": {
+      "title": "Dein Haushalt",
+      "description": "Sieh dir deine Rolle und Rechte im aktuellen Haushalt an.",
+      "unknown": "Haushalt",
+      "owner": "Eigentümer",
+      "member": "Mitglied",
+      "ownerRights": "Du kannst Vorräte und Einkaufsliste verwalten, Mitglieder einladen und den Haushalt umbenennen. Der Eigentümer kann den Haushalt nicht verlassen.",
+      "memberRights": "Du kannst gemeinsame Vorräte, die Einkaufsliste und eigene Rezepte verwalten. Du kannst den Haushalt verlassen, sobald diese Funktion angebunden ist.",
+      "leave": "Haushalt verlassen",
+      "leaveSoon": "Das Verlassen des Haushalts wird nach der Backend-Anbindung verfügbar sein."
+    },
     "preferences": {
+      "cancel": "Abbrechen",
+      "save": "Änderungen speichern",
       "expiry": {
         "title": "Erinnerungen an Verbrauchsdaten",
         "description": "Wähle, wann Fridgy an ein nahendes Verbrauchsdatum erinnern soll.",
@@ -143,13 +163,6 @@
         "copy": "Link kopieren",
         "copied": "Link kopiert."
       },
-      "transfer": {
-        "title": "Haushaltseigentum übertragen",
-        "description": "Übertrage die Eigentümerrolle an ein Mitglied, bevor du dein Konto löschst.",
-        "emailLabel": "E-Mail-Adresse des Mitglieds",
-        "placeholder": "mitglied@example.com",
-        "action": "Eigentum übertragen"
-      },
       "sessions": {
         "title": "Aktive Sitzungen",
         "description": "Beende Fridgy-Sitzungen auf deinen anderen Geräten.",
@@ -166,7 +179,7 @@
         "description": "Konto, Vorräte, Rezepte und Kochverlauf werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
         "cancel": "Abbrechen",
         "confirm": "Konto löschen",
-        "ownerHasMembers": "Übertrage zuerst die Haushaltsleitung an ein anderes Mitglied."
+        "ownerHasMembers": "Der Eigentümer kann sein Konto nicht löschen, solange andere Mitglieder im Haushalt sind."
       }
     },
     "advanced": {

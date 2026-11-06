@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { LanguagesIcon, PaletteIcon } from "lucide-react";
+import { HomeIcon, LanguagesIcon, PaletteIcon } from "lucide-react";
 
 import { PageHeader } from "@/components/dashboard/page-header";
 import { AccountSettings } from "@/components/dashboard/account-settings";
@@ -9,6 +9,8 @@ import { PreferenceSettings } from "@/components/dashboard/preference-settings";
 import { SettingsTabs } from "@/components/dashboard/settings-tabs";
 import { ThemeSettings } from "@/components/dashboard/theme-settings";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import packageJson from "@/package.json";
 import { createClient } from "@/lib/supabase/server";
 import type { ProfileSettings } from "@/app/dashboard/settings-actions";
@@ -26,8 +28,9 @@ export default async function SettingsPage() {
   const { data: profile, error } = await supabase.from("profiles")
     .select("*").eq("user_id", auth.user.id).single();
   if (error || !profile) throw new Error("Could not load settings");
-  const { data: household } = await supabase.from("households")
+  const { data: household, error: householdError } = await supabase.from("households")
     .select("name,owner_id").eq("id", profile.household_id).single();
+  if (householdError || !household) throw new Error("Could not load household");
   const settings = profile as ProfileSettings;
 
   return (
@@ -72,10 +75,34 @@ export default async function SettingsPage() {
                 <ThemeSettings />
               </div>
             </section>
+            <section className="app-card p-5">
+              <div className="flex items-start gap-4">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
+                  <HomeIcon className="size-5" aria-hidden="true" />
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-sm font-bold">{t("householdUi.title")}</h2>
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">{t("householdUi.description")}</p>
+                </div>
+              </div>
+              <div className="mt-5 flex flex-wrap items-center gap-2">
+                <span className="font-semibold">{household.name}</span>
+                <Badge variant="secondary">{t(household.owner_id === auth.user.id ? "householdUi.owner" : "householdUi.member")}</Badge>
+              </div>
+              <p className="mt-2 text-xs leading-5 text-muted-foreground">
+                {t(household.owner_id === auth.user.id ? "householdUi.ownerRights" : "householdUi.memberRights")}
+              </p>
+              {household.owner_id !== auth.user.id ? (
+                <>
+                  <Button type="button" variant="outline" className="mt-5 h-11" disabled>{t("householdUi.leave")}</Button>
+                  <p className="mt-2 text-xs text-muted-foreground">{t("householdUi.leaveSoon")}</p>
+                </>
+              ) : null}
+            </section>
             <AdvancedSettings version={packageJson.version} initialSettings={settings} />
           </div>
         }
-        account={<AccountSettings key={household?.name ?? ""} email={auth.user.email ?? ""} householdName={household?.name ?? ""} isOwner={household?.owner_id === auth.user.id} />}
+        account={<AccountSettings key={household.name} email={auth.user.email ?? ""} householdName={household.name} isOwner={household.owner_id === auth.user.id} />}
         preferences={<PreferenceSettings initialSettings={settings} />}
       />
     </>

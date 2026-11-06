@@ -9,19 +9,20 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
 
 const productUnits = ["szt.", "g", "kg", "ml", "l", "opak.", "puszka", "porcje", "kromki"] as const;
 
-export function ProductUnitSelect({ id, value, onValueChange }: { id: string; value: string; onValueChange: (value: string) => void }) {
+export function ProductUnitSelect({ id, value, onValueChange, compact = false }: { id: string; value: string; onValueChange: (value: string) => void; compact?: boolean }) {
   const options = value && !productUnits.some((unit) => unit === value) ? [value, ...productUnits] : productUnits;
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
         id={id}
-        className="h-11! min-h-11 w-full"
+        className={cn("h-11! min-h-11", compact ? "w-auto" : "w-full")}
         render={
-          <Button type="button" variant="outline" className="h-11! min-h-11 w-full justify-between px-3 font-normal">
+          <Button type="button" variant="outline" className={cn("h-11! min-h-11 justify-between px-3 font-normal", compact ? "w-auto" : "w-full")}>
             <span className="truncate">{value}</span>
             <ChevronDownIcon className="text-muted-foreground" aria-hidden="true" />
           </Button>

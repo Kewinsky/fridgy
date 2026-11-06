@@ -113,7 +113,7 @@ export function ShoppingListPage() {
             aria-label={t("newItem")}
             className="h-11"
           />
-          <Button className="h-11" onClick={addItem}><PlusIcon aria-hidden="true" /> <span className="hidden sm:inline">{t("add")}</span></Button>
+          <Button className="size-11 p-0" onClick={addItem} aria-label={t("add")}><PlusIcon aria-hidden="true" /></Button>
         </div>
         <div className="mt-5">
           {displayItems.map((item) => (

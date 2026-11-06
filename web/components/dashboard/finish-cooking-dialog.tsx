@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { CheckCircle2Icon } from "lucide-react";
@@ -37,11 +37,13 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
   const products = useInventory();
   const { finishCooking, deductionMode } = useDashboardData();
   const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [deductions, setDeductions] = useState<
     InventoryDeductionSuggestion[]
   >([]);
 
   function changeOpen(nextOpen: boolean) {
+    if (isPending) return;
     if (nextOpen) {
       setDeductions(suggestRecipeDeductions(recipe, products));
     }
@@ -61,26 +63,29 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
     );
   }
 
-  async function complete(deductionsToApply: InventoryDeductionSuggestion[]) {
-    try {
-      await finishCooking(recipe,
-        deductionsToApply
-          .filter((deduction) => deduction.selected && deduction.amount > 0)
-          .map(({ amount, productId }) => ({ amount, productId })),
-      );
-    } catch {
-      toast.error(common("saveFailed"));
-      return;
-    }
-    setOpen(false);
-    toast.success(t("success"));
-    router.push("/dashboard/moje-przepisy");
+  function complete(deductionsToApply: InventoryDeductionSuggestion[]) {
+    if (isPending) return;
+    startTransition(async () => {
+      try {
+        await finishCooking(recipe,
+          deductionsToApply
+            .filter((deduction) => deduction.selected && deduction.amount > 0)
+            .map(({ amount, productId }) => ({ amount, productId })),
+        );
+      } catch {
+        toast.error(common("saveFailed"));
+        return;
+      }
+      setOpen(false);
+      toast.success(t("success"));
+      router.push("/dashboard/moje-przepisy");
+    });
   }
 
   if (deductionMode !== "ask") {
-    return <Button className="mt-8 h-12 w-full" onClick={() => void complete(
+    return <Button className="mt-8 h-12 w-full" disabled={isPending} aria-busy={isPending} onClick={() => complete(
       deductionMode === "always" ? suggestRecipeDeductions(recipe, products) : [],
-    )}><CheckCircle2Icon aria-hidden="true" /> {t("open")}</Button>;
+    )}><CheckCircle2Icon aria-hidden="true" /> {isPending ? common("saving") : t("open")}</Button>;
   }
 
   return (
@@ -175,12 +180,13 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
             type="button"
             variant="outline"
             className="h-11"
+            disabled={isPending}
             onClick={() => setOpen(false)}
           >
             {t("cancel")}
           </Button>
-          <Button type="button" className="h-11" onClick={() => void complete(deductions)}>
-            {t("confirm")}
+          <Button type="button" className="h-11" disabled={isPending} aria-busy={isPending} onClick={() => complete(deductions)}>
+            {isPending ? common("saving") : t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

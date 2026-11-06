@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent, useEffect, useId, useRef, useState } from "react";
+import { type FormEvent, useEffect, useId, useRef, useState, useTransition } from "react";
 import Image from "next/image";
 import { CheckIcon, ChevronDownIcon, FileImageIcon, LinkIcon, PencilIcon, PenLineIcon, PlusIcon, Trash2Icon, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -77,7 +77,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState(() => getInitialForm(recipe));
   const [error, setError] = useState("");
-  const [saving, setSaving] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [removeImage, setRemoveImage] = useState(false);
@@ -123,9 +123,9 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
     }
   }
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
+  function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (saving || checkingImage || imageError) return;
+    if (isPending || checkingImage || imageError) return;
     if (!form.title.trim() || !form.ingredients.trim() || !form.steps.trim() || form.ingredients.split("\n").some((line) => line.trim() && !line.split("|")[0].trim())) {
       setError(t("errors.required"));
       return;
@@ -133,47 +133,46 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
 
     const totalTime = Math.max(1, Number(form.time) || 1);
 
-    setSaving(true);
-    let uploadedImagePath: string | undefined;
-    try {
-      if (imageFile) uploadedImagePath = await uploadRecipeImage(imageFile);
-      const imagePath = uploadedImagePath ?? (removeImage ? undefined : recipe?.imagePath);
-      const customRecipe = createCustomRecipe(
-        {
-          title: form.title,
-          imagePath,
-          description: form.description,
-          cuisine: form.cuisine,
-          time: totalTime,
-          activeTime: recipe?.activeTime && recipe.activeTime <= totalTime ? recipe.activeTime : undefined,
-          servings: Math.max(1, Number(form.servings) || 1),
-          ingredients: form.ingredients,
-          steps: form.steps,
-          nutrition: recipe?.macros && recipe.calories ? { calories: recipe.calories, ...recipe.macros } : undefined,
-          allergens: recipe?.allergens,
-          dietTags: recipe?.dietTags,
-        },
-        recipe?.slug ?? `${slugifyRecipeTitle(form.title) || "przepis"}-${crypto.randomUUID().slice(0, 8)}`,
-        recipe?.createdAt ?? new Date().toISOString(),
-      );
-      if (editing) await updateCustomRecipe(customRecipe);
-      else await saveCustomRecipe(customRecipe);
-      if (recipe?.imagePath && recipe.imagePath !== imagePath) {
-        void deleteRecipeImage(recipe.imagePath).catch(() => {});
+    startTransition(async () => {
+      let uploadedImagePath: string | undefined;
+      try {
+        if (imageFile) uploadedImagePath = await uploadRecipeImage(imageFile);
+        const imagePath = uploadedImagePath ?? (removeImage ? undefined : recipe?.imagePath);
+        const customRecipe = createCustomRecipe(
+          {
+            title: form.title,
+            imagePath,
+            description: form.description,
+            cuisine: form.cuisine,
+            time: totalTime,
+            activeTime: recipe?.activeTime && recipe.activeTime <= totalTime ? recipe.activeTime : undefined,
+            servings: Math.max(1, Number(form.servings) || 1),
+            ingredients: form.ingredients,
+            steps: form.steps,
+            nutrition: recipe?.macros && recipe.calories ? { calories: recipe.calories, ...recipe.macros } : undefined,
+            allergens: recipe?.allergens,
+            dietTags: recipe?.dietTags,
+          },
+          recipe?.slug ?? `${slugifyRecipeTitle(form.title) || "przepis"}-${crypto.randomUUID().slice(0, 8)}`,
+          recipe?.createdAt ?? new Date().toISOString(),
+        );
+        if (editing) await updateCustomRecipe(customRecipe);
+        else await saveCustomRecipe(customRecipe);
+        if (recipe?.imagePath && recipe.imagePath !== imagePath) {
+          void deleteRecipeImage(recipe.imagePath).catch(() => {});
+        }
+      } catch {
+        if (uploadedImagePath) void deleteRecipeImage(uploadedImagePath).catch(() => {});
+        setError(common("saveFailed"));
+        return;
       }
-    } catch {
-      if (uploadedImagePath) void deleteRecipeImage(uploadedImagePath).catch(() => {});
-      setError(common("saveFailed"));
-      return;
-    } finally {
-      setSaving(false);
-    }
-    changeOpen(false);
-    toast.success(editing ? t("toasts.updated") : t("toasts.created"));
+      changeOpen(false);
+      toast.success(editing ? t("toasts.updated") : t("toasts.created"));
+    });
   }
 
   return (
-    <Dialog open={open} onOpenChange={changeOpen}>
+    <Dialog open={open} onOpenChange={(nextOpen) => { if (!isPending) changeOpen(nextOpen); }}>
       <DialogTrigger
         render={
           editing ? (
@@ -198,7 +197,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
             fieldId={fieldId}
             form={form}
             error={error}
-            saving={saving}
+            saving={isPending}
             imageSrc={previewUrl ?? (!removeImage && recipe ? getRecipeImageSrc(recipe) : null)}
             imageError={imageError}
             checkingImage={checkingImage}
@@ -224,7 +223,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
                 fieldId={fieldId}
                 form={form}
                 error={error}
-                saving={saving}
+                saving={isPending}
                 imageSrc={previewUrl}
                 imageError={imageError}
                 checkingImage={checkingImage}
@@ -276,7 +275,10 @@ function ManualRecipeForm({
 }) {
   const t = useTranslations("RecipeForm");
   const recipeT = useTranslations("Recipe");
+  const common = useTranslations("Common");
   const imageInputRef = useRef<HTMLInputElement>(null);
+  let saveLabel = editing ? t("saveChanges") : t("save");
+  if (saving) saveLabel = editing ? common("saving") : common("adding");
 
   return (
     <form onSubmit={submit} className="grid gap-4">
@@ -371,8 +373,8 @@ function ManualRecipeForm({
           </div>
           {error ? <p role="alert" className="text-sm font-semibold text-destructive">{error}</p> : null}
           <DialogFooter>
-            <Button type="button" variant="outline" className="h-11" onClick={close}>{t("cancel")}</Button>
-            <Button type="submit" className="h-11" disabled={saving || checkingImage || Boolean(imageError)} aria-busy={saving}>{editing ? t("saveChanges") : t("save")}</Button>
+            <Button type="button" variant="outline" className="h-11" disabled={saving} onClick={close}>{t("cancel")}</Button>
+            <Button type="submit" className="h-11" disabled={saving || checkingImage || Boolean(imageError)} aria-busy={saving}>{saveLabel}</Button>
           </DialogFooter>
     </form>
   );
@@ -435,22 +437,26 @@ export function DeleteRecipeDialog({ recipe }: { recipe: CustomRecipe }) {
   const t = useTranslations("RecipeForm");
   const common = useTranslations("Common");
   const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const { deleteCustomRecipe } = useRecipeLibraryActions();
 
-  async function removeRecipe() {
-    try {
-      await deleteCustomRecipe(recipe.slug);
-      if (recipe.imagePath) void deleteRecipeImage(recipe.imagePath).catch(() => {});
-    } catch {
-      toast.error(common("saveFailed"));
-      return;
-    }
-    setOpen(false);
-    toast.success(t("toasts.deleted"));
+  function removeRecipe() {
+    if (isPending) return;
+    startTransition(async () => {
+      try {
+        await deleteCustomRecipe(recipe.slug);
+        if (recipe.imagePath) void deleteRecipeImage(recipe.imagePath).catch(() => {});
+      } catch {
+        toast.error(common("saveFailed"));
+        return;
+      }
+      setOpen(false);
+      toast.success(t("toasts.deleted"));
+    });
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={(nextOpen) => { if (!isPending) setOpen(nextOpen); }}>
       <DialogTrigger
         render={
           <Button variant="destructive" size="icon-lg" className="size-11" aria-label={t("deleteLabel", { title: recipe.title })} />
@@ -466,8 +472,8 @@ export function DeleteRecipeDialog({ recipe }: { recipe: CustomRecipe }) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button type="button" variant="outline" className="h-11" onClick={() => setOpen(false)}>{t("cancel")}</Button>
-          <Button type="button" variant="destructive" className="h-11" onClick={removeRecipe}>{t("delete")}</Button>
+          <Button type="button" variant="outline" className="h-11" disabled={isPending} onClick={() => setOpen(false)}>{t("cancel")}</Button>
+          <Button type="button" variant="destructive" className="h-11" disabled={isPending} aria-busy={isPending} onClick={removeRecipe}>{isPending ? common("deleting") : t("delete")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
 import { CheckIcon, ChevronDownIcon } from "lucide-react";
 
@@ -44,9 +44,10 @@ export function ProductEditDialog({
 }: {
   product: DemoProduct;
   onClose: () => void;
-  onSave: (product: DemoProduct) => void;
+  onSave: (product: DemoProduct) => Promise<void>;
 }) {
   const t = useTranslations("Inventory.editDialog");
+  const common = useTranslations("Common");
   const inventoryT = useTranslations("Inventory");
   const [name, setName] = useState(product.name);
   const [quantity, setQuantity] = useState(String(product.quantity));
@@ -57,6 +58,7 @@ export function ProductEditDialog({
   const [location, setLocation] = useState<StorageLocation>(product.storageLocation);
   const [estimatedUseBy, setEstimatedUseBy] = useState(product.estimatedUseBy);
   const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -72,19 +74,21 @@ export function ProductEditDialog({
       return;
     }
 
-    onSave({
-      ...product,
-      name: name.trim(),
-      quantity: parsedQuantity,
-      unit: unit.trim(),
-      category: category.trim(),
-      storageLocation: location,
-      estimatedUseBy,
+    startTransition(async () => {
+      await onSave({
+        ...product,
+        name: name.trim(),
+        quantity: parsedQuantity,
+        unit: unit.trim(),
+        category: category.trim(),
+        storageLocation: location,
+        estimatedUseBy,
+      });
     });
   }
 
   return (
-    <Dialog open onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Dialog open onOpenChange={(open) => { if (!open && !isPending) onClose(); }}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
@@ -173,8 +177,8 @@ export function ProductEditDialog({
         </form>
 
         <DialogFooter>
-          <Button type="button" variant="outline" className="h-11" onClick={onClose}>{t("cancel")}</Button>
-          <Button type="submit" form="edit-product-form" className="h-11">{t("save")}</Button>
+          <Button type="button" variant="outline" className="h-11" disabled={isPending} onClick={onClose}>{t("cancel")}</Button>
+          <Button type="submit" form="edit-product-form" className="h-11" disabled={isPending} aria-busy={isPending}>{isPending ? common("saving") : t("save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

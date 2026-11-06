@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import {
   BellRingIcon,
@@ -21,29 +21,43 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { saveProfileSetting, type ProfileSettings } from "@/app/dashboard/settings-actions";
+import { savePreferenceSettings, type PreferenceSettingsValues, type ProfileSettings } from "@/app/dashboard/settings-actions";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
+
+function getPreferences(settings: ProfileSettings): PreferenceSettingsValues {
+  return {
+    notification_days: [...settings.notification_days].sort((a, b) => a - b),
+    diet: settings.diet,
+    allergies: settings.allergies,
+    excluded_ingredients: settings.excluded_ingredients,
+    deduction_mode: settings.deduction_mode,
+    receipt_mode: settings.receipt_mode,
+  };
+}
 
 export function PreferenceSettings({ initialSettings }: { initialSettings: ProfileSettings }) {
   const t = useTranslations("Settings.preferences");
   const common = useTranslations("Common");
-  const [settings, setSettings] = useState(initialSettings);
-  const { setDeductionMode, setDietPreferences, diet, allergies, excludedIngredients } = useDashboardData();
+  const [settings, setSettings] = useState(() => getPreferences(initialSettings));
+  const [savedSettings, setSavedSettings] = useState(() => getPreferences(initialSettings));
+  const [isPending, startTransition] = useTransition();
+  const { setDeductionMode, setDietPreferences } = useDashboardData();
+  const hasChanges = JSON.stringify(settings) !== JSON.stringify(savedSettings);
 
-  async function save<K extends keyof ProfileSettings>(key: K, value: ProfileSettings[K]) {
-    try {
-      await saveProfileSetting(key, value);
-      setSettings((current) => ({ ...current, [key]: value }));
-      if (key === "deduction_mode") setDeductionMode(value as ProfileSettings["deduction_mode"]);
-      if (key === "diet" || key === "allergies" || key === "excluded_ingredients") {
-        setDietPreferences({
-          diet: key === "diet" ? value as ProfileSettings["diet"] : diet,
-          allergies: key === "allergies" ? value as string : allergies,
-          excludedIngredients: key === "excluded_ingredients" ? value as string : excludedIngredients,
-        });
+  function save() {
+    if (!hasChanges || isPending) return;
+    const values = settings;
+    startTransition(async () => {
+      try {
+        await savePreferenceSettings(values);
+        setSavedSettings(values);
+        setDeductionMode(values.deduction_mode);
+        setDietPreferences({ diet: values.diet, allergies: values.allergies, excludedIngredients: values.excluded_ingredients });
+        toast.success(common("saved"));
+      } catch {
+        toast.error(common("saveFailed"));
       }
-      toast.success(common("saved"));
-    } catch { toast.error(common("saveFailed")); }
+    });
   }
 
   return (
@@ -63,7 +77,12 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
                 <Checkbox checked={settings.notification_days.includes(({ sameDay: 0, oneDay: 1, threeDays: 3 } as const)[option])}
                   onCheckedChange={(checked) => {
                     const day = ({ sameDay: 0, oneDay: 1, threeDays: 3 } as const)[option];
-                    void save("notification_days", checked ? [...settings.notification_days, day] : settings.notification_days.filter((value) => value !== day));
+                    setSettings((current) => ({
+                      ...current,
+                      notification_days: checked === true
+                        ? [...new Set([...current.notification_days, day])].sort((a, b) => a - b)
+                        : current.notification_days.filter((value) => value !== day),
+                    }));
                   }} />
                 {t(`expiry.options.${option}`)}
               </label>
@@ -81,7 +100,7 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
               <SettingsDropdown
                 ariaLabel={t("diet.typeLabel")}
                 value={settings.diet}
-                onValueChange={(value) => void save("diet", value as ProfileSettings["diet"])}
+                onValueChange={(value) => setSettings((current) => ({ ...current, diet: value as PreferenceSettingsValues["diet"] }))}
                 options={(["none", "vegetarian", "vegan", "pescatarian"] as const).map(
                   (value) => ({ value, label: t(`diet.options.${value}`) }),
                 )}
@@ -90,12 +109,12 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
             <FieldLabel label={t("diet.allergiesLabel")}>
               <Input aria-label={t("diet.allergiesLabel")} className="h-11" placeholder={t("diet.allergiesPlaceholder")}
                 value={settings.allergies} onChange={(event) => setSettings((current) => ({ ...current, allergies: event.target.value }))}
-                onBlur={() => void save("allergies", settings.allergies)} />
+              />
             </FieldLabel>
             <FieldLabel label={t("diet.excludedLabel")}>
               <Input aria-label={t("diet.excludedLabel")} className="h-11" placeholder={t("diet.excludedPlaceholder")}
                 value={settings.excluded_ingredients} onChange={(event) => setSettings((current) => ({ ...current, excluded_ingredients: event.target.value }))}
-                onBlur={() => void save("excluded_ingredients", settings.excluded_ingredients)} />
+              />
             </FieldLabel>
           </div>
         </PreferenceCard>
@@ -109,7 +128,7 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
             <SettingsDropdown
               ariaLabel={t("deduction.label")}
               value={settings.deduction_mode}
-              onValueChange={(value) => void save("deduction_mode", value as ProfileSettings["deduction_mode"])}
+              onValueChange={(value) => setSettings((current) => ({ ...current, deduction_mode: value as PreferenceSettingsValues["deduction_mode"] }))}
               options={(["always", "never", "ask"] as const).map((value) => ({
                 value,
                 label: t(`deduction.options.${value}`),
@@ -127,7 +146,7 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
             <SettingsDropdown
               ariaLabel={t("receipt.label")}
               value={settings.receipt_mode}
-              onValueChange={(value) => void save("receipt_mode", value as ProfileSettings["receipt_mode"])}
+              onValueChange={(value) => setSettings((current) => ({ ...current, receipt_mode: value as PreferenceSettingsValues["receipt_mode"] }))}
               options={(["automatic", "review"] as const).map((value) => ({
                 value,
                 label: t(`receipt.options.${value}`),
@@ -135,6 +154,10 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
             />
           </FieldLabel>
         </PreferenceCard>
+      </div>
+      <div className="mt-5 flex justify-end gap-2">
+        <Button type="button" variant="outline" className="h-11" disabled={!hasChanges || isPending} onClick={() => setSettings(savedSettings)}>{t("cancel")}</Button>
+        <Button type="button" className="h-11" disabled={!hasChanges || isPending} aria-busy={isPending} onClick={save}>{isPending ? common("saving") : t("save")}</Button>
       </div>
     </div>
   );

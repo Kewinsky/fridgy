@@ -1,6 +1,9 @@
 {
   "Common": {
     "changeLanguage": "Zmień język",
+    "saving": "Zapisywanie…",
+    "adding": "Dodawanie…",
+    "deleting": "Usuwanie…",
     "saved": "Zapisano zmiany.",
     "saveFailed": "Nie udało się zapisać zmian. Spróbuj ponownie."
   },
@@ -60,6 +63,10 @@
     "mainNavigation": "Główna nawigacja",
     "mobileNavigation": "Mobilna nawigacja",
     "yourHome": "Twój dom",
+    "selectHousehold": "Wybierz domostwo",
+    "owner": "Właściciel",
+    "member": "Członek",
+    "householdSwitchSoon": "Więcej domostw wkrótce",
     "signOut": "Wyloguj się"
   },
   "Settings": {
@@ -72,7 +79,20 @@
     "languageDescription": "Wybierz język interfejsu Fridgy.",
     "theme": "Motyw kolorystyczny",
     "themeDescription": "Wybierz jasny, ciemny lub automatyczny wygląd aplikacji.",
+    "householdUi": {
+      "title": "Twoje domostwo",
+      "description": "Sprawdź swoją rolę i uprawnienia w bieżącym domostwie.",
+      "unknown": "Domostwo",
+      "owner": "Właściciel",
+      "member": "Członek",
+      "ownerRights": "Możesz zarządzać zapasami i listą zakupów, zapraszać domowników oraz zmienić nazwę domu. Właściciel nie może opuścić domostwa.",
+      "memberRights": "Możesz zarządzać wspólnymi zapasami, listą zakupów i własnymi przepisami. Możesz też opuścić domostwo, gdy ta funkcja zostanie podłączona.",
+      "leave": "Opuść domostwo",
+      "leaveSoon": "Opuszczenie domostwa będzie dostępne po dodaniu obsługi w bazie."
+    },
     "preferences": {
+      "cancel": "Anuluj",
+      "save": "Zapisz zmiany",
       "expiry": {
         "title": "Powiadomienia o terminach",
         "description": "Wybierz, kiedy Fridgy ma przypominać o kończącym się terminie.",
@@ -143,13 +163,6 @@
         "copy": "Kopiuj link",
         "copied": "Skopiowano link."
       },
-      "transfer": {
-        "title": "Przenieś własność gospodarstwa",
-        "description": "Przekaż rolę właściciela domownikowi przed usunięciem swojego konta.",
-        "emailLabel": "Adres e-mail domownika",
-        "placeholder": "domownik@example.com",
-        "action": "Przenieś własność"
-      },
       "sessions": {
         "title": "Aktywne sesje",
         "description": "Zakończ sesje Fridgy na pozostałych urządzeniach.",
@@ -166,7 +179,7 @@
         "description": "Usunięte zostaną konto, zapasy, przepisy i historia gotowania. Tej operacji nie można cofnąć.",
         "cancel": "Anuluj",
         "confirm": "Usuń konto",
-        "ownerHasMembers": "Najpierw przenieś własność gospodarstwa na innego domownika."
+        "ownerHasMembers": "Nie można usunąć konta właściciela, dopóki w domostwie są inni członkowie."
       }
     },
     "advanced": {

@@ -20,7 +20,6 @@ import {
   exportAccountData,
   saveHouseholdName,
   signOutEverywhere,
-  transferHouseholdOwnership,
 } from "@/app/dashboard/settings-actions";
 
 import { Button } from "@/components/ui/button";
@@ -54,7 +53,6 @@ export function AccountSettings({
   const [isSavingName, setIsSavingName] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteLink, setInviteLink] = useState("");
-  const [newOwnerEmail, setNewOwnerEmail] = useState("");
   const hasNameChanges = name.trim() !== savedName;
 
   async function saveName() {
@@ -95,15 +93,6 @@ export function AccountSettings({
       link.download = "fridgy-data.json";
       link.click();
       URL.revokeObjectURL(url);
-    } catch {
-      toast.error(common("saveFailed"));
-    }
-  }
-
-  async function transferOwner() {
-    try {
-      await transferHouseholdOwnership(newOwnerEmail);
-      window.location.reload();
     } catch {
       toast.error(common("saveFailed"));
     }
@@ -189,42 +178,43 @@ export function AccountSettings({
                   className="h-11 sm:min-w-0 sm:flex-1"
                   value={name}
                   onChange={(event) => setName(event.target.value)}
-                  disabled={!isOwner || isSavingName}
+                  readOnly={!isOwner}
+                  disabled={isSavingName}
                   maxLength={100}
                 />
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-11 flex-1 sm:flex-none"
-                    onClick={() => setName(savedName)}
-                    disabled={!isOwner || !hasNameChanges || isSavingName}
-                  >
-                    {t("household.cancel")}
-                  </Button>
-                  <Button
-                    type="button"
-                    className="h-11 flex-1 sm:flex-none"
-                    onClick={saveName}
-                    disabled={
-                      !isOwner ||
-                      !hasNameChanges ||
-                      !name.trim() ||
-                      isSavingName
-                    }
-                  >
-                    {t("household.save")}
-                  </Button>
-                </div>
+                {isOwner ? (
+                  <div className="flex gap-2">
+                    {hasNameChanges ? (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-11 flex-1 sm:flex-none"
+                        onClick={() => setName(savedName)}
+                        disabled={isSavingName}
+                      >
+                        {t("household.cancel")}
+                      </Button>
+                    ) : null}
+                    <Button
+                      type="button"
+                      className="h-11 flex-1 sm:flex-none"
+                      onClick={saveName}
+                      disabled={!hasNameChanges || !name.trim() || isSavingName}
+                    >
+                      {t("household.save")}
+                    </Button>
+                  </div>
+                ) : null}
               </div>
             </Field>
           </SettingsCard>
 
-          <SettingsCard
-            icon={UserPlusIcon}
-            title={t("invite.title")}
-            description={t("invite.description")}
-          >
+          {isOwner ? (
+            <SettingsCard
+              icon={UserPlusIcon}
+              title={t("invite.title")}
+              description={t("invite.description")}
+            >
             <Field id="invite-email" label={t("invite.emailLabel")}>
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Input
@@ -234,13 +224,12 @@ export function AccountSettings({
                   placeholder={t("invite.placeholder")}
                   value={inviteEmail}
                   onChange={(event) => setInviteEmail(event.target.value)}
-                  disabled={!isOwner}
                 />
                 <Button
                   type="button"
                   className="h-11 sm:shrink-0"
                   onClick={invite}
-                  disabled={!isOwner || !inviteEmail}
+                  disabled={!inviteEmail}
                 >
                   <UserPlusIcon aria-hidden="true" /> {t("invite.action")}
                 </Button>
@@ -267,35 +256,6 @@ export function AccountSettings({
                 </div>
               ) : null}
             </Field>
-          </SettingsCard>
-
-          {isOwner ? (
-            <SettingsCard
-              icon={UsersIcon}
-              title={t("transfer.title")}
-              description={t("transfer.description")}
-            >
-              <Field id="transfer-email" label={t("transfer.emailLabel")}>
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Input
-                    id="transfer-email"
-                    className="h-11"
-                    type="email"
-                    value={newOwnerEmail}
-                    onChange={(event) => setNewOwnerEmail(event.target.value)}
-                    placeholder={t("transfer.placeholder")}
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-11 sm:shrink-0"
-                    onClick={transferOwner}
-                    disabled={!newOwnerEmail}
-                  >
-                    {t("transfer.action")}
-                  </Button>
-                </div>
-              </Field>
             </SettingsCard>
           ) : null}
         </div>

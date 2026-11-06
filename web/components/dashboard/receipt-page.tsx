@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { addDays, format } from "date-fns";
 import Link from "next/link";
 import {
@@ -111,6 +111,7 @@ export function ReceiptPage() {
   const [fileName, setFileName] = useState("");
   const [fileError, setFileError] = useState("");
   const [analysisStage, setAnalysisStage] = useState(0);
+  const [isPending, startTransition] = useTransition();
   const { refreshInventory } = useDashboardData();
 
   useEffect(() => {
@@ -166,7 +167,8 @@ export function ReceiptPage() {
     ]);
   }
 
-  async function confirmItems() {
+  function confirmItems() {
+    if (isPending) return;
     if (
       !items.length ||
       items.some(
@@ -190,23 +192,25 @@ export function ReceiptPage() {
       toast.error(t("toasts.invalidQuantity"));
       return;
     }
-    try {
-      await saveManualReceipt(
-        items.map((item) => ({
-          name: item.name.trim(),
-          quantity: Number(item.quantity.replace(",", ".")),
-          unit: item.unit.trim(),
-          storageLocation: item.storageLocation,
-          category: item.category,
-          estimatedUseBy: item.estimatedUseBy,
-          price: item.price,
-        })),
-      );
-      await refreshInventory();
-      setStep("success");
-    } catch {
-      toast.error(common("saveFailed"));
-    }
+    startTransition(async () => {
+      try {
+        await saveManualReceipt(
+          items.map((item) => ({
+            name: item.name.trim(),
+            quantity: Number(item.quantity.replace(",", ".")),
+            unit: item.unit.trim(),
+            storageLocation: item.storageLocation,
+            category: item.category,
+            estimatedUseBy: item.estimatedUseBy,
+            price: item.price,
+          })),
+        );
+        await refreshInventory();
+        setStep("success");
+      } catch {
+        toast.error(common("saveFailed"));
+      }
+    });
   }
 
   if (step === "success") {
@@ -345,129 +349,54 @@ export function ReceiptPage() {
         ) : null}
 
         <section className="app-card overflow-hidden">
-          <div className="hidden grid-cols-[1fr_92px_92px_150px_92px_44px] gap-3 border-b border-border bg-muted/50 px-5 py-3 text-xs font-bold text-muted-foreground lg:grid">
-            <span>{t("fields.product")}</span>
-            <span>{t("fields.quantity")}</span>
-            <span>{t("fields.unit")}</span>
-            <span>{t("fields.location")}</span>
-            <span>{t("fields.price")}</span>
-            <span />
-          </div>
           {items.map((item) => (
             <div
               key={item.id}
-              className="grid gap-3 border-b border-border p-4 last:border-0 lg:grid-cols-[1fr_92px_92px_150px_92px_44px] lg:items-end lg:px-5"
+              className="grid gap-3 border-b border-border p-4 last:border-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_92px_44px] lg:px-5"
             >
-              <div className="grid gap-2">
-                <Label
-                  htmlFor={`receipt-name-${item.id}`}
-                  className="lg:sr-only"
+              <div className="flex items-end gap-2">
+                <div className="grid min-w-0 flex-1 gap-2">
+                  <Label htmlFor={`receipt-name-${item.id}`}>{t("fields.product")}</Label>
+                  <Input
+                    id={`receipt-name-${item.id}`}
+                    value={item.name}
+                    onChange={(event) => updateItem(item.id, { name: event.target.value })}
+                    placeholder={t("fields.productPlaceholder")}
+                    className="h-11"
+                  />
+                </div>
+                <Button
+                  variant="destructive"
+                  size="icon-lg"
+                  className="size-11 shrink-0 lg:hidden"
+                  onClick={() => setItems((current) => current.filter((currentItem) => currentItem.id !== item.id))}
+                  aria-label={t("remove", { name: item.name || t("fields.productFallback") })}
                 >
-                  {t("fields.product")}
-                </Label>
-                <Input
-                  id={`receipt-name-${item.id}`}
-                  value={item.name}
-                  onChange={(event) =>
-                    updateItem(item.id, { name: event.target.value })
-                  }
-                  placeholder={t("fields.productPlaceholder")}
-                  className="h-11"
-                />
+                  <Trash2Icon aria-hidden="true" />
+                </Button>
               </div>
-              <div className="grid gap-2">
-                <Label
-                  htmlFor={`receipt-quantity-${item.id}`}
-                  className="lg:sr-only"
-                >
-                  {t("fields.quantity")}
-                </Label>
-                <Input
-                  id={`receipt-quantity-${item.id}`}
-                  value={item.quantity}
-                  onChange={(event) =>
-                    updateItem(item.id, { quantity: event.target.value })
-                  }
-                  inputMode="decimal"
-                  className="h-11"
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label
-                  htmlFor={`receipt-unit-${item.id}`}
-                  className="lg:sr-only"
-                >
-                  {t("fields.unit")}
-                </Label>
+              <div className="flex items-end gap-2">
+                <div className="grid min-w-0 flex-1 gap-2">
+                  <Label htmlFor={`receipt-quantity-${item.id}`}>{t("fields.quantity")}</Label>
+                  <Input
+                    id={`receipt-quantity-${item.id}`}
+                    value={item.quantity}
+                    onChange={(event) => updateItem(item.id, { quantity: event.target.value })}
+                    inputMode="decimal"
+                    className="h-11"
+                  />
+                </div>
+                <Label htmlFor={`receipt-unit-${item.id}`} className="sr-only">{t("fields.unit")}</Label>
                 <ProductUnitSelect
                   id={`receipt-unit-${item.id}`}
                   value={item.unit}
                   onValueChange={(unit) => updateItem(item.id, { unit })}
+                  compact
                 />
               </div>
               <div className="grid gap-2">
                 <Label
-                  htmlFor={`receipt-location-${item.id}`}
-                  className="lg:sr-only"
-                >
-                  {t("fields.location")}
-                </Label>
-                <DropdownMenu>
-                  <DropdownMenuTrigger
-                    id={`receipt-location-${item.id}`}
-                    className="h-11! min-h-11 w-full"
-                    render={
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="h-11! min-h-11 w-full justify-between px-3 font-normal"
-                      >
-                        <span className="flex min-w-0 items-center gap-2">
-                          <StorageLocationIcon
-                            location={item.storageLocation}
-                          />
-                          <span className="truncate">
-                            {inventoryT(
-                              `locations.${storageLocationMessageKeys[item.storageLocation]}`,
-                            )}
-                          </span>
-                        </span>
-                        <ChevronDownIcon
-                          className="text-muted-foreground"
-                          aria-hidden="true"
-                        />
-                      </Button>
-                    }
-                  />
-                  <DropdownMenuContent
-                    align="start"
-                    className="min-w-(--anchor-width)"
-                  >
-                    {locations.map((location) => (
-                      <DropdownMenuItem
-                        key={location}
-                        onClick={() =>
-                          updateItem(item.id, { storageLocation: location })
-                        }
-                      >
-                        <StorageLocationIcon location={location} />
-                        <span className="flex-1">
-                          {inventoryT(
-                            `locations.${storageLocationMessageKeys[location]}`,
-                          )}
-                        </span>
-                        {item.storageLocation === location ? (
-                          <CheckIcon aria-hidden="true" />
-                        ) : null}
-                      </DropdownMenuItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-              <div className="grid gap-2">
-                <Label
                   htmlFor={`receipt-price-${item.id}`}
-                  className="lg:sr-only"
                 >
                   {t("fields.price")}
                 </Label>
@@ -485,19 +414,13 @@ export function ReceiptPage() {
               <Button
                 variant="destructive"
                 size="icon-lg"
-                className="size-11"
-                onClick={() =>
-                  setItems((current) =>
-                    current.filter((currentItem) => currentItem.id !== item.id),
-                  )
-                }
-                aria-label={t("remove", {
-                  name: item.name || t("fields.productFallback"),
-                })}
+                className="hidden size-11 self-end lg:flex"
+                onClick={() => setItems((current) => current.filter((currentItem) => currentItem.id !== item.id))}
+                aria-label={t("remove", { name: item.name || t("fields.productFallback") })}
               >
                 <Trash2Icon aria-hidden="true" />
               </Button>
-              <div className="grid gap-3 sm:grid-cols-2 lg:col-span-6">
+              <div className="grid gap-3 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-3">
                 <div className="grid gap-2">
                   <Label htmlFor={`receipt-category-${item.id}`}>
                     {inventoryT("editDialog.category")}
@@ -551,6 +474,32 @@ export function ReceiptPage() {
                     }
                   />
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor={`receipt-location-${item.id}`}>{t("fields.location")}</Label>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger
+                      id={`receipt-location-${item.id}`}
+                      render={
+                        <Button type="button" variant="outline" className="h-11 w-full justify-between px-3 font-normal">
+                          <span className="flex min-w-0 items-center gap-2">
+                            <StorageLocationIcon location={item.storageLocation} />
+                            <span className="truncate">{inventoryT(`locations.${storageLocationMessageKeys[item.storageLocation]}`)}</span>
+                          </span>
+                          <ChevronDownIcon className="text-muted-foreground" aria-hidden="true" />
+                        </Button>
+                      }
+                    />
+                    <DropdownMenuContent align="start" className="min-w-(--anchor-width)">
+                      {locations.map((location) => (
+                        <DropdownMenuItem key={location} onClick={() => updateItem(item.id, { storageLocation: location })}>
+                          <StorageLocationIcon location={location} />
+                          <span className="flex-1">{inventoryT(`locations.${storageLocationMessageKeys[location]}`)}</span>
+                          {item.storageLocation === location ? <CheckIcon aria-hidden="true" /> : null}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               </div>
             </div>
           ))}
@@ -572,10 +521,11 @@ export function ReceiptPage() {
           </div>
           <Button
             className="h-11"
-            disabled={!items.length}
+            disabled={!items.length || isPending}
+            aria-busy={isPending}
             onClick={confirmItems}
           >
-            <CheckIcon aria-hidden="true" /> {t("review.confirm")}
+            <CheckIcon aria-hidden="true" /> {isPending ? common("adding") : t("review.confirm")}
           </Button>
         </div>
       </>

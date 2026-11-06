@@ -1,6 +1,9 @@
 {
   "Common": {
     "changeLanguage": "Change language",
+    "saving": "Saving…",
+    "adding": "Adding…",
+    "deleting": "Deleting…",
     "saved": "Changes saved.",
     "saveFailed": "Could not save changes. Please try again."
   },
@@ -60,6 +63,10 @@
     "mainNavigation": "Main navigation",
     "mobileNavigation": "Mobile navigation",
     "yourHome": "Your home",
+    "selectHousehold": "Choose household",
+    "owner": "Owner",
+    "member": "Member",
+    "householdSwitchSoon": "More households coming soon",
     "signOut": "Sign out"
   },
   "Settings": {
@@ -72,7 +79,20 @@
     "languageDescription": "Choose the language of the Fridgy interface.",
     "theme": "Colour theme",
     "themeDescription": "Choose a light, dark or automatic app appearance.",
+    "householdUi": {
+      "title": "Your household",
+      "description": "See your role and permissions in the current household.",
+      "unknown": "Household",
+      "owner": "Owner",
+      "member": "Member",
+      "ownerRights": "You can manage inventory and shopping, invite members and rename the household. The owner cannot leave the household.",
+      "memberRights": "You can manage shared inventory, shopping and your own recipes. You can leave the household once this feature is connected.",
+      "leave": "Leave household",
+      "leaveSoon": "Leaving the household will be available after backend support is added."
+    },
     "preferences": {
+      "cancel": "Cancel",
+      "save": "Save changes",
       "expiry": {
         "title": "Use-by notifications",
         "description": "Choose when Fridgy should remind you about an approaching use-by date.",
@@ -143,13 +163,6 @@
         "copy": "Copy link",
         "copied": "Link copied."
       },
-      "transfer": {
-        "title": "Transfer household ownership",
-        "description": "Give another member ownership before deleting your account.",
-        "emailLabel": "Member's email address",
-        "placeholder": "member@example.com",
-        "action": "Transfer ownership"
-      },
       "sessions": {
         "title": "Active sessions",
         "description": "End Fridgy sessions on your other devices.",
@@ -166,7 +179,7 @@
         "description": "Your account, inventory, recipes and cooking history will be deleted. This action cannot be undone.",
         "cancel": "Cancel",
         "confirm": "Delete account",
-        "ownerHasMembers": "Transfer household ownership to another member first."
+        "ownerHasMembers": "The owner cannot delete their account while other members are in the household."
       }
     },
     "advanced": {

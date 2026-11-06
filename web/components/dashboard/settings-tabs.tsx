@@ -32,7 +32,7 @@ export function SettingsTabs({
 
       <TabsContent value="general" className="pt-3">{general}</TabsContent>
       <TabsContent value="account" className="pt-3">{account}</TabsContent>
-      <TabsContent value="preferences" className="pt-3">{preferences}</TabsContent>
+      <TabsContent value="preferences" className="pt-3" keepMounted>{preferences}</TabsContent>
     </Tabs>
   );
 }

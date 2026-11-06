@@ -1,6 +1,9 @@
 {
   "Common": {
     "changeLanguage": "Cambiar idioma",
+    "saving": "Guardando…",
+    "adding": "Añadiendo…",
+    "deleting": "Eliminando…",
     "saved": "Cambios guardados.",
     "saveFailed": "No se pudieron guardar los cambios. Inténtalo de nuevo."
   },
@@ -60,6 +63,10 @@
     "mainNavigation": "Navegación principal",
     "mobileNavigation": "Navegación móvil",
     "yourHome": "Tu hogar",
+    "selectHousehold": "Elegir hogar",
+    "owner": "Propietario",
+    "member": "Miembro",
+    "householdSwitchSoon": "Pronto habrá más hogares",
     "signOut": "Cerrar sesión"
   },
   "Settings": {
@@ -72,7 +79,20 @@
     "languageDescription": "Elige el idioma de la interfaz de Fridgy.",
     "theme": "Tema de color",
     "themeDescription": "Elige una apariencia clara, oscura o automática.",
+    "householdUi": {
+      "title": "Tu hogar",
+      "description": "Consulta tu rol y permisos en el hogar actual.",
+      "unknown": "Hogar",
+      "owner": "Propietario",
+      "member": "Miembro",
+      "ownerRights": "Puedes gestionar el inventario y las compras, invitar miembros y cambiar el nombre del hogar. El propietario no puede salir del hogar.",
+      "memberRights": "Puedes gestionar el inventario y las compras compartidas, además de tus recetas. Podrás salir del hogar cuando esta función esté conectada.",
+      "leave": "Salir del hogar",
+      "leaveSoon": "Salir del hogar estará disponible cuando se añada soporte en el servidor."
+    },
     "preferences": {
+      "cancel": "Cancelar",
+      "save": "Guardar cambios",
       "expiry": {
         "title": "Avisos de caducidad",
         "description": "Elige cuándo debe avisarte Fridgy de una fecha próxima.",
@@ -143,13 +163,6 @@
         "copy": "Copiar enlace",
         "copied": "Enlace copiado."
       },
-      "transfer": {
-        "title": "Transferir la propiedad del hogar",
-        "description": "Da la propiedad a otro miembro antes de eliminar tu cuenta.",
-        "emailLabel": "Correo electrónico del miembro",
-        "placeholder": "miembro@example.com",
-        "action": "Transferir la propiedad"
-      },
       "sessions": {
         "title": "Sesiones activas",
         "description": "Cierra las sesiones de Fridgy en tus otros dispositivos.",
@@ -166,7 +179,7 @@
         "description": "Se eliminarán la cuenta, las provisiones, las recetas y el historial de cocina. Esta acción no se puede deshacer.",
         "cancel": "Cancelar",
         "confirm": "Eliminar cuenta",
-        "ownerHasMembers": "Transfiere primero la propiedad del hogar a otra persona."
+        "ownerHasMembers": "El propietario no puede eliminar su cuenta mientras haya otros miembros en el hogar."
       }
     },
     "advanced": {
