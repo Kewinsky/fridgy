@@ -62,7 +62,7 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
 
   return (
     <div>
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid items-start gap-5 lg:grid-cols-2">
         <PreferenceCard
           icon={BellRingIcon}
           title={t("expiry.title")}

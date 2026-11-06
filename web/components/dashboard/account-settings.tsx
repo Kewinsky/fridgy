@@ -13,7 +13,6 @@ import {
   UsersIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { cn } from "cn";
 import {
   createHouseholdInvitation,
   deleteAccount,
@@ -104,7 +103,7 @@ export function AccountSettings({
         <h2 id="account-settings-heading" className="text-lg font-bold">
           {t("groups.account")}
         </h2>
-        <div className="mt-4 grid gap-5 lg:grid-cols-2">
+        <div className="mt-4 grid items-start gap-5 lg:grid-cols-2">
           <SettingsCard
             icon={MailIcon}
             title={t("login.title")}
@@ -125,7 +124,6 @@ export function AccountSettings({
             icon={LogOutIcon}
             title={t("sessions.title")}
             description={t("sessions.description")}
-            className="flex flex-col justify-between"
           >
             <Button
               type="button"
@@ -165,7 +163,7 @@ export function AccountSettings({
         <h2 id="household-settings-heading" className="text-lg font-bold">
           {t("groups.household")}
         </h2>
-        <div className="mt-4 grid gap-5 lg:grid-cols-2">
+        <div className="mt-4 grid items-start gap-5 lg:grid-cols-2">
           <SettingsCard
             icon={UsersIcon}
             title={t("household.title")}
@@ -312,16 +310,14 @@ function SettingsCard({
   title,
   description,
   children,
-  className,
 }: {
   icon: typeof MailIcon;
   title: string;
   description: string;
   children: React.ReactNode;
-  className?: string;
 }) {
   return (
-    <section className={cn("app-card p-5", className)}>
+    <section className="app-card p-5">
       <div className="flex items-start gap-4">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
           <Icon className="size-5" aria-hidden="true" />

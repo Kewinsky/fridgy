@@ -42,7 +42,7 @@ export default async function SettingsPage() {
       />
       <SettingsTabs
         general={
-          <div className="grid gap-5 lg:grid-cols-2">
+          <div className="grid items-start gap-5 lg:grid-cols-2">
             <section className="app-card p-5">
               <div className="flex items-start gap-4">
                 <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
