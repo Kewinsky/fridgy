@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowLeftIcon,
@@ -32,6 +33,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getMissingIngredients, recipeAllergens, type Recipe } from "@/lib/demo-recipes";
 import { localizeDemoRecipe } from "@/lib/demo-localization";
+import { getRecipeImageSrc } from "@/lib/recipe-image";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
 import { matchRecipeToInventory } from "@/lib/inventory-store";
@@ -53,6 +55,7 @@ export function RecipeDetail({
   const t = useTranslations("Recipe");
   const matchedRecipe = matchRecipeToInventory(recipe, useInventory());
   const displayRecipe = localizeDemoRecipe(matchedRecipe, useLocale() as Locale);
+  const imageSrc = getRecipeImageSrc(recipe);
   const missing = getMissingIngredients(matchedRecipe);
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
   const preferences = useDashboardData();
@@ -86,8 +89,12 @@ export function RecipeDetail({
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(18rem,0.8fr)]">
         <div className="space-y-5">
           <section className="app-card overflow-hidden">
-            <div className="flex min-h-48 items-center justify-center bg-secondary text-primary sm:min-h-64">
-              <ChefHatIcon className="size-16" aria-hidden="true" />
+            <div className="relative flex min-h-48 items-center justify-center overflow-hidden bg-secondary text-primary sm:min-h-64">
+              {imageSrc ? (
+                <Image src={imageSrc} alt="" fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" unoptimized={Boolean(recipe.imagePath)} />
+              ) : (
+                <ChefHatIcon className="size-16" aria-hidden="true" />
+              )}
             </div>
             <div className="grid grid-cols-2 gap-3 p-5 sm:grid-cols-4">
               <RecipeFact icon={<ClockIcon />} label={t("totalTime")} value={t("minutes", { count: recipe.time })} />

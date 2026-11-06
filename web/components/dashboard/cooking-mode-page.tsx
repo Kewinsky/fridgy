@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowLeftIcon, ChefHatIcon, ClockIcon, UsersIcon } from "lucide-react";
+import { ArrowLeftIcon, ClockIcon, UsersIcon } from "lucide-react";
 
 import { FinishCookingDialog } from "@/components/dashboard/finish-cooking-dialog";
 import {

@@ -1,5 +1,7 @@
 export type Recipe = {
   slug: string;
+  image?: string;
+  imagePath?: string;
   title: string;
   description: string;
   time: number;
@@ -48,6 +50,7 @@ export type DemoRecipe = Recipe;
 const rawDemoRecipes: DemoRecipe[] = [
   {
     slug: "makaron-ze-szpinakiem",
+    image: "/recipes/makaron-ze-szpinakiem.webp",
     title: "Makaron ze szpinakiem",
     description: "Kremowy, szybki obiad z produktów z lodówki.",
     time: 25,
@@ -72,6 +75,7 @@ const rawDemoRecipes: DemoRecipe[] = [
   },
   {
     slug: "kurczak-z-warzywami",
+    image: "/recipes/kurczak-z-warzywami.webp",
     title: "Kurczak z warzywami",
     description: "Jedna patelnia i minimum zmywania.",
     time: 35,
@@ -96,6 +100,7 @@ const rawDemoRecipes: DemoRecipe[] = [
   },
   {
     slug: "miska-z-ciecierzyca",
+    image: "/recipes/miska-z-ciecierzyca.webp",
     title: "Miska z ciecierzycą",
     description: "Lekka kolacja z chrupiącymi warzywami.",
     time: 20,
@@ -120,6 +125,7 @@ const rawDemoRecipes: DemoRecipe[] = [
   },
   {
     slug: "szakszuka-z-ciecierzyca",
+    image: "/recipes/szakszuka-z-ciecierzyca.webp",
     title: "Szakszuka z ciecierzycą",
     description: "Rozgrzewające danie z pomidorami i płynnym żółtkiem.",
     time: 30,
@@ -144,6 +150,7 @@ const rawDemoRecipes: DemoRecipe[] = [
   },
   {
     slug: "chrupiace-zapiekanki",
+    image: "/recipes/chrupiace-zapiekanki.webp",
     title: "Chrupiące zapiekanki",
     description: "Szybka kolacja na ciepło z pieczywa i warzyw.",
     time: 20,
@@ -168,6 +175,7 @@ const rawDemoRecipes: DemoRecipe[] = [
   },
   {
     slug: "losos-z-groszkiem",
+    image: "/recipes/losos-z-groszkiem.webp",
     title: "Łosoś z groszkiem",
     description: "Lekki obiad z kremowym sosem jogurtowo-cytrynowym.",
     time: 30,

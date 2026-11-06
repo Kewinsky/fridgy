@@ -21,6 +21,7 @@ export type RecipeLibrary = {
 
 export type RecipeDraft = {
   title: string;
+  imagePath?: string;
   description: string;
   cuisine: string;
   time: number;
@@ -142,6 +143,7 @@ export function createCustomRecipe(draft: RecipeDraft, slug: string, createdAt: 
 
   return {
     slug,
+    imagePath: draft.imagePath,
     title: draft.title.trim(),
     description: draft.description.trim() || "Twój własny przepis.",
     cuisine: draft.cuisine,

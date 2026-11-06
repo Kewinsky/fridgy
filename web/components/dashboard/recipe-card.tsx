@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowRightIcon,
@@ -26,6 +27,7 @@ import {
   type Recipe,
 } from "@/lib/demo-recipes";
 import { localizeDemoRecipe } from "@/lib/demo-localization";
+import { getRecipeImageSrc } from "@/lib/recipe-image";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
 import { matchRecipeToInventory } from "@/lib/inventory-store";
@@ -47,6 +49,7 @@ export function RecipeCard({
   const displayRecipe = localizeDemoRecipe(matchedRecipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
+  const imageSrc = getRecipeImageSrc(recipe);
   const missing = suggestion ? getMissingIngredients(matchedRecipe) : [];
   const match = suggestion ? getRecipeMatch(matchedRecipe) : null;
   const conflicts = getRecipePreferenceConflicts(displayRecipe, preferences, Object.fromEntries(
@@ -63,8 +66,12 @@ export function RecipeCard({
 
   return (
     <article className={cn("app-card flex flex-col p-5", suggestion && conflictReasons.length && "border-destructive/60")}>
-      <div className="mb-4 flex h-24 items-center justify-center rounded-lg bg-secondary text-primary">
-        <ChefHatIcon className="size-9" aria-hidden="true" />
+      <div className={cn("relative mb-4 flex h-40 items-center justify-center overflow-hidden rounded-lg", !imageSrc && "bg-secondary text-primary")}>
+        {imageSrc ? (
+          <Image src={imageSrc} alt="" fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover" unoptimized={Boolean(recipe.imagePath)} />
+        ) : (
+          <ChefHatIcon className="size-9" aria-hidden="true" />
+        )}
       </div>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">

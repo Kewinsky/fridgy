@@ -1,7 +1,8 @@
 "use client";
 
-import { type FormEvent, useId, useState } from "react";
-import { CheckIcon, ChevronDownIcon, LinkIcon, PencilIcon, PenLineIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { type FormEvent, useEffect, useId, useRef, useState } from "react";
+import Image from "next/image";
+import { CheckIcon, ChevronDownIcon, FileImageIcon, LinkIcon, PencilIcon, PenLineIcon, PlusIcon, Trash2Icon, UploadIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -35,6 +36,8 @@ import {
   type CustomRecipe,
 } from "@/lib/recipe-library";
 import { cuisineMessageKeys, cuisines } from "@/components/dashboard/recipe-options";
+import { getRecipeImageSrc, MAX_RECIPE_IMAGE_MB, validateRecipeImage } from "@/lib/recipe-image";
+import { deleteRecipeImage, uploadRecipeImage } from "@/lib/recipe-image-storage";
 
 type RecipeFormState = {
   title: string;
@@ -75,7 +78,16 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const [form, setForm] = useState(() => getInitialForm(recipe));
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [removeImage, setRemoveImage] = useState(false);
+  const [imageError, setImageError] = useState("");
+  const [checkingImage, setCheckingImage] = useState(false);
   const { saveCustomRecipe, updateCustomRecipe } = useRecipeLibraryActions();
+
+  useEffect(() => {
+    return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
+  }, [previewUrl]);
 
   function update(field: keyof RecipeFormState, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
@@ -86,11 +98,34 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
       setForm(getInitialForm(recipe));
       setError("");
     }
+    setImageFile(null);
+    setPreviewUrl(null);
+    setRemoveImage(false);
+    setImageError("");
+    setCheckingImage(false);
     setOpen(nextOpen);
+  }
+
+  async function selectImage(file: File) {
+    setCheckingImage(true);
+    try {
+      const validationError = await validateRecipeImage(file);
+      if (validationError) {
+        setImageError(t(`image.errors.${validationError}`, { maxMb: MAX_RECIPE_IMAGE_MB }));
+        return;
+      }
+      setImageError("");
+      setImageFile(file);
+      setRemoveImage(false);
+      setPreviewUrl(URL.createObjectURL(file));
+    } finally {
+      setCheckingImage(false);
+    }
   }
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (saving || checkingImage || imageError) return;
     if (!form.title.trim() || !form.ingredients.trim() || !form.steps.trim() || form.ingredients.split("\n").some((line) => line.trim() && !line.split("|")[0].trim())) {
       setError(t("errors.required"));
       return;
@@ -98,35 +133,42 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
 
     const totalTime = Math.max(1, Number(form.time) || 1);
 
-    const customRecipe = createCustomRecipe(
-      {
-        title: form.title,
-        description: form.description,
-        cuisine: form.cuisine,
-        time: totalTime,
-        activeTime: recipe?.activeTime && recipe.activeTime <= totalTime ? recipe.activeTime : undefined,
-        servings: Math.max(1, Number(form.servings) || 1),
-        ingredients: form.ingredients,
-        steps: form.steps,
-        nutrition: recipe?.macros && recipe.calories ? { calories: recipe.calories, ...recipe.macros } : undefined,
-        allergens: recipe?.allergens,
-        dietTags: recipe?.dietTags,
-      },
-      recipe?.slug ?? `${slugifyRecipeTitle(form.title) || "przepis"}-${crypto.randomUUID().slice(0, 8)}`,
-      recipe?.createdAt ?? new Date().toISOString(),
-    );
-
     setSaving(true);
+    let uploadedImagePath: string | undefined;
     try {
+      if (imageFile) uploadedImagePath = await uploadRecipeImage(imageFile);
+      const imagePath = uploadedImagePath ?? (removeImage ? undefined : recipe?.imagePath);
+      const customRecipe = createCustomRecipe(
+        {
+          title: form.title,
+          imagePath,
+          description: form.description,
+          cuisine: form.cuisine,
+          time: totalTime,
+          activeTime: recipe?.activeTime && recipe.activeTime <= totalTime ? recipe.activeTime : undefined,
+          servings: Math.max(1, Number(form.servings) || 1),
+          ingredients: form.ingredients,
+          steps: form.steps,
+          nutrition: recipe?.macros && recipe.calories ? { calories: recipe.calories, ...recipe.macros } : undefined,
+          allergens: recipe?.allergens,
+          dietTags: recipe?.dietTags,
+        },
+        recipe?.slug ?? `${slugifyRecipeTitle(form.title) || "przepis"}-${crypto.randomUUID().slice(0, 8)}`,
+        recipe?.createdAt ?? new Date().toISOString(),
+      );
       if (editing) await updateCustomRecipe(customRecipe);
       else await saveCustomRecipe(customRecipe);
+      if (recipe?.imagePath && recipe.imagePath !== imagePath) {
+        void deleteRecipeImage(recipe.imagePath).catch(() => {});
+      }
     } catch {
+      if (uploadedImagePath) void deleteRecipeImage(uploadedImagePath).catch(() => {});
       setError(common("saveFailed"));
       return;
     } finally {
       setSaving(false);
     }
-    setOpen(false);
+    changeOpen(false);
     toast.success(editing ? t("toasts.updated") : t("toasts.created"));
   }
 
@@ -157,9 +199,14 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
             form={form}
             error={error}
             saving={saving}
+            imageSrc={previewUrl ?? (!removeImage && recipe ? getRecipeImageSrc(recipe) : null)}
+            imageError={imageError}
+            checkingImage={checkingImage}
+            selectImage={selectImage}
+            removeImage={() => { setImageFile(null); setPreviewUrl(null); setRemoveImage(true); setImageError(""); }}
             update={update}
             submit={submit}
-            close={() => setOpen(false)}
+            close={() => changeOpen(false)}
           />
         ) : (
           <Tabs defaultValue="manual">
@@ -178,9 +225,14 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
                 form={form}
                 error={error}
                 saving={saving}
+                imageSrc={previewUrl}
+                imageError={imageError}
+                checkingImage={checkingImage}
+                selectImage={selectImage}
+                removeImage={() => { setImageFile(null); setPreviewUrl(null); setRemoveImage(true); setImageError(""); }}
                 update={update}
                 submit={submit}
-                close={() => setOpen(false)}
+                close={() => changeOpen(false)}
               />
             </TabsContent>
             <TabsContent value="link" className="pt-3">
@@ -199,6 +251,11 @@ function ManualRecipeForm({
   form,
   error,
   saving,
+  imageSrc,
+  imageError,
+  checkingImage,
+  selectImage,
+  removeImage,
   update,
   submit,
   close,
@@ -208,15 +265,67 @@ function ManualRecipeForm({
   form: RecipeFormState;
   error: string;
   saving: boolean;
+  imageSrc: string | null;
+  imageError: string;
+  checkingImage: boolean;
+  selectImage: (file: File) => void;
+  removeImage: () => void;
   update: (field: keyof RecipeFormState, value: string) => void;
   submit: (event: FormEvent<HTMLFormElement>) => void;
   close: () => void;
 }) {
   const t = useTranslations("RecipeForm");
   const recipeT = useTranslations("Recipe");
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <form onSubmit={submit} className="grid gap-4">
+          <div className="grid gap-2">
+            <Label htmlFor={`${fieldId}-image`}>{t("image.label")}</Label>
+            <input
+              ref={imageInputRef}
+              id={`${fieldId}-image`}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+              className="sr-only"
+              aria-label={t("image.choose")}
+              onChange={(event) => {
+                const file = event.currentTarget.files?.[0];
+                event.currentTarget.value = "";
+                if (file) void selectImage(file);
+              }}
+            />
+            <div
+              className="subtle-grid flex min-h-56 flex-col items-center justify-center rounded-xl border border-dashed border-input bg-muted/30 px-5 py-6 text-center"
+              onDragOver={(event) => event.preventDefault()}
+              onDrop={(event) => {
+                event.preventDefault();
+                if (!saving && !checkingImage && event.dataTransfer.files[0]) void selectImage(event.dataTransfer.files[0]);
+              }}
+            >
+              {imageSrc ? (
+                <div className="relative h-36 w-full overflow-hidden rounded-lg bg-secondary">
+                  <Image src={imageSrc} alt="" fill sizes="(max-width: 640px) 100vw, 640px" className="object-cover" unoptimized />
+                </div>
+              ) : (
+                <>
+                  <span className="flex size-14 items-center justify-center rounded-full bg-card text-primary shadow-sm">
+                    <FileImageIcon className="size-6" aria-hidden="true" />
+                  </span>
+                  <p className="mt-4 text-lg font-extrabold">{t("image.title")}</p>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{t("image.description")}</p>
+                </>
+              )}
+              <div className="mt-4 flex flex-wrap justify-center gap-2">
+                <Button type="button" className="h-11" disabled={saving || checkingImage} onClick={() => imageInputRef.current?.click()}>
+                  <UploadIcon aria-hidden="true" /> {t(imageSrc ? "image.change" : "image.choose")}
+                </Button>
+                {imageSrc ? <Button type="button" variant="outline" className="h-11" disabled={saving || checkingImage} onClick={removeImage}>{t("image.remove")}</Button> : null}
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">{t("image.formats", { maxMb: MAX_RECIPE_IMAGE_MB })}</p>
+            </div>
+            {imageError ? <p role="alert" className="text-sm text-destructive">{imageError}</p> : null}
+          </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label={t("name")} htmlFor={`${fieldId}-title`} className="sm:col-span-2">
               <Input id={`${fieldId}-title`} className="h-11" value={form.title} onChange={(event) => update("title", event.target.value)} />
@@ -263,7 +372,7 @@ function ManualRecipeForm({
           {error ? <p role="alert" className="text-sm font-semibold text-destructive">{error}</p> : null}
           <DialogFooter>
             <Button type="button" variant="outline" className="h-11" onClick={close}>{t("cancel")}</Button>
-            <Button type="submit" className="h-11" disabled={saving} aria-busy={saving}>{editing ? t("saveChanges") : t("save")}</Button>
+            <Button type="submit" className="h-11" disabled={saving || checkingImage || Boolean(imageError)} aria-busy={saving}>{editing ? t("saveChanges") : t("save")}</Button>
           </DialogFooter>
     </form>
   );
@@ -331,6 +440,7 @@ export function DeleteRecipeDialog({ recipe }: { recipe: CustomRecipe }) {
   async function removeRecipe() {
     try {
       await deleteCustomRecipe(recipe.slug);
+      if (recipe.imagePath) void deleteRecipeImage(recipe.imagePath).catch(() => {});
     } catch {
       toast.error(common("saveFailed"));
       return;

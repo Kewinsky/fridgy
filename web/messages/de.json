@@ -574,6 +574,19 @@
     "yourRecipe": "Your recipe"
   },
   "RecipeForm": {
+    "image": {
+      "label": "Rezeptfoto",
+      "title": "Foto deines Gerichts hinzufügen",
+      "description": "Ziehe ein Foto hierher oder wähle es auf deinem Gerät aus.",
+      "choose": "Foto hinzufügen",
+      "change": "Foto ändern",
+      "remove": "Foto entfernen",
+      "formats": "JPG, PNG oder WebP · max. {maxMb} MB",
+      "errors": {
+        "invalid": "Wähle ein gültiges JPG-, PNG- oder WebP-Bild.",
+        "tooLarge": "Das Foto darf höchstens {maxMb} MB groß sein."
+      }
+    },
     "add": "Add recipe",
     "editLabel": "Edit {title}",
     "deleteLabel": "Delete {title}",
