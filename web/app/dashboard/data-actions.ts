@@ -82,11 +82,16 @@ export async function persistShoppingItems(changed: ShoppingItem[], removedIds: 
     const { error } = await supabase.from("shopping_items").delete().eq("household_id", householdId).in("id", validIds);
     if (error) throw new Error(error.message);
   }
-  const { data, error } = await supabase.from("shopping_items").select("id,name,done,seed_key").eq("household_id", householdId).order("created_at");
+}
+
+export async function readShoppingItems(): Promise<ShoppingItem[]> {
+  const { supabase, householdId } = await authorizedClient();
+  const { data, error } = await supabase.from("shopping_items")
+    .select("id,name,done,seed_key").eq("household_id", householdId).order("created_at");
   if (error) throw new Error(error.message);
   return (data ?? []).map((item) => ({ id: item.id, name: item.name, done: item.done,
     ...(item.seed_key ? { seedKey: item.seed_key } : {}),
-  })) as ShoppingItem[];
+  }));
 }
 
 export async function persistRecipeLibrary(library: RecipeLibrary) {

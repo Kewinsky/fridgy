@@ -35,10 +35,13 @@ export function ShoppingListPage() {
   async function addItem() {
     const trimmedName = name.trim();
     if (!trimmedName) return;
+    setName("");
     try {
       await updateShoppingItems((current) => [...current, { id: crypto.randomUUID(), name: trimmedName, done: false }]);
-    } catch { toast.error(common("saveFailed")); return; }
-    setName("");
+    } catch {
+      setName((current) => current || trimmedName);
+      toast.error(common("saveFailed"));
+    }
   }
 
   async function toggleItem(id: string) {
@@ -52,9 +55,9 @@ export function ShoppingListPage() {
   }
 
   async function clearList() {
+    setClearDialogOpen(false);
     try { await updateShoppingItems(() => []); }
     catch { toast.error(common("saveFailed")); return; }
-    setClearDialogOpen(false);
     toast.success(t("toasts.cleared"));
   }
 

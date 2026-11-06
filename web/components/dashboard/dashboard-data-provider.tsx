@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-import { finishCookingSession, persistInventory, persistRecipeLibrary, persistShoppingItems, readDashboardData, readInventory } from "@/app/dashboard/data-actions";
+import { finishCookingSession, persistInventory, persistRecipeLibrary, persistShoppingItems, readDashboardData, readInventory, readShoppingItems } from "@/app/dashboard/data-actions";
 import type { Recipe } from "@/lib/demo-recipes";
 import type { DashboardData } from "@/lib/dashboard-data";
 import type { DemoProduct } from "@/lib/demo-data";
@@ -68,7 +68,13 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
     const changed = next.filter((item) => JSON.stringify(item) !== JSON.stringify(previous.get(item.id)));
     const removed = shoppingItems.filter((item) => !nextIds.has(item.id)).map((item) => item.id);
     if (!changed.length && !removed.length) return;
-    setShoppingItems(await persistShoppingItems(changed, removed));
+    setShoppingItems(next);
+    try {
+      await persistShoppingItems(changed, removed);
+    } catch (error) {
+      setShoppingItems(await readShoppingItems().catch(() => shoppingItems));
+      throw error;
+    }
   }
 
   async function updateRecipeLibrary(update: (current: RecipeLibrary) => RecipeLibrary) {

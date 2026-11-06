@@ -18,17 +18,21 @@ export function AddMissingItemsButton({
 }) {
   const t = useTranslations("AddMissingItems");
   const common = useTranslations("Common");
-  const { shoppingItems, updateShoppingItems } = useDashboardData();
+  const { updateShoppingItems } = useDashboardData();
 
   async function addItems() {
-    const added = mergeShoppingItems(shoppingItems, names).changedCount;
+    let added = 0;
+    try {
+      await updateShoppingItems((current) => {
+        const result = mergeShoppingItems(current, names);
+        added = result.changedCount;
+        return result.items;
+      });
+    } catch { toast.error(common("saveFailed")); return; }
     if (!added) {
       toast.info(t("alreadyAdded"));
       return;
     }
-    try {
-      await updateShoppingItems((current) => mergeShoppingItems(current, names).items);
-    } catch { toast.error(common("saveFailed")); return; }
     toast.success(t("success", { count: added }));
   }
 
