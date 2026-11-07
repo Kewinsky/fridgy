@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import {
   BookOpenIcon,
@@ -16,18 +17,14 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsScrollableList, TabsTrigger } from "@/components/ui/tabs";
 import { demoRecipes, type Recipe } from "@/lib/demo-recipes";
 
-export function RecipeLibraryPage() {
+export type RecipeLibraryTab = "favorites" | "custom" | "history";
+
+export function RecipeLibraryPage({ favorites, custom, history }: {
+  favorites: ReactNode;
+  custom: ReactNode;
+  history: ReactNode;
+}) {
   const t = useTranslations("RecipeLibrary");
-  const library = useRecipeLibrary();
-  const allRecipes = [...library.customRecipes, ...demoRecipes];
-  const favoriteRecipes = allRecipes.filter((recipe) =>
-    library.favoriteSlugs.includes(recipe.slug),
-  );
-  const historyRecipes = Array.from(
-    new Set(library.history.map((record) => record.recipeSlug)),
-  )
-    .map((slug) => allRecipes.find((recipe) => recipe.slug === slug))
-    .filter((recipe): recipe is Recipe => recipe !== undefined);
 
   return (
     <>
@@ -52,57 +49,47 @@ export function RecipeLibraryPage() {
         </TabsScrollableList>
 
         <TabsContent value="favorites" className="pt-3">
-          {favoriteRecipes.length ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {favoriteRecipes.map((recipe) => (
-                <RecipeCard key={recipe.slug} recipe={recipe} variant="library" />
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              icon={HeartIcon}
-              title={t("emptyFavorites.title")}
-              description={t("emptyFavorites.description")}
-            />
-          )}
+          {favorites}
         </TabsContent>
 
         <TabsContent value="custom" className="pt-3">
-          {library.customRecipes.length ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {library.customRecipes.map((recipe) => (
-                <RecipeCard key={recipe.slug} recipe={recipe} variant="library" />
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              icon={BookOpenIcon}
-              title={t("emptyCustom.title")}
-              description={t("emptyCustom.description")}
-              actionNode={<AddRecipeDialog />}
-            />
-          )}
+          {custom}
         </TabsContent>
 
         <TabsContent value="history" className="pt-3">
-          {historyRecipes.length ? (
-            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              {historyRecipes.map((recipe) => (
-                <RecipeCard key={recipe.slug} recipe={recipe} variant="library" />
-              ))}
-            </div>
-          ) : (
-            <EmptyState
-              icon={HistoryIcon}
-              title={t("emptyHistory.title")}
-              description={t("emptyHistory.description")}
-              href="/dashboard/co-ugotowac"
-              action={t("emptyHistory.action")}
-            />
-          )}
+          {history}
         </TabsContent>
       </Tabs>
     </>
+  );
+}
+
+export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
+  const t = useTranslations("RecipeLibrary");
+  const library = useRecipeLibrary();
+  const allRecipes = [...library.customRecipes, ...demoRecipes];
+  let recipes: Recipe[];
+  let emptyState: ReactNode;
+
+  if (tab === "favorites") {
+    recipes = allRecipes.filter((recipe) => library.favoriteSlugs.includes(recipe.slug));
+    emptyState = <EmptyState icon={HeartIcon} title={t("emptyFavorites.title")} description={t("emptyFavorites.description")} />;
+  } else if (tab === "custom") {
+    recipes = library.customRecipes;
+    emptyState = <EmptyState icon={BookOpenIcon} title={t("emptyCustom.title")} description={t("emptyCustom.description")} actionNode={<AddRecipeDialog />} />;
+  } else {
+    recipes = Array.from(new Set(library.history.map((record) => record.recipeSlug)))
+      .map((slug) => allRecipes.find((recipe) => recipe.slug === slug))
+      .filter((recipe): recipe is Recipe => recipe !== undefined);
+    emptyState = <EmptyState icon={HistoryIcon} title={t("emptyHistory.title")} description={t("emptyHistory.description")} href="/dashboard/co-ugotowac" action={t("emptyHistory.action")} />;
+  }
+
+  if (!recipes.length) return emptyState;
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      {recipes.map((recipe) => <RecipeCard key={recipe.slug} recipe={recipe} variant="library" />)}
+    </div>
   );
 }
 
