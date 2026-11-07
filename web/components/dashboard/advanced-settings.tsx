@@ -2,21 +2,11 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import {
-  BanknoteIcon,
-  DatabaseZapIcon,
-  InfoIcon,
-  RotateCcwIcon,
-  ShieldCheckIcon,
-} from "lucide-react";
+import { RotateCcwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { resetDemoData, saveProfileSetting, type ProfileSettings } from "@/app/dashboard/settings-actions";
 
-import {
-  FieldLabel,
-  PreferenceCard,
-  SettingsDropdown,
-} from "@/components/dashboard/preference-settings";
+import { PreferenceCard, SettingsDropdown } from "@/components/dashboard/preference-settings";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -47,64 +37,47 @@ export function AdvancedSettings({ version, initialSettings }: { version: string
   return (
     <>
       <PreferenceCard
-        icon={BanknoteIcon}
-        title={t("regional.title")}
+        title={t("regional.currencyLabel")}
         description={t("regional.description")}
       >
-        <div className="grid gap-4 sm:grid-cols-2">
-          <FieldLabel label={t("regional.currencyLabel")}>
-            <SettingsDropdown
-              ariaLabel={t("regional.currencyLabel")}
-              value={settings.currency}
-              onValueChange={(value) => void save("currency", value as ProfileSettings["currency"])}
-              options={["PLN", "EUR", "GBP", "CHF"].map((value) => ({ value, label: value }))}
+        <SettingsDropdown
+          ariaLabel={t("regional.currencyLabel")}
+          value={settings.currency}
+          onValueChange={(value) => void save("currency", value as ProfileSettings["currency"])}
+          options={["PLN", "EUR", "GBP", "CHF"].map((value) => ({ value, label: value }))}
+        />
+      </PreferenceCard>
+      <PreferenceCard title={t("regional.dateLabel")}>
+        <SettingsDropdown
+          ariaLabel={t("regional.dateLabel")}
+          value={settings.date_format}
+          onValueChange={(value) => void save("date_format", value as ProfileSettings["date_format"])}
+          options={["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"].map((value) => ({ value, label: value }))}
+        />
+      </PreferenceCard>
+
+      {(["personalization", "analytics"] as const).map((option) => (
+        <PreferenceCard
+          key={option}
+          title={t(`privacy.options.${option}.title`)}
+          description={t(`privacy.options.${option}.description`)}
+        >
+          <div className="flex justify-end">
+            <Checkbox
+              aria-label={t(`privacy.options.${option}.title`)}
+              checked={option === "personalization" ? settings.personalization_consent : settings.analytics_consent}
+              onCheckedChange={(checked) => void save(option === "personalization" ? "personalization_consent" : "analytics_consent", checked === true)}
             />
-          </FieldLabel>
-          <FieldLabel label={t("regional.dateLabel")}>
-            <SettingsDropdown
-              ariaLabel={t("regional.dateLabel")}
-              value={settings.date_format}
-              onValueChange={(value) => void save("date_format", value as ProfileSettings["date_format"])}
-              options={["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"].map((value) => ({ value, label: value }))}
-            />
-          </FieldLabel>
-        </div>
-      </PreferenceCard>
-
-      <PreferenceCard
-        icon={ShieldCheckIcon}
-        title={t("privacy.title")}
-        description={t("privacy.description")}
-      >
-        <div className="grid gap-2">
-          {(["personalization", "analytics"] as const).map((option) => (
-            <label
-              key={option}
-              className="flex min-h-11 cursor-pointer items-start gap-3 rounded-lg border border-input px-3 py-3"
-            >
-              <Checkbox checked={option === "personalization" ? settings.personalization_consent : settings.analytics_consent}
-                onCheckedChange={(checked) => void save(option === "personalization" ? "personalization_consent" : "analytics_consent", checked === true)} className="mt-0.5" />
-              <span>
-                <span className="block text-sm font-medium">{t(`privacy.options.${option}.title`)}</span>
-                <span className="mt-1 block text-xs leading-5 text-muted-foreground">
-                  {t(`privacy.options.${option}.description`)}
-                </span>
-              </span>
-            </label>
-          ))}
-        </div>
-      </PreferenceCard>
-
-      <PreferenceCard icon={DatabaseZapIcon} title={t("demo.title")} description={t("demo.description")}>
-        <ResetDemoDialog />
-      </PreferenceCard>
-
-      <PreferenceCard icon={InfoIcon} title={t("about.title")} description={t("about.description")}>
-        <div className="flex min-h-11 items-center justify-between gap-3 rounded-lg border border-input px-3">
-          <div>
-            <p className="text-sm font-semibold">Fridgy Web</p>
-            <p className="text-xs text-muted-foreground">{t("about.version")}</p>
           </div>
+        </PreferenceCard>
+      ))}
+
+      <PreferenceCard title={t("demo.title")} description={t("demo.description")}>
+        <div className="flex justify-end"><ResetDemoDialog /></div>
+      </PreferenceCard>
+
+      <PreferenceCard title={t("about.title")} description={t("about.description")}>
+        <div className="flex min-h-11 items-center justify-end">
           <Badge variant="outline">v{version}</Badge>
         </div>
       </PreferenceCard>

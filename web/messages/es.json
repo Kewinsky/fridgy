@@ -58,6 +58,7 @@
     "shoppingShort": "Lista",
     "settings": "Ajustes",
     "settingsShort": "Ajustes",
+    "account": "Cuenta",
     "receipt": "Añadir productos",
     "receiptShort": "Añadir",
     "mainNavigation": "Navegación principal",
@@ -96,6 +97,7 @@
       "expiry": {
         "title": "Avisos de caducidad",
         "description": "Elige cuándo debe avisarte Fridgy de una fecha próxima.",
+        "none": "Sin avisos",
         "options": {
           "sameDay": "El día de caducidad",
           "oneDay": "1 día antes",
@@ -139,6 +141,28 @@
     },
     "account": {
       "groups": { "account": "Cuenta", "household": "Hogar" },
+      "avatar": {
+        "title": "Foto de perfil",
+        "description": "La foto que aparece en tu cuenta.",
+        "alt": "Tu foto de perfil",
+        "choose": "Elegir foto",
+        "change": "Cambiar foto",
+        "remove": "Eliminar foto",
+        "formats": "JPG, PNG o WebP, hasta {maxMb} MB.",
+        "saved": "Foto de perfil guardada.",
+        "removed": "Foto de perfil eliminada.",
+        "errors": {
+          "invalid": "Elige un archivo JPG, PNG o WebP válido.",
+          "tooLarge": "La foto no puede superar los {maxMb} MB."
+        }
+      },
+      "username": {
+        "title": "Nombre de usuario",
+        "description": "Este nombre aparece en el menú de tu cuenta.",
+        "label": "Nombre de usuario",
+        "save": "Guardar",
+        "cancel": "Cancelar"
+      },
       "login": {
         "title": "Inicio de sesión",
         "description": "El correo electrónico vinculado a tu cuenta.",
@@ -222,7 +246,7 @@
     },
     "tabs": {
       "general": "General",
-      "account": "Cuenta y hogar",
+      "account": "Hogar y cuenta",
       "preferences": "Preferencias"
     }
   },

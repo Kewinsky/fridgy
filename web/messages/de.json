@@ -58,6 +58,7 @@
     "shoppingShort": "Liste",
     "settings": "Einstellungen",
     "settingsShort": "Einstellungen",
+    "account": "Konto",
     "receipt": "Produkte hinzufügen",
     "receiptShort": "Neu",
     "mainNavigation": "Hauptnavigation",
@@ -96,6 +97,7 @@
       "expiry": {
         "title": "Erinnerungen an Verbrauchsdaten",
         "description": "Wähle, wann Fridgy an ein nahendes Verbrauchsdatum erinnern soll.",
+        "none": "Keine Erinnerungen",
         "options": {
           "sameDay": "Am Verbrauchsdatum",
           "oneDay": "1 Tag vorher",
@@ -139,6 +141,28 @@
     },
     "account": {
       "groups": { "account": "Konto", "household": "Haushalt" },
+      "avatar": {
+        "title": "Profilbild",
+        "description": "Das Bild, das in deinem Konto angezeigt wird.",
+        "alt": "Dein Profilbild",
+        "choose": "Bild auswählen",
+        "change": "Bild ändern",
+        "remove": "Bild entfernen",
+        "formats": "JPG, PNG oder WebP, maximal {maxMb} MB.",
+        "saved": "Profilbild gespeichert.",
+        "removed": "Profilbild entfernt.",
+        "errors": {
+          "invalid": "Wähle eine gültige JPG-, PNG- oder WebP-Datei.",
+          "tooLarge": "Das Bild darf höchstens {maxMb} MB groß sein."
+        }
+      },
+      "username": {
+        "title": "Benutzername",
+        "description": "Dieser Name erscheint im Kontomenü.",
+        "label": "Benutzername",
+        "save": "Speichern",
+        "cancel": "Abbrechen"
+      },
       "login": {
         "title": "Anmeldung",
         "description": "Die mit deinem Konto verknüpfte E-Mail-Adresse.",
@@ -222,7 +246,7 @@
     },
     "tabs": {
       "general": "Allgemein",
-      "account": "Konto und Haushalt",
+      "account": "Haushalt und Konto",
       "preferences": "Einstellungen"
     }
   },

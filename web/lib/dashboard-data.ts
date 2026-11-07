@@ -11,6 +11,8 @@ import { createClient } from "@/lib/supabase/server";
 
 export type DashboardData = {
   householdId: string;
+  username: string;
+  avatarPath: string | null;
   deductionMode: "always" | "never" | "ask";
   diet: "none" | "vegetarian" | "vegan" | "pescatarian";
   allergies: string;
@@ -69,7 +71,7 @@ export function productToRow(product: DemoProduct, householdId: string) {
 
 export async function loadDashboardData(supabase: SupabaseClient, userId: string): Promise<DashboardData> {
   const { data: profile, error: profileError } = await supabase
-    .from("profiles").select("household_id,deduction_mode,diet,allergies,excluded_ingredients").eq("user_id", userId).single();
+    .from("profiles").select("household_id,username,avatar_path,deduction_mode,diet,allergies,excluded_ingredients").eq("user_id", userId).single();
   if (profileError || !profile) throw new Error("Profile is missing. Apply the Supabase migration.");
 
   const householdId = profile.household_id as string;
@@ -82,6 +84,8 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
 
   return {
     householdId,
+    username: String(profile.username),
+    avatarPath: typeof profile.avatar_path === "string" ? profile.avatar_path : null,
     deductionMode: profile.deduction_mode as DashboardData["deductionMode"],
     diet: profile.diet as DashboardData["diet"],
     allergies: String(profile.allergies ?? ""),

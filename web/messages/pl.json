@@ -58,6 +58,7 @@
     "shoppingShort": "Lista",
     "settings": "Ustawienia",
     "settingsShort": "Ustawienia",
+    "account": "Konto",
     "receipt": "Dodaj produkty",
     "receiptShort": "Dodaj",
     "mainNavigation": "Główna nawigacja",
@@ -96,6 +97,7 @@
       "expiry": {
         "title": "Powiadomienia o terminach",
         "description": "Wybierz, kiedy Fridgy ma przypominać o kończącym się terminie.",
+        "none": "Brak powiadomień",
         "options": {
           "sameDay": "W dniu terminu",
           "oneDay": "1 dzień wcześniej",
@@ -139,6 +141,28 @@
     },
     "account": {
       "groups": { "account": "Konto", "household": "Dom" },
+      "avatar": {
+        "title": "Zdjęcie profilowe",
+        "description": "Zdjęcie widoczne na Twoim koncie.",
+        "alt": "Twoje zdjęcie profilowe",
+        "choose": "Wybierz zdjęcie",
+        "change": "Zmień zdjęcie",
+        "remove": "Usuń zdjęcie",
+        "formats": "JPG, PNG lub WebP, maksymalnie {maxMb} MB.",
+        "saved": "Zdjęcie profilowe zostało zapisane.",
+        "removed": "Zdjęcie profilowe zostało usunięte.",
+        "errors": {
+          "invalid": "Wybierz poprawny plik JPG, PNG lub WebP.",
+          "tooLarge": "Zdjęcie może mieć maksymalnie {maxMb} MB."
+        }
+      },
+      "username": {
+        "title": "Nazwa użytkownika",
+        "description": "Ta nazwa jest widoczna w menu konta.",
+        "label": "Nazwa użytkownika",
+        "save": "Zapisz",
+        "cancel": "Anuluj"
+      },
       "login": {
         "title": "Logowanie",
         "description": "Adres e-mail powiązany z kontem.",
@@ -222,7 +246,7 @@
     },
     "tabs": {
       "general": "Ogólne",
-      "account": "Konto i dom",
+      "account": "Dom i konto",
       "preferences": "Preferencje"
     }
   },

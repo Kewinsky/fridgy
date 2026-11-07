@@ -6,6 +6,7 @@ import { z } from "zod";
 
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseConfig } from "@/lib/supabase/config";
+import { PROFILE_IMAGE_BUCKET } from "@/lib/profile-image";
 
 const profileSettings = z.object({
   notification_days: z.array(z.union([z.literal(0), z.literal(1), z.literal(3)])).max(3),
@@ -51,6 +52,14 @@ export async function savePreferenceSettings(settings: PreferenceSettingsValues)
   const validSettings = preferenceSettings.parse(settings);
   const { supabase, user } = await currentUser();
   const { error } = await supabase.from("profiles").update(validSettings).eq("user_id", user.id);
+  if (error) throw new Error(error.message);
+}
+
+export async function saveUsername(value: string) {
+  const username = z.string().trim().min(1).max(100).parse(value);
+  const { supabase, user } = await currentUser();
+  const { error } = await supabase.from("profiles")
+    .update({ username }).eq("user_id", user.id).select("username").single();
   if (error) throw new Error(error.message);
 }
 
@@ -113,7 +122,7 @@ export async function deleteAccount() {
   const { url } = getSupabaseConfig();
   const admin = createAdminClient(url, secret, { auth: { autoRefreshToken: false, persistSession: false } });
   const { data: profile, error: profileError } = await supabase.from("profiles")
-    .select("household_id").eq("user_id", user.id).single();
+    .select("household_id,avatar_path").eq("user_id", user.id).single();
   if (profileError || !profile) throw new Error("Profile not found");
   const { data: household } = await supabase.from("households")
     .select("owner_id").eq("id", profile.household_id).single();
@@ -125,6 +134,9 @@ export async function deleteAccount() {
   }
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) throw new Error(error.message);
+  if (typeof profile.avatar_path === "string") {
+    await admin.storage.from(PROFILE_IMAGE_BUCKET).remove([`${user.id}/${profile.avatar_path}`]);
+  }
   redirect("/");
 }
 

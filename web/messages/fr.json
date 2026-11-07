@@ -58,6 +58,7 @@
     "shoppingShort": "Liste",
     "settings": "Paramètres",
     "settingsShort": "Paramètres",
+    "account": "Compte",
     "receipt": "Ajouter des produits",
     "receiptShort": "Ajouter",
     "mainNavigation": "Navigation principale",
@@ -96,6 +97,7 @@
       "expiry": {
         "title": "Notifications de péremption",
         "description": "Choisissez quand Fridgy doit vous rappeler une date limite proche.",
+        "none": "Aucune notification",
         "options": {
           "sameDay": "Le jour de la date limite",
           "oneDay": "1 jour avant",
@@ -139,6 +141,28 @@
     },
     "account": {
       "groups": { "account": "Compte", "household": "Foyer" },
+      "avatar": {
+        "title": "Photo de profil",
+        "description": "La photo affichée sur votre compte.",
+        "alt": "Votre photo de profil",
+        "choose": "Choisir une photo",
+        "change": "Changer la photo",
+        "remove": "Supprimer la photo",
+        "formats": "JPG, PNG ou WebP, {maxMb} Mo maximum.",
+        "saved": "Photo de profil enregistrée.",
+        "removed": "Photo de profil supprimée.",
+        "errors": {
+          "invalid": "Choisissez un fichier JPG, PNG ou WebP valide.",
+          "tooLarge": "La photo ne peut pas dépasser {maxMb} Mo."
+        }
+      },
+      "username": {
+        "title": "Nom d'utilisateur",
+        "description": "Ce nom apparaît dans le menu de votre compte.",
+        "label": "Nom d'utilisateur",
+        "save": "Enregistrer",
+        "cancel": "Annuler"
+      },
       "login": {
         "title": "Connexion",
         "description": "L'adresse e-mail liée à votre compte.",
@@ -222,7 +246,7 @@
     },
     "tabs": {
       "general": "Général",
-      "account": "Compte et foyer",
+      "account": "Foyer et compte",
       "preferences": "Préférences"
     }
   },

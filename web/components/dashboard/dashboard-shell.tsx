@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import {
@@ -20,8 +21,9 @@ import {
 
 import { signOut } from "@/app/dashboard/actions";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { getProfileImageSrc } from "@/lib/profile-image";
 
 const navigation = [
   {
@@ -54,12 +56,6 @@ const navigation = [
     shortLabelKey: "shoppingShort",
     icon: ListChecksIcon,
   },
-  {
-    href: "/dashboard/ustawienia",
-    labelKey: "settings",
-    shortLabelKey: "settingsShort",
-    icon: SettingsIcon,
-  },
 ] as const;
 
 const mobileNavigation = [
@@ -78,17 +74,22 @@ const mobileNavigation = [
 export function DashboardShell({
   children,
   email,
+  username,
+  avatarPath,
   householdName,
   isHouseholdOwner,
 }: {
   children: ReactNode;
   email: string;
+  username: string;
+  avatarPath: string | null;
   householdName: string;
   isHouseholdOwner: boolean;
 }) {
   const pathname = usePathname();
   const t = useTranslations("Navigation");
-  const initial = email.charAt(0).toUpperCase();
+  const initial = username.charAt(0).toUpperCase();
+  const avatarSrc = getProfileImageSrc(avatarPath);
 
   if (pathname.startsWith("/dashboard/gotowanie/")) {
     return (
@@ -176,52 +177,19 @@ export function DashboardShell({
           })}
         </nav>
 
-        <div className="mt-auto border-t border-border p-5">
-          <form action={signOut}>
-            <Button
-              type="submit"
-              variant="ghost"
-              className="w-full justify-start px-2"
-            >
-              <LogOutIcon aria-hidden="true" />
-              {t("signOut")}
-            </Button>
-          </form>
+        <div className="mt-auto border-t border-border p-4">
+          <ProfileMenu email={email} username={username} avatarSrc={avatarSrc} initial={initial} householdName={householdName} />
         </div>
       </aside>
 
       <div className="lg:pl-64">
-        <header className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-border bg-background/90 px-4 backdrop-blur sm:px-7 lg:px-10">
-          <Link href="/dashboard" className="flex items-center gap-2 lg:hidden">
-            <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <LeafIcon className="size-4" aria-hidden="true" />
-            </span>
-            <span className="font-extrabold">Fridgy</span>
-          </Link>
-          <p className="hidden text-sm text-muted-foreground lg:block">
-            {householdName}
-          </p>
-          <div className="flex items-center gap-2">
-            <Link
-              href="/dashboard/ustawienia"
-              className="flex size-11 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground lg:hidden"
-              aria-label={t("settings")}
-            >
-              <SettingsIcon className="size-5" aria-hidden="true" />
-            </Link>
-            <span className="flex size-9 items-center justify-center rounded-full bg-secondary text-xs font-bold text-primary">
-              {initial}
-            </span>
-          </div>
-        </header>
-
         <div className="mx-auto max-w-7xl px-4 py-6 pb-28 sm:px-7 lg:px-10 lg:py-9 lg:pb-12">
           {children}
         </div>
       </div>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 border-t border-border bg-card px-1 pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-border bg-card px-1 pb-[env(safe-area-inset-bottom)] lg:hidden"
         aria-label={t("mobileNavigation")}
       >
         {mobileNavigation.map(({ href, shortLabelKey, icon: Icon }) => {
@@ -244,7 +212,70 @@ export function DashboardShell({
             </Link>
           );
         })}
+        <ProfileMenu email={email} username={username} avatarSrc={avatarSrc} initial={initial} householdName={householdName} mobile />
       </nav>
     </main>
+  );
+}
+
+function ProfileMenu({
+  email,
+  username,
+  avatarSrc,
+  initial,
+  householdName,
+  mobile = false,
+}: {
+  email: string;
+  username: string;
+  avatarSrc: string | null;
+  initial: string;
+  householdName: string;
+  mobile?: boolean;
+}) {
+  const t = useTranslations("Navigation");
+  const pathname = usePathname();
+  const active = pathname.startsWith("/dashboard/ustawienia");
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button
+            type="button"
+            variant="ghost"
+            aria-label={t("account")}
+            className={mobile
+              ? cn("flex min-h-16 w-full flex-col gap-1 rounded-none px-1 text-[10px] font-semibold", active && "text-primary")
+              : "h-auto min-h-12 w-full justify-start gap-3 px-2 text-left"}
+          >
+            <span className={cn("relative flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary font-bold text-primary", mobile ? "size-6" : "size-9 text-xs")}>
+              {avatarSrc ? <Image src={avatarSrc} alt="" fill sizes={mobile ? "24px" : "36px"} className="object-cover" unoptimized /> : initial}
+            </span>
+            {mobile ? <span className="max-w-full truncate">{t("account")}</span> : <span className="min-w-0 flex-1 truncate text-sm font-semibold">{username}</span>}
+            {mobile ? null : <ChevronDownIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" />}
+          </Button>
+        }
+      />
+      <DropdownMenuContent side="top" align={mobile ? "end" : "start"} sideOffset={8} className="min-w-56">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="px-3 py-2">
+            <span className="block truncate font-semibold text-foreground">{username}</span>
+            <span className="block truncate font-normal">{email}</span>
+            <span className="block truncate font-normal">{householdName}</span>
+          </DropdownMenuLabel>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem render={<Link href="/dashboard/ustawienia" />}>
+          <SettingsIcon aria-hidden="true" /> {t("settings")}
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <form action={signOut}>
+          <DropdownMenuItem render={<button type="submit" className="w-full" />}>
+            <LogOutIcon aria-hidden="true" /> {t("signOut")}
+          </DropdownMenuItem>
+        </form>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

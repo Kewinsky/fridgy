@@ -58,6 +58,7 @@
     "shoppingShort": "List",
     "settings": "Settings",
     "settingsShort": "Settings",
+    "account": "Account",
     "receipt": "Add products",
     "receiptShort": "Add",
     "mainNavigation": "Main navigation",
@@ -96,6 +97,7 @@
       "expiry": {
         "title": "Use-by notifications",
         "description": "Choose when Fridgy should remind you about an approaching use-by date.",
+        "none": "No notifications",
         "options": {
           "sameDay": "On the use-by date",
           "oneDay": "1 day before",
@@ -139,6 +141,28 @@
     },
     "account": {
       "groups": { "account": "Account", "household": "Home" },
+      "avatar": {
+        "title": "Profile photo",
+        "description": "The photo shown on your account.",
+        "alt": "Your profile photo",
+        "choose": "Choose photo",
+        "change": "Change photo",
+        "remove": "Remove photo",
+        "formats": "JPG, PNG or WebP, up to {maxMb} MB.",
+        "saved": "Profile photo saved.",
+        "removed": "Profile photo removed.",
+        "errors": {
+          "invalid": "Choose a valid JPG, PNG or WebP file.",
+          "tooLarge": "The photo can be no larger than {maxMb} MB."
+        }
+      },
+      "username": {
+        "title": "Username",
+        "description": "This name appears in your account menu.",
+        "label": "Username",
+        "save": "Save",
+        "cancel": "Cancel"
+      },
       "login": {
         "title": "Sign-in",
         "description": "The email address linked to your account.",
@@ -222,7 +246,7 @@
     },
     "tabs": {
       "general": "General",
-      "account": "Account and home",
+      "account": "Home and account",
       "preferences": "Preferences"
     }
   },
