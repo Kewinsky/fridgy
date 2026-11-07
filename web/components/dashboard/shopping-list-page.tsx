@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckIcon, PlusIcon, Share2Icon, ShoppingBasketIcon, Trash2Icon } from "lucide-react";
+import { CheckIcon, CopyIcon, PlusIcon, ShoppingBasketIcon, Trash2Icon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -61,26 +61,18 @@ export function ShoppingListPage() {
     toast.success(t("toasts.cleared"));
   }
 
-  async function shareList() {
+  async function copyList() {
     const pendingItems = items.filter((item) => !item.done);
     if (!pendingItems.length) {
-      toast.info(t("toasts.nothingToShare"));
+      toast.info(t("toasts.nothingToCopy"));
       return;
     }
 
     try {
-      if (typeof navigator.share === "function") {
-        await navigator.share({
-          title: t("shareTitle"),
-          text: formatShoppingList(displayItems, false, t("shareTitle")),
-        });
-      } else {
-        await navigator.clipboard.writeText(formatShoppingList(displayItems, true, t("shareTitle")));
-        toast.success(t("toasts.copied"));
-      }
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") return;
-      toast.error(t("toasts.shareError"));
+      await navigator.clipboard.writeText(formatShoppingList(displayItems, true, t("listTitle")));
+      toast.success(t("toasts.copied"));
+    } catch {
+      toast.error(t("toasts.copyError"));
     }
   }
 
@@ -92,8 +84,8 @@ export function ShoppingListPage() {
         description={t("description")}
         actions={
           <>
-            <Button variant="outline" className="h-11" onClick={shareList}>
-              <Share2Icon aria-hidden="true" /> {t("share")}
+            <Button variant="outline" className="h-11" onClick={copyList}>
+              <CopyIcon aria-hidden="true" /> {t("copyList")}
             </Button>
             <Button
               variant="destructive"

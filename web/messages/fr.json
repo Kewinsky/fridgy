@@ -654,8 +654,8 @@
     "metaDescription": "Une liste de courses simple pour la maison.",
     "eyebrow": "Pour vos prochaines courses",
     "title": "Liste de courses",
-    "description": "Une courte liste des produits qui manquent à la maison. Les produits déjà achetés sont ignorés lors du partage.",
-    "share": "Partager",
+    "description": "Une courte liste des produits qui manquent à la maison. Les produits déjà achetés sont ignorés lors de la copie.",
+    "copyList": "Copier la liste de courses",
     "clear": "Vider",
     "placeholder": "Ajouter à la liste...",
     "newItem": "Nouveau produit",
@@ -663,7 +663,7 @@
     "removeItem": "Supprimer {name}",
     "empty": "La liste est vide",
     "cancel": "Annuler",
-    "shareTitle": "Liste de courses – Fridgy",
+    "listTitle": "Liste de courses – Fridgy",
     "clearDialog": {
       "title": "Vider la liste de courses ?",
       "description": "Tous les produits seront supprimés. Cette action est irréversible.",
@@ -671,9 +671,9 @@
     },
     "toasts": {
       "cleared": "La liste de courses a été vidée.",
-      "nothingToShare": "Aucun produit à partager.",
+      "nothingToCopy": "Aucun produit à copier.",
       "copied": "La liste a été copiée.",
-      "shareError": "Impossible de partager la liste."
+      "copyError": "Impossible de copier la liste."
     }
   },
   "AddMissingItems": {

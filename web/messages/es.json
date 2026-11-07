@@ -654,8 +654,8 @@
     "metaDescription": "Una lista de compras sencilla para casa.",
     "eyebrow": "Para tu próxima compra",
     "title": "Lista de compras",
-    "description": "Una lista breve de lo que falta en casa. Los productos ya comprados se omiten al compartirla.",
-    "share": "Compartir",
+    "description": "Una lista breve de lo que falta en casa. Los productos ya comprados se omiten al copiarla.",
+    "copyList": "Copiar lista de compras",
     "clear": "Vaciar",
     "placeholder": "Añadir a la lista...",
     "newItem": "Nuevo producto",
@@ -663,7 +663,7 @@
     "removeItem": "Eliminar {name}",
     "empty": "La lista está vacía",
     "cancel": "Cancelar",
-    "shareTitle": "Lista de compras – Fridgy",
+    "listTitle": "Lista de compras – Fridgy",
     "clearDialog": {
       "title": "¿Vaciar la lista de compras?",
       "description": "Se eliminarán todos los productos. Esta acción no se puede deshacer.",
@@ -671,9 +671,9 @@
     },
     "toasts": {
       "cleared": "La lista de compras se ha vaciado.",
-      "nothingToShare": "No hay productos para compartir.",
+      "nothingToCopy": "No hay productos para copiar.",
       "copied": "La lista se ha copiado.",
-      "shareError": "No se ha podido compartir la lista."
+      "copyError": "No se ha podido copiar la lista."
     }
   },
   "AddMissingItems": {

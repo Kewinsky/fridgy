@@ -175,7 +175,7 @@ export function CookingPage() {
         </>
       ) : (
         <>
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid items-start gap-5 lg:grid-cols-2">
             <Question number="1" title={t("questions.meal")}>
               <Chips options={meals} value={meal} onChange={setMeal} getLabel={(value) => t(`options.meals.${value}`)} />
             </Question>
@@ -217,8 +217,8 @@ function Question({ number, title, children }: { number: string; title: string; 
   return (
     <section className="app-card p-5">
       <p className="text-xs font-bold uppercase tracking-wider text-primary">{t("questionProgress", { number })}</p>
-      <h2 className="mb-3 mt-1 text-lg font-extrabold">{title}</h2>
-      {children}
+      <h2 className="mt-1 text-lg font-extrabold">{title}</h2>
+      <div className="mt-5">{children}</div>
     </section>
   );
 }

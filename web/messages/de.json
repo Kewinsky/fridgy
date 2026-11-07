@@ -654,8 +654,8 @@
     "metaDescription": "Eine einfache Einkaufsliste für den Haushalt.",
     "eyebrow": "Für deinen nächsten Einkauf",
     "title": "Einkaufsliste",
-    "description": "Eine kurze Liste der Dinge, die zu Hause fehlen. Gekaufte Produkte werden beim Teilen ausgelassen.",
-    "share": "Teilen",
+    "description": "Eine kurze Liste der Dinge, die zu Hause fehlen. Gekaufte Produkte werden beim Kopieren ausgelassen.",
+    "copyList": "Einkaufsliste kopieren",
     "clear": "Leeren",
     "placeholder": "Zur Liste hinzufügen...",
     "newItem": "Neues Produkt",
@@ -663,7 +663,7 @@
     "removeItem": "{name} entfernen",
     "empty": "Die Liste ist leer",
     "cancel": "Abbrechen",
-    "shareTitle": "Einkaufsliste – Fridgy",
+    "listTitle": "Einkaufsliste – Fridgy",
     "clearDialog": {
       "title": "Einkaufsliste leeren?",
       "description": "Alle Produkte werden entfernt. Diese Aktion kann nicht rückgängig gemacht werden.",
@@ -671,9 +671,9 @@
     },
     "toasts": {
       "cleared": "Einkaufsliste wurde geleert.",
-      "nothingToShare": "Es gibt keine Produkte zum Teilen.",
+      "nothingToCopy": "Es gibt keine Produkte zum Kopieren.",
       "copied": "Liste wurde kopiert.",
-      "shareError": "Die Liste konnte nicht geteilt werden."
+      "copyError": "Die Liste konnte nicht kopiert werden."
     }
   },
   "AddMissingItems": {

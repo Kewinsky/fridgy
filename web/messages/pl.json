@@ -654,8 +654,8 @@
     "metaDescription": "Prosta lista zakupów dla domu.",
     "eyebrow": "Przy następnych zakupach",
     "title": "Lista zakupów",
-    "description": "Krótka lista rzeczy, których brakuje w domu. Udostępniana lista pomija kupione produkty.",
-    "share": "Udostępnij",
+    "description": "Krótka lista rzeczy, których brakuje w domu. Kopiowana lista pomija kupione produkty.",
+    "copyList": "Kopiuj listę zakupów",
     "clear": "Wyczyść",
     "placeholder": "Dodaj do listy...",
     "newItem": "Nowy produkt",
@@ -663,7 +663,7 @@
     "removeItem": "Usuń {name}",
     "empty": "Lista jest pusta",
     "cancel": "Anuluj",
-    "shareTitle": "Lista zakupów – Fridgy",
+    "listTitle": "Lista zakupów – Fridgy",
     "clearDialog": {
       "title": "Wyczyścić listę zakupów?",
       "description": "Wszystkie produkty z listy zostaną usunięte. Tej operacji nie można cofnąć.",
@@ -671,9 +671,9 @@
     },
     "toasts": {
       "cleared": "Lista zakupów została wyczyszczona.",
-      "nothingToShare": "Nie ma produktów do udostępnienia.",
+      "nothingToCopy": "Nie ma produktów do skopiowania.",
       "copied": "Lista została skopiowana.",
-      "shareError": "Nie udało się udostępnić listy."
+      "copyError": "Nie udało się skopiować listy."
     }
   },
   "AddMissingItems": {

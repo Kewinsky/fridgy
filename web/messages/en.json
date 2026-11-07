@@ -654,8 +654,8 @@
     "metaDescription": "A simple household shopping list.",
     "eyebrow": "For your next shop",
     "title": "Shopping list",
-    "description": "A short list of things missing at home. Shared lists skip purchased products.",
-    "share": "Share",
+    "description": "A short list of things missing at home. Copied lists skip purchased products.",
+    "copyList": "Copy shopping list",
     "clear": "Clear",
     "placeholder": "Add to the list...",
     "newItem": "New product",
@@ -663,7 +663,7 @@
     "removeItem": "Remove {name}",
     "empty": "The list is empty",
     "cancel": "Cancel",
-    "shareTitle": "Shopping list – Fridgy",
+    "listTitle": "Shopping list – Fridgy",
     "clearDialog": {
       "title": "Clear the shopping list?",
       "description": "All products will be removed. This action cannot be undone.",
@@ -671,9 +671,9 @@
     },
     "toasts": {
       "cleared": "Shopping list cleared.",
-      "nothingToShare": "There are no products to share.",
+      "nothingToCopy": "There are no products to copy.",
       "copied": "List copied.",
-      "shareError": "Could not share the list."
+      "copyError": "Could not copy the list."
     }
   },
   "AddMissingItems": {

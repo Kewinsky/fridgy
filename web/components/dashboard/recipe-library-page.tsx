@@ -5,7 +5,6 @@ import {
   BookOpenIcon,
   HeartIcon,
   HistoryIcon,
-  UtensilsIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -16,12 +15,9 @@ import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsScrollableList, TabsTrigger } from "@/components/ui/tabs";
 import { demoRecipes, type Recipe } from "@/lib/demo-recipes";
-import { getFavoriteCuisine } from "@/lib/recipe-library";
-import { cuisineMessageKeys, isCuisine } from "@/components/dashboard/recipe-options";
 
 export function RecipeLibraryPage() {
   const t = useTranslations("RecipeLibrary");
-  const recipeT = useTranslations("Recipe");
   const library = useRecipeLibrary();
   const allRecipes = [...library.customRecipes, ...demoRecipes];
   const favoriteRecipes = allRecipes.filter((recipe) =>
@@ -32,10 +28,6 @@ export function RecipeLibraryPage() {
   )
     .map((slug) => allRecipes.find((recipe) => recipe.slug === slug))
     .filter((recipe): recipe is Recipe => recipe !== undefined);
-  const favoriteCuisine = getFavoriteCuisine(library);
-  const favoriteCuisineLabel = isCuisine(favoriteCuisine)
-    ? recipeT(`cuisineOptions.${cuisineMessageKeys[favoriteCuisine]}`)
-    : t("noData");
 
   return (
     <>
@@ -45,27 +37,6 @@ export function RecipeLibraryPage() {
         description={t("description")}
         actions={<AddRecipeDialog />}
       />
-
-      <section
-        aria-label={t("summary")}
-        className="mb-6 grid gap-3 sm:grid-cols-3"
-      >
-        <Metric
-          icon={HistoryIcon}
-          value={`${library.history.length}`}
-          label={t("allCookings")}
-        />
-        <Metric
-          icon={HeartIcon}
-          value={`${favoriteRecipes.length}`}
-          label={t("favoriteRecipes")}
-        />
-        <Metric
-          icon={UtensilsIcon}
-          value={favoriteCuisineLabel}
-          label={t("favoriteCuisine")}
-        />
-      </section>
 
       <Tabs defaultValue="favorites">
         <TabsScrollableList>
@@ -132,28 +103,6 @@ export function RecipeLibraryPage() {
         </TabsContent>
       </Tabs>
     </>
-  );
-}
-
-function Metric({
-  icon: Icon,
-  value,
-  label,
-}: {
-  icon: typeof HistoryIcon;
-  value: string;
-  label: string;
-}) {
-  return (
-    <div className="app-card flex min-h-24 items-center gap-4 p-4">
-      <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-secondary text-primary">
-        <Icon className="size-5" aria-hidden="true" />
-      </span>
-      <div className="min-w-0">
-        <p className="truncate text-xl font-extrabold">{value}</p>
-        <p className="text-xs text-muted-foreground">{label}</p>
-      </div>
-    </div>
   );
 }
 
