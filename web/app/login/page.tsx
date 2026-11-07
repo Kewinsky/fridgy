@@ -2,11 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
-import { ArrowLeftIcon, LeafIcon, ScanLineIcon, SparklesIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  LeafIcon,
+  ScanLineIcon,
+  SparklesIcon,
+} from "lucide-react";
 
 import { LoginForm } from "@/components/auth/login-form";
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { createClient } from "@/lib/supabase/server";
 import { safeAuthPath } from "@/lib/auth-next";
 
@@ -30,15 +34,16 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     redirect(nextPath);
   }
 
-  const initialError = params.error
-    ? t("errors.oauth")
-    : undefined;
+  const initialError = params.error ? t("errors.oauth") : undefined;
 
   return (
     <main className="grid min-h-dvh lg:grid-cols-[0.9fr_1.1fr]">
       <section className="relative hidden overflow-hidden bg-surface-strong p-10 text-surface-strong-foreground lg:flex lg:flex-col">
         <div className="strong-grid absolute inset-0" />
-        <Link href="/" className="relative flex items-center gap-2.5 font-extrabold">
+        <Link
+          href="/"
+          className="relative flex items-center gap-2.5 font-extrabold"
+        >
           <span className="flex size-9 items-center justify-center rounded-lg bg-surface-strong-foreground text-surface-strong">
             <LeafIcon className="size-5" aria-hidden="true" />
           </span>
@@ -82,7 +87,6 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           </Link>
           <div className="flex items-center gap-2">
             <LanguageSwitcher compact />
-            <ThemeToggle />
           </div>
         </div>
 

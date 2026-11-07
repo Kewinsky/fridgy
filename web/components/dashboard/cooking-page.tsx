@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { BookOpenCheckIcon, CheckIcon, ChefHatIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
 
 import { PageHeader } from "@/components/dashboard/page-header";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
+import { RecipeCardSkeleton } from "@/components/dashboard/recipe-card-skeleton";
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,43 @@ export function CookingPage() {
   const [savedRecipes, setSavedRecipes] = useState<(typeof savedRecipeOptions)[number]>("include");
   const [showRecipes, setShowRecipes] = useState(false);
   const [visibleRecipeCount, setVisibleRecipeCount] = useState(3);
+  const [loadingPhase, setLoadingPhase] = useState<"initial" | "more" | null>(null);
+  const loadingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (loadingTimer.current) clearTimeout(loadingTimer.current);
+    };
+  }, []);
+
+  function showSuggestions() {
+    if (loadingTimer.current) return;
+    setShowRecipes(true);
+    setLoadingPhase("initial");
+    // Demo delay until recipe generation is connected.
+    loadingTimer.current = setTimeout(() => {
+      setLoadingPhase(null);
+      loadingTimer.current = null;
+    }, 900);
+  }
+
+  function showMoreSuggestions() {
+    if (loadingTimer.current) return;
+    setLoadingPhase("more");
+    loadingTimer.current = setTimeout(() => {
+      setVisibleRecipeCount((count) => count + 3);
+      setLoadingPhase(null);
+      loadingTimer.current = null;
+    }, 900);
+  }
+
+  function changeAnswers() {
+    if (loadingTimer.current) clearTimeout(loadingTimer.current);
+    loadingTimer.current = null;
+    setLoadingPhase(null);
+    setShowRecipes(false);
+    setVisibleRecipeCount(3);
+  }
   const usedRecipeSlugs = new Set([
     ...library.favoriteSlugs,
     ...library.history.map((record) => record.recipeSlug),
@@ -59,6 +97,9 @@ export function CookingPage() {
   const candidateRecipes = [...filterRecipesByCuisine(savedCandidates, cuisine)]
     .sort((first, second) => conflictCount(first) - conflictCount(second));
   const visibleRecipes = candidateRecipes.slice(0, visibleRecipeCount);
+  const skeletonCount = loadingPhase === "more"
+    ? Math.min(3, candidateRecipes.length - visibleRecipeCount)
+    : 3;
 
   return (
     <>
@@ -82,17 +123,15 @@ export function CookingPage() {
             <Button
               variant="outline"
               className="h-11"
-              onClick={() => {
-                setShowRecipes(false);
-                setVisibleRecipeCount(3);
-              }}
+              onClick={changeAnswers}
             >
               <RefreshCwIcon aria-hidden="true" /> {t("changeAnswers")}
             </Button>
           </div>
-          {visibleRecipes.length ? (
+          {loadingPhase ? <p className="sr-only" role="status">{t("loadingSuggestions")}</p> : null}
+          {visibleRecipes.length || loadingPhase ? (
             <div className="grid gap-4 lg:grid-cols-3">
-              {visibleRecipes.map((recipe) => {
+              {loadingPhase !== "initial" ? visibleRecipes.map((recipe) => {
                 return (
                   <RecipeCard
                     key={recipe.slug}
@@ -101,7 +140,8 @@ export function CookingPage() {
                     servings={servings}
                   />
                 );
-              })}
+              }) : null}
+              {loadingPhase ? Array.from({ length: skeletonCount }, (_, index) => <RecipeCardSkeleton key={`skeleton-${index}`} />) : null}
             </div>
           ) : (
             <section className="app-card p-8 text-center">
@@ -111,7 +151,7 @@ export function CookingPage() {
               </p>
             </section>
           )}
-          {candidateRecipes.length > 3 && visibleRecipeCount === 3 ? (
+          {candidateRecipes.length > 3 && visibleRecipeCount === 3 && !loadingPhase ? (
             <section className="app-card mt-4 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="font-extrabold">{t("more.title")}</h2>
@@ -122,7 +162,7 @@ export function CookingPage() {
               <Button
                 variant="outline"
                 className="h-11 shrink-0"
-                onClick={() => setVisibleRecipeCount((count) => count + 3)}
+                onClick={showMoreSuggestions}
               >
                 <SparklesIcon aria-hidden="true" /> {t("more.button")}
               </Button>
@@ -164,7 +204,7 @@ export function CookingPage() {
           </div>
           <div className="sticky bottom-20 z-10 mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/95 p-4 backdrop-blur lg:bottom-4">
             <p className="text-sm text-muted-foreground">{t("demoNotice")}</p>
-            <Button className="h-11" onClick={() => setShowRecipes(true)}><ChefHatIcon aria-hidden="true" /> {t("showSuggestions")}</Button>
+            <Button className="h-11" onClick={showSuggestions}><ChefHatIcon aria-hidden="true" /> {t("showSuggestions")}</Button>
           </div>
         </>
       )}

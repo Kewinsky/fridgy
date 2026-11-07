@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -61,7 +60,6 @@ export default async function HomePage() {
             {t("login")}
           </Link>
           <LanguageSwitcher compact />
-          <ThemeToggle />
         </div>
       </header>
 
