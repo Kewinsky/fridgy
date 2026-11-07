@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowRightIcon,
@@ -16,6 +15,7 @@ import {
 } from "@/components/dashboard/add-recipe-dialog";
 import { AddMissingItemsButton } from "@/components/dashboard/add-missing-items-button";
 import { FavoriteRecipeButton } from "@/components/dashboard/recipe-actions";
+import { RecipeImage } from "@/components/dashboard/recipe-image";
 import { useInventory } from "@/components/dashboard/use-inventory";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { difficultyMessageKeys } from "@/components/dashboard/recipe-options";
@@ -68,7 +68,7 @@ export function RecipeCard({
     <article className={cn("app-card flex flex-col p-5", suggestion && conflictReasons.length && "border-destructive/60")}>
       <div className={cn("relative mb-4 flex h-40 items-center justify-center overflow-hidden rounded-lg", !imageSrc && "bg-secondary text-primary")}>
         {imageSrc ? (
-          <Image src={imageSrc} alt="" fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover" unoptimized={Boolean(recipe.imagePath)} />
+          <RecipeImage key={imageSrc} src={imageSrc} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" unoptimized={Boolean(recipe.imagePath)} />
         ) : (
           <ChefHatIcon className="size-9" aria-hidden="true" />
         )}

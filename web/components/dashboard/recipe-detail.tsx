@@ -2,7 +2,6 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import {
   ArrowLeftIcon,
@@ -23,6 +22,7 @@ import {
 } from "@/components/dashboard/add-recipe-dialog";
 import { FavoriteRecipeButton, StartCookingButton } from "@/components/dashboard/recipe-actions";
 import { RecipeCookingStats } from "@/components/dashboard/recipe-cooking-stats";
+import { RecipeImage } from "@/components/dashboard/recipe-image";
 import {
   cuisineMessageKeys,
   difficultyMessageKeys,
@@ -91,7 +91,7 @@ export function RecipeDetail({
           <section className="app-card overflow-hidden">
             <div className="relative flex min-h-48 items-center justify-center overflow-hidden bg-secondary text-primary sm:min-h-64">
               {imageSrc ? (
-                <Image src={imageSrc} alt="" fill sizes="(max-width: 1024px) 100vw, 60vw" className="object-cover" unoptimized={Boolean(recipe.imagePath)} />
+                <RecipeImage key={imageSrc} src={imageSrc} sizes="(max-width: 1024px) 100vw, 60vw" unoptimized={Boolean(recipe.imagePath)} />
               ) : (
                 <ChefHatIcon className="size-16" aria-hidden="true" />
               )}

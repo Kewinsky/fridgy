@@ -31,6 +31,9 @@ export default async function RecipeRoute({ params }: RecipeRouteProps) {
   const { slug } = await params;
   const recipe = demoRecipes.find((item) => item.slug === slug);
   if (!recipe) notFound();
+  if (process.env.NODE_ENV === "development") {
+    await new Promise((resolve) => setTimeout(resolve, 900));
+  }
   const t = await getTranslations("Recipe");
 
   return (

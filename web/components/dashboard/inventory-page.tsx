@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import {
@@ -45,6 +45,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   getFreshnessStatus,
   type DemoProduct,
@@ -76,6 +77,13 @@ export function InventoryPage() {
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [tableLoading, setTableLoading] = useState(process.env.NODE_ENV === "development");
+
+  useEffect(() => {
+    if (!tableLoading) return;
+    const timer = window.setTimeout(() => setTableLoading(false), 900);
+    return () => window.clearTimeout(timer);
+  }, [tableLoading]);
   const locationFilters: FilterBadgeOption<LocationFilter>[] = [
     { value: "Wszystkie", label: t("all") },
     ...(["Lodówka", "Zamrażarka", "Spiżarnia"] as const).map((value) => ({
@@ -316,7 +324,7 @@ export function InventoryPage() {
         </section>
       ) : null}
 
-      <section className="app-card px-5">
+      <section className="app-card px-5" aria-busy={tableLoading}>
         <div className="flex items-center justify-between border-b border-border py-4">
           <h2 className="flex flex-wrap items-baseline gap-x-2 font-extrabold">
             {location === "Wszystkie"
@@ -339,7 +347,9 @@ export function InventoryPage() {
             {editing ? t("cancel") : t("edit")}
           </Button>
         </div>
-        {filtered.length ? (
+        {tableLoading ? (
+          <InventoryTableSkeleton />
+        ) : filtered.length ? (
           filtered.map((product) =>
             editing ? (
               <label
@@ -395,6 +405,23 @@ export function InventoryPage() {
         />
       ) : null}
     </>
+  );
+}
+
+function InventoryTableSkeleton() {
+  return (
+    <div aria-hidden="true">
+      {Array.from({ length: 5 }, (_, index) => (
+        <div key={index} className="flex items-center gap-3 border-b border-border py-3.5 pl-2 last:border-0 sm:gap-4">
+          <Skeleton className="size-11 shrink-0 rounded-lg" />
+          <div className="min-w-0 flex-1 space-y-2">
+            <Skeleton className="h-4 w-36 max-w-full" />
+            <Skeleton className="h-3 w-28 max-w-full" />
+            <Skeleton className="h-5 w-24 rounded-full" />
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
 

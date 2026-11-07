@@ -8,6 +8,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("metaTitle"), description: t("metaDescription") };
 }
 
-export default function RecipeLibraryRoute() {
+export default async function RecipeLibraryRoute() {
+  if (process.env.NODE_ENV === "development") {
+    await new Promise((resolve) => setTimeout(resolve, 900));
+  }
   return <RecipeLibraryPage />;
 }
