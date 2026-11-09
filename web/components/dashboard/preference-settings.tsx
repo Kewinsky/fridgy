@@ -19,6 +19,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { savePreferenceSettings, type PreferenceSettingsValues, type ProfileSettings } from "@/app/dashboard/settings-actions";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
+import { recipeAllergens } from "@/lib/demo-recipes";
+import { parseSelectedAllergens } from "@/lib/recipe-preferences";
 
 const notificationOptions = [
   { key: "sameDay", day: 0 },
@@ -30,7 +32,7 @@ function getPreferences(settings: ProfileSettings): PreferenceSettingsValues {
   return {
     notification_days: [...settings.notification_days].sort((a, b) => a - b),
     diet: settings.diet,
-    allergies: settings.allergies,
+    allergies: parseSelectedAllergens(settings.allergies).join(","),
     excluded_ingredients: settings.excluded_ingredients,
     deduction_mode: settings.deduction_mode,
     receipt_mode: settings.receipt_mode,
@@ -39,12 +41,14 @@ function getPreferences(settings: ProfileSettings): PreferenceSettingsValues {
 
 export function PreferenceSettings({ initialSettings }: { initialSettings: ProfileSettings }) {
   const t = useTranslations("Settings.preferences");
+  const allergenT = useTranslations("Recipe.allergens.options");
   const common = useTranslations("Common");
   const [settings, setSettings] = useState(() => getPreferences(initialSettings));
   const [savedSettings, setSavedSettings] = useState(() => getPreferences(initialSettings));
   const [isPending, startTransition] = useTransition();
   const { setDeductionMode, setDietPreferences } = useDashboardData();
   const hasChanges = JSON.stringify(settings) !== JSON.stringify(savedSettings);
+  const selectedAllergens = parseSelectedAllergens(settings.allergies);
 
   function save() {
     if (!hasChanges || isPending) return;
@@ -116,9 +120,33 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
           />
         </PreferenceCard>
         <PreferenceCard title={t("diet.allergiesLabel")}>
-          <Input aria-label={t("diet.allergiesLabel")} className="h-11" placeholder={t("diet.allergiesPlaceholder")}
-            value={settings.allergies} onChange={(event) => setSettings((current) => ({ ...current, allergies: event.target.value }))}
-          />
+          <div className="flex justify-end">
+            <DropdownMenu>
+              <DropdownMenuTrigger render={
+                <Button type="button" variant="outline" className="h-11 min-w-56 max-w-full justify-between px-3 font-normal" aria-label={t("diet.allergiesLabel")}>
+                  <span className="truncate">{selectedAllergens.length ? selectedAllergens.map((allergen) => allergenT(allergen)).join(", ") : t("diet.allergiesPlaceholder")}</span>
+                  <ChevronDownIcon className="text-muted-foreground" aria-hidden="true" />
+                </Button>
+              } />
+              <DropdownMenuContent align="end" className="max-h-80 min-w-(--anchor-width) overflow-y-auto">
+                {recipeAllergens.map((allergen) => (
+                  <DropdownMenuCheckboxItem
+                    key={allergen}
+                    checked={selectedAllergens.includes(allergen)}
+                    closeOnClick={false}
+                    onCheckedChange={(checked) => setSettings((current) => {
+                      const selected = parseSelectedAllergens(current.allergies);
+                      return { ...current, allergies: recipeAllergens.filter((item) =>
+                        item === allergen ? checked : selected.includes(item),
+                      ).join(",") };
+                    })}
+                  >
+                    {allergenT(allergen)}
+                  </DropdownMenuCheckboxItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </PreferenceCard>
         <PreferenceCard title={t("diet.excludedLabel")}>
           <Input aria-label={t("diet.excludedLabel")} className="h-11" placeholder={t("diet.excludedPlaceholder")}

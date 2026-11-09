@@ -10,7 +10,7 @@ import {
   cuisineMessageKeys,
   isCuisine,
 } from "@/components/dashboard/recipe-options";
-import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -24,10 +24,10 @@ export function CookingModePage({ slug }: { slug: string }) {
   const recipeT = useTranslations("Recipe");
   const locale = useLocale() as Locale;
   const router = useRouter();
-  const library = useRecipeLibrary();
+  const { recipes } = useDashboardData();
   const sourceRecipe =
     demoRecipes.find((item) => item.slug === slug) ??
-    library.customRecipes.find((item) => item.slug === slug);
+    recipes.find((item) => item.slug === slug);
   const recipe = sourceRecipe
     ? localizeDemoRecipe(sourceRecipe, locale)
     : undefined;

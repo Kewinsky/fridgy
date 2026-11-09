@@ -7,11 +7,12 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 import { PROFILE_IMAGE_BUCKET } from "@/lib/profile-image";
+import { recipeAllergens } from "@/lib/demo-recipes";
 
 const profileSettings = z.object({
   notification_days: z.array(z.union([z.literal(0), z.literal(1), z.literal(3)])).max(3),
   diet: z.enum(["none", "vegetarian", "vegan", "pescatarian"]),
-  allergies: z.string().max(500),
+  allergies: z.string().max(500).refine((value) => !value || value.split(",").every((allergen) => recipeAllergens.includes(allergen as typeof recipeAllergens[number]))),
   excluded_ingredients: z.string().max(500),
   deduction_mode: z.enum(["always", "never", "ask"]),
   receipt_mode: z.enum(["automatic", "review"]),

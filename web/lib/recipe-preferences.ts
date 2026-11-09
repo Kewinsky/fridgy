@@ -1,4 +1,4 @@
-import type { Recipe, RecipeAllergen } from "./demo-recipes.ts";
+import { recipeAllergens, type Recipe, type RecipeAllergen } from "./demo-recipes.ts";
 
 type Preferences = {
   diet: "none" | "vegetarian" | "vegan" | "pescatarian";
@@ -7,14 +7,14 @@ type Preferences = {
 };
 
 const allergenAliases: Record<RecipeAllergen, string[]> = {
-  gluten: ["gluten", "pszenica", "zyto", "jęczmień", "jéczmien", "wheat", "rye", "barley"],
+  gluten: ["gluten", "pszenica", "zyto", "jęczmień", "jéczmien", "wheat", "rye", "barley", "owies", "oats", "mąka", "flour", "makaron", "pasta", "chleb", "bread"],
   crustaceans: ["skorupiaki", "crustaceans"],
-  eggs: ["jaja", "jajka", "egg", "eggs"],
+  eggs: ["jaja", "jajka", "jajko", "egg", "eggs", "majonez", "mayonnaise"],
   fish: ["ryby", "ryba", "fish"],
-  peanuts: ["orzeszki ziemne", "peanuts"],
-  soy: ["soja", "soy"],
-  milk: ["mleko", "nabiał", "nabial", "milk", "dairy"],
-  nuts: ["orzechy", "nuts", "tree nuts", "nüsse", "noix", "frutos secos"],
+  peanuts: ["orzeszki ziemne", "orzechy ziemne", "peanuts", "peanut"],
+  soy: ["soja", "soy", "tofu"],
+  milk: ["mleko", "nabiał", "nabial", "milk", "dairy", "jogurt", "yogurt", "śmietana", "cream", "masło", "butter", "ser", "cheese", "mozzarella", "parmezan"],
+  nuts: ["orzechy", "nuts", "tree nuts", "nüsse", "noix", "frutos secos", "migdały", "almonds", "pistacje", "pistachios", "nerkowce", "cashews"],
   celery: ["seler", "celery", "sellerie", "céleri", "apio"],
   mustard: ["gorczyca", "musztarda", "mustard"],
   sesame: ["sezam", "sesame"],
@@ -31,10 +31,28 @@ function entries(value: string) {
   return value.split(/[,;\n]/).map(normalize).filter(Boolean);
 }
 
+export function parseSelectedAllergens(value: string): RecipeAllergen[] {
+  const selected = entries(value);
+  return recipeAllergens.filter((allergen) => selected.some((item) =>
+    [allergen, ...allergenAliases[allergen]].some((alias) => normalize(alias) === item),
+  ));
+}
+
+export function getKnownAllergenConflicts(recipe: Pick<Recipe, "allergens" | "ingredients">, allergies: string): RecipeAllergen[] {
+  return parseSelectedAllergens(allergies).filter((allergen) =>
+    recipe.allergens?.includes(allergen) || recipe.ingredients.some((ingredient) =>
+      allergenAliases[allergen].some((alias) => normalize(ingredient.name).includes(normalize(alias))),
+    ),
+  );
+}
+
 export function getRecipePreferenceConflicts(recipe: Recipe, preferences: Preferences, allergenLabels?: Partial<Record<RecipeAllergen, string>>) {
   const requestedAllergens = entries(preferences.allergies);
-  const matchingAllergens = (recipe.allergens ?? []).filter((allergen) =>
-    requestedAllergens.some((entry) => [...allergenAliases[allergen], allergenLabels?.[allergen] ?? ""].some((alias) => normalize(alias) === entry)),
+  const matchingAllergens = recipeAllergens.filter((allergen) =>
+    requestedAllergens.some((entry) => [...allergenAliases[allergen], allergen, allergenLabels?.[allergen] ?? ""].some((alias) => normalize(alias) === entry)) &&
+    (recipe.allergens?.includes(allergen) || recipe.ingredients.some((ingredient) =>
+      allergenAliases[allergen].some((alias) => normalize(ingredient.name).includes(normalize(alias))),
+    )),
   );
   const excluded = entries(preferences.excludedIngredients);
   const matchingIngredients = recipe.ingredients.filter((ingredient) =>

@@ -7,6 +7,10 @@ import { productFromRow, productToRow } from "@/lib/dashboard-data";
 import type { DemoProduct } from "@/lib/demo-data";
 import type { ShoppingItem } from "@/lib/shopping-list";
 import type { RecipeLibrary } from "@/lib/recipe-library";
+import type { CustomRecipe } from "@/lib/recipe-library";
+import { validateCustomRecipe } from "@/lib/recipe-store";
+import { prepareGeneratedRecipe } from "@/lib/generated-recipes";
+import { collectGeneratedRecipes, generationInputSchema, type GenerationInput } from "@/lib/recipe-generation";
 import type { Recipe } from "@/lib/demo-recipes";
 import { loadDashboardData } from "@/lib/dashboard-data";
 
@@ -24,7 +28,6 @@ const productSchema = z.object({
 const shoppingSchema = z.object({ id: z.uuid(), name: z.string().trim().min(1).max(150), done: z.boolean(), seedKey: z.string().max(50).optional() });
 const librarySchema = z.object({
   version: z.literal(1),
-  customRecipes: z.array(z.record(z.string(), z.unknown())).max(500),
   favoriteSlugs: z.array(z.string().max(150)).max(1000),
   history: z.array(z.record(z.string(), z.unknown())).max(5000),
 });
@@ -100,6 +103,55 @@ export async function persistRecipeLibrary(library: RecipeLibrary) {
   const { error } = await supabase.from("recipe_libraries").update({ library: validLibrary }).eq("user_id", userId);
   if (error) throw new Error(error.message);
   return library;
+}
+
+export async function saveCustomRecipe(recipe: CustomRecipe) {
+  const valid = validateCustomRecipe(recipe);
+  const { supabase, userId } = await authorizedClient();
+  const { error } = await supabase.from("recipes").insert({ user_id: userId, slug: valid.slug, source: "custom", recipe: valid, created_at: valid.createdAt });
+  if (error) throw new Error(error.message);
+  return valid;
+}
+
+export async function updateCustomRecipe(recipe: CustomRecipe) {
+  const valid = validateCustomRecipe(recipe);
+  const { supabase, userId } = await authorizedClient();
+  const { data, error } = await supabase.from("recipes").update({ recipe: valid })
+    .eq("user_id", userId).eq("slug", valid.slug).eq("source", "custom").select("slug").single();
+  if (error || !data) throw new Error(error?.message ?? "Recipe not found");
+  return valid;
+}
+
+export async function deleteCustomRecipe(slug: string) {
+  const validSlug = z.string().trim().min(1).max(150).parse(slug);
+  const { supabase } = await authorizedClient();
+  const { error } = await supabase.rpc("delete_fridgy_custom_recipe", { target_slug: validSlug });
+  if (error) throw new Error(error.message);
+}
+
+export async function generateRecipes(input: GenerationInput) {
+  const validInput = generationInputSchema.parse(input);
+  const { supabase, userId } = await authorizedClient();
+  const dashboard = await loadDashboardData(supabase, userId);
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) return { error: "unavailable" as const };
+  if (validInput.shopping === "none" && !dashboard.products.some((product) => product.status === "active" && product.quantity > 0)) {
+    return { error: "emptyInventory" as const };
+  }
+  let batch;
+  try {
+    batch = await collectGeneratedRecipes(key, validInput, dashboard.products, dashboard, dashboard.recipes);
+  } catch {
+    return { error: "unavailable" as const };
+  }
+  if (!batch.recipes.length) return { error: "noMatches" as const };
+  if (batch.recipes.length < 3 && validInput.shopping !== "none") return { error: "notEnoughSuggestions" as const };
+  const recipes = batch.recipes.map((recipe) => prepareGeneratedRecipe(recipe, crypto.randomUUID()));
+  const { error } = await supabase.from("recipes").insert(recipes.map((recipe) => ({
+    user_id: userId, slug: recipe.slug, source: "ai", recipe, created_at: recipe.createdAt,
+  })));
+  if (error) throw new Error(error.message);
+  return { recipes, partial: recipes.length < 3, message: batch.message };
 }
 
 export async function saveManualReceipt(items: Array<{

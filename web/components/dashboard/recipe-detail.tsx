@@ -200,7 +200,7 @@ export function RecipeDetail({
           ) : null}
 
           <div className="mt-4 flex flex-wrap gap-2">
-            <StartCookingButton recipe={recipe} className="w-full" />
+            <StartCookingButton recipe={recipe} className="min-w-0 flex-1" />
             {showFavoriteAction ? (
               <FavoriteRecipeButton slug={recipe.slug} compact />
             ) : null}

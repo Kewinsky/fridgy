@@ -12,7 +12,7 @@ The Next.js web application for Fridgy. It uses the App Router, TypeScript, and 
 ```bash
 pnpm install
 cp .env.example .env.local
-# Fill in the three values in .env.local.
+# Fill in the Supabase and OpenAI values in .env.local.
 pnpm dev
 ```
 
@@ -27,8 +27,10 @@ Set the following in `.env.local` and in the Vercel project's environment variab
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Project Settings → API | Supabase client |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase → Project Settings → API | Supabase client |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API | Server-only account deletion |
+| `OPENAI_API_KEY` | OpenAI Platform → API keys | Server-only recipe generation |
 
 Never prefix the service role key with `NEXT_PUBLIC_` or expose it in browser code.
+Keep `OPENAI_API_KEY` server-only as well. Apply `202611090001_generated_recipes.sql` and then `202611090002_unified_recipes.sql` before using recipe generation. The second migration moves existing recipes into one table.
 
 Run [`../supabase/migrations/202610140001_initial_schema.sql`](../supabase/migrations/202610140001_initial_schema.sql) in the Supabase SQL Editor before opening the dashboard. It creates the tables, RLS policies, receipt and cooking transactions, and a trigger that gives every new user starter inventory and shopping items. Existing users are backfilled when the migration runs. Keep this migration in source control; do not run it twice manually.
 

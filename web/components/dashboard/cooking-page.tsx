@@ -1,20 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { BookOpenCheckIcon, CheckIcon, ChefHatIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
 
+import { generateRecipes } from "@/app/dashboard/data-actions";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { RecipeCardSkeleton } from "@/components/dashboard/recipe-card-skeleton";
-import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { demoRecipes, filterRecipesByCuisines, recipeAllergens, type Recipe } from "@/lib/demo-recipes";
-import { localizeDemoRecipe } from "@/lib/demo-localization";
-import { getRecipePreferenceConflicts } from "@/lib/recipe-preferences";
+import type { StoredRecipe } from "@/lib/recipe-library";
 import type { Locale } from "@/i18n/config";
 import { cuisineMessageKeys, cuisines as recipeCuisines, type Cuisine } from "@/components/dashboard/recipe-options";
 import { cn } from "@/lib/utils";
@@ -27,11 +25,9 @@ const maxNotesLength = 500;
 export function CookingPage() {
   const t = useTranslations("Cooking");
   const recipeT = useTranslations("Recipe.cuisineOptions");
-  const allergenT = useTranslations("Recipe.allergens.options");
   const locale = useLocale() as Locale;
-  const library = useRecipeLibrary();
-  const preferences = useDashboardData();
-  const [meal, setMeal] = useState<(typeof meals)[number] | null>(null);
+  const { addRecipes } = useDashboardData();
+  const [meal, setMeal] = useState<(typeof meals)[number]>("lunch");
   const [time, setTime] = useState<(typeof times)[number]>("30");
   const [servings, setServings] = useState(2);
   const [selectedCuisines, setSelectedCuisines] = useState<Cuisine[]>([]);
@@ -39,67 +35,51 @@ export function CookingPage() {
   const [savedRecipes, setSavedRecipes] = useState<(typeof savedRecipeOptions)[number]>("include");
   const [notes, setNotes] = useState("");
   const [showRecipes, setShowRecipes] = useState(false);
-  const [visibleRecipeCount, setVisibleRecipeCount] = useState(3);
+  const [recipes, setRecipes] = useState<StoredRecipe[]>([]);
+  const [error, setError] = useState<"unavailable" | "emptyInventory" | "noMatches" | "notEnoughSuggestions" | "failed" | null>(null);
+  const [partial, setPartial] = useState(false);
+  const [aiMessage, setAiMessage] = useState<string | null>(null);
   const [loadingPhase, setLoadingPhase] = useState<"initial" | "more" | null>(null);
-  const loadingTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const pending = useRef(false);
 
-  useEffect(() => {
-    return () => {
-      if (loadingTimer.current) clearTimeout(loadingTimer.current);
-    };
-  }, []);
-
-  function showSuggestions() {
-    if (!meal || loadingTimer.current) return;
+  async function requestSuggestions(more: boolean) {
+    if (pending.current) return;
+    pending.current = true;
     setShowRecipes(true);
-    setLoadingPhase("initial");
-    // Demo delay until recipe generation is connected.
-    loadingTimer.current = setTimeout(() => {
+    setLoadingPhase(more ? "more" : "initial");
+    setError(null);
+    setPartial(false);
+    setAiMessage(null);
+    try {
+      const result = await generateRecipes({
+        meal, servings, time, shopping, cuisines: selectedCuisines, savedRecipes, notes, locale,
+        excludeTitles: more ? recipes.slice(-100).map((recipe) => recipe.title) : [],
+      });
+      if (result.error) {
+        setError(result.error);
+      } else if (result.recipes) {
+        setRecipes((current) => more ? [...current, ...result.recipes] : result.recipes);
+        addRecipes(result.recipes);
+        setPartial(result.partial);
+        setAiMessage(result.message);
+      }
+    } catch {
+      setError("failed");
+    } finally {
+      pending.current = false;
       setLoadingPhase(null);
-      loadingTimer.current = null;
-    }, 900);
-  }
-
-  function showMoreSuggestions() {
-    if (loadingTimer.current) return;
-    setLoadingPhase("more");
-    loadingTimer.current = setTimeout(() => {
-      setVisibleRecipeCount((count) => count + 3);
-      setLoadingPhase(null);
-      loadingTimer.current = null;
-    }, 900);
+    }
   }
 
   function changeAnswers() {
-    if (loadingTimer.current) clearTimeout(loadingTimer.current);
-    loadingTimer.current = null;
+    if (pending.current) return;
     setLoadingPhase(null);
     setShowRecipes(false);
-    setVisibleRecipeCount(3);
+    setRecipes([]);
+    setError(null);
+    setPartial(false);
+    setAiMessage(null);
   }
-  const usedRecipeSlugs = new Set([
-    ...library.favoriteSlugs,
-    ...library.history.map((record) => record.recipeSlug),
-  ]);
-  const rememberedDemoRecipes = [...demoRecipes].sort(
-    (first, second) => Number(usedRecipeSlugs.has(second.slug)) - Number(usedRecipeSlugs.has(first.slug)),
-  );
-  const savedCandidates = savedRecipes === "include"
-    ? [...library.customRecipes, ...rememberedDemoRecipes]
-    : savedRecipes === "newOnly"
-      ? demoRecipes.filter((recipe) => !usedRecipeSlugs.has(recipe.slug))
-      : demoRecipes;
-  const allergenLabels = Object.fromEntries(recipeAllergens.map((allergen) => [allergen, allergenT(allergen)]));
-  function conflictCount(recipe: Recipe) {
-    const conflicts = getRecipePreferenceConflicts(localizeDemoRecipe(recipe, locale), preferences, allergenLabels);
-    return conflicts.matchingAllergens.length + conflicts.matchingIngredients.length + Number(conflicts.dietConflict);
-  }
-  const candidateRecipes = [...filterRecipesByCuisines(savedCandidates, selectedCuisines)]
-    .sort((first, second) => conflictCount(first) - conflictCount(second));
-  const visibleRecipes = candidateRecipes.slice(0, visibleRecipeCount);
-  const skeletonCount = loadingPhase === "more"
-    ? Math.min(3, candidateRecipes.length - visibleRecipeCount)
-    : 3;
 
   return (
     <>
@@ -118,40 +98,48 @@ export function CookingPage() {
         <>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm text-muted-foreground">
-              {meal ? t(`options.meals.${meal}`) : null} · {t(`options.times.${time}`)} · {t("servings", { count: servings })} · {t(`options.shopping.${shopping}`)} · {selectedCuisines.length ? selectedCuisines.map((cuisine) => recipeT(cuisineMessageKeys[cuisine])).join(", ") : t("options.cuisines.any")} · {t(`options.saved.${savedRecipes}`)}
+              {t(`options.meals.${meal}`)} · {t(`options.times.${time}`)} · {t("servings", { count: servings })} · {t(`options.shopping.${shopping}`)} · {selectedCuisines.length ? selectedCuisines.map((cuisine) => recipeT(cuisineMessageKeys[cuisine])).join(", ") : t("options.cuisines.any")} · {t(`options.saved.${savedRecipes}`)}
             </p>
             <Button
               variant="outline"
               className="h-11"
+              disabled={loadingPhase !== null}
               onClick={changeAnswers}
             >
               <RefreshCwIcon aria-hidden="true" /> {t("changeAnswers")}
             </Button>
           </div>
           {loadingPhase ? <p className="sr-only" role="status">{t("loadingSuggestions")}</p> : null}
-          {visibleRecipes.length || loadingPhase ? (
+          {aiMessage ? (
+            <section className="app-card mb-4 flex items-start gap-3 p-5" aria-label={t("aiMessageLabel")}>
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-primary"><SparklesIcon className="size-5" aria-hidden="true" /></span>
+              <p className="pt-1 text-sm leading-6">{aiMessage}</p>
+            </section>
+          ) : null}
+          {error ? <p role="alert" className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm font-semibold text-destructive">{t(`errors.${error}`)}</p> : null}
+          {partial ? <p role="status" className="mb-4 rounded-lg border border-border bg-muted p-4 text-sm">{t("partialNoShopping")}</p> : null}
+          {recipes.length || loadingPhase ? (
             <div className="grid gap-4 lg:grid-cols-3">
-              {loadingPhase !== "initial" ? visibleRecipes.map((recipe) => {
+              {loadingPhase !== "initial" ? recipes.map((recipe) => {
                 return (
                   <RecipeCard
                     key={recipe.slug}
                     recipe={recipe}
                     variant="suggestion"
-                    servings={servings}
                   />
                 );
               }) : null}
-              {loadingPhase ? Array.from({ length: skeletonCount }, (_, index) => <RecipeCardSkeleton key={`skeleton-${index}`} />) : null}
+              {loadingPhase ? Array.from({ length: 3 }, (_, index) => <RecipeCardSkeleton key={`skeleton-${index}`} />) : null}
             </div>
-          ) : (
+          ) : !error ? (
             <section className="app-card p-8 text-center">
               <h2 className="text-lg font-extrabold">{t("empty.title")}</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 {t("empty.description")}
               </p>
             </section>
-          )}
-          {candidateRecipes.length > 3 && visibleRecipeCount === 3 && !loadingPhase ? (
+          ) : null}
+          {recipes.length > 0 && !loadingPhase ? (
             <section className="app-card mt-4 flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <h2 className="font-extrabold">{t("more.title")}</h2>
@@ -162,23 +150,18 @@ export function CookingPage() {
               <Button
                 variant="outline"
                 className="h-11 shrink-0"
-                onClick={showMoreSuggestions}
+                onClick={() => void requestSuggestions(true)}
               >
                 <SparklesIcon aria-hidden="true" /> {t("more.button")}
               </Button>
             </section>
-          ) : visibleRecipeCount > 3 ? (
-            <p className="mt-4 text-center text-sm text-muted-foreground" aria-live="polite">
-              {t("more.count", { count: visibleRecipes.length })}
-            </p>
           ) : null}
         </>
       ) : (
         <>
-          <div className="grid items-start gap-5 lg:grid-cols-2">
+          <div className="grid auto-rows-fr gap-5 lg:grid-cols-2">
             <Question number="1" title={t("questions.meal")}>
               <Chips options={meals} value={meal} onChange={setMeal} getLabel={(value) => t(`options.meals.${value}`)} label={t("questions.meal")} required />
-              <p className="mt-3 text-xs text-muted-foreground">{t("mealRequired")}</p>
             </Question>
             <Question number="2" title={t("questions.servings")}>
               <div className="flex items-center gap-3">
@@ -237,8 +220,8 @@ export function CookingPage() {
             </div>
           </details>
           <div className="sticky bottom-20 z-10 mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/95 p-4 backdrop-blur lg:bottom-4">
-            <p className="text-sm text-muted-foreground">{t("demoNotice")}</p>
-            <Button className="h-11" onClick={showSuggestions} disabled={!meal}><ChefHatIcon aria-hidden="true" /> {t("showSuggestions")}</Button>
+            <p className="text-sm text-muted-foreground">{t("generationNotice")}</p>
+            <Button className="h-11" onClick={() => void requestSuggestions(false)}><ChefHatIcon aria-hidden="true" /> {t("showSuggestions")}</Button>
           </div>
         </>
       )}

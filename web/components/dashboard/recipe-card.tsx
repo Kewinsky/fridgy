@@ -13,25 +13,15 @@ import {
   DeleteRecipeDialog,
   EditRecipeDialog,
 } from "@/components/dashboard/add-recipe-dialog";
-import { AddMissingItemsButton } from "@/components/dashboard/add-missing-items-button";
 import { FavoriteRecipeButton } from "@/components/dashboard/recipe-actions";
 import { RecipeImage } from "@/components/dashboard/recipe-image";
-import { useInventory } from "@/components/dashboard/use-inventory";
-import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { difficultyMessageKeys } from "@/components/dashboard/recipe-options";
 import { Button } from "@/components/ui/button";
-import {
-  getMissingIngredients,
-  getRecipeMatch,
-  recipeAllergens,
-  type Recipe,
-} from "@/lib/demo-recipes";
+import type { Recipe } from "@/lib/demo-recipes";
 import { localizeDemoRecipe } from "@/lib/demo-localization";
 import { getRecipeImageSrc } from "@/lib/recipe-image";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
-import { matchRecipeToInventory } from "@/lib/inventory-store";
-import { getRecipePreferenceConflicts } from "@/lib/recipe-preferences";
 import { cn } from "@/lib/utils";
 
 export function RecipeCard({
@@ -44,28 +34,15 @@ export function RecipeCard({
   servings?: number;
 }) {
   const t = useTranslations("Recipe");
-  const preferences = useDashboardData();
-  const matchedRecipe = matchRecipeToInventory(recipe, useInventory());
-  const displayRecipe = localizeDemoRecipe(matchedRecipe, useLocale() as Locale);
+  const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
   const imageSrc = getRecipeImageSrc(recipe);
-  const missing = suggestion ? getMissingIngredients(matchedRecipe) : [];
-  const match = suggestion ? getRecipeMatch(matchedRecipe) : null;
-  const conflicts = getRecipePreferenceConflicts(displayRecipe, preferences, Object.fromEntries(
-    recipeAllergens.map((allergen) => [allergen, t(`allergens.options.${allergen}`)]),
-  ));
-  const conflictReasons = [
-    ...(conflicts.dietConflict ? [t(`diet.options.${preferences.diet as "vegetarian" | "vegan" | "pescatarian"}`)] : []),
-    ...conflicts.matchingAllergens.map((allergen) => t(`allergens.options.${allergen}`)),
-    ...conflicts.matchingIngredients,
-  ];
-  const href = customRecipe
-    ? `/dashboard/moje-przepisy/${recipe.slug}`
-    : `/dashboard/co-ugotowac/${recipe.slug}`;
+  let href = `/dashboard/co-ugotowac/${recipe.slug}`;
+  if (customRecipe || recipe.slug.startsWith("ai-")) href = `/dashboard/moje-przepisy/${recipe.slug}`;
 
   return (
-    <article className={cn("app-card flex flex-col p-5", suggestion && conflictReasons.length && "border-destructive/60")}>
+    <article className="app-card flex flex-col p-5">
       <div className={cn("relative mb-4 flex h-40 items-center justify-center overflow-hidden rounded-lg", !imageSrc && "bg-secondary text-primary")}>
         {imageSrc ? (
           <RecipeImage key={imageSrc} src={imageSrc} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" unoptimized={Boolean(recipe.imagePath)} />
@@ -94,50 +71,20 @@ export function RecipeCard({
           </span>
         </div>
 
-        {recipe.macros && recipe.calories && recipe.calories > 0 ? (
+        {recipe.calories && recipe.calories > 0 ? (
           <p className="mt-3 text-xs font-semibold text-muted-foreground">
             {t("nutrition.card", { calories: recipe.calories })}
           </p>
         ) : null}
 
-        {suggestion && conflictReasons.length ? (
-          <p className="mt-3 rounded-lg bg-destructive/10 p-3 text-xs font-semibold text-destructive" role="alert">
-            {t("diet.conflict", { reason: conflictReasons.join(", ") })}
-          </p>
-        ) : suggestion && preferences.allergies.trim() && recipe.allergens === undefined ? (
-          <p className="mt-3 text-xs font-semibold text-muted-foreground">{t("allergens.unknown")}</p>
-        ) : null}
-
-        {match ? (
-          <>
-            <p className="mt-4 text-sm font-bold">{t("match", { available: match.available, total: match.total })}</p>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-muted" role="progressbar" aria-label={t("match", { available: match.available, total: match.total })} aria-valuenow={match.available} aria-valuemin={0} aria-valuemax={match.total}>
-              <div className="h-full bg-primary" style={{ width: `${(match.available / match.total) * 100}%` }} />
-            </div>
-            <p className="mt-2 text-xs text-muted-foreground">
-              {missing.length
-                ? t("missingNames", { names: getMissingIngredients(displayRecipe).map((ingredient) => ingredient.name).join(", ") })
-                : t("allIngredients")}
-            </p>
-          </>
-        ) : null}
-
         <div className="mt-5 flex gap-2">
-          <div className="grid min-w-0 flex-1 gap-2">
-            {suggestion && missing.length ? (
-              <AddMissingItemsButton
-                names={getMissingIngredients(displayRecipe).map((ingredient) => ingredient.name)}
-                className="w-full"
-              />
-            ) : null}
-            <Button
-              nativeButton={false}
-              render={<Link href={href} />}
-              className="h-11 w-full"
-            >
-              {t("viewRecipe")} <ArrowRightIcon aria-hidden="true" />
-            </Button>
-          </div>
+          <Button
+            nativeButton={false}
+            render={<Link href={href} />}
+            className="h-11 min-w-0 flex-1"
+          >
+            {t("viewRecipe")} <ArrowRightIcon aria-hidden="true" />
+          </Button>
           {!suggestion && customRecipe ? (
             <div className="flex gap-2 self-end">
               <EditRecipeDialog recipe={customRecipe} />

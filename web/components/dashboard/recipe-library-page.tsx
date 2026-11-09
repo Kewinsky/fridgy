@@ -13,9 +13,11 @@ import { AddRecipeDialog } from "@/components/dashboard/add-recipe-dialog";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsScrollableList, TabsTrigger } from "@/components/ui/tabs";
 import { demoRecipes, type Recipe } from "@/lib/demo-recipes";
+import { getHistoryRecipes } from "@/lib/recipe-library";
 
 export type RecipeLibraryTab = "favorites" | "custom" | "history";
 
@@ -57,6 +59,7 @@ export function RecipeLibraryPage({ favorites, custom, history }: {
         </TabsContent>
 
         <TabsContent value="history" className="pt-3">
+          <p className="mb-3 text-sm text-muted-foreground">{t("historyRetention")}</p>
           {history}
         </TabsContent>
       </Tabs>
@@ -67,7 +70,8 @@ export function RecipeLibraryPage({ favorites, custom, history }: {
 export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
   const t = useTranslations("RecipeLibrary");
   const library = useRecipeLibrary();
-  const allRecipes = [...library.customRecipes, ...demoRecipes];
+  const { recipes: savedRecipes } = useDashboardData();
+  const allRecipes = [...savedRecipes, ...demoRecipes];
   let recipes: Recipe[];
   let emptyState: ReactNode;
 
@@ -75,12 +79,10 @@ export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
     recipes = allRecipes.filter((recipe) => library.favoriteSlugs.includes(recipe.slug));
     emptyState = <EmptyState icon={HeartIcon} title={t("emptyFavorites.title")} description={t("emptyFavorites.description")} />;
   } else if (tab === "custom") {
-    recipes = library.customRecipes;
+    recipes = savedRecipes.filter((recipe) => recipe.source === "custom");
     emptyState = <EmptyState icon={BookOpenIcon} title={t("emptyCustom.title")} description={t("emptyCustom.description")} actionNode={<AddRecipeDialog />} />;
   } else {
-    recipes = Array.from(new Set(library.history.map((record) => record.recipeSlug)))
-      .map((slug) => allRecipes.find((recipe) => recipe.slug === slug))
-      .filter((recipe): recipe is Recipe => recipe !== undefined);
+    recipes = getHistoryRecipes(savedRecipes, demoRecipes, library.history);
     emptyState = <EmptyState icon={HistoryIcon} title={t("emptyHistory.title")} description={t("emptyHistory.description")} href="/dashboard/co-ugotowac" action={t("emptyHistory.action")} />;
   }
 

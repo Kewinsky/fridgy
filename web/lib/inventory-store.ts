@@ -1,6 +1,11 @@
 import { getIngredientQuantity, type Recipe } from "./demo-recipes.ts";
 import type { DemoProduct } from "./demo-data.ts";
 
+const tapWaterNames = new Set([
+  "woda", "woda kranowa", "woda z kranu", "water", "tap water",
+  "wasser", "leitungswasser", "eau", "eau du robinet", "agua", "agua del grifo",
+]);
+
 export type InventoryDeduction = {
   productId: string;
   amount: number;
@@ -15,30 +20,45 @@ export function suggestRecipeDeductions(
   recipe: Pick<Recipe, "ingredients">,
   products: DemoProduct[],
 ): InventoryDeductionSuggestion[] {
-  return recipe.ingredients.flatMap((ingredient) => {
-    const product = products.find(
-      (item) =>
-        item.status === "active" &&
-        productNameMatches(item.name, ingredient.name),
+  const deductions = new Map<string, InventoryDeductionSuggestion>();
+  for (const ingredient of recipe.ingredients) {
+    if (isTapWaterIngredient(ingredient.name)) continue;
+    const matching = products.filter((product) =>
+      product.status === "active" && product.quantity > 0 && productNameMatches(product.name, ingredient.name),
     );
-    if (!product) return [];
+    if (!matching.length) continue;
 
-    const parsedAmount = getIngredientQuantity(ingredient);
-    const compatible =
-      parsedAmount !== null &&
-      normalizeUnit(parsedAmount.unit) === normalizeUnit(product.unit);
+    const required = getIngredientQuantity(ingredient);
+    const requiredUnit = required ? normalizeUnit(required.unit) : "";
+    const compatible = required ? matching.filter((product) =>
+      inventoryBaseUnit(normalizeUnit(product.unit)) === inventoryBaseUnit(requiredUnit),
+    ) : [];
+    if (!required || !compatible.length) {
+      const product = matching[0];
+      if (!deductions.has(product.id)) deductions.set(product.id, {
+        productId: product.id, ingredientAmount: ingredient.amount, amount: 0, selected: false,
+      });
+      continue;
+    }
 
-    return [
-      {
+    let remaining = required.quantity * unitMultiplier(requiredUnit);
+    for (const product of compatible) {
+      const previous = deductions.get(product.id);
+      const multiplier = unitMultiplier(normalizeUnit(product.unit));
+      const available = product.quantity - (previous?.amount ?? 0);
+      const amount = Math.min(available, Math.floor((remaining / multiplier + 1e-9) * 1000) / 1000);
+      if (amount <= 0) continue;
+      deductions.set(product.id, {
         productId: product.id,
-        ingredientAmount: ingredient.amount,
-        amount: compatible
-          ? Math.min(parsedAmount.quantity, product.quantity)
-          : 0,
-        selected: compatible,
-      },
-    ];
-  });
+        ingredientAmount: previous ? `${previous.ingredientAmount} + ${ingredient.amount}` : ingredient.amount,
+        amount: Number(((previous?.amount ?? 0) + amount).toFixed(3)),
+        selected: true,
+      });
+      remaining -= amount * multiplier;
+      if (remaining <= 1e-9) break;
+    }
+  }
+  return [...deductions.values()];
 }
 
 export function matchRecipeToInventory(recipe: Recipe, products: DemoProduct[]): Recipe {
@@ -46,11 +66,39 @@ export function matchRecipeToInventory(recipe: Recipe, products: DemoProduct[]):
     ...recipe,
     ingredients: recipe.ingredients.map((ingredient) => ({
       ...ingredient,
-      available: products.some((product) =>
-        product.status === "active" && product.quantity > 0 &&
-        productNameMatches(product.name, ingredient.name)),
+      available: hasEnoughIngredient(ingredient, products),
     })),
   };
+}
+
+export function hasEnoughIngredient(ingredient: Recipe["ingredients"][number], products: DemoProduct[]) {
+  if (isTapWaterIngredient(ingredient.name)) return true;
+  const required = getIngredientQuantity(ingredient);
+  if (!required) return false;
+  const unit = normalizeUnit(required.unit);
+  const baseUnit = inventoryBaseUnit(unit);
+  const needed = required.quantity * unitMultiplier(unit);
+  const available = products.reduce((total, product) => {
+    if (product.status !== "active" || !productNameMatches(product.name, ingredient.name)) return total;
+    const productUnit = normalizeUnit(product.unit);
+    if (inventoryBaseUnit(productUnit) !== baseUnit) return total;
+    return total + product.quantity * unitMultiplier(productUnit);
+  }, 0);
+  return available >= needed;
+}
+
+export function isTapWaterIngredient(name: string) {
+  return tapWaterNames.has(normalize(name));
+}
+
+function inventoryBaseUnit(unit: string) {
+  if (unit === "kg") return "g";
+  if (unit === "l") return "ml";
+  return unit;
+}
+
+function unitMultiplier(unit: string) {
+  return unit === "kg" || unit === "l" ? 1000 : 1;
 }
 
 function productNameMatches(productName: string, ingredientName: string) {

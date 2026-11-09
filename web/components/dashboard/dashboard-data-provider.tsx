@@ -2,11 +2,11 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 
-import { finishCookingSession, persistInventory, persistRecipeLibrary, persistShoppingItems, readDashboardData, readInventory, readShoppingItems } from "@/app/dashboard/data-actions";
+import { deleteCustomRecipe, finishCookingSession, persistInventory, persistRecipeLibrary, persistShoppingItems, readDashboardData, readInventory, readShoppingItems, saveCustomRecipe, updateCustomRecipe } from "@/app/dashboard/data-actions";
 import type { Recipe } from "@/lib/demo-recipes";
 import type { DashboardData } from "@/lib/dashboard-data";
 import type { DemoProduct } from "@/lib/demo-data";
-import type { RecipeLibrary } from "@/lib/recipe-library";
+import type { CustomRecipe, RecipeLibrary, StoredRecipe } from "@/lib/recipe-library";
 import type { ShoppingItem } from "@/lib/shopping-list";
 
 type DashboardStore = DashboardData & {
@@ -14,6 +14,10 @@ type DashboardStore = DashboardData & {
   refreshInventory: () => Promise<void>;
   updateShoppingItems: (update: (current: ShoppingItem[]) => ShoppingItem[]) => Promise<void>;
   updateRecipeLibrary: (update: (current: RecipeLibrary) => RecipeLibrary) => Promise<void>;
+  saveCustomRecipe: (recipe: CustomRecipe) => Promise<void>;
+  updateCustomRecipe: (recipe: CustomRecipe) => Promise<void>;
+  deleteCustomRecipe: (slug: string) => Promise<void>;
+  addRecipes: (recipes: StoredRecipe[]) => void;
   finishCooking: (recipe: Pick<Recipe, "slug" | "title" | "cuisine">, deductions: Array<{ productId: string; amount: number }>) => Promise<void>;
   setDeductionMode: (mode: DashboardData["deductionMode"]) => void;
   setDietPreferences: (preferences: Pick<DashboardData, "diet" | "allergies" | "excludedIngredients">) => void;
@@ -25,6 +29,7 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
   const [products, setProducts] = useState(initialData.products);
   const [shoppingItems, setShoppingItems] = useState(initialData.shoppingItems);
   const [recipeLibrary, setRecipeLibrary] = useState(initialData.recipeLibrary);
+  const [recipes, setRecipes] = useState(initialData.recipes);
   const [deductionMode, setDeductionMode] = useState(initialData.deductionMode);
   const [dietPreferences, setDietPreferences] = useState({ diet: initialData.diet, allergies: initialData.allergies, excludedIngredients: initialData.excludedIngredients });
 
@@ -35,6 +40,7 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
         setProducts(data.products);
         setShoppingItems(data.shoppingItems);
         setRecipeLibrary(data.recipeLibrary);
+        setRecipes(data.recipes);
         setDeductionMode(data.deductionMode);
         setDietPreferences({ diet: data.diet, allergies: data.allergies, excludedIngredients: data.excludedIngredients });
       }).catch(() => {});
@@ -81,16 +87,36 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
     setRecipeLibrary(await persistRecipeLibrary(update(recipeLibrary)));
   }
 
+  async function saveCustom(recipe: CustomRecipe) {
+    const saved = await saveCustomRecipe(recipe);
+    setRecipes((current) => [saved, ...current]);
+  }
+
+  async function updateCustom(recipe: CustomRecipe) {
+    const saved = await updateCustomRecipe(recipe);
+    setRecipes((current) => current.map((item) => item.slug === saved.slug ? saved : item));
+  }
+
+  async function deleteCustom(slug: string) {
+    await deleteCustomRecipe(slug);
+    setRecipes((current) => current.filter((item) => item.slug !== slug));
+    setRecipeLibrary((current) => ({ ...current, favoriteSlugs: current.favoriteSlugs.filter((item) => item !== slug) }));
+  }
+
   async function finishCooking(recipe: Pick<Recipe, "slug" | "title" | "cuisine">, deductions: Array<{ productId: string; amount: number }>) {
     const data = await finishCookingSession(recipe, deductions);
     setProducts(data.products);
     setRecipeLibrary(data.recipeLibrary);
+    setRecipes(data.recipes);
   }
 
   return (
     <DashboardContext.Provider value={{
-      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, deductionMode,
-      updateInventory, refreshInventory, updateShoppingItems, updateRecipeLibrary, finishCooking, setDeductionMode, setDietPreferences,
+      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, recipes, deductionMode,
+      updateInventory, refreshInventory, updateShoppingItems, updateRecipeLibrary,
+      saveCustomRecipe: saveCustom, updateCustomRecipe: updateCustom, deleteCustomRecipe: deleteCustom,
+      addRecipes: (added) => setRecipes((current) => [...added, ...current]),
+      finishCooking, setDeductionMode, setDietPreferences,
     }}>
       {children}
     </DashboardContext.Provider>

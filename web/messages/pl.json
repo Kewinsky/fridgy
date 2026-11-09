@@ -109,7 +109,7 @@
         "description": "Informacje wykorzystywane przy proponowaniu przepisów.",
         "typeLabel": "Sposób żywienia",
         "allergiesLabel": "Alergie",
-        "allergiesPlaceholder": "np. orzechy, seler",
+        "allergiesPlaceholder": "Nie wybrano alergenów",
         "excludedLabel": "Wykluczone składniki",
         "excludedPlaceholder": "np. oliwki, kolendra",
         "options": {
@@ -404,10 +404,18 @@
     "servings": "{count, plural, one {# porcja} few {# porcje} other {# porcji}}",
     "fewerPeople": "Mniej osób",
     "morePeople": "Więcej osób",
-    "demoNotice": "To przepisy demonstracyjne. Uwagi nie wpływają jeszcze na propozycje.",
+    "generationNotice": "Przepisy tworzy AI. Sprawdź skład i etykiety produktów przed gotowaniem.",
+    "aiMessageLabel": "Wiadomość od Fridgy",
     "showSuggestions": "Pokaż propozycje",
-    "mealRequired": "Wybierz jeden rodzaj posiłku.",
-    "loadingSuggestions": "Przygotowujemy propozycje przepisów...",
+    "loadingSuggestions": "Generujemy przepisy...",
+    "partialNoShopping": "Z dostępnych zapasów udało się znaleźć mniej niż 3 przepisy. Pozostałe składniki możesz dokupić po zmianie odpowiedzi.",
+    "errors": {
+      "unavailable": "Nie udało się uzyskać przepisu z usługi AI. Spróbuj ponownie.",
+      "emptyInventory": "Nie masz dostępnych zapasów. Dodaj produkty albo pozwól na zakupy, aby wygenerować przepisy.",
+      "noMatches": "Nie udało się znaleźć przepisu zgodnego z Twoimi ograniczeniami. Spróbuj ponownie.",
+      "notEnoughSuggestions": "Po sprawdzeniu czasu, kuchni, alergii i dostępnych składników nie udało się zebrać 3 różnych przepisów. Możesz wydłużyć czas, wybrać więcej kuchni lub pozwolić na zakupy.",
+      "failed": "Nie udało się zapisać przepisów. Spróbuj ponownie."
+    },
     "questionProgress": "Pytanie {number} z 4",
     "questions": {
       "meal": "Jaki posiłek przygotowujesz?",
@@ -421,7 +429,7 @@
       "title": "Dodatkowe preferencje (opcjonalnie)",
       "notesLabel": "Masz dodatkowe uwagi?",
       "notesPlaceholder": "Np. bez ostrych przypraw, coś dla dzieci albo wykorzystaj brokuły",
-      "notesHint": "Uwagi zostaną uwzględnione po podłączeniu propozycji AI.",
+      "notesHint": "Uwagi wpływają na generowane propozycje.",
       "notesCount": "{count}/{max} znaków"
     },
     "options": {
@@ -499,7 +507,7 @@
     "ingredients": "Składniki",
     "nutrition": {
       "title": "Wartości na 1 porcję",
-      "estimate": "Szacunkowe wartości – zależą od użytych produktów i wielkości porcji.",
+      "estimate": "Szacunkowe wartości na porcję – zależą od użytych produktów i wielkości porcji.",
       "author": "Wartości podane przez autora przepisu – nie są automatycznie weryfikowane.",
       "missing": "Brak danych o wartościach odżywczych dla tego przepisu.",
       "card": "Około {calories} kcal na porcję",
@@ -577,10 +585,10 @@
   },
   "RecipeLibrary": {
     "metaTitle": "Moje przepisy",
-    "metaDescription": "Ulubione przepisy, własne dania i historia gotowania.",
+    "metaDescription": "Ulubione i własne przepisy oraz historia wygenerowanych i ugotowanych dań.",
     "eyebrow": "Twoja książka kucharska",
     "title": "Moje przepisy",
-    "description": "Zapisuj ulubione dania, dodawaj własne przepisy i wracaj do historii gotowania.",
+    "description": "Zapisuj ulubione dania, dodawaj własne przepisy i wracaj do wygenerowanych oraz ugotowanych dań.",
     "summary": "Podsumowanie przepisów",
     "allCookings": "wszystkich ugotowań",
     "favoriteRecipes": "ulubionych przepisów",
@@ -591,6 +599,7 @@
       "custom": "Moje",
       "history": "Historia"
     },
+    "historyRetention": "Wygenerowane przepisy bez serca są usuwane po 7 dniach. Ulubione zostają.",
     "emptyFavorites": {
       "title": "Brak ulubionych",
       "description": "Dodaj sercem przepisy, do których chcesz szybko wracać."
@@ -601,7 +610,7 @@
     },
     "emptyHistory": {
       "title": "Historia jest jeszcze pusta",
-      "description": "Otwórz przepis i wybierz „Gotuj!”, aby zapisać pierwsze przygotowanie.",
+      "description": "Wygeneruj przepis albo wybierz „Gotuj!”, aby zobaczyć go tutaj.",
       "action": "Znajdź przepis"
     },
     "notFound": {

@@ -109,7 +109,7 @@
         "description": "Information used when suggesting recipes.",
         "typeLabel": "Diet",
         "allergiesLabel": "Allergies",
-        "allergiesPlaceholder": "e.g. nuts, celery",
+        "allergiesPlaceholder": "No allergens selected",
         "excludedLabel": "Excluded ingredients",
         "excludedPlaceholder": "e.g. olives, coriander",
         "options": {
@@ -404,10 +404,18 @@
     "servings": "{count, plural, one {# serving} other {# servings}}",
     "fewerPeople": "Fewer people",
     "morePeople": "More people",
-    "demoNotice": "These are demo recipes. Notes do not affect suggestions yet.",
+    "generationNotice": "AI creates these recipes. Check ingredients and product labels before cooking.",
+    "aiMessageLabel": "Message from Fridgy",
     "showSuggestions": "Show suggestions",
-    "mealRequired": "Choose one meal type.",
-    "loadingSuggestions": "Preparing recipe suggestions...",
+    "loadingSuggestions": "Generating recipes...",
+    "partialNoShopping": "We found fewer than 3 recipes using your current stock. Allow shopping to see more options.",
+    "errors": {
+      "unavailable": "The AI service could not provide a recipe. Please try again.",
+      "emptyInventory": "You have no available stock. Add products or allow shopping to generate recipes.",
+      "noMatches": "No recipe matched your requirements. Please try again.",
+      "notEnoughSuggestions": "After checking the time, cuisine, allergies and available ingredients, we could not find 3 distinct recipes. Try more time, more cuisines or allow shopping.",
+      "failed": "We could not save the recipes. Please try again."
+    },
     "questionProgress": "Question {number} of 4",
     "questions": {
       "meal": "Which meal are you preparing?",
@@ -421,7 +429,7 @@
       "title": "More preferences (optional)",
       "notesLabel": "Anything else we should know?",
       "notesPlaceholder": "For example, no spicy food, something for kids, or use broccoli",
-      "notesHint": "Your notes will be used when AI suggestions are connected.",
+      "notesHint": "Your notes shape the generated suggestions.",
       "notesCount": "{count}/{max} characters"
     },
     "options": {
@@ -499,7 +507,7 @@
     "ingredients": "Ingredients",
     "nutrition": {
       "title": "Nutrition per serving",
-      "estimate": "Estimates vary with the products used and portion size.",
+      "estimate": "Estimates per serving vary with the products used and portion size.",
       "author": "Values entered by the recipe author – they are not checked automatically.",
       "missing": "No nutrition data is available for this recipe.",
       "card": "About {calories} kcal per serving",
@@ -577,10 +585,10 @@
   },
   "RecipeLibrary": {
     "metaTitle": "My recipes",
-    "metaDescription": "Favourite recipes, your dishes and cooking history.",
+    "metaDescription": "Favourite and personal recipes, plus generated and cooked dishes.",
     "eyebrow": "Your cookbook",
     "title": "My recipes",
-    "description": "Save favourite dishes, add your own recipes and return to your cooking history.",
+    "description": "Save favourites, add your own recipes and revisit generated or cooked dishes.",
     "summary": "Recipe summary",
     "allCookings": "total cooking sessions",
     "favoriteRecipes": "favourite recipes",
@@ -591,6 +599,7 @@
       "custom": "Mine",
       "history": "History"
     },
+    "historyRetention": "Generated recipes without a heart are removed after 7 days. Favourites stay.",
     "emptyFavorites": {
       "title": "No favourites",
       "description": "Use the heart to save recipes you want to return to."
@@ -601,7 +610,7 @@
     },
     "emptyHistory": {
       "title": "History is empty",
-      "description": "Open a recipe and select 'Cook!' to save your first cooking session.",
+      "description": "Generate a recipe or select 'Cook!' to see it here.",
       "action": "Find a recipe"
     },
     "notFound": {

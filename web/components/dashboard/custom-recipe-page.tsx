@@ -5,13 +5,13 @@ import { BookOpenIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { RecipeDetail } from "@/components/dashboard/recipe-detail";
-import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Button } from "@/components/ui/button";
 
 export function CustomRecipePage({ slug }: { slug: string }) {
   const t = useTranslations("RecipeLibrary");
-  const library = useRecipeLibrary();
-  const recipe = library.customRecipes.find((item) => item.slug === slug);
+  const { recipes } = useDashboardData();
+  const recipe = recipes.find((item) => item.slug === slug);
 
   if (!recipe) {
     return (

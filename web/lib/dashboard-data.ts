@@ -5,7 +5,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 
 import type { DemoProduct } from "@/lib/demo-data";
-import { emptyRecipeLibrary, type RecipeLibrary } from "@/lib/recipe-library";
+import { emptyRecipeLibrary, type RecipeLibrary, type StoredRecipe } from "@/lib/recipe-library";
+import { readStoredRecipes } from "@/lib/recipe-store";
 import type { ShoppingItem } from "@/lib/shopping-list";
 import { createClient } from "@/lib/supabase/server";
 
@@ -20,6 +21,7 @@ export type DashboardData = {
   products: DemoProduct[];
   shoppingItems: ShoppingItem[];
   recipeLibrary: RecipeLibrary;
+  recipes: StoredRecipe[];
 };
 
 export const getCurrentDashboard = cache(async () => {
@@ -75,12 +77,15 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
   if (profileError || !profile) throw new Error("Profile is missing. Apply the Supabase migration.");
 
   const householdId = profile.household_id as string;
-  const [products, shopping, recipes] = await Promise.all([
+  const { error: pruneError } = await supabase.rpc("prune_fridgy_recipe_history");
+  if (pruneError && pruneError.code !== "PGRST202") throw new Error(pruneError.message);
+  const [products, shopping, library, recipes] = await Promise.all([
     supabase.from("products").select("*").eq("household_id", householdId).order("created_at"),
     supabase.from("shopping_items").select("*").eq("household_id", householdId).order("created_at"),
     supabase.from("recipe_libraries").select("library").eq("user_id", userId).single(),
+    readStoredRecipes(supabase, userId),
   ]);
-  if (products.error || shopping.error || recipes.error) throw new Error("Could not load dashboard data.");
+  if (products.error || shopping.error || library.error) throw new Error("Could not load dashboard data.");
 
   return {
     householdId,
@@ -94,6 +99,7 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
     shoppingItems: (shopping.data ?? []).map((item) => ({ id: item.id, name: item.name, done: item.done,
       ...(item.seed_key ? { seedKey: item.seed_key } : {}),
     })),
-    recipeLibrary: (recipes.data?.library ?? emptyRecipeLibrary) as RecipeLibrary,
+    recipeLibrary: (library.data?.library ?? emptyRecipeLibrary) as RecipeLibrary,
+    recipes,
   };
 }

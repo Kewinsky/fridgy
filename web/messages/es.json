@@ -109,7 +109,7 @@
         "description": "Esta información se usa para sugerir recetas.",
         "typeLabel": "Tipo de alimentación",
         "allergiesLabel": "Alergias",
-        "allergiesPlaceholder": "p. ej. frutos secos, apio",
+        "allergiesPlaceholder": "Ningún alérgeno seleccionado",
         "excludedLabel": "Ingredientes excluidos",
         "excludedPlaceholder": "p. ej. aceitunas, cilantro",
         "options": {
@@ -404,10 +404,18 @@
     "servings": "{count, plural, one {# ración} other {# raciones}}",
     "fewerPeople": "Menos personas",
     "morePeople": "Más personas",
-    "demoNotice": "Estas son recetas de muestra. Las notas aún no influyen en las propuestas.",
+    "generationNotice": "La IA crea estas recetas. Revisa los ingredientes y las etiquetas antes de cocinar.",
+    "aiMessageLabel": "Mensaje de Fridgy",
     "showSuggestions": "Mostrar propuestas",
-    "mealRequired": "Elige un tipo de comida.",
-    "loadingSuggestions": "Preparando propuestas de recetas...",
+    "loadingSuggestions": "Generando recetas...",
+    "partialNoShopping": "Con tus existencias encontramos menos de 3 recetas. Permite comprar ingredientes para ver más opciones.",
+    "errors": {
+      "unavailable": "El servicio de IA no pudo ofrecer una receta. Inténtalo de nuevo.",
+      "emptyInventory": "No tienes productos disponibles. Añade productos o permite hacer compras.",
+      "noMatches": "Ninguna receta cumple tus requisitos. Inténtalo de nuevo.",
+      "notEnoughSuggestions": "Tras revisar el tiempo, la cocina, las alergias y las existencias, no encontramos 3 recetas diferentes. Prueba con más tiempo, más cocinas o permite hacer compras.",
+      "failed": "No pudimos guardar las recetas. Inténtalo de nuevo."
+    },
     "questionProgress": "Pregunta {number} de 4",
     "questions": {
       "meal": "¿Qué comida vas a preparar?",
@@ -421,7 +429,7 @@
       "title": "Más preferencias (opcional)",
       "notesLabel": "¿Quieres añadir algo más?",
       "notesPlaceholder": "Por ejemplo, sin picante, algo para niños o usar brócoli",
-      "notesHint": "Tus notas se tendrán en cuenta cuando estén disponibles las sugerencias con IA.",
+      "notesHint": "Tus notas influyen en las sugerencias generadas.",
       "notesCount": "{count}/{max} caracteres"
     },
     "options": {
@@ -499,7 +507,7 @@
     "ingredients": "Ingredientes",
     "nutrition": {
       "title": "Valores por ración",
-      "estimate": "Valores aproximados según los ingredientes y el tamaño de la ración.",
+      "estimate": "Valores aproximados por ración según los ingredientes y su tamaño.",
       "author": "Valores introducidos por quien creó la receta – no se verifican automáticamente.",
       "missing": "No hay datos nutricionales para esta receta.",
       "card": "Unas {calories} kcal por ración",
@@ -577,10 +585,10 @@
   },
   "RecipeLibrary": {
     "metaTitle": "Mis recetas",
-    "metaDescription": "Favourite recipes, your dishes and cooking history.",
+    "metaDescription": "Favoritos, recetas propias y platos generados o cocinados.",
     "eyebrow": "Tu libro de cocina",
     "title": "Mis recetas",
-    "description": "Save favourite dishes, add your own recipes and return to your cooking history.",
+    "description": "Guarda favoritos, añade tus recetas y vuelve a los platos generados o cocinados.",
     "summary": "Recipe summary",
     "allCookings": "total cooking sessions",
     "favoriteRecipes": "favourite recipes",
@@ -591,6 +599,7 @@
       "custom": "Míos",
       "history": "Historial"
     },
+    "historyRetention": "Las recetas generadas sin corazón se eliminan tras 7 días. Los favoritos permanecen.",
     "emptyFavorites": {
       "title": "No favourites",
       "description": "Use the heart to save recipes you want to return to."
@@ -601,7 +610,7 @@
     },
     "emptyHistory": {
       "title": "History is empty",
-      "description": "Open a recipe and select 'Cook!' to save your first cooking session.",
+      "description": "Genera una receta o elige «¡Cocinar!» para verla aquí.",
       "action": "Find a recipe"
     },
     "notFound": {

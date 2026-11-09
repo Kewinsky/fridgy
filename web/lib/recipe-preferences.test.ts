@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { demoRecipes } from "./demo-recipes.ts";
-import { getRecipePreferenceConflicts } from "./recipe-preferences.ts";
+import { getRecipePreferenceConflicts, parseSelectedAllergens } from "./recipe-preferences.ts";
 
 test("flags explicit allergen, diet and ingredient conflicts", () => {
   const recipe = demoRecipes.find((item) => item.slug === "makaron-ze-szpinakiem")!;
@@ -14,13 +14,17 @@ test("flags explicit allergen, diet and ingredient conflicts", () => {
   assert.deepEqual(result.matchingIngredients, ["Szpinak baby"]);
 });
 
-test("does not claim a conflict when recipe allergen data is unknown", () => {
+test("finds a known ingredient conflict even without allergen metadata", () => {
   const recipe = { ...demoRecipes[0], allergens: undefined, dietTags: undefined };
   const result = getRecipePreferenceConflicts(recipe, {
     diet: "vegan", allergies: "mleko", excludedIngredients: "",
   });
-  assert.deepEqual(result.matchingAllergens, []);
+  assert.deepEqual(result.matchingAllergens, ["milk"]);
   assert.equal(result.dietConflict, false);
+});
+
+test("recognizes stored EU allergen codes and older labels", () => {
+  assert.deepEqual(parseSelectedAllergens("milk,eggs,orzechy"), ["eggs", "milk", "nuts"]);
 });
 
 test("does not flag a milk allergy for chicken without listed allergens", () => {

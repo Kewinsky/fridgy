@@ -10,8 +10,5 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function CustomRecipeRoute({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  if (process.env.NODE_ENV === "development") {
-    await new Promise((resolve) => setTimeout(resolve, 900));
-  }
   return <CustomRecipePage slug={slug} />;
 }

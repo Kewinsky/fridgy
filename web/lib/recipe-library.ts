@@ -1,8 +1,10 @@
 import { getIngredientQuantity, parseIngredientAmount, recipeAllergens, type Recipe, type RecipeAllergen } from "./demo-recipes.ts";
 
-export type CustomRecipe = Recipe & {
+export type StoredRecipe = Recipe & {
+  source: "custom" | "ai";
   createdAt: string;
 };
+export type CustomRecipe = StoredRecipe & { source: "custom" };
 
 export type CookingRecord = {
   id: string;
@@ -14,7 +16,6 @@ export type CookingRecord = {
 
 export type RecipeLibrary = {
   version: 1;
-  customRecipes: CustomRecipe[];
   favoriteSlugs: string[];
   history: CookingRecord[];
 };
@@ -36,7 +37,6 @@ export type RecipeDraft = {
 
 export const emptyRecipeLibrary: RecipeLibrary = {
   version: 1,
-  customRecipes: [],
   favoriteSlugs: [],
   history: [],
 };
@@ -46,6 +46,7 @@ export function isCustomRecipe(value: unknown): value is CustomRecipe {
   const recipe = value as CustomRecipe;
   return (
     typeof recipe.slug === "string" &&
+    recipe.source === "custom" &&
     typeof recipe.title === "string" &&
     typeof recipe.description === "string" &&
     typeof recipe.time === "number" &&
@@ -75,29 +76,6 @@ export function toggleFavorite(library: RecipeLibrary, slug: string): RecipeLibr
   return { ...library, favoriteSlugs };
 }
 
-export function replaceCustomRecipe(
-  library: RecipeLibrary,
-  recipe: CustomRecipe,
-): RecipeLibrary {
-  return {
-    ...library,
-    customRecipes: library.customRecipes.map((item) =>
-      item.slug === recipe.slug ? recipe : item,
-    ),
-  };
-}
-
-export function removeCustomRecipe(
-  library: RecipeLibrary,
-  slug: string,
-): RecipeLibrary {
-  return {
-    ...library,
-    customRecipes: library.customRecipes.filter((recipe) => recipe.slug !== slug),
-    favoriteSlugs: library.favoriteSlugs.filter((favoriteSlug) => favoriteSlug !== slug),
-  };
-}
-
 export function addCookingRecord(
   library: RecipeLibrary,
   recipe: Pick<Recipe, "slug" | "title" | "cuisine">,
@@ -115,6 +93,20 @@ export function addCookingRecord(
 
 export function getCookingCount(library: RecipeLibrary, slug: string) {
   return library.history.filter((record) => record.recipeSlug === slug).length;
+}
+
+export function getHistoryRecipes(stored: StoredRecipe[], demos: Recipe[], history: CookingRecord[]): Recipe[] {
+  const latestActivity = new Map(stored.filter((recipe) => recipe.source === "ai")
+    .map((recipe) => [recipe.slug, Date.parse(recipe.createdAt)]));
+  for (const record of history) {
+    const cookedAt = Date.parse(record.cookedAt);
+    if (cookedAt > (latestActivity.get(record.recipeSlug) ?? 0)) {
+      latestActivity.set(record.recipeSlug, cookedAt);
+    }
+  }
+  return [...stored, ...demos]
+    .filter((recipe) => latestActivity.has(recipe.slug))
+    .sort((a, b) => (latestActivity.get(b.slug) ?? 0) - (latestActivity.get(a.slug) ?? 0));
 }
 
 export function getFavoriteCuisine(library: RecipeLibrary) {
@@ -143,6 +135,7 @@ export function createCustomRecipe(draft: RecipeDraft, slug: string, createdAt: 
 
   return {
     slug,
+    source: "custom",
     imagePath: draft.imagePath,
     title: draft.title.trim(),
     description: draft.description.trim() || "Twój własny przepis.",

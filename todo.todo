@@ -1,0 +1,76 @@
+# Fridgy – lista przed produkcją
+
+Stan na 2026-11-09. Lista powstała z przeglądu kodu web, mobile, migracji Supabase i testów. `[ ]` oznacza zadanie otwarte. P0 blokuje publiczne uruchomienie danej funkcji; P1 to warunek stabilnego produktu. Zadania mobilne obowiązują przed wydaniem aplikacji mobilnej.
+
+## Co dziś jest demonstracją lub nie ma pełnej logiki
+
+- **Zapasy i lista zakupów:** zapisują się w Supabase i można je edytować, ale nowe konto dostaje przykładowe produkty i zakupy z migracji `202610140001_initial_schema.sql`.
+- **Przepisy:** sześć przepisów w `web/lib/demo-recipes.ts` nadal zasila część widoków, w tym pulpit. Przepisy własne i wygenerowane zapisują się w tabeli `recipes`; ulubione i historia zapisują się w Supabase.
+- **Pulpit:** podpowiedź dania wybiera wyłącznie spośród tych sześciu przepisów (`web/app/dashboard/page.tsx`).
+- **„Co ugotować?”:** wysyła odpowiedzi formularza, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Liczba porcji jest ustalana podczas generowania. Brakuje wspólnego źródła przepisów dla pulpitu.
+- **Dodawanie z paragonu:** wybrany obraz nie jest analizowany ani wysyłany do usługi OCR; po opóźnieniu pojawiają się trzy przykładowe produkty (`web/components/dashboard/receipt-page.tsx`). Ręczne dodawanie produktów działa i zapisuje paragon oraz zapasy.
+- **Import przepisu z linku:** sprawdza format URL, po czym pokazuje komunikat „wkrótce” (`web/components/dashboard/add-recipe-dialog.tsx`).
+- **Ustawienia:** dni powiadomień, tryb paragonu, waluta, format daty i zgody zapisują się, ale nie mają podłączonego działania. Preferowane kuchnie istnieją w profilu, lecz nie są używane.
+- **Mobile:** zawiera tylko ekran „Ready for development” i konfigurację klienta Supabase (`mobile/src/app/index.tsx`).
+
+## P0 – działający produkt webowy
+
+- [x] Zastąpić demonstracyjne „Co ugotować?” prawdziwym doborem przepisów lub generowaniem AI. Przekazywać posiłek, porcje, czas, możliwość zakupów, wybrane kuchnie, zapisane przepisy, uwagi, zapasy i ustawienia diety; usunąć sztuczne opóźnienie.
+- [x] Ustalić źródło przepisów poza sześcioma pozycjami w kodzie: katalog, przepisy użytkownika i/lub generowanie. Zapewnić zapis, ponowne otwarcie i historię przepisów wygenerowanych; inaczej link i historia mogą prowadzić do nieistniejącego dania.
+- [ ] Podłączyć skan paragonu do OCR/analizy obrazu z rzeczywistym przesyłaniem pliku, obsługą błędów i ekranem korekty przed zapisem. Usunąć podstawianie przykładowych produktów i pozorny postęp analizy.
+- [x] Dodać oznaczenie rodzaju posiłku do przepisów albo obsłużyć je w generatorze. Obecne przepisy nie mają tej cechy, więc pytanie o śniadanie/obiad/kolację nie może ich wiarygodnie filtrować.
+- [ ] Zdecydować, czy import przepisu z URL wchodzi do pierwszego wydania. Jeśli tak, zbudować pobieranie, ekstrakcję, podgląd i zapis; jeśli nie, usunąć z interfejsu przycisk, który dziś kończy się komunikatem „wkrótce”.
+- [ ] Zapewnić bezpieczne rozróżnienie danych demo od danych użytkownika. Produkty i zakupy startowe mają `is_demo` oraz `seed_key`, ale trzeba ustalić, kiedy edytowany rekord demo staje się danymi użytkownika, i zadbać, by reset go wtedy nie usunął.
+- [ ] Ujednolicić dobór dania na pulpicie i stronie „Co ugotować?”, aby oba korzystały z tego samego źródła przepisów, aktualnych zapasów i ograniczeń.
+- [ ] Sprawdzić cały przepływ „przepis → gotowanie → odjęcie zapasów → historia”: zgodność jednostek, kilka pasujących produktów, częściowe zużycie, brak składnika i zmianę zapasu przez innego domownika w trakcie gotowania.
+
+## P0 – bezpieczeństwo żywności i danych
+
+- [ ] Traktować alergie i wymagania diety jako twarde ograniczenia rekomendacji. Nie proponować dań z wykrytym konfliktem; przy brakujących lub niepewnych danych jasno pokazać „nie można potwierdzić”, bez obietnicy bezpieczeństwa. Obecna strona „Co ugotować?” tylko przesuwa konflikty na koniec listy.
+- [ ] Zbudować wiarygodne dane o składnikach, alergenach i diecie dla wszystkich typów przepisów, także własnych i generowanych. Nie wywodzić bezpieczeństwa wyłącznie z nazwy potrawy; uwzględnić skład konkretnych produktów i ostrzeżenie o kontakcie z alergenami.
+- [x] Przy integracji AI sprawdzać dane na serwerze: limit długości uwag, dozwolone wartości odpowiedzi, limit kosztu i czasu żądania. Przekazywać uwagi jako dane użytkownika, nie instrukcje systemowe; walidować strukturę i skład każdej odpowiedzi przed pokazaniem lub zapisaniem.
+- [ ] Przetestować RLS i uprawnienia Supabase dla dwóch gospodarstw i kilku domowników, w tym dostęp do zapasów, paragonów, przepisów, zdjęć, zaproszeń i funkcji SQL `security definer`. Testować bezpośrednie żądania do API, nie tylko ukryte przyciski.
+- [ ] Dodać limity nadużyć dla logowania, zaproszeń, analiz paragonów, generowania AI i wysyłania plików; ograniczyć koszt, liczbę żądań i rozmiar danych na użytkownika.
+- [ ] Walidować przesyłane obrazy na zaufanej granicy, usuwać zbędne metadane i bezpiecznie obsługiwać uszkodzone pliki. Obecna kontrola sygnatury obrazu przepisu i zdjęcia profilu działa w przeglądarce, którą można ominąć.
+- [ ] Zabezpieczyć nowe pobieranie treści z URL przed żądaniami do sieci wewnętrznej i podmianą adresu po przekierowaniu, jeśli import przepisów zostanie wdrożony.
+- [ ] Sprawdzić proces usuwania konta i zdjęć: dziś kasowane jest zdjęcie profilu, lecz obrazy własnych przepisów mogą zostać w Storage. Opracować także wyjście właściciela z domu, który ma innych członków.
+
+## P1 – spójność i pełne działanie funkcji
+
+- [ ] Wprowadzić wysyłanie powiadomień o terminach produktów albo usunąć ustawienie dni powiadomień. Dodać zgody na kanał, strefę czasową, harmonogram, deduplikację i rezygnację.
+- [ ] Podłączyć tryb paragonu „automatycznie / do sprawdzenia” do rzeczywistego przepływu po analizie. Dla automatycznego zapisu określić próg pewności i bezpieczny sposób cofnięcia.
+- [ ] Zastosować wybraną walutę i format daty w całym produkcie albo usunąć te ustawienia. Ustalić znaczenie pola ceny z paragonu, które jest dziś przechowywane jako tekst, bez obliczeń.
+- [ ] Podłączyć preferowane kuchnie i zgodę na personalizację do doboru przepisów. Zgoda na analitykę powinna faktycznie sterować zbieraniem danych; bez analityki usunąć martwe ustawienie.
+- [ ] Doprowadzić zapraszanie domowników do końca: wysyłać zaproszenie lub jasno opisać ręczne udostępnienie linku; umożliwić podgląd i odwołanie zaproszeń oraz obsłużyć wygasłe linki.
+- [ ] Usunąć ryzyko nadpisania zmian przy równoczesnej pracy domowników i kart przeglądarki. Aktualizacje zapasów, listy zakupów i całej biblioteki przepisów używają lokalnej kopii stanu; potrzebne są operacje atomowe lub kontrola wersji.
+- [ ] Utrwalić lub świadomie porzucać postęp gotowania po odświeżeniu. Dziś zaznaczone kroki istnieją tylko w stanie strony.
+- [ ] Poprawić dopasowanie składników do zapasów: odmiany nazw, języki, jednostki i przeliczenia, produkty o podobnych nazwach oraz kilka opakowań tego samego składnika. Pokazać użytkownikowi, czego system nie dopasował.
+- [ ] Zastąpić demonstracyjne wartości odżywcze danymi ze wskazanym źródłem albo nie pokazywać ich jako pewnych. Sprawdzić ich zmianę po przeskalowaniu porcji.
+- [ ] Zweryfikować tłumaczenia we wszystkich pięciu językach. Test obecnie porównuje klucze, ale część tekstów poza polskim nadal jest po angielsku; poprawić też nazwy własnych przepisów i jednostek.
+- [ ] Sprawdzić eksport danych użytkownika: kompletność, poprawność po imporcie, zakres danych współdzielonego domu i bezpieczne pobieranie. Udokumentować zasady przechowywania i usuwania danych.
+
+## P1 – dostępność i jakość obsługi
+
+- [ ] Wykonać testy klawiaturą i czytnikiem ekranu dla logowania, filtrów, pól ilości, list, dialogów, zakładek i procesu gotowania. Poprawić nazwy kontrolek, kolejność fokusu, powrót fokusu i komunikaty o błędach.
+- [ ] Sprawdzić kontrast i czytelność w jasnym i ciemnym motywie, przy powiększeniu 200–400%, dużej czcionce i na małym ekranie. Nie opierać znaczenia wyłącznie na kolorze lub emoji.
+- [ ] Sprawdzić komunikaty podczas długich operacji, pustych wyników i błędów sieci. Nie pokazywać pozornego „generowania” lub „analizy”; umożliwić ponowienie bez podwójnego zapisu.
+- [ ] Przetestować formularz „Co ugotować?” z użytkownikami: czy rozumieją wymagany posiłek, opcjonalne filtry, brak dopasowań i ograniczenia alergiczne. Sprawdzić, czy odpowiedzi rzeczywiście zmieniają wyniki.
+
+## P1 – uruchomienie i utrzymanie
+
+- [ ] Dodać testy integracyjne z lokalnym Supabase dla migracji, RLS, zaproszeń, paragonów, zapisów równoległych i transakcji kończenia gotowania. Obecne testy obejmują głównie czyste funkcje.
+- [ ] Dodać testy końca do końca krytycznych ścieżek: rejestracja, zapasy, lista zakupów, ręczny/skanowany paragon, przepis, gotowanie, domownicy, eksport i usunięcie konta.
+- [ ] Przygotować powtarzalne wdrożenie migracji, kopie zapasowe oraz próbę odtworzenia danych. Zweryfikować środowisko produkcyjne Supabase, Storage, OAuth i zmienne środowiskowe.
+- [ ] Dodać monitoring błędów i metryki jakości dla OCR/AI, zapisów, zaproszeń i synchronizacji; nie wysyłać treści paragonów, alergii ani tokenów do logów bez potrzeby.
+- [ ] Przeprowadzić przegląd konfiguracji produkcyjnej: domeny przekierowań, nagłówki bezpieczeństwa, polityka treści, sekrety, zależności, limity Storage i plan reakcji na incydent.
+- [ ] Dodać działające linki do zasad korzystania i informacji o prywatności przed zbieraniem danych. Obecny tekst przy logowaniu mówi o akceptacji zasad, ale nie prowadzi do dokumentu.
+
+## Mobile – przed wydaniem aplikacji mobilnej
+
+- [ ] Zdecydować, czy pierwsza produkcja obejmuje mobile. Jeśli tak, zbudować rzeczywiste ekrany i przepływy dla logowania, zapasów, zakupów, paragonów, przepisów, gotowania i ustawień; dziś jest tylko ekran startowy.
+- [ ] Sprawdzić sesję Supabase na iOS i Androidzie: logowanie, powrót z linku, odświeżanie sesji, wylogowanie i bezpieczne przechowywanie danych.
+- [ ] Dodać testy mobile, dostępność natywną, obsługę uprawnień aparatu/zdjęć, stanu offline oraz konfigurację i próbne wydania sklepowe.
+
+## System subskrypcyjny – zadanie produktowe
+
+- [ ] Opracować model subskrypcji: co jest darmowe, za co płaci użytkownik, limity OCR/AI, okres próbny, cena, rozliczanie gospodarstwa domowego, anulowanie i przywracanie dostępu. Dopiero potem wybrać dostawcę płatności, wdrożyć serwerowe uprawnienia, webhooki, obsługę błędów płatności i testy całego cyklu. Jeśli start ma być darmowy, to zadanie nie blokuje pierwszego wydania.

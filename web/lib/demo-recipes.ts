@@ -32,6 +32,10 @@ export type RecipeIngredient = {
   available: boolean;
 };
 
+export function cleanIngredientName(name: string) {
+  return name.replace(/\s*\**\s*[–—-]\s*(?:do kupienia|to buy|zu kaufen|à acheter|por comprar)\s*\**\.?\s*$/iu, "").trim();
+}
+
 export function parseIngredientAmount(amount: string): { quantity: number; unit: string } | null {
   const match = amount.trim().match(/^(\d+(?:[.,]\d+)?)\s+(.+)$/);
   if (!match) return null;

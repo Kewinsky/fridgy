@@ -109,7 +109,7 @@
         "description": "Diese Angaben werden für Rezeptvorschläge verwendet.",
         "typeLabel": "Ernährungsweise",
         "allergiesLabel": "Allergien",
-        "allergiesPlaceholder": "z. B. Nüsse, Sellerie",
+        "allergiesPlaceholder": "Keine Allergene ausgewählt",
         "excludedLabel": "Ausgeschlossene Zutaten",
         "excludedPlaceholder": "z. B. Oliven, Koriander",
         "options": {
@@ -404,10 +404,18 @@
     "servings": "{count, plural, one {# Portion} other {# Portionen}}",
     "fewerPeople": "Weniger Personen",
     "morePeople": "Mehr Personen",
-    "demoNotice": "Dies sind Demorezepte. Hinweise beeinflussen die Vorschläge noch nicht.",
+    "generationNotice": "Diese Rezepte erstellt KI. Prüfe Zutaten und Produktetiketten vor dem Kochen.",
+    "aiMessageLabel": "Nachricht von Fridgy",
     "showSuggestions": "Vorschläge anzeigen",
-    "mealRequired": "Wähle eine Mahlzeit aus.",
-    "loadingSuggestions": "Rezeptvorschläge werden vorbereitet...",
+    "loadingSuggestions": "Rezepte werden erstellt...",
+    "partialNoShopping": "Mit deinen Vorräten wurden weniger als 3 Rezepte gefunden. Erlaube Einkäufe für mehr Vorschläge.",
+    "errors": {
+      "unavailable": "Der KI-Dienst konnte kein Rezept liefern. Versuche es erneut.",
+      "emptyInventory": "Du hast keine verfügbaren Vorräte. Füge Produkte hinzu oder erlaube Einkäufe.",
+      "noMatches": "Kein Rezept erfüllt deine Vorgaben. Versuche es erneut.",
+      "notEnoughSuggestions": "Nach Prüfung von Zeit, Küche, Allergien und Vorräten wurden keine 3 unterschiedlichen Rezepte gefunden. Wähle mehr Zeit oder Küchen oder erlaube Einkäufe.",
+      "failed": "Die Rezepte konnten nicht gespeichert werden. Versuche es erneut."
+    },
     "questionProgress": "Frage {number} von 4",
     "questions": {
       "meal": "Welche Mahlzeit möchtest du zubereiten?",
@@ -421,7 +429,7 @@
       "title": "Weitere Wünsche (optional)",
       "notesLabel": "Hast du weitere Wünsche?",
       "notesPlaceholder": "Zum Beispiel nicht scharf, etwas für Kinder oder Brokkoli verwenden",
-      "notesHint": "Deine Angaben werden berücksichtigt, sobald KI-Vorschläge verfügbar sind.",
+      "notesHint": "Deine Angaben beeinflussen die Vorschläge.",
       "notesCount": "{count}/{max} Zeichen"
     },
     "options": {
@@ -499,7 +507,7 @@
     "ingredients": "Zutaten",
     "nutrition": {
       "title": "Nährwerte pro Portion",
-      "estimate": "Schätzwerte – abhängig von Zutaten und Portionsgröße.",
+      "estimate": "Schätzwerte pro Portion – abhängig von Zutaten und Portionsgröße.",
       "author": "Vom Rezeptautor eingetragene Werte – nicht automatisch geprüft.",
       "missing": "Für dieses Rezept sind keine Nährwerte verfügbar.",
       "card": "Etwa {calories} kcal pro Portion",
@@ -577,10 +585,10 @@
   },
   "RecipeLibrary": {
     "metaTitle": "Meine Rezepte",
-    "metaDescription": "Favourite recipes, your dishes and cooking history.",
+    "metaDescription": "Favoriten, eigene Rezepte sowie generierte und gekochte Gerichte.",
     "eyebrow": "Dein Kochbuch",
     "title": "Meine Rezepte",
-    "description": "Save favourite dishes, add your own recipes and return to your cooking history.",
+    "description": "Speichere Favoriten, füge eigene Rezepte hinzu und finde generierte oder gekochte Gerichte wieder.",
     "summary": "Recipe summary",
     "allCookings": "total cooking sessions",
     "favoriteRecipes": "favourite recipes",
@@ -591,6 +599,7 @@
       "custom": "Eigene",
       "history": "Verlauf"
     },
+    "historyRetention": "Generierte Rezepte ohne Herz werden nach 7 Tagen entfernt. Favoriten bleiben.",
     "emptyFavorites": {
       "title": "No favourites",
       "description": "Use the heart to save recipes you want to return to."
@@ -601,7 +610,7 @@
     },
     "emptyHistory": {
       "title": "History is empty",
-      "description": "Open a recipe and select 'Cook!' to save your first cooking session.",
+      "description": "Generiere ein Rezept oder wähle „Kochen!“, damit es hier erscheint.",
       "action": "Find a recipe"
     },
     "notFound": {

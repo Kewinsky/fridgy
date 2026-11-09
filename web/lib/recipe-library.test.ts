@@ -7,8 +7,7 @@ import {
   emptyRecipeLibrary,
   getCookingCount,
   getFavoriteCuisine,
-  removeCustomRecipe,
-  replaceCustomRecipe,
+  getHistoryRecipes,
   toggleFavorite,
 } from "./recipe-library.ts";
 
@@ -36,6 +35,19 @@ test("toggles favorites without duplicates", () => {
   assert.deepEqual(toggleFavorite(added, "ramen").favoriteSlugs, []);
 });
 
+test("history includes generated recipes and cooked custom recipes, but not unsaved activity", () => {
+  const custom = createCustomRecipe({
+    title: "Tosty", description: "", cuisine: "Polska", time: 10, servings: 1,
+    ingredients: "Chleb | 1 szt.", steps: "Podpiecz.",
+  }, "custom-1", "2026-10-13T10:00:00.000Z");
+  const generated = { ...custom, slug: "ai-1", source: "ai" as const, createdAt: "2026-10-14T10:00:00.000Z" };
+  const untouched = { ...custom, slug: "custom-2" };
+  const history = addCookingRecord(emptyRecipeLibrary, custom, "1", "2026-10-15T10:00:00.000Z").history;
+
+  assert.deepEqual(getHistoryRecipes([custom, generated, untouched], [], history).map((recipe) => recipe.slug), ["custom-1", "ai-1"]);
+  assert.deepEqual(getHistoryRecipes([custom, generated, untouched], [], []).map((recipe) => recipe.slug), ["ai-1"]);
+});
+
 test("parses line-based ingredients into structured quantities", () => {
   const recipe = createCustomRecipe(
     {
@@ -58,7 +70,7 @@ test("parses line-based ingredients into structured quantities", () => {
   assert.equal(recipe.calories, undefined);
 });
 
-test("updates and removes custom recipes without deleting cooking history", () => {
+test("custom recipes keep their source and cooking history", () => {
   const original = createCustomRecipe(
     {
       title: "Tosty",
@@ -73,19 +85,13 @@ test("updates and removes custom recipes without deleting cooking history", () =
     "2026-10-13T10:00:00.000Z",
   );
   const library = addCookingRecord(
-    { ...emptyRecipeLibrary, customRecipes: [original], favoriteSlugs: [original.slug] },
+    { ...emptyRecipeLibrary, favoriteSlugs: [original.slug] },
     original,
     "history-1",
     "2026-10-13T11:00:00.000Z",
   );
-  const updated = { ...original, title: "Tosty z serem" };
-
-  assert.equal(replaceCustomRecipe(library, updated).customRecipes[0].title, "Tosty z serem");
-
-  const removed = removeCustomRecipe(library, original.slug);
-  assert.deepEqual(removed.customRecipes, []);
-  assert.deepEqual(removed.favoriteSlugs, []);
-  assert.equal(removed.history.length, 1);
+  assert.equal(original.source, "custom");
+  assert.equal(library.history[0].recipeSlug, original.slug);
 });
 
 test("keeps an old unquantified ingredient when editing a recipe", () => {
