@@ -553,16 +553,21 @@
     "stepCompleted": "Mark step {number} as complete"
   },
   "FinishCooking": {
-    "success": "Cooking saved and inventory updated.",
-    "open": "Dish ready",
-    "title": "Finish cooking?",
-    "description": "Save this cooking session and select products to deduct from inventory.",
-    "deductProduct": "Deduct {name}",
-    "productSummary": "Recipe: {recipeAmount}. In inventory: {quantity} {unit}.",
-    "productAmount": "Amount of {name}",
-    "noMatches": "No matching inventory products found.",
-    "cancel": "Cancel",
-    "confirm": "Save and deduct"
+    "success": "Kochen gespeichert und Vorrat aktualisiert.",
+    "successNoDeduction": "Kochen gespeichert, Vorrat unverändert.",
+    "open": "Gericht fertig",
+    "title": "Kochen abschließen?",
+    "description": "Speichere das Kochen und wähle Produkte aus, die vom Vorrat abgezogen werden sollen.",
+    "deductProduct": "{name} abziehen",
+    "recipeAmount": "Rezept: {amount}",
+    "inStock": "Im Vorrat",
+    "deduct": "Abziehen",
+    "remaining": "Verbleiben",
+    "productAmount": "Abzuziehende Menge: {name}",
+    "noMatches": "Keine passenden Produkte im Vorrat gefunden.",
+    "cancel": "Abbrechen",
+    "confirm": "Speichern und abziehen",
+    "saveOnly": "Kochen speichern"
   },
   "RecipeStats": {
     "label": "Cooking history",

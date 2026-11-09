@@ -554,15 +554,20 @@
   },
   "FinishCooking": {
     "success": "Cooking saved and inventory updated.",
+    "successNoDeduction": "Cooking saved without changing inventory.",
     "open": "Dish ready",
     "title": "Finish cooking?",
     "description": "Save this cooking session and select products to deduct from inventory.",
     "deductProduct": "Deduct {name}",
-    "productSummary": "Recipe: {recipeAmount}. In inventory: {quantity} {unit}.",
-    "productAmount": "Amount of {name}",
+    "recipeAmount": "Recipe: {amount}",
+    "inStock": "In stock",
+    "deduct": "Deduct",
+    "remaining": "Remaining",
+    "productAmount": "Amount to deduct: {name}",
     "noMatches": "No matching inventory products found.",
     "cancel": "Cancel",
-    "confirm": "Save and deduct"
+    "confirm": "Save and deduct",
+    "saveOnly": "Save cooking"
   },
   "RecipeStats": {
     "label": "Cooking history",

@@ -65,21 +65,27 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
 
   function complete(deductionsToApply: InventoryDeductionSuggestion[]) {
     if (isPending) return;
+    const selectedDeductions = deductionsToApply
+      .filter((deduction) => deduction.selected && deduction.amount > 0)
+      .map(({ amount, productId }) => ({ amount, productId }));
     startTransition(async () => {
       try {
-        await finishCooking(recipe,
-          deductionsToApply
-            .filter((deduction) => deduction.selected && deduction.amount > 0)
-            .map(({ amount, productId }) => ({ amount, productId })),
-        );
+        await finishCooking(recipe, selectedDeductions);
       } catch {
         toast.error(common("saveFailed"));
         return;
       }
       setOpen(false);
-      toast.success(t("success"));
+      toast.success(t(selectedDeductions.length ? "success" : "successNoDeduction"));
       router.push("/dashboard/moje-przepisy");
     });
+  }
+
+  let confirmLabel = t("saveOnly");
+  if (isPending) {
+    confirmLabel = common("saving");
+  } else if (deductions.some((deduction) => deduction.selected && deduction.amount > 0)) {
+    confirmLabel = t("confirm");
   }
 
   if (deductionMode !== "ask") {
@@ -113,57 +119,69 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
               );
               if (!product) return null;
               const inputId = `deduction-${product.id}`;
+              const amountToDeduct = deduction.selected ? deduction.amount : 0;
+              const remaining = Math.max(0, Number((product.quantity - amountToDeduct).toFixed(3)));
 
               return (
                 <div
                   key={product.id}
-                  className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-3 rounded-lg border border-border p-3 sm:grid-cols-[auto_minmax(0,1fr)_7rem]"
+                  className="rounded-xl border border-border p-4"
                 >
-                  <Checkbox
-                    id={`${inputId}-selected`}
-                    checked={deduction.selected}
-                    onCheckedChange={(checked) =>
-                      updateDeduction(product.id, { selected: checked === true })
-                    }
-                    aria-label={t("deductProduct", { name: product.name })}
-                  />
-                  <Label htmlFor={`${inputId}-selected`} className="min-w-0">
-                    <span className="block break-words font-bold">
-                      {product.name}
-                    </span>
-                    <span className="block text-xs font-normal text-muted-foreground">
-                      {t("productSummary", {
-                        recipeAmount: deduction.ingredientAmount,
-                        quantity: product.quantity.toLocaleString(locale),
-                        unit: product.unit,
-                      })}
-                    </span>
-                  </Label>
-                  <div className="relative col-span-2 sm:col-span-1">
-                    <Label htmlFor={inputId} className="sr-only">
-                      {t("productAmount", { name: product.name })}
-                    </Label>
-                    <Input
-                      id={inputId}
-                      type="number"
-                      min="0"
-                      max={product.quantity}
-                      step="any"
-                      value={deduction.amount}
-                      disabled={!deduction.selected}
-                      onChange={(event) =>
-                        updateDeduction(product.id, {
-                          amount: Math.min(
-                            product.quantity,
-                            Math.max(0, Number(event.target.value) || 0),
-                          ),
-                        })
+                  <div className="flex items-start gap-3">
+                    <Checkbox
+                      id={`${inputId}-selected`}
+                      checked={deduction.selected}
+                      onCheckedChange={(checked) =>
+                        updateDeduction(product.id, { selected: checked === true })
                       }
-                      className="h-11 pr-10"
+                      aria-label={t("deductProduct", { name: product.name })}
+                      className="mt-1"
                     />
-                    <span className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-xs text-muted-foreground">
-                      {product.unit}
-                    </span>
+                    <div className="min-w-0">
+                      <Label htmlFor={`${inputId}-selected`} className="block break-words text-base font-bold">
+                        {product.name}
+                      </Label>
+                      <p className="mt-0.5 text-sm text-muted-foreground">
+                        {t("recipeAmount", { amount: deduction.ingredientAmount })}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                    <div className="flex items-center justify-between gap-3 rounded-lg bg-muted/60 px-3 py-2.5 sm:block">
+                      <p className="text-xs font-semibold text-muted-foreground">{t("inStock")}</p>
+                      <p className="text-base font-bold tabular-nums sm:mt-1.5 sm:flex sm:h-11 sm:items-center">{product.quantity.toLocaleString(locale)} {product.unit}</p>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 rounded-lg border border-border px-3 py-2.5 sm:block">
+                      <Label htmlFor={inputId} className="text-xs font-semibold text-muted-foreground">
+                        {t("deduct")}
+                      </Label>
+                      <div className="flex min-w-0 items-center gap-1.5 sm:mt-1.5">
+                        <Input
+                          id={inputId}
+                          type="number"
+                          min="0"
+                          max={product.quantity}
+                          step="any"
+                          value={amountToDeduct}
+                          disabled={!deduction.selected}
+                          aria-label={t("productAmount", { name: product.name })}
+                          onChange={(event) =>
+                            updateDeduction(product.id, {
+                              amount: Math.min(
+                                product.quantity,
+                                Math.max(0, Number(event.target.value) || 0),
+                              ),
+                            })
+                          }
+                          className="h-11 min-w-16 flex-1 text-base font-bold tabular-nums md:text-base"
+                        />
+                        <span className="shrink-0 text-base font-bold text-muted-foreground">{product.unit}</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between gap-3 rounded-lg border border-primary/20 bg-primary/10 px-3 py-2.5 sm:block">
+                      <p className="text-xs font-semibold text-foreground">{t("remaining")}</p>
+                      <p className="text-base font-bold tabular-nums text-foreground sm:mt-1.5 sm:flex sm:h-11 sm:items-center" aria-live="polite">{remaining.toLocaleString(locale)} {product.unit}</p>
+                    </div>
                   </div>
                 </div>
               );
@@ -186,7 +204,7 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
             {t("cancel")}
           </Button>
           <Button type="button" className="h-11" disabled={isPending} aria-busy={isPending} onClick={() => complete(deductions)}>
-            {isPending ? common("saving") : t("confirm")}
+            {confirmLabel}
           </Button>
         </DialogFooter>
       </DialogContent>

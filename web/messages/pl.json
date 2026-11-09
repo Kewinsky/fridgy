@@ -554,15 +554,20 @@
   },
   "FinishCooking": {
     "success": "Zapisano gotowanie i zaktualizowano zapasy.",
+    "successNoDeduction": "Zapisano gotowanie bez zmiany zapasów.",
     "open": "Danie gotowe",
     "title": "Zakończyć gotowanie?",
     "description": "Zapisz przygotowanie i wybierz produkty, które chcesz odjąć z zapasów.",
     "deductProduct": "Odejmij {name}",
-    "productSummary": "Przepis: {recipeAmount}. W zapasach: {quantity} {unit}.",
-    "productAmount": "Ilość produktu {name}",
+    "recipeAmount": "Przepis: {amount}",
+    "inStock": "W zapasach",
+    "deduct": "Odejmujemy",
+    "remaining": "Zostanie",
+    "productAmount": "Ilość do odjęcia: {name}",
     "noMatches": "Nie znaleziono pasujących produktów w zapasach.",
     "cancel": "Anuluj",
-    "confirm": "Zapisz i odejmij"
+    "confirm": "Zapisz i odejmij",
+    "saveOnly": "Zapisz gotowanie"
   },
   "RecipeStats": {
     "label": "Historia gotowania",
