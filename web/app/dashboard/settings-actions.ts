@@ -75,11 +75,31 @@ export async function saveHouseholdName(name: string) {
   if (error || !data) throw new Error(error?.message ?? "Only the household owner can rename it");
 }
 
+export async function createHousehold(name: string, includeDemoData: boolean) {
+  const validName = z.string().trim().min(1).max(100).parse(name);
+  const validDemoChoice = z.boolean().parse(includeDemoData);
+  const { supabase } = await currentUser();
+  const { error } = await supabase.rpc("create_fridgy_household", {
+    household_name: validName, include_demo_data: validDemoChoice,
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function switchHousehold(id: string) {
+  const validId = z.uuid().parse(id);
+  const { supabase } = await currentUser();
+  const { error } = await supabase.rpc("switch_fridgy_household", { target_household: validId });
+  if (error) throw new Error(error.message);
+}
+
 export async function createHouseholdInvitation(email: string) {
   const validEmail = z.email().max(254).parse(email.trim().toLowerCase());
   const { supabase, user } = await currentUser();
+  const { data: profile, error: profileError } = await supabase.from("profiles")
+    .select("household_id").eq("user_id", user.id).single();
+  if (profileError || !profile) throw new Error("Profile not found");
   const { data: household, error: householdError } = await supabase.from("households")
-    .select("id").eq("owner_id", user.id).single();
+    .select("id").eq("id", profile.household_id).eq("owner_id", user.id).single();
   if (householdError || !household) throw new Error("Only the household owner can invite members");
   const { data, error } = await supabase.from("household_invitations").insert({
     household_id: household.id, email: validEmail, created_by: user.id,
@@ -125,13 +145,14 @@ export async function deleteAccount() {
   const { data: profile, error: profileError } = await supabase.from("profiles")
     .select("household_id,avatar_path").eq("user_id", user.id).single();
   if (profileError || !profile) throw new Error("Profile not found");
-  const { data: household } = await supabase.from("households")
-    .select("owner_id").eq("id", profile.household_id).single();
-  if (household?.owner_id === user.id) {
-    const { count, error } = await admin.from("profiles")
-      .select("user_id", { count: "exact", head: true }).eq("household_id", profile.household_id);
-    if (error) throw new Error(error.message);
-    if ((count ?? 0) > 1) return { error: "has_members" as const };
+  const { data: ownedHouseholds, error: householdError } = await admin.from("households")
+    .select("id").eq("owner_id", user.id);
+  if (householdError) throw new Error(householdError.message);
+  if (ownedHouseholds?.length) {
+    const { data: members, error: membersError } = await admin.from("household_memberships")
+      .select("household_id,user_id").in("household_id", ownedHouseholds.map((household) => household.id));
+    if (membersError) throw new Error(membersError.message);
+    if (members?.some((member) => member.user_id !== user.id)) return { error: "has_members" as const };
   }
   const { error } = await admin.auth.admin.deleteUser(user.id);
   if (error) throw new Error(error.message);
@@ -141,8 +162,8 @@ export async function deleteAccount() {
   redirect("/");
 }
 
-export async function resetDemoData() {
+export async function resetDemoData(expectedHouseholdId: string) {
   const { supabase } = await currentUser();
-  const { error } = await supabase.rpc("reset_fridgy_demo");
+  const { error } = await supabase.rpc("remove_fridgy_demo_for_household", { expected_household: z.uuid().parse(expectedHouseholdId) });
   if (error) throw new Error(error.message);
 }

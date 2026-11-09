@@ -58,7 +58,7 @@ export default async function SettingsPage() {
                 <ThemeSettings />
               </div>
             </section>
-            <AdvancedSettings version={packageJson.version} initialSettings={settings} />
+            <AdvancedSettings version={packageJson.version} initialSettings={settings} isHouseholdOwner={household.owner_id === auth.user.id} />
           </div>
         }
         account={<AccountSettings key={household.name} email={auth.user.email ?? ""} username={String(profile.username)} avatarPath={typeof profile.avatar_path === "string" ? profile.avatar_path : null} householdName={household.name} isOwner={household.owner_id === auth.user.id} />}

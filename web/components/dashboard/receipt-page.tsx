@@ -112,7 +112,7 @@ export function ReceiptPage() {
   const [fileError, setFileError] = useState("");
   const [analysisStage, setAnalysisStage] = useState(0);
   const [isPending, startTransition] = useTransition();
-  const { refreshInventory } = useDashboardData();
+  const { refreshInventory, householdId } = useDashboardData();
 
   useEffect(() => {
     if (step !== "analyzing") return;
@@ -204,6 +204,7 @@ export function ReceiptPage() {
             estimatedUseBy: item.estimatedUseBy,
             price: item.price,
           })),
+          householdId,
         );
         await refreshInventory();
         setStep("success");

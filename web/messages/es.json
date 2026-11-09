@@ -5,13 +5,14 @@
     "adding": "Añadiendo…",
     "deleting": "Eliminando…",
     "saved": "Cambios guardados.",
-    "saveFailed": "No se pudieron guardar los cambios. Inténtalo de nuevo."
+    "saveFailed": "No se pudieron guardar los cambios. Inténtalo de nuevo.",
+    "demoData": "Datos de ejemplo"
   },
   "Invitation": {
     "title": "Unirse a un hogar",
     "description": "Verás el inventario y la lista de compras compartidos. Tus recetas personales seguirán en tu cuenta.",
     "accept": "Unirse al hogar",
-    "error": "No se pudo aceptar la invitación. Comprueba el correo y la fecha de vencimiento. Exporta tu inventario antes de unirte."
+    "error": "No se pudo aceptar la invitación. Comprueba el correo electrónico o si el enlace ha caducado."
   },
   "Metadata": {
     "description": "Gestiona tus alimentos en casa y desperdicia menos."
@@ -67,8 +68,13 @@
     "selectHousehold": "Elegir hogar",
     "owner": "Propietario",
     "member": "Miembro",
-    "householdSwitchSoon": "Pronto habrá más hogares",
-    "signOut": "Cerrar sesión"
+    "signOut": "Cerrar sesión",
+    "addHousehold": "Añadir hogar",
+    "addHouseholdDescription": "Elige empezar desde cero o con datos de ejemplo. Las recetas siguen compartidas.",
+    "householdName": "Nombre del hogar",
+    "createHousehold": "Crear hogar",
+    "sampleDataLabel": "Añadir datos de ejemplo",
+    "sampleDataDescription": "5 productos en las existencias y 3 artículos en la lista de compras. Podrás eliminarlos más tarde."
   },
   "Settings": {
     "metaTitle": "Ajustes",
@@ -87,7 +93,7 @@
       "owner": "Propietario",
       "member": "Miembro",
       "ownerRights": "Puedes gestionar el inventario y las compras, invitar miembros y cambiar el nombre del hogar. El propietario no puede salir del hogar.",
-      "memberRights": "Puedes gestionar el inventario y las compras compartidas, además de tus recetas. Podrás salir del hogar cuando esta función esté conectada.",
+      "memberRights": "Puedes gestionar las existencias y las compras compartidas, ver las recetas de los miembros del hogar y editar las tuyas. Aún no es posible salir de un hogar.",
       "leave": "Salir del hogar",
       "leaveSoon": "Salir del hogar estará disponible cuando se añada soporte en el servidor."
     },
@@ -229,13 +235,13 @@
       },
       "demo": {
         "title": "Datos de demostración",
-        "description": "Restaura los productos y la lista de compras de ejemplo.",
+        "description": "Eliminar los productos y las compras de ejemplo de este hogar, además de las recetas de ejemplo de tu cuenta.",
         "dialog": {
-          "open": "Restablecer datos de demostración",
-          "title": "¿Restablecer los datos de demostración?",
-          "description": "Se restaurarán los productos y artículos de ejemplo. Tus datos propios seguirán intactos. Solo disponible para hogares de una persona.",
+          "open": "Eliminar datos de ejemplo",
+          "title": "¿Eliminar los datos de ejemplo?",
+          "description": "Los productos y las compras de ejemplo de este hogar, y tus recetas de ejemplo, se eliminarán de forma permanente. Los demás datos permanecerán.",
           "cancel": "Cancelar",
-          "confirm": "Restablecer datos"
+          "confirm": "Eliminar datos de ejemplo"
         }
       },
       "about": {

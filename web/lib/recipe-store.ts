@@ -41,13 +41,15 @@ export function validateCustomRecipe(value: unknown): CustomRecipe {
   return recipe as CustomRecipe;
 }
 
-export async function readStoredRecipes(supabase: SupabaseClient, userId: string): Promise<StoredRecipe[]> {
-  const { data, error } = await supabase.from("recipes").select("slug,source,recipe,created_at").eq("user_id", userId).order("created_at", { ascending: false });
+export async function readStoredRecipes(supabase: SupabaseClient): Promise<StoredRecipe[]> {
+  const { data, error } = await supabase.from("recipes").select("slug,source,recipe,created_at,is_demo,user_id").order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
   return (data ?? []).map((row) => {
-    const recipe = validateStoredRecipe({
-      ...(row.recipe as object), slug: row.slug, source: row.source, createdAt: row.created_at,
-    });
+    const recipe = {
+      ...validateStoredRecipe({ ...(row.recipe as object), slug: row.slug, source: row.source, createdAt: row.created_at }),
+      createdBy: row.user_id,
+      ...(row.is_demo ? { isDemo: true } : {}),
+    };
     if (recipe.source !== "ai") return recipe;
     return { ...recipe, ingredients: recipe.ingredients.map((ingredient) => ({
       ...ingredient,

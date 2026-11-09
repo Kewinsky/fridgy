@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { RotateCcwIcon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { resetDemoData, saveProfileSetting, type ProfileSettings } from "@/app/dashboard/settings-actions";
 
 import { PreferenceCard, SettingsDropdown } from "@/components/dashboard/preference-settings";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -21,7 +22,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-export function AdvancedSettings({ version, initialSettings }: { version: string; initialSettings: ProfileSettings }) {
+export function AdvancedSettings({ version, initialSettings, isHouseholdOwner }: { version: string; initialSettings: ProfileSettings; isHouseholdOwner: boolean }) {
   const t = useTranslations("Settings.advanced");
   const common = useTranslations("Common");
   const [settings, setSettings] = useState(initialSettings);
@@ -72,9 +73,11 @@ export function AdvancedSettings({ version, initialSettings }: { version: string
         </PreferenceCard>
       ))}
 
-      <PreferenceCard title={t("demo.title")} description={t("demo.description")}>
-        <div className="flex justify-end"><ResetDemoDialog /></div>
-      </PreferenceCard>
+      {isHouseholdOwner ? (
+        <PreferenceCard title={t("demo.title")} description={t("demo.description")}>
+          <div className="flex justify-end"><ResetDemoDialog /></div>
+        </PreferenceCard>
+      ) : null}
 
       <PreferenceCard title={t("about.title")} description={t("about.description")}>
         <div className="flex min-h-11 items-center justify-end">
@@ -88,16 +91,17 @@ export function AdvancedSettings({ version, initialSettings }: { version: string
 function ResetDemoDialog() {
   const t = useTranslations("Settings.advanced.demo.dialog");
   const common = useTranslations("Common");
+  const { householdId } = useDashboardData();
 
   async function reset() {
-    try { await resetDemoData(); window.location.reload(); }
+    try { await resetDemoData(householdId); window.location.reload(); }
     catch { toast.error(common("saveFailed")); }
   }
 
   return (
     <Dialog>
       <DialogTrigger render={<Button type="button" variant="outline" className="h-11" />}>
-        <RotateCcwIcon aria-hidden="true" /> {t("open")}
+        <Trash2Icon aria-hidden="true" /> {t("open")}
       </DialogTrigger>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
@@ -109,7 +113,7 @@ function ResetDemoDialog() {
             {t("cancel")}
           </DialogClose>
           <Button type="button" variant="destructive" className="h-11" onClick={reset}>
-            <RotateCcwIcon aria-hidden="true" /> {t("confirm")}
+            <Trash2Icon aria-hidden="true" /> {t("confirm")}
           </Button>
         </DialogFooter>
       </DialogContent>

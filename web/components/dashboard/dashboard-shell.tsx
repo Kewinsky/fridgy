@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 import {
   ChefHatIcon,
   BookOpenCheckIcon,
-  CheckIcon,
   ChevronDownIcon,
   HomeIcon,
   LeafIcon,
@@ -20,10 +19,12 @@ import {
 } from "lucide-react";
 
 import { signOut } from "@/app/dashboard/actions";
+import { HouseholdSwitcher } from "@/components/dashboard/household-switcher";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { getProfileImageSrc } from "@/lib/profile-image";
+import type { HouseholdOption } from "@/lib/dashboard-data";
 
 const navigation = [
   {
@@ -77,14 +78,16 @@ export function DashboardShell({
   username,
   avatarPath,
   householdName,
-  isHouseholdOwner,
+  householdId,
+  households,
 }: {
   children: ReactNode;
   email: string;
   username: string;
   avatarPath: string | null;
   householdName: string;
-  isHouseholdOwner: boolean;
+  householdId: string;
+  households: HouseholdOption[];
 }) {
   const pathname = usePathname();
   const t = useTranslations("Navigation");
@@ -110,26 +113,7 @@ export function DashboardShell({
         </Link>
 
         <div className="mb-5 px-5">
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              render={
-                <Button type="button" variant="outline" className="h-auto min-h-12 w-full justify-between gap-2 px-3 py-2 text-left font-normal" aria-label={t("selectHousehold")}>
-                  <span className="min-w-0">
-                    <span className="block truncate font-semibold">{householdName}</span>
-                    <span className="block text-xs text-muted-foreground">{t(isHouseholdOwner ? "owner" : "member")}</span>
-                  </span>
-                  <ChevronDownIcon className="shrink-0 text-muted-foreground" aria-hidden="true" />
-                </Button>
-              }
-            />
-            <DropdownMenuContent align="start">
-              <DropdownMenuItem>
-                <span className="min-w-0 flex-1 truncate">{householdName}</span>
-                <CheckIcon aria-hidden="true" />
-              </DropdownMenuItem>
-              <DropdownMenuItem disabled>{t("householdSwitchSoon")}</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <HouseholdSwitcher currentId={householdId} households={households} />
         </div>
 
         <div className="px-5">
@@ -184,6 +168,9 @@ export function DashboardShell({
 
       <div className="lg:pl-64">
         <div className="mx-auto max-w-7xl px-4 py-6 pb-28 sm:px-7 lg:px-10 lg:py-9 lg:pb-12">
+          <div className="mb-5 max-w-sm lg:hidden">
+            <HouseholdSwitcher currentId={householdId} households={households} />
+          </div>
           {children}
         </div>
       </div>

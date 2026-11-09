@@ -4,10 +4,10 @@ Stan na 2026-11-09. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 
 ## Co dziś jest demonstracją lub nie ma pełnej logiki
 
-- **Zapasy i lista zakupów:** zapisują się w Supabase i można je edytować, ale nowe konto dostaje przykładowe produkty i zakupy z migracji `202610140001_initial_schema.sql`.
-- **Przepisy:** sześć przepisów w `web/lib/demo-recipes.ts` nadal zasila część widoków, w tym pulpit. Przepisy własne i wygenerowane zapisują się w tabeli `recipes`; ulubione i historia zapisują się w Supabase.
+- **Zapasy i lista zakupów:** zapisują się w Supabase i można je edytować. Przy dodawaniu domostwa użytkownik wybiera pusty start lub kilka oznaczonych danych testowych, które właściciel może później usunąć.
+- **Przepisy:** sześć przepisów w `web/lib/demo-recipes.ts` nadal zasila część widoków, w tym pulpit. Każdy użytkownik dostaje raz trzy oznaczone przepisy testowe w „Moje”. Przepisy własne i AI są dostępne we wszystkich jego domostwach oraz dla ich członków; ulubione i historia są osobiste.
 - **Pulpit:** podpowiedź dania wybiera wyłącznie spośród tych sześciu przepisów (`web/app/dashboard/page.tsx`).
-- **„Co ugotować?”:** wysyła odpowiedzi formularza, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Liczba porcji jest ustalana podczas generowania. Brakuje wspólnego źródła przepisów dla pulpitu.
+- **„Co ugotować?”:** wysyła odpowiedzi formularza, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Brakuje skalowania istniejącego przepisu po zmianie liczby porcji i wspólnego źródła przepisów dla pulpitu.
 - **Dodawanie z paragonu:** wybrany obraz nie jest analizowany ani wysyłany do usługi OCR; po opóźnieniu pojawiają się trzy przykładowe produkty (`web/components/dashboard/receipt-page.tsx`). Ręczne dodawanie produktów działa i zapisuje paragon oraz zapasy.
 - **Import przepisu z linku:** sprawdza format URL, po czym pokazuje komunikat „wkrótce” (`web/components/dashboard/add-recipe-dialog.tsx`).
 - **Ustawienia:** dni powiadomień, tryb paragonu, waluta, format daty i zgody zapisują się, ale nie mają podłączonego działania. Preferowane kuchnie istnieją w profilu, lecz nie są używane.
@@ -17,10 +17,11 @@ Stan na 2026-11-09. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 
 - [x] Zastąpić demonstracyjne „Co ugotować?” prawdziwym doborem przepisów lub generowaniem AI. Przekazywać posiłek, porcje, czas, możliwość zakupów, wybrane kuchnie, zapisane przepisy, uwagi, zapasy i ustawienia diety; usunąć sztuczne opóźnienie.
 - [x] Ustalić źródło przepisów poza sześcioma pozycjami w kodzie: katalog, przepisy użytkownika i/lub generowanie. Zapewnić zapis, ponowne otwarcie i historię przepisów wygenerowanych; inaczej link i historia mogą prowadzić do nieistniejącego dania.
-- [ ] Podłączyć skan paragonu do OCR/analizy obrazu z rzeczywistym przesyłaniem pliku, obsługą błędów i ekranem korekty przed zapisem. Usunąć podstawianie przykładowych produktów i pozorny postęp analizy.
 - [x] Dodać oznaczenie rodzaju posiłku do przepisów albo obsłużyć je w generatorze. Obecne przepisy nie mają tej cechy, więc pytanie o śniadanie/obiad/kolację nie może ich wiarygodnie filtrować.
+- [ ] Sprawić, by wybór liczby porcji skalował ilości składników, listę braków i sugerowane odjęcia z zapasów. Sprawdzić jednostki, zaokrąglenia oraz sytuację, gdy w zapasach jest mniej niż potrzeba.
+- [ ] Podłączyć skan paragonu do OCR/analizy obrazu z rzeczywistym przesyłaniem pliku, obsługą błędów i ekranem korekty przed zapisem. Usunąć podstawianie przykładowych produktów i pozorny postęp analizy.
 - [ ] Zdecydować, czy import przepisu z URL wchodzi do pierwszego wydania. Jeśli tak, zbudować pobieranie, ekstrakcję, podgląd i zapis; jeśli nie, usunąć z interfejsu przycisk, który dziś kończy się komunikatem „wkrótce”.
-- [ ] Zapewnić bezpieczne rozróżnienie danych demo od danych użytkownika. Produkty i zakupy startowe mają `is_demo` oraz `seed_key`, ale trzeba ustalić, kiedy edytowany rekord demo staje się danymi użytkownika, i zadbać, by reset go wtedy nie usunął.
+- [x] Oznaczyć testowe produkty, zakupy i przepisy. Usunięcie danych testowych kasuje rekordy `is_demo = true` w bieżącym domostwie oraz przykładowe przepisy użytkownika. Edytowany rekord demo pozostaje testowy.
 - [ ] Ujednolicić dobór dania na pulpicie i stronie „Co ugotować?”, aby oba korzystały z tego samego źródła przepisów, aktualnych zapasów i ograniczeń.
 - [ ] Sprawdzić cały przepływ „przepis → gotowanie → odjęcie zapasów → historia”: zgodność jednostek, kilka pasujących produktów, częściowe zużycie, brak składnika i zmianę zapasu przez innego domownika w trakcie gotowania.
 

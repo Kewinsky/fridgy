@@ -33,6 +33,7 @@ import {
   storageLocationMessageKeys,
 } from "@/components/dashboard/storage-location-icon";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   useInventory,
@@ -427,6 +428,7 @@ function InventoryTableSkeleton() {
 
 function ProductRowDetails({ product }: { product: DemoProduct }) {
   const t = useTranslations("Inventory");
+  const common = useTranslations("Common");
   const locale = useLocale() as Locale;
   const displayProduct = localizeDemoProduct(product, locale);
 
@@ -434,8 +436,9 @@ function ProductRowDetails({ product }: { product: DemoProduct }) {
     <>
       <ProductVisual category={product.category} />
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-sm font-bold text-foreground">
-          {displayProduct.name}
+        <span className="flex flex-wrap items-center gap-2 text-sm font-bold text-foreground">
+          <span className="truncate">{displayProduct.name}</span>
+          {product.isDemo ? <Badge variant="outline">{common("demoData")}</Badge> : null}
         </span>
         <span className="mt-1 block truncate text-xs text-muted-foreground">
           {product.quantity.toLocaleString(locale)} {product.unit} ·{" "}

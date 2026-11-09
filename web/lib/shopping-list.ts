@@ -2,6 +2,7 @@ export type ShoppingItem = {
   id: string;
   name: string;
   done: boolean;
+  isDemo?: boolean;
   seedKey?: string;
 };
 

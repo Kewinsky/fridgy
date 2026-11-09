@@ -5,13 +5,14 @@
     "adding": "Ajout…",
     "deleting": "Suppression…",
     "saved": "Modifications enregistrées.",
-    "saveFailed": "Impossible d'enregistrer les modifications. Réessayez."
+    "saveFailed": "Impossible d'enregistrer les modifications. Réessayez.",
+    "demoData": "Données de démonstration"
   },
   "Invitation": {
     "title": "Rejoindre un foyer",
     "description": "Vous verrez les réserves et la liste de courses partagées. Vos recettes personnelles resteront sur votre compte.",
     "accept": "Rejoindre le foyer",
-    "error": "Impossible d'accepter l'invitation. Vérifiez l'adresse e-mail et la date d'expiration. Exportez vos réserves avant de rejoindre."
+    "error": "Impossible d'accepter l'invitation. Vérifiez l'adresse e-mail ou la validité du lien."
   },
   "Metadata": {
     "description": "Gérez vos aliments à la maison et gaspillez moins."
@@ -67,8 +68,13 @@
     "selectHousehold": "Choisir un foyer",
     "owner": "Propriétaire",
     "member": "Membre",
-    "householdSwitchSoon": "D'autres foyers bientôt disponibles",
-    "signOut": "Se déconnecter"
+    "signOut": "Se déconnecter",
+    "addHousehold": "Ajouter un foyer",
+    "addHouseholdDescription": "Choisissez un départ à vide ou des données de démonstration. Les recettes restent partagées.",
+    "householdName": "Nom du foyer",
+    "createHousehold": "Créer le foyer",
+    "sampleDataLabel": "Ajouter des données de démonstration",
+    "sampleDataDescription": "5 produits dans les stocks et 3 articles sur la liste de courses. Vous pourrez les supprimer plus tard."
   },
   "Settings": {
     "metaTitle": "Paramètres",
@@ -87,7 +93,7 @@
       "owner": "Propriétaire",
       "member": "Membre",
       "ownerRights": "Vous pouvez gérer les réserves et les courses, inviter des membres et renommer le foyer. Le propriétaire ne peut pas quitter le foyer.",
-      "memberRights": "Vous pouvez gérer les réserves et les courses partagées ainsi que vos recettes. Vous pourrez quitter le foyer lorsque cette fonction sera disponible.",
+      "memberRights": "Vous pouvez gérer les stocks et les courses partagés, consulter les recettes des membres du foyer et modifier les vôtres. Il n'est pas encore possible de quitter un foyer.",
       "leave": "Quitter le foyer",
       "leaveSoon": "Quitter le foyer sera disponible après l'ajout du support côté serveur."
     },
@@ -229,13 +235,13 @@
       },
       "demo": {
         "title": "Données de démonstration",
-        "description": "Restaurez les produits et la liste de courses d'exemple.",
+        "description": "Supprimer les produits et les courses de démonstration de ce foyer, ainsi que les recettes de démonstration de votre compte.",
         "dialog": {
-          "open": "Réinitialiser les données de démonstration",
-          "title": "Réinitialiser les données de démonstration ?",
-          "description": "Les produits et articles d'exemple seront restaurés. Vos propres données resteront intactes. Disponible uniquement pour un foyer d'une personne.",
+          "open": "Supprimer les données de démonstration",
+          "title": "Supprimer les données de démonstration ?",
+          "description": "Les produits et les courses de démonstration de ce foyer, ainsi que vos recettes de démonstration, seront supprimés définitivement. Les autres données resteront.",
           "cancel": "Annuler",
-          "confirm": "Réinitialiser"
+          "confirm": "Supprimer les données"
         }
       },
       "about": {

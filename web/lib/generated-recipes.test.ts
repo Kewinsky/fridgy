@@ -62,19 +62,15 @@ test("reopens custom and AI recipes from the unified table", async () => {
       assert.equal(table, "recipes");
       return {
         select(columns: string) {
-          assert.equal(columns, "slug,source,recipe,created_at");
+          assert.equal(columns, "slug,source,recipe,created_at,is_demo,user_id");
           return {
-            eq(column: string, userId: string) {
-              assert.equal(column, "user_id");
+            async order() {
               return {
-                async order() {
-                  return {
-                    data: userId === "user-1" ? [oldAiRecipe, custom].map((recipe) => ({
-                      slug: recipe.slug, source: recipe.source, recipe, created_at: recipe.createdAt,
-                    })) : [],
-                    error: null,
-                  };
-                },
+                data: [oldAiRecipe, custom].map((recipe) => ({
+                  slug: recipe.slug, source: recipe.source, recipe, created_at: recipe.createdAt,
+                  is_demo: recipe.source === "custom", user_id: recipe.source === "custom" ? "user-2" : "user-1",
+                })),
+                error: null,
               };
             },
           };
@@ -83,6 +79,7 @@ test("reopens custom and AI recipes from the unified table", async () => {
     },
   } as unknown as SupabaseClient;
 
-  assert.deepEqual(await readStoredRecipes(client, "user-1"), [stored, custom]);
-  assert.deepEqual(await readStoredRecipes(client, "user-2"), []);
+  assert.deepEqual(await readStoredRecipes(client), [
+    { ...stored, createdBy: "user-1" }, { ...custom, isDemo: true, createdBy: "user-2" },
+  ]);
 });

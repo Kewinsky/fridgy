@@ -5,13 +5,14 @@
     "adding": "Wird hinzugefügt…",
     "deleting": "Wird gelöscht…",
     "saved": "Änderungen gespeichert.",
-    "saveFailed": "Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen."
+    "saveFailed": "Änderungen konnten nicht gespeichert werden. Bitte erneut versuchen.",
+    "demoData": "Beispieldaten"
   },
   "Invitation": {
     "title": "Einem Haushalt beitreten",
     "description": "Du siehst dann die gemeinsamen Vorräte und die Einkaufsliste. Deine eigenen Rezepte bleiben in deinem Konto.",
     "accept": "Haushalt beitreten",
-    "error": "Einladung konnte nicht angenommen werden. Prüfe E-Mail-Adresse und Ablaufdatum. Exportiere eigene Vorräte vor dem Beitritt."
+    "error": "Die Einladung konnte nicht angenommen werden. Prüfe die E-Mail-Adresse oder ob der Link abgelaufen ist."
   },
   "Metadata": {
     "description": "Lebensmittel zu Hause verwalten und weniger verschwenden."
@@ -67,8 +68,13 @@
     "selectHousehold": "Haushalt wählen",
     "owner": "Eigentümer",
     "member": "Mitglied",
-    "householdSwitchSoon": "Weitere Haushalte bald verfügbar",
-    "signOut": "Abmelden"
+    "signOut": "Abmelden",
+    "addHousehold": "Haushalt hinzufügen",
+    "addHouseholdDescription": "Wähle einen leeren Start oder Beispieldaten. Rezepte bleiben geteilt.",
+    "householdName": "Name des Haushalts",
+    "createHousehold": "Haushalt erstellen",
+    "sampleDataLabel": "Beispieldaten hinzufügen",
+    "sampleDataDescription": "5 Produkte im Vorrat und 3 Einkaufsartikel. Du kannst sie später entfernen."
   },
   "Settings": {
     "metaTitle": "Einstellungen",
@@ -87,7 +93,7 @@
       "owner": "Eigentümer",
       "member": "Mitglied",
       "ownerRights": "Du kannst Vorräte und Einkaufsliste verwalten, Mitglieder einladen und den Haushalt umbenennen. Der Eigentümer kann den Haushalt nicht verlassen.",
-      "memberRights": "Du kannst gemeinsame Vorräte, die Einkaufsliste und eigene Rezepte verwalten. Du kannst den Haushalt verlassen, sobald diese Funktion angebunden ist.",
+      "memberRights": "Du kannst gemeinsame Vorräte und Einkäufe verwalten, Rezepte der Haushaltsmitglieder ansehen und deine eigenen bearbeiten. Das Verlassen eines Haushalts ist noch nicht verfügbar.",
       "leave": "Haushalt verlassen",
       "leaveSoon": "Das Verlassen des Haushalts wird nach der Backend-Anbindung verfügbar sein."
     },
@@ -229,13 +235,13 @@
       },
       "demo": {
         "title": "Demo-Daten",
-        "description": "Stelle die Beispielprodukte und die Einkaufsliste wieder her.",
+        "description": "Beispielprodukte und Einkaufsartikel aus diesem Haushalt sowie Beispielrezepte aus deinem Konto entfernen.",
         "dialog": {
-          "open": "Demo-Daten zurücksetzen",
-          "title": "Demo-Daten zurücksetzen?",
-          "description": "Beispielprodukte und Listeneinträge werden wiederhergestellt. Eigene Daten bleiben erhalten. Nur für Haushalte mit einem Mitglied verfügbar.",
+          "open": "Beispieldaten entfernen",
+          "title": "Beispieldaten entfernen?",
+          "description": "Beispielprodukte und Einkaufsartikel in diesem Haushalt sowie deine Beispielrezepte werden dauerhaft gelöscht. Andere Daten bleiben erhalten.",
           "cancel": "Abbrechen",
-          "confirm": "Daten zurücksetzen"
+          "confirm": "Beispieldaten entfernen"
         }
       },
       "about": {

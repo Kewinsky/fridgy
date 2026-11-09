@@ -16,9 +16,12 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
   const supabase = await createClient();
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) return new Response(null, { status: 401 });
+  const { data: recipe, error: recipeError } = await supabase.from("recipes")
+    .select("user_id").contains("recipe", { imagePath: filename }).limit(1).maybeSingle();
+  if (recipeError || !recipe) return new Response(null, { status: 404 });
 
   const { data, error } = await supabase.storage.from(RECIPE_IMAGE_BUCKET)
-    .download(`${user.id}/${filename}`);
+    .download(`${recipe.user_id}/${filename}`);
   if (error || !data) return new Response(null, { status: 404 });
 
   const extension = filename.split(".").pop()!;

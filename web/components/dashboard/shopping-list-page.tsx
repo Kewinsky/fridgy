@@ -10,6 +10,7 @@ import { useDashboardData } from "@/components/dashboard/dashboard-data-provider
 import { localizeStarterShoppingItem } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -118,6 +119,7 @@ export function ShoppingListPage() {
                   {item.done ? <CheckIcon className="size-4" aria-hidden="true" /> : null}
                 </span>
                 <span className={item.done ? "truncate text-muted-foreground line-through" : "truncate font-semibold"}>{item.name}</span>
+                {item.isDemo ? <Badge variant="outline">{common("demoData")}</Badge> : null}
               </Button>
               <Button type="button" variant="destructive" size="icon-lg" className="size-11" onClick={() => removeItem(item.id)} aria-label={t("removeItem", { name: item.name })} title={t("removeItem", { name: item.name })}>
                 <Trash2Icon aria-hidden="true" />

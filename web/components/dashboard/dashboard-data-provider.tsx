@@ -37,6 +37,10 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
     function refreshOnFocus() {
       if (document.visibilityState !== "visible") return;
       void readDashboardData().then((data) => {
+        if (data.householdId !== initialData.householdId) {
+          window.location.reload();
+          return;
+        }
         setProducts(data.products);
         setShoppingItems(data.shoppingItems);
         setRecipeLibrary(data.recipeLibrary);
@@ -51,7 +55,7 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
       window.removeEventListener("focus", refreshOnFocus);
       document.removeEventListener("visibilitychange", refreshOnFocus);
     };
-  }, []);
+  }, [initialData.householdId]);
 
   async function updateInventory(update: (current: DemoProduct[]) => DemoProduct[]) {
     const next = update(products);
@@ -60,11 +64,11 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
     const changed = next.filter((product) => JSON.stringify(product) !== JSON.stringify(previous.get(product.id)));
     const removed = products.filter((product) => !nextIds.has(product.id)).map((product) => product.id);
     if (!changed.length && !removed.length) return;
-    setProducts(await persistInventory(changed, removed));
+    setProducts(await persistInventory(changed, removed, initialData.householdId));
   }
 
   async function refreshInventory() {
-    setProducts(await readInventory());
+    setProducts(await readInventory(initialData.householdId));
   }
 
   async function updateShoppingItems(update: (current: ShoppingItem[]) => ShoppingItem[]) {
@@ -76,9 +80,9 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
     if (!changed.length && !removed.length) return;
     setShoppingItems(next);
     try {
-      await persistShoppingItems(changed, removed);
+      await persistShoppingItems(changed, removed, initialData.householdId);
     } catch (error) {
-      setShoppingItems(await readShoppingItems().catch(() => shoppingItems));
+      setShoppingItems(await readShoppingItems(initialData.householdId).catch(() => shoppingItems));
       throw error;
     }
   }
@@ -104,7 +108,7 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
   }
 
   async function finishCooking(recipe: Pick<Recipe, "slug" | "title" | "cuisine">, deductions: Array<{ productId: string; amount: number }>) {
-    const data = await finishCookingSession(recipe, deductions);
+    const data = await finishCookingSession(recipe, deductions, initialData.householdId);
     setProducts(data.products);
     setRecipeLibrary(data.recipeLibrary);
     setRecipes(data.recipes);

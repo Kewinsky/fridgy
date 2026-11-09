@@ -23,29 +23,32 @@ const productSchema = z.object({
   storageLocation: z.enum(["Lodówka", "Zamrażarka", "Spiżarnia"]),
   estimatedUseBy: z.iso.date(),
   status: z.enum(["active", "consumed"]),
+  isDemo: z.boolean().optional(),
   seedKey: z.string().max(50).optional(),
 });
-const shoppingSchema = z.object({ id: z.uuid(), name: z.string().trim().min(1).max(150), done: z.boolean(), seedKey: z.string().max(50).optional() });
+const shoppingSchema = z.object({ id: z.uuid(), name: z.string().trim().min(1).max(150), done: z.boolean(), isDemo: z.boolean().optional(), seedKey: z.string().max(50).optional() });
 const librarySchema = z.object({
   version: z.literal(1),
   favoriteSlugs: z.array(z.string().max(150)).max(1000),
   history: z.array(z.record(z.string(), z.unknown())).max(5000),
 });
 
-async function authorizedClient() {
+async function authorizedClient(expectedHouseholdId?: string) {
   const supabase = await createClient();
   const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) throw new Error("Unauthorized");
   const { data: profile, error: profileError } = await supabase.from("profiles")
     .select("household_id").eq("user_id", data.user.id).single();
   if (profileError || !profile) throw new Error("Profile not found");
+  if (expectedHouseholdId && profile.household_id !== z.uuid().parse(expectedHouseholdId))
+    throw new Error("Active household changed. Refresh and try again.");
   return { supabase, userId: data.user.id, householdId: profile.household_id as string };
 }
 
-export async function persistInventory(changed: DemoProduct[], removedIds: string[]) {
+export async function persistInventory(changed: DemoProduct[], removedIds: string[], expectedHouseholdId: string) {
   const validProducts = z.array(productSchema).max(100).parse(changed);
   const validIds = z.array(z.uuid()).max(100).parse(removedIds);
-  const { supabase, householdId } = await authorizedClient();
+  const { supabase, householdId } = await authorizedClient(expectedHouseholdId);
   if (validProducts.length) {
     const { error } = await supabase.from("products").upsert(validProducts.map((product) => productToRow(product, householdId)));
     if (error) throw new Error(error.message);
@@ -59,8 +62,8 @@ export async function persistInventory(changed: DemoProduct[], removedIds: strin
   return (data ?? []).map(productFromRow);
 }
 
-export async function readInventory() {
-  const { supabase, householdId } = await authorizedClient();
+export async function readInventory(expectedHouseholdId: string) {
+  const { supabase, householdId } = await authorizedClient(expectedHouseholdId);
   const { data, error } = await supabase.from("products").select("*").eq("household_id", householdId).order("created_at");
   if (error) throw new Error(error.message);
   return (data ?? []).map(productFromRow);
@@ -71,13 +74,13 @@ export async function readDashboardData() {
   return loadDashboardData(supabase, userId);
 }
 
-export async function persistShoppingItems(changed: ShoppingItem[], removedIds: string[]) {
+export async function persistShoppingItems(changed: ShoppingItem[], removedIds: string[], expectedHouseholdId: string) {
   const validItems = z.array(shoppingSchema).max(100).parse(changed);
   const validIds = z.array(z.uuid()).max(100).parse(removedIds);
-  const { supabase, householdId } = await authorizedClient();
+  const { supabase, householdId } = await authorizedClient(expectedHouseholdId);
   if (validItems.length) {
     const { error } = await supabase.from("shopping_items").upsert(validItems.map((item) => ({
-      id: item.id, name: item.name, done: item.done, seed_key: item.seedKey ?? null, household_id: householdId,
+      id: item.id, name: item.name, done: item.done, is_demo: item.isDemo ?? false, seed_key: item.seedKey ?? null, household_id: householdId,
     })));
     if (error) throw new Error(error.message);
   }
@@ -87,12 +90,12 @@ export async function persistShoppingItems(changed: ShoppingItem[], removedIds: 
   }
 }
 
-export async function readShoppingItems(): Promise<ShoppingItem[]> {
-  const { supabase, householdId } = await authorizedClient();
+export async function readShoppingItems(expectedHouseholdId: string): Promise<ShoppingItem[]> {
+  const { supabase, householdId } = await authorizedClient(expectedHouseholdId);
   const { data, error } = await supabase.from("shopping_items")
-    .select("id,name,done,seed_key").eq("household_id", householdId).order("created_at");
+    .select("id,name,done,is_demo,seed_key").eq("household_id", householdId).order("created_at");
   if (error) throw new Error(error.message);
-  return (data ?? []).map((item) => ({ id: item.id, name: item.name, done: item.done,
+  return (data ?? []).map((item) => ({ id: item.id, name: item.name, done: item.done, isDemo: item.is_demo === true,
     ...(item.seed_key ? { seedKey: item.seed_key } : {}),
   }));
 }
@@ -110,7 +113,7 @@ export async function saveCustomRecipe(recipe: CustomRecipe) {
   const { supabase, userId } = await authorizedClient();
   const { error } = await supabase.from("recipes").insert({ user_id: userId, slug: valid.slug, source: "custom", recipe: valid, created_at: valid.createdAt });
   if (error) throw new Error(error.message);
-  return valid;
+  return { ...valid, createdBy: userId };
 }
 
 export async function updateCustomRecipe(recipe: CustomRecipe) {
@@ -119,7 +122,7 @@ export async function updateCustomRecipe(recipe: CustomRecipe) {
   const { data, error } = await supabase.from("recipes").update({ recipe: valid })
     .eq("user_id", userId).eq("slug", valid.slug).eq("source", "custom").select("slug").single();
   if (error || !data) throw new Error(error?.message ?? "Recipe not found");
-  return valid;
+  return { ...valid, createdBy: userId };
 }
 
 export async function deleteCustomRecipe(slug: string) {
@@ -129,10 +132,11 @@ export async function deleteCustomRecipe(slug: string) {
   if (error) throw new Error(error.message);
 }
 
-export async function generateRecipes(input: GenerationInput) {
+export async function generateRecipes(input: GenerationInput, expectedHouseholdId: string) {
   const validInput = generationInputSchema.parse(input);
-  const { supabase, userId } = await authorizedClient();
+  const { supabase, userId } = await authorizedClient(expectedHouseholdId);
   const dashboard = await loadDashboardData(supabase, userId);
+  if (dashboard.householdId !== expectedHouseholdId) throw new Error("Active household changed. Refresh and try again.");
   const key = process.env.OPENAI_API_KEY;
   if (!key) return { error: "unavailable" as const };
   if (validInput.shopping === "none" && !dashboard.products.some((product) => product.status === "active" && product.quantity > 0)) {
@@ -156,7 +160,7 @@ export async function generateRecipes(input: GenerationInput) {
 
 export async function saveManualReceipt(items: Array<{
   name: string; quantity: number; unit: string; storageLocation: string; category: string; estimatedUseBy: string; price: string;
-}>) {
+}>, expectedHouseholdId: string) {
   const validItems = z.array(z.object({
     name: z.string().trim().min(1).max(150),
     quantity: z.number().positive().max(100000),
@@ -166,24 +170,27 @@ export async function saveManualReceipt(items: Array<{
     estimatedUseBy: z.iso.date(),
     price: z.string().max(30),
   })).min(1).max(100).parse(items);
-  const { supabase } = await authorizedClient();
-  const { error } = await supabase.rpc("save_manual_receipt", { receipt_items: validItems });
+  const { supabase } = await authorizedClient(expectedHouseholdId);
+  const { error } = await supabase.rpc("save_manual_receipt_for_household", {
+    receipt_items: validItems, expected_household: expectedHouseholdId,
+  });
   if (error) throw new Error(error.message);
 }
 
-export async function finishCookingSession(recipe: Pick<Recipe, "slug" | "title" | "cuisine">, deductions: Array<{ productId: string; amount: number }>) {
+export async function finishCookingSession(recipe: Pick<Recipe, "slug" | "title" | "cuisine">, deductions: Array<{ productId: string; amount: number }>, expectedHouseholdId: string) {
   const validRecipe = z.object({
     slug: z.string().trim().min(1).max(150),
     title: z.string().trim().min(1).max(200),
     cuisine: z.string().trim().min(1).max(100),
   }).parse(recipe);
   const validDeductions = z.array(z.object({ productId: z.uuid(), amount: z.number().positive().finite() })).max(100).parse(deductions);
-  const { supabase, userId } = await authorizedClient();
-  const { error } = await supabase.rpc("finish_fridgy_cooking", {
+  const { supabase, userId } = await authorizedClient(expectedHouseholdId);
+  const { error } = await supabase.rpc("finish_fridgy_cooking_for_household", {
     recipe_slug: validRecipe.slug,
     recipe_title: validRecipe.title,
     recipe_cuisine: validRecipe.cuisine,
     deductions: validDeductions,
+    expected_household: expectedHouseholdId,
   });
   if (error) throw new Error(error.message);
   return loadDashboardData(supabase, userId);

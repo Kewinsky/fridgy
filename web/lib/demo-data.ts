@@ -10,6 +10,7 @@ export type DemoProduct = {
   storageLocation: StorageLocation;
   estimatedUseBy: string;
   status: ProductStatus;
+  isDemo?: boolean;
   seedKey?: string;
 };
 

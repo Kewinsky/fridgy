@@ -5,13 +5,14 @@
     "adding": "Dodawanie…",
     "deleting": "Usuwanie…",
     "saved": "Zapisano zmiany.",
-    "saveFailed": "Nie udało się zapisać zmian. Spróbuj ponownie."
+    "saveFailed": "Nie udało się zapisać zmian. Spróbuj ponownie.",
+    "demoData": "Dane testowe"
   },
   "Invitation": {
     "title": "Dołącz do gospodarstwa domowego",
     "description": "Po dołączeniu zobaczysz wspólne zapasy i listę zakupów. Twoje osobiste przepisy pozostaną na koncie.",
     "accept": "Dołącz",
-    "error": "Nie można przyjąć zaproszenia. Sprawdź adres e-mail lub ważność linku. Jeśli masz własne zapasy, wyeksportuj je przed dołączeniem."
+    "error": "Nie można przyjąć zaproszenia. Sprawdź adres e-mail lub ważność linku."
   },
   "Metadata": {
     "description": "Domowe zapasy bez marnowania."
@@ -67,8 +68,13 @@
     "selectHousehold": "Wybierz domostwo",
     "owner": "Właściciel",
     "member": "Członek",
-    "householdSwitchSoon": "Więcej domostw wkrótce",
-    "signOut": "Wyloguj się"
+    "signOut": "Wyloguj się",
+    "addHousehold": "Dodaj domostwo",
+    "addHouseholdDescription": "Wybierz pusty start lub dane demonstracyjne. Przepisy pozostaną wspólne.",
+    "householdName": "Nazwa domostwa",
+    "createHousehold": "Utwórz domostwo",
+    "sampleDataLabel": "Dodaj dane demonstracyjne",
+    "sampleDataDescription": "5 produktów w zapasach i 3 na liście zakupów. Możesz je później usunąć."
   },
   "Settings": {
     "metaTitle": "Ustawienia",
@@ -87,7 +93,7 @@
       "owner": "Właściciel",
       "member": "Członek",
       "ownerRights": "Możesz zarządzać zapasami i listą zakupów, zapraszać domowników oraz zmienić nazwę domu. Właściciel nie może opuścić domostwa.",
-      "memberRights": "Możesz zarządzać wspólnymi zapasami, listą zakupów i własnymi przepisami. Możesz też opuścić domostwo, gdy ta funkcja zostanie podłączona.",
+      "memberRights": "Możesz zarządzać wspólnymi zapasami i listą zakupów, przeglądać przepisy domowników oraz edytować własne. Opuszczanie domostwa nie jest jeszcze dostępne.",
       "leave": "Opuść domostwo",
       "leaveSoon": "Opuszczenie domostwa będzie dostępne po dodaniu obsługi w bazie."
     },
@@ -229,13 +235,13 @@
       },
       "demo": {
         "title": "Dane demonstracyjne",
-        "description": "Przywróć początkowe przykładowe produkty i listę zakupów.",
+        "description": "Usuń testowe produkty i zakupy z bieżącego domostwa oraz przykładowe przepisy przypisane do Twojego konta.",
         "dialog": {
-          "open": "Resetuj dane demo",
-          "title": "Zresetować dane demonstracyjne?",
-          "description": "Przykładowe produkty i pozycje listy zostaną zastąpione początkowym zestawem. Twoje własne dane pozostaną bez zmian. Dostępne tylko w jednoosobowym gospodarstwie.",
+          "open": "Usuń dane testowe",
+          "title": "Usunąć dane testowe?",
+          "description": "Testowe produkty i zakupy z bieżącego domostwa oraz Twoje przykładowe przepisy zostaną trwale usunięte. Pozostałe dane zostaną zachowane.",
           "cancel": "Anuluj",
-          "confirm": "Resetuj dane"
+          "confirm": "Usuń dane testowe"
         }
       },
       "about": {

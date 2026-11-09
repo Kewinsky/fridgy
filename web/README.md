@@ -30,9 +30,9 @@ Set the following in `.env.local` and in the Vercel project's environment variab
 | `OPENAI_API_KEY` | OpenAI Platform → API keys | Server-only recipe generation |
 
 Never prefix the service role key with `NEXT_PUBLIC_` or expose it in browser code.
-Keep `OPENAI_API_KEY` server-only as well. Apply `202611090001_generated_recipes.sql` and then `202611090002_unified_recipes.sql` before using recipe generation. The second migration moves existing recipes into one table.
+Keep `OPENAI_API_KEY` server-only as well. Apply the migrations in `supabase/migrations/` in filename order. `202611090004_households_and_demo_data.sql` adds household switching, recipes shared with household members and removable sample data.
 
-Run [`../supabase/migrations/202610140001_initial_schema.sql`](../supabase/migrations/202610140001_initial_schema.sql) in the Supabase SQL Editor before opening the dashboard. It creates the tables, RLS policies, receipt and cooking transactions, and a trigger that gives every new user starter inventory and shopping items. Existing users are backfilled when the migration runs. Keep this migration in source control; do not run it twice manually.
+Run [`../supabase/migrations/202610140001_initial_schema.sql`](../supabase/migrations/202610140001_initial_schema.sql) in the Supabase SQL Editor before opening the dashboard. It creates the tables, RLS policies, receipt and cooking transactions, and a trigger that creates the first household for every new user. After migration `202611090004`, new accounts receive five sample products, three shopping items and three sample recipes. When adding another household, the user chooses whether to add sample products and shopping items; the default is an empty start. Migration `004` also adds sample recipes for existing users. Keep migrations in source control; do not run them twice manually.
 
 In Supabase Dashboard:
 

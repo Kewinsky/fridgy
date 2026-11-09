@@ -48,10 +48,10 @@ const productNames: Record<Exclude<Locale, "pl">, string[]> = {
 };
 
 const starterProducts: Record<Exclude<Locale, "pl">, Record<string, string>> = {
-  en: { milk: "2% milk", eggs: "Eggs", tomatoes: "Tomatoes", pasta: "Pasta", peas: "Frozen peas" },
-  de: { milk: "Milch 2 %", eggs: "Eier", tomatoes: "Tomaten", pasta: "Nudeln", peas: "Tiefkühlerbsen" },
-  fr: { milk: "Lait 2 %", eggs: "Œufs", tomatoes: "Tomates", pasta: "Pâtes", peas: "Petits pois surgelés" },
-  es: { milk: "Leche 2 %", eggs: "Huevos", tomatoes: "Tomates", pasta: "Pasta", peas: "Guisantes congelados" },
+  en: { milk: "2% milk", eggs: "Eggs", tomatoes: "Tomatoes", pasta: "Pasta", potatoes: "Potatoes", peas: "Frozen peas" },
+  de: { milk: "Milch 2 %", eggs: "Eier", tomatoes: "Tomaten", pasta: "Nudeln", potatoes: "Kartoffeln", peas: "Tiefkühlerbsen" },
+  fr: { milk: "Lait 2 %", eggs: "Œufs", tomatoes: "Tomates", pasta: "Pâtes", potatoes: "Pommes de terre", peas: "Petits pois surgelés" },
+  es: { milk: "Leche 2 %", eggs: "Huevos", tomatoes: "Tomates", pasta: "Pasta", potatoes: "Patatas", peas: "Guisantes congelados" },
 };
 
 const starterShopping: Record<Exclude<Locale, "pl">, Record<string, string>> = {

@@ -26,7 +26,7 @@ export function CookingPage() {
   const t = useTranslations("Cooking");
   const recipeT = useTranslations("Recipe.cuisineOptions");
   const locale = useLocale() as Locale;
-  const { addRecipes } = useDashboardData();
+  const { addRecipes, householdId } = useDashboardData();
   const [meal, setMeal] = useState<(typeof meals)[number]>("lunch");
   const [time, setTime] = useState<(typeof times)[number]>("30");
   const [servings, setServings] = useState(2);
@@ -54,7 +54,7 @@ export function CookingPage() {
       const result = await generateRecipes({
         meal, servings, time, shopping, cuisines: selectedCuisines, savedRecipes, notes, locale,
         excludeTitles: more ? recipes.slice(-100).map((recipe) => recipe.title) : [],
-      });
+      }, householdId);
       if (result.error) {
         setError(result.error);
       } else if (result.recipes) {

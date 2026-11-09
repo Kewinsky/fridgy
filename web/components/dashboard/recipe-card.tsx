@@ -14,9 +14,11 @@ import {
   EditRecipeDialog,
 } from "@/components/dashboard/add-recipe-dialog";
 import { FavoriteRecipeButton } from "@/components/dashboard/recipe-actions";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { RecipeImage } from "@/components/dashboard/recipe-image";
 import { difficultyMessageKeys } from "@/components/dashboard/recipe-options";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import type { Recipe } from "@/lib/demo-recipes";
 import { localizeDemoRecipe } from "@/lib/demo-localization";
 import { getRecipeImageSrc } from "@/lib/recipe-image";
@@ -34,6 +36,8 @@ export function RecipeCard({
   servings?: number;
 }) {
   const t = useTranslations("Recipe");
+  const common = useTranslations("Common");
+  const { userId } = useDashboardData();
   const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
@@ -53,6 +57,7 @@ export function RecipeCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h2 className="text-lg font-extrabold">{displayRecipe.title}</h2>
+          {"isDemo" in recipe && recipe.isDemo ? <Badge variant="outline" className="mt-2">{common("demoData")}</Badge> : null}
           <p className="mt-1 text-sm leading-6 text-muted-foreground">{displayRecipe.description}</p>
         </div>
         <FavoriteRecipeButton slug={recipe.slug} compact />
@@ -85,7 +90,7 @@ export function RecipeCard({
           >
             {t("viewRecipe")} <ArrowRightIcon aria-hidden="true" />
           </Button>
-          {!suggestion && customRecipe ? (
+          {!suggestion && customRecipe?.createdBy === userId ? (
             <div className="flex gap-2 self-end">
               <EditRecipeDialog recipe={customRecipe} />
               <DeleteRecipeDialog recipe={customRecipe} />

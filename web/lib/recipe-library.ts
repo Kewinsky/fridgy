@@ -3,6 +3,8 @@ import { getIngredientQuantity, parseIngredientAmount, recipeAllergens, type Rec
 export type StoredRecipe = Recipe & {
   source: "custom" | "ai";
   createdAt: string;
+  createdBy?: string;
+  isDemo?: boolean;
 };
 export type CustomRecipe = StoredRecipe & { source: "custom" };
 

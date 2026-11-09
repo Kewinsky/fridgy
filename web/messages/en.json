@@ -5,13 +5,14 @@
     "adding": "Adding…",
     "deleting": "Deleting…",
     "saved": "Changes saved.",
-    "saveFailed": "Could not save changes. Please try again."
+    "saveFailed": "Could not save changes. Please try again.",
+    "demoData": "Sample data"
   },
   "Invitation": {
     "title": "Join a household",
     "description": "You will see the shared inventory and shopping list. Your personal recipes will stay in your account.",
     "accept": "Join household",
-    "error": "Could not accept the invitation. Check the email address or link expiry. Export your own inventory before joining."
+    "error": "Could not accept the invitation. Check the email address or whether the link has expired."
   },
   "Metadata": {
     "description": "Manage your food at home and waste less."
@@ -67,8 +68,13 @@
     "selectHousehold": "Choose household",
     "owner": "Owner",
     "member": "Member",
-    "householdSwitchSoon": "More households coming soon",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "addHousehold": "Add household",
+    "addHouseholdDescription": "Choose an empty start or sample data. Recipes stay shared.",
+    "householdName": "Household name",
+    "createHousehold": "Create household",
+    "sampleDataLabel": "Add sample data",
+    "sampleDataDescription": "5 inventory products and 3 shopping items. You can remove them later."
   },
   "Settings": {
     "metaTitle": "Settings",
@@ -87,7 +93,7 @@
       "owner": "Owner",
       "member": "Member",
       "ownerRights": "You can manage inventory and shopping, invite members and rename the household. The owner cannot leave the household.",
-      "memberRights": "You can manage shared inventory, shopping and your own recipes. You can leave the household once this feature is connected.",
+      "memberRights": "You can manage shared inventory and shopping, view household members' recipes, and edit your own. Leaving a household is not available yet.",
       "leave": "Leave household",
       "leaveSoon": "Leaving the household will be available after backend support is added."
     },
@@ -229,13 +235,13 @@
       },
       "demo": {
         "title": "Demo data",
-        "description": "Restore the initial sample products and shopping list.",
+        "description": "Remove sample products and shopping items from this household, plus the sample recipes on your account.",
         "dialog": {
-          "open": "Reset demo data",
-          "title": "Reset demo data?",
-          "description": "Sample products and list items will be restored. Your own data will stay. Available only to a household with one member.",
+          "open": "Remove sample data",
+          "title": "Remove sample data?",
+          "description": "Sample products and shopping items in this household, and your sample recipes, will be permanently removed. Other data will stay.",
           "cancel": "Cancel",
-          "confirm": "Reset data"
+          "confirm": "Remove sample data"
         }
       },
       "about": {
