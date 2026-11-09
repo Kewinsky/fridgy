@@ -305,8 +305,28 @@
     "allProductsEyebrow": "W domu",
     "allProductsEmpty": "Nie masz jeszcze produktów w zapasach.",
     "moreProducts": "I jeszcze {count, plural, one {# produkt} few {# produkty} other {# produktów}} w zapasach.",
-    "recipeEyebrow": "Danie na dziś",
-    "recipeFallbackTitle": "Znajdź pomysł na posiłek"
+    "householdEyebrow": "Twoje domostwo",
+    "householdTitle": "Kuchnia: {name}",
+    "expiringEyebrow": "Warto sprawdzić",
+    "expiringTitle": "Produkty z bliskim terminem",
+    "snapshotTitle": "Sytuacja w domostwie",
+    "consumedEyebrow": "Do uzupełnienia",
+    "consumedTitle": "Co się skończyło",
+    "consumedEmpty": "Nie ma produktów oznaczonych jako zużyte.",
+    "addToShopping": "Dodaj do zakupów",
+    "dailyEyebrow": "Dla Twojej kuchni",
+    "dailyTitle": "Pomysł na dziś",
+    "dailyLoading": "Przygotowujemy pomysł na dziś…",
+    "dailyStatus": {
+      "pending": "Pomysł jest przygotowywany. Odśwież stronę za chwilę.",
+      "failed": "Dziś nie udało się przygotować sensownej propozycji. Możesz samodzielnie wybrać odpowiedzi w „Co ugotować?”.",
+      "unavailable": "Dzisiejszy pomysł jest chwilowo niedostępny.",
+      "empty": "Dodaj produkty do zapasów, aby dostać pomysł dopasowany do Twojej kuchni."
+    },
+    "expiringCountLabel": "z terminem w ciągu 7 dni",
+    "stockCountLabel": "produktów w zapasach",
+    "expiringEmpty": "Żaden produkt nie ma terminu w ciągu najbliższych 7 dni.",
+    "overdueNotice": "{count, plural, one {# produkt jest po terminie – sprawdź go przed użyciem.} few {# produkty są po terminie – sprawdź je przed użyciem.} other {# produktów jest po terminie – sprawdź je przed użyciem.}}"
   },
   "Inventory": {
     "metaTitle": "Moje zapasy",
@@ -444,7 +464,8 @@
         "lunch": "Obiad",
         "dinner": "Kolacja",
         "snack": "Przekąska",
-        "dessert": "Deser"
+        "dessert": "Deser",
+        "soup": "Zupa"
       },
       "times": {
         "15": "Do 15 min",

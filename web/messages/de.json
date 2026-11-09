@@ -305,8 +305,28 @@
     "allProductsEyebrow": "Zu Hause",
     "allProductsEmpty": "Du hast noch keine Produkte in deinen Vorräten.",
     "moreProducts": "Und {count, plural, one {# weiteres Produkt} other {# weitere Produkte}} in deinen Vorräten.",
-    "recipeEyebrow": "Gericht für heute",
-    "recipeFallbackTitle": "Finde eine Essensidee"
+    "householdEyebrow": "Dein Haushalt",
+    "householdTitle": "Küche: {name}",
+    "expiringEyebrow": "Jetzt prüfen",
+    "expiringTitle": "Produkte mit nahem Datum",
+    "snapshotTitle": "Haushalt im Überblick",
+    "consumedEyebrow": "Nachkaufen",
+    "consumedTitle": "Was ist aufgebraucht?",
+    "consumedEmpty": "Keine Produkte sind als aufgebraucht markiert.",
+    "addToShopping": "Zur Einkaufsliste",
+    "dailyEyebrow": "Für deine Küche",
+    "dailyTitle": "Idee für heute",
+    "dailyLoading": "Die Idee für heute wird vorbereitet…",
+    "dailyStatus": {
+      "pending": "Deine Idee wird vorbereitet. Lade die Seite gleich neu.",
+      "failed": "Heute konnten wir keine gute Idee vorbereiten. Du kannst deine Wünsche unter Was soll ich kochen? selbst angeben.",
+      "unavailable": "Die heutige Idee ist vorübergehend nicht verfügbar.",
+      "empty": "Füge Produkte zu deinem Vorrat hinzu, um eine passende Idee zu erhalten."
+    },
+    "expiringCountLabel": "mit Datum innerhalb von 7 Tagen",
+    "stockCountLabel": "Produkte im Vorrat",
+    "expiringEmpty": "Kein Produkt hat ein Datum innerhalb der nächsten 7 Tage.",
+    "overdueNotice": "{count, plural, one {# Produkt ist über dem Datum – prüfe es vor der Verwendung.} other {# Produkte sind über dem Datum – prüfe sie vor der Verwendung.}}"
   },
   "Inventory": {
     "metaTitle": "My inventory",
@@ -444,7 +464,8 @@
         "lunch": "Mittagessen",
         "dinner": "Abendessen",
         "snack": "Snack",
-        "dessert": "Dessert"
+        "dessert": "Dessert",
+        "soup": "Suppe"
       },
       "times": {
         "15": "Bis 15 Min.",

@@ -305,8 +305,28 @@
     "allProductsEyebrow": "À la maison",
     "allProductsEmpty": "Vous n'avez pas encore de produits dans vos provisions.",
     "moreProducts": "Et {count, plural, one {# autre produit} other {# autres produits}} dans vos provisions.",
-    "recipeEyebrow": "Plat du jour",
-    "recipeFallbackTitle": "Trouvez une idée de repas"
+    "householdEyebrow": "Votre foyer",
+    "householdTitle": "Cuisine : {name}",
+    "expiringEyebrow": "À vérifier",
+    "expiringTitle": "Produits dont la date approche",
+    "snapshotTitle": "Aperçu du foyer",
+    "consumedEyebrow": "À renouveler",
+    "consumedTitle": "Ce qui est épuisé",
+    "consumedEmpty": "Aucun produit n'est marqué comme épuisé.",
+    "addToShopping": "Ajouter aux courses",
+    "dailyEyebrow": "Pour votre cuisine",
+    "dailyTitle": "Idée du jour",
+    "dailyLoading": "Préparation de l'idée du jour…",
+    "dailyStatus": {
+      "pending": "Votre idée est en cours de préparation. Actualisez la page dans un instant.",
+      "failed": "Nous n'avons pas trouvé de bonne idée aujourd'hui. Vous pouvez choisir vos critères dans Que cuisiner ?",
+      "unavailable": "L'idée du jour est temporairement indisponible.",
+      "empty": "Ajoutez des produits à vos provisions pour recevoir une idée adaptée."
+    },
+    "expiringCountLabel": "avec une date dans les 7 jours",
+    "stockCountLabel": "produits en stock",
+    "expiringEmpty": "Aucun produit n'a de date dans les 7 prochains jours.",
+    "overdueNotice": "{count, plural, one {# produit a dépassé sa date – vérifiez-le avant utilisation.} other {# produits ont dépassé leur date – vérifiez-les avant utilisation.}}"
   },
   "Inventory": {
     "metaTitle": "My inventory",
@@ -444,7 +464,8 @@
         "lunch": "Déjeuner",
         "dinner": "Dîner",
         "snack": "En-cas",
-        "dessert": "Dessert"
+        "dessert": "Dessert",
+        "soup": "Soupe"
       },
       "times": {
         "15": "Jusqu'à 15 min",

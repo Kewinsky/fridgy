@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { acceptedGeneratedRecipes, collectGeneratedRecipes, generationContext, generationInputSchema, requestModelRecipes } from "./recipe-generation.ts";
+import { acceptedGeneratedRecipes, collectGeneratedRecipes, generationContext, generationInputSchema, requestDailyRecipe, requestModelRecipes } from "./recipe-generation.ts";
 import type { DemoProduct } from "./demo-data.ts";
 
 const input = generationInputSchema.parse({
@@ -19,6 +19,29 @@ const recipe = {
   steps: ["Ugotuj marchew."], allergens: [],
 };
 const modelOutput = (recipes: unknown[], message = "Mam kilka pomysłów na obiad.") => ({ message, recipes });
+
+test("accepts soup as a meal and asks for one daily recipe in one model call", async () => {
+  const soupInput = generationInputSchema.parse({ ...input, meal: "soup" });
+  let calls = 0;
+  const daily = await requestDailyRecipe("key", soupInput, products, { diet: "none", allergies: "", excludedIngredients: "" }, [], async (_key, context) => {
+    calls += 1;
+    assert.equal(context.meal, "soup");
+    assert.equal(context.targetRecipeCount, 1);
+    return modelOutput([recipe]);
+  });
+  assert.equal(calls, 1);
+  assert.equal(daily?.title, "Zupa z marchwi");
+});
+
+test("daily idea rejects an allergen conflict without another model call", async () => {
+  let calls = 0;
+  const daily = await requestDailyRecipe("key", input, products, { diet: "none", allergies: "milk", excludedIngredients: "" }, [], async () => {
+    calls += 1;
+    return modelOutput([{ ...recipe, allergens: ["milk"] }]);
+  });
+  assert.equal(calls, 1);
+  assert.equal(daily, null);
+});
 
 test("sends form answers and current stock to the model context", () => {
   const context = generationContext(input, products, { diet: "vegan", allergies: "milk,eggs", excludedIngredients: "mleko" }, []);

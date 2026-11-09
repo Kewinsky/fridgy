@@ -17,7 +17,7 @@ import type { Locale } from "@/i18n/config";
 import { cuisineMessageKeys, cuisines as recipeCuisines, type Cuisine } from "@/components/dashboard/recipe-options";
 import { cn } from "@/lib/utils";
 
-const meals = ["breakfast", "lunch", "dinner", "snack", "dessert"] as const;
+const meals = ["breakfast", "lunch", "dinner", "snack", "dessert", "soup"] as const;
 const times = ["15", "30", "60", "any"] as const;
 const shoppingOptions = ["none", "two", "any"] as const;
 const savedRecipeOptions = ["include", "newOnly"] as const;

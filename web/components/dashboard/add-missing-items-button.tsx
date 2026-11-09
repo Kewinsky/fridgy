@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingCartIcon } from "lucide-react";
+import { ShoppingCartPlusIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
@@ -12,9 +12,11 @@ import { cn } from "@/lib/utils";
 export function AddMissingItemsButton({
   names,
   className,
+  label,
 }: {
   names: string[];
   className?: string;
+  label?: string;
 }) {
   const t = useTranslations("AddMissingItems");
   const common = useTranslations("Common");
@@ -28,7 +30,10 @@ export function AddMissingItemsButton({
         added = result.changedCount;
         return result.items;
       });
-    } catch { toast.error(common("saveFailed")); return; }
+    } catch {
+      toast.error(common("saveFailed"));
+      return;
+    }
     if (!added) {
       toast.info(t("alreadyAdded"));
       return;
@@ -43,8 +48,8 @@ export function AddMissingItemsButton({
       className={cn("h-11", className)}
       onClick={addItems}
     >
-      <ShoppingCartIcon aria-hidden="true" />
-      {t("button")}
+      <ShoppingCartPlusIcon aria-hidden="true" />
+      {label ?? t("button")}
     </Button>
   );
 }

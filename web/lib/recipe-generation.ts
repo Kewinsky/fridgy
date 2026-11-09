@@ -8,7 +8,7 @@ import { hasEnoughIngredient, isTapWaterIngredient } from "./inventory-store.ts"
 import { getKnownAllergenConflicts } from "./recipe-preferences.ts";
 
 export const generationInputSchema = z.object({
-  meal: z.enum(["breakfast", "lunch", "dinner", "snack", "dessert"]),
+  meal: z.enum(["breakfast", "lunch", "dinner", "snack", "dessert", "soup"]),
   servings: z.number().int().min(1).max(12),
   time: z.enum(["15", "30", "60", "any"]),
   shopping: z.enum(["none", "two", "any"]),
@@ -111,6 +111,7 @@ export async function requestModelRecipes(
         "Start from a known dish and its standard ingredient list, then check what is available. Do not invent a dish title by chaining available ingredients together or add peas, tomatoes or dairy to an unrelated classic merely because they are in stock.",
         "Keep recipes distinct by dish and cooking method, not by random additions. When shopping is allowed, spend the allowance on key ingredients that make a familiar dish possible instead of inventing a weak substitute.",
         "Follow the meal, servings, time, cuisine, diet, excluded ingredients and shopping limit. If shopping is none and fewer sensible dishes are possible, return fewer recipes or an empty array instead of inventing a dish.",
+        "If the meal is soup, suggest actual soups rather than other dishes.",
         "Tap water is always available. Do not list it as an ingredient or something to buy; mention it in the steps if needed. Salt and pepper may be mentioned as optional seasoning in steps but must not consume a shopping slot. Do not assume oil or other staples are available.",
         "Avoid every listed allergy, related ingredients and derivatives. For each recipe, list any EU allergens that may be present in its ingredients. Do not claim allergen safety.",
         "Ingredient quantities are totals for all requested servings. Check these totals against the inventory. Use only units from the schema.",
@@ -272,4 +273,17 @@ export async function collectGeneratedRecipes(
     suggestions.push(...accepted.slice(0, 3 - suggestions.length));
   }
   return { recipes: suggestions, message };
+}
+
+export async function requestDailyRecipe(
+  key: string,
+  input: GenerationInput,
+  products: DemoProduct[],
+  preferences: { diet: string; allergies: string; excludedIngredients: string },
+  saved: Recipe[],
+  request: (key: string, context: ReturnType<typeof generationContext>) => Promise<unknown> = requestModelRecipes,
+) {
+  const context = generationContext(input, products, preferences, saved, 1);
+  const output = await request(key, context);
+  return acceptedGeneratedRecipes(output, input, products, preferences.excludedIngredients, preferences.allergies)[0] ?? null;
 }

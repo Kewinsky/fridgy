@@ -305,8 +305,28 @@
     "allProductsEyebrow": "At home",
     "allProductsEmpty": "You have no products in your inventory yet.",
     "moreProducts": "And {count, plural, one {# more product} other {# more products}} in your inventory.",
-    "recipeEyebrow": "Today's dish",
-    "recipeFallbackTitle": "Find a meal idea"
+    "householdEyebrow": "Your household",
+    "householdTitle": "Kitchen: {name}",
+    "expiringEyebrow": "Worth checking",
+    "expiringTitle": "Products nearing their date",
+    "snapshotTitle": "Household snapshot",
+    "consumedEyebrow": "Restock",
+    "consumedTitle": "What ran out",
+    "consumedEmpty": "No products are marked as used up.",
+    "addToShopping": "Add to shopping list",
+    "dailyEyebrow": "For your kitchen",
+    "dailyTitle": "Today's idea",
+    "dailyLoading": "Preparing today's idea…",
+    "dailyStatus": {
+      "pending": "Your idea is being prepared. Refresh the page in a moment.",
+      "failed": "We could not prepare a good idea today. You can choose your own answers in What should I cook?",
+      "unavailable": "Today's idea is temporarily unavailable.",
+      "empty": "Add products to your inventory to get an idea for your kitchen."
+    },
+    "expiringCountLabel": "with a date within 7 days",
+    "stockCountLabel": "products in stock",
+    "expiringEmpty": "No products have a date within the next 7 days.",
+    "overdueNotice": "{count, plural, one {# product is past its date – check it before use.} other {# products are past their date – check them before use.}}"
   },
   "Inventory": {
     "metaTitle": "My inventory",
@@ -444,7 +464,8 @@
         "lunch": "Lunch",
         "dinner": "Dinner",
         "snack": "Snack",
-        "dessert": "Dessert"
+        "dessert": "Dessert",
+        "soup": "Soup"
       },
       "times": {
         "15": "Up to 15 min",
