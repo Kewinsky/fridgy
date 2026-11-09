@@ -404,18 +404,25 @@
     "servings": "{count, plural, one {# ración} other {# raciones}}",
     "fewerPeople": "Menos personas",
     "morePeople": "Más personas",
-    "demoNotice": "Estas propuestas de demostración se basan en tus respuestas.",
+    "demoNotice": "Estas son recetas de muestra. Las notas aún no influyen en las propuestas.",
     "showSuggestions": "Mostrar propuestas",
+    "mealRequired": "Elige un tipo de comida.",
     "loadingSuggestions": "Preparando propuestas de recetas...",
-    "questionProgress": "Pregunta {number} de 7",
+    "questionProgress": "Pregunta {number} de 4",
     "questions": {
       "meal": "¿Qué comida vas a preparar?",
       "time": "¿Cuánto tiempo tienes?",
       "servings": "¿Para cuántas personas cocinas?",
-      "craving": "¿Qué te apetece comer?",
       "cuisine": "¿Qué tipo de cocina te apetece?",
       "shopping": "¿Puedes comprar ingredientes adicionales?",
       "saved": "¿Quieres incluir los platos guardados?"
+    },
+    "optional": {
+      "title": "Más preferencias (opcional)",
+      "notesLabel": "¿Quieres añadir algo más?",
+      "notesPlaceholder": "Por ejemplo, sin picante, algo para niños o usar brócoli",
+      "notesHint": "Tus notas se tendrán en cuenta cuando estén disponibles las sugerencias con IA.",
+      "notesCount": "{count}/{max} caracteres"
     },
     "options": {
       "meals": {
@@ -423,21 +430,13 @@
         "lunch": "Almuerzo",
         "dinner": "Cena",
         "snack": "Tentempié",
-        "any": "Me da igual"
+        "dessert": "Postre"
       },
       "times": {
         "15": "Hasta 15 min",
         "30": "Hasta 30 min",
         "60": "Hasta 60 min",
         "any": "Me da igual"
-      },
-      "cravings": {
-        "light": "Algo ligero",
-        "protein": "Mucha proteína",
-        "comfort": "Algo reconfortante",
-        "world": "Sabores del mundo",
-        "simple": "Sencillo",
-        "surprise": "Sorpréndeme"
       },
       "cuisines": {
         "any": "Me da igual"
@@ -449,8 +448,7 @@
       },
       "saved": {
         "include": "Sí",
-        "newOnly": "Solo recetas nuevas",
-        "any": "Me da igual"
+        "newOnly": "Solo recetas nuevas"
       }
     },
     "empty": {

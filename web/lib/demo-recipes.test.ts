@@ -1,12 +1,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { demoRecipes, filterRecipesByCuisine } from "./demo-recipes.ts";
+import { demoRecipes, filterRecipesByCuisines } from "./demo-recipes.ts";
 
-test("cuisine choice filters demo recipes without changing the any choice", () => {
-  assert.deepEqual(filterRecipesByCuisine(demoRecipes, "any"), demoRecipes);
-  assert.ok(filterRecipesByCuisine(demoRecipes, "Włoska").every((recipe) => recipe.cuisine === "Włoska"));
-  assert.deepEqual(filterRecipesByCuisine(demoRecipes, "Azjatycka"), []);
+test("cuisine choices include any selected cuisine and an empty choice leaves recipes unchanged", () => {
+  assert.deepEqual(filterRecipesByCuisines(demoRecipes, []), demoRecipes);
+  assert.deepEqual(filterRecipesByCuisines(demoRecipes, ["Włoska", "Polska"]), demoRecipes.filter((recipe) => ["Włoska", "Polska"].includes(recipe.cuisine)));
+  assert.deepEqual(filterRecipesByCuisines(demoRecipes, ["Azjatycka"]), []);
 });
 
 test("demo nutrition is estimated per serving and consistent with calories", () => {

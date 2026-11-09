@@ -404,18 +404,25 @@
     "servings": "{count, plural, one {# Portion} other {# Portionen}}",
     "fewerPeople": "Weniger Personen",
     "morePeople": "Mehr Personen",
-    "demoNotice": "Dies sind Demo-Vorschläge auf Grundlage deiner Antworten.",
+    "demoNotice": "Dies sind Demorezepte. Hinweise beeinflussen die Vorschläge noch nicht.",
     "showSuggestions": "Vorschläge anzeigen",
+    "mealRequired": "Wähle eine Mahlzeit aus.",
     "loadingSuggestions": "Rezeptvorschläge werden vorbereitet...",
-    "questionProgress": "Frage {number} von 7",
+    "questionProgress": "Frage {number} von 4",
     "questions": {
       "meal": "Welche Mahlzeit möchtest du zubereiten?",
       "time": "Wie viel Zeit hast du?",
       "servings": "Für wie viele Personen kochst du?",
-      "craving": "Worauf hast du Appetit?",
       "cuisine": "Auf welche Küche hast du Lust?",
       "shopping": "Kannst du zusätzliche Zutaten einkaufen?",
       "saved": "Sollen gespeicherte Gerichte berücksichtigt werden?"
+    },
+    "optional": {
+      "title": "Weitere Wünsche (optional)",
+      "notesLabel": "Hast du weitere Wünsche?",
+      "notesPlaceholder": "Zum Beispiel nicht scharf, etwas für Kinder oder Brokkoli verwenden",
+      "notesHint": "Deine Angaben werden berücksichtigt, sobald KI-Vorschläge verfügbar sind.",
+      "notesCount": "{count}/{max} Zeichen"
     },
     "options": {
       "meals": {
@@ -423,21 +430,13 @@
         "lunch": "Mittagessen",
         "dinner": "Abendessen",
         "snack": "Snack",
-        "any": "Egal"
+        "dessert": "Dessert"
       },
       "times": {
         "15": "Bis 15 Min.",
         "30": "Bis 30 Min.",
         "60": "Bis 60 Min.",
         "any": "Egal"
-      },
-      "cravings": {
-        "light": "Etwas Leichtes",
-        "protein": "Viel Eiweiß",
-        "comfort": "Etwas Herzhaftes",
-        "world": "Aromen der Welt",
-        "simple": "Einfach",
-        "surprise": "Überrasche mich"
       },
       "cuisines": {
         "any": "Egal"
@@ -449,8 +448,7 @@
       },
       "saved": {
         "include": "Ja",
-        "newOnly": "Nur neue",
-        "any": "Egal"
+        "newOnly": "Nur neue"
       }
     },
     "empty": {

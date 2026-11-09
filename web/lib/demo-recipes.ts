@@ -228,7 +228,7 @@ export function getRecipeMatch(recipe: DemoRecipe) {
   return { available, total: recipe.ingredients.length };
 }
 
-export function filterRecipesByCuisine<T extends Recipe>(recipes: T[], cuisine: string): T[] {
-  return cuisine === "any" ? recipes : recipes.filter((recipe) => recipe.cuisine === cuisine);
+export function filterRecipesByCuisines<T extends Recipe>(recipes: T[], cuisines: readonly string[]): T[] {
+  return cuisines.length === 0 ? recipes : recipes.filter((recipe) => cuisines.includes(recipe.cuisine));
 }
 

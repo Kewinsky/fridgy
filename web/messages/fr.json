@@ -404,18 +404,25 @@
     "servings": "{count, plural, one {# portion} other {# portions}}",
     "fewerPeople": "Moins de personnes",
     "morePeople": "Plus de personnes",
-    "demoNotice": "Ces suggestions de démonstration reposent sur vos réponses.",
+    "demoNotice": "Ce sont des recettes de démonstration. Les remarques n'influencent pas encore les suggestions.",
     "showSuggestions": "Afficher les suggestions",
+    "mealRequired": "Choisissez un type de repas.",
     "loadingSuggestions": "Préparation des suggestions de recettes...",
-    "questionProgress": "Question {number} sur 7",
+    "questionProgress": "Question {number} sur 4",
     "questions": {
       "meal": "Quel repas préparez-vous ?",
       "time": "De combien de temps disposez-vous ?",
       "servings": "Pour combien de personnes cuisinez-vous ?",
-      "craving": "De quoi avez-vous envie ?",
       "cuisine": "Quelle cuisine vous ferait plaisir ?",
       "shopping": "Pouvez-vous acheter des ingrédients supplémentaires ?",
       "saved": "Faut-il tenir compte des plats enregistrés ?"
+    },
+    "optional": {
+      "title": "Autres préférences (facultatif)",
+      "notesLabel": "Avez-vous d'autres souhaits ?",
+      "notesPlaceholder": "Par exemple, pas épicé, pour les enfants ou utiliser du brocoli",
+      "notesHint": "Vos remarques seront prises en compte lorsque les suggestions IA seront disponibles.",
+      "notesCount": "{count}/{max} caractères"
     },
     "options": {
       "meals": {
@@ -423,21 +430,13 @@
         "lunch": "Déjeuner",
         "dinner": "Dîner",
         "snack": "En-cas",
-        "any": "Peu importe"
+        "dessert": "Dessert"
       },
       "times": {
         "15": "Jusqu'à 15 min",
         "30": "Jusqu'à 30 min",
         "60": "Jusqu'à 60 min",
         "any": "Peu importe"
-      },
-      "cravings": {
-        "light": "Quelque chose de léger",
-        "protein": "Riche en protéines",
-        "comfort": "Un plat réconfortant",
-        "world": "Saveurs du monde",
-        "simple": "Simple",
-        "surprise": "Surprenez-moi"
       },
       "cuisines": {
         "any": "Peu importe"
@@ -449,8 +448,7 @@
       },
       "saved": {
         "include": "Oui",
-        "newOnly": "Uniquement des nouveautés",
-        "any": "Peu importe"
+        "newOnly": "Uniquement des nouveautés"
       }
     },
     "empty": {

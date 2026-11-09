@@ -404,18 +404,25 @@
     "servings": "{count, plural, one {# serving} other {# servings}}",
     "fewerPeople": "Fewer people",
     "morePeople": "More people",
-    "demoNotice": "These are demo suggestions based on your answers.",
+    "demoNotice": "These are demo recipes. Notes do not affect suggestions yet.",
     "showSuggestions": "Show suggestions",
+    "mealRequired": "Choose one meal type.",
     "loadingSuggestions": "Preparing recipe suggestions...",
-    "questionProgress": "Question {number} of 7",
+    "questionProgress": "Question {number} of 4",
     "questions": {
       "meal": "Which meal are you preparing?",
       "time": "How much time do you have?",
       "servings": "How many people are you cooking for?",
-      "craving": "What do you feel like eating?",
       "cuisine": "Which cuisine are you in the mood for?",
       "shopping": "Can you buy extra ingredients?",
       "saved": "Should saved dishes be included?"
+    },
+    "optional": {
+      "title": "More preferences (optional)",
+      "notesLabel": "Anything else we should know?",
+      "notesPlaceholder": "For example, no spicy food, something for kids, or use broccoli",
+      "notesHint": "Your notes will be used when AI suggestions are connected.",
+      "notesCount": "{count}/{max} characters"
     },
     "options": {
       "meals": {
@@ -423,21 +430,13 @@
         "lunch": "Lunch",
         "dinner": "Dinner",
         "snack": "Snack",
-        "any": "Any"
+        "dessert": "Dessert"
       },
       "times": {
         "15": "Up to 15 min",
         "30": "Up to 30 min",
         "60": "Up to 60 min",
         "any": "Any"
-      },
-      "cravings": {
-        "light": "Something light",
-        "protein": "High protein",
-        "comfort": "Comfort food",
-        "world": "World flavours",
-        "simple": "Simple",
-        "surprise": "Surprise me"
       },
       "cuisines": {
         "any": "Any"
@@ -449,8 +448,7 @@
       },
       "saved": {
         "include": "Yes",
-        "newOnly": "New only",
-        "any": "Any"
+        "newOnly": "New only"
       }
     },
     "empty": {
