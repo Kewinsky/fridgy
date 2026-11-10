@@ -297,6 +297,18 @@
     "eyebrow": "Buenos días",
     "title": "Tu cocina de un vistazo",
     "description": "Revisa tus provisiones y planifica la próxima comida.",
+    "onboarding": {
+      "welcomeTitle": "Empecemos a cocinar",
+      "welcomeDescription": "Crea un hogar, añade productos de un recibo y encuentra una idea para tu primera comida.",
+      "modalTitle": "¡Bienvenido a Fridgy!",
+      "modalDescription": "Primero crea tu hogar. Después podrás usar tus existencias y recetas.",
+      "stepsEyebrow": "Primeros pasos",
+      "stepsTitle": "Prepara tu cocina",
+      "stepHousehold": "Crear un hogar",
+      "stepReceipt": "Añadir un recibo",
+      "stepCook": "Cocinar con productos disponibles",
+      "done": "Hecho"
+    },
     "addReceipt": "Añadir productos",
     "cookNow": "¿Qué cocino?",
     "viewAll": "Ver todo",

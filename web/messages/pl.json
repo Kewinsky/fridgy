@@ -297,6 +297,18 @@
     "eyebrow": "Dzień dobry",
     "title": "Twoja kuchnia w skrócie",
     "description": "Sprawdź zapasy i zaplanuj kolejny posiłek.",
+    "onboarding": {
+      "welcomeTitle": "Zacznijmy gotować",
+      "welcomeDescription": "Utwórz domostwo, dodaj produkty z paragonu i znajdź pomysł na pierwszy posiłek.",
+      "modalTitle": "Witaj we Fridgy!",
+      "modalDescription": "Na początek utwórz swoje domostwo. Dopiero potem będziesz mieć dostęp do zapasów i przepisów.",
+      "stepsEyebrow": "Pierwsze kroki",
+      "stepsTitle": "Przygotuj swoją kuchnię",
+      "stepHousehold": "Utwórz domostwo",
+      "stepReceipt": "Dodaj paragon",
+      "stepCook": "Ugotuj coś z dostępnych produktów",
+      "done": "Gotowe"
+    },
     "addReceipt": "Dodaj produkty",
     "cookNow": "Co ugotować?",
     "viewAll": "Zobacz wszystkie",

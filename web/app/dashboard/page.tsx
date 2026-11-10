@@ -10,6 +10,7 @@ import {
 
 import { ConsumedProductsCard } from "@/components/dashboard/consumed-products-card";
 import { ProductRowDetails } from "@/components/dashboard/product-row-details";
+import { OnboardingSteps } from "@/components/dashboard/household-onboarding";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentDashboard, type DashboardData } from "@/lib/dashboard-data";
@@ -25,7 +26,9 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function DashboardPage() {
   const t = await getTranslations("Dashboard");
   const locale = await getLocale() as Locale;
-  const { initialData, householdName } = await getCurrentDashboard();
+  const dashboard = await getCurrentDashboard();
+  if (!dashboard) return null;
+  const { initialData, householdName, onboardingFinished } = dashboard;
   const activeProducts = initialData.products.filter((product) => product.status === "active");
   const expiringProducts = activeProducts.map((product) => ({
     product,
@@ -35,6 +38,9 @@ export default async function DashboardPage() {
   }).sort((first, second) => first.product.estimatedUseBy.localeCompare(second.product.estimatedUseBy));
   const overdueCount = activeProducts.filter((product) => getFreshnessStatus(product.estimatedUseBy) === "overdue").length;
   const hasProducts = activeProducts.length > 0;
+  const hasAddedProducts = initialData.products.some((product) => !product.isDemo);
+  const hasCooked = initialData.recipeLibrary.history.length > 0;
+  const shouldAddProducts = !hasProducts || (!onboardingFinished && !hasAddedProducts);
 
   return (
     <div className="space-y-5 pb-6">
@@ -46,19 +52,21 @@ export default async function DashboardPage() {
               <h1 className="mt-3 break-words text-3xl font-extrabold tracking-tight text-balance sm:text-4xl xl:text-5xl">{t("householdTitle", { name: householdName })}</h1>
               <p className="mt-4 max-w-md leading-7 text-surface-strong-foreground/80">{t("description")}</p>
               <div className="mt-7 flex flex-wrap gap-3">
-                <Button nativeButton={false} render={<Link href={hasProducts ? "/dashboard/co-ugotowac" : "/dashboard/dodaj-produkty"} />} className="h-11 bg-surface-strong-foreground px-5 text-surface-strong hover:bg-surface-strong-foreground/90">
-                  {hasProducts ? <ChefHatIcon aria-hidden="true" /> : <PackagePlusIcon aria-hidden="true" />}
-                  {hasProducts ? t("cookNow") : t("addReceipt")}
+                <Button nativeButton={false} render={<Link href={shouldAddProducts ? "/dashboard/dodaj-produkty" : "/dashboard/co-ugotowac"} />} className="h-11 bg-surface-strong-foreground px-5 text-surface-strong hover:bg-surface-strong-foreground/90">
+                  {shouldAddProducts ? <PackagePlusIcon aria-hidden="true" /> : <ChefHatIcon aria-hidden="true" />}
+                  {shouldAddProducts ? t("addReceipt") : t("cookNow")}
                   <ArrowRightIcon aria-hidden="true" />
                 </Button>
-                {hasProducts ? (
+                {hasProducts && !shouldAddProducts ? (
                   <Button nativeButton={false} render={<Link href="/dashboard/dodaj-produkty" />} variant="outline" className="h-11 border-surface-strong-foreground/30 bg-transparent px-5 text-surface-strong-foreground hover:bg-surface-strong-foreground/10 hover:text-surface-strong-foreground">
                     <PackagePlusIcon aria-hidden="true" /> {t("addReceipt")}
                   </Button>
                 ) : null}
               </div>
             </div>
-            <Suspense fallback={
+            {!onboardingFinished ? (
+              <OnboardingSteps hasHousehold hasProducts={hasAddedProducts} hasCooked={hasCooked} />
+            ) : <Suspense fallback={
               <section className="flex min-h-64 min-w-0 flex-col rounded-2xl border border-surface-strong-foreground/15 bg-surface-strong-foreground/10 p-5 sm:p-6" aria-busy="true">
                 <p className="sr-only" role="status">{t("dailyLoading")}</p>
                 <p className="text-xs font-bold uppercase tracking-[0.14em] text-surface-strong-accent">{t("dailyEyebrow")}</p>
@@ -73,7 +81,7 @@ export default async function DashboardPage() {
               </section>
             }>
               <DailyIdeaCard dashboard={initialData} locale={locale} />
-            </Suspense>
+            </Suspense>}
           </div>
       </section>
 

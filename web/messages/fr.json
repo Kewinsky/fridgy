@@ -297,6 +297,18 @@
     "eyebrow": "Bonjour",
     "title": "Votre cuisine en un coup d'œil",
     "description": "Consultez vos provisions et planifiez votre prochain repas.",
+    "onboarding": {
+      "welcomeTitle": "Commençons à cuisiner",
+      "welcomeDescription": "Créez un foyer, ajoutez des produits depuis un ticket et trouvez une idée pour votre premier repas.",
+      "modalTitle": "Bienvenue sur Fridgy !",
+      "modalDescription": "Créez d'abord votre foyer. Vous pourrez ensuite utiliser vos stocks et vos recettes.",
+      "stepsEyebrow": "Premières étapes",
+      "stepsTitle": "Préparez votre cuisine",
+      "stepHousehold": "Créer un foyer",
+      "stepReceipt": "Ajouter un ticket",
+      "stepCook": "Cuisiner avec les produits disponibles",
+      "done": "Terminé"
+    },
     "addReceipt": "Ajouter des produits",
     "cookNow": "Que cuisiner ?",
     "viewAll": "Tout voir",

@@ -297,6 +297,18 @@
     "eyebrow": "Good to see you",
     "title": "Your kitchen at a glance",
     "description": "Check your inventory and plan your next meal.",
+    "onboarding": {
+      "welcomeTitle": "Let's start cooking",
+      "welcomeDescription": "Create a household, add products from a receipt, and find an idea for your first meal.",
+      "modalTitle": "Welcome to Fridgy!",
+      "modalDescription": "First, create your household. You can then use your stock and recipes.",
+      "stepsEyebrow": "First steps",
+      "stepsTitle": "Set up your kitchen",
+      "stepHousehold": "Create a household",
+      "stepReceipt": "Add a receipt",
+      "stepCook": "Cook with available products",
+      "done": "Done"
+    },
     "addReceipt": "Add products",
     "cookNow": "What should I cook?",
     "viewAll": "View all",

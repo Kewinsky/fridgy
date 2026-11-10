@@ -34,9 +34,14 @@ export const getCurrentDashboard = cache(async () => {
   const { data, error } = await supabase.auth.getClaims();
   if (error || !data?.claims) redirect("/login");
 
+  const { data: profile, error: profileError } = await supabase.from("profiles")
+    .select("household_id").eq("user_id", data.claims.sub).single();
+  if (profileError || !profile) throw new Error("Profile is missing. Apply the Supabase migration.");
+  if (!profile.household_id) return null;
+
   const initialData = await loadDashboardData(supabase, data.claims.sub);
   const { data: household, error: householdError } = await supabase.from("households")
-    .select("name,owner_id").eq("id", initialData.householdId).single();
+    .select("name,owner_id,onboarding_finished").eq("id", initialData.householdId).single();
   if (householdError || !household) throw new Error("Could not load household");
   const { data: memberships, error: membershipsError } = await supabase.from("household_memberships")
     .select("household_id,households(id,name,owner_id)").eq("user_id", data.claims.sub);
@@ -51,6 +56,7 @@ export const getCurrentDashboard = cache(async () => {
     email: typeof data.claims.email === "string" ? data.claims.email : "Twoje konto",
     householdName: household.name as string,
     isHouseholdOwner: household.owner_id === data.claims.sub,
+    onboardingFinished: household.onboarding_finished === true,
     households,
   };
 });

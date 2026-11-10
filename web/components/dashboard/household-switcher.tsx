@@ -19,8 +19,6 @@ export function HouseholdSwitcher({ currentId, households }: { currentId: string
   const common = useTranslations("Common");
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [includeDemoData, setIncludeDemoData] = useState(false);
   const [pending, setPending] = useState(false);
   const current = households.find((household) => household.id === currentId);
 
@@ -29,20 +27,6 @@ export function HouseholdSwitcher({ currentId, households }: { currentId: string
     setPending(true);
     try {
       await switchHousehold(id);
-      router.replace("/dashboard");
-      router.refresh();
-    } catch {
-      toast.error(common("saveFailed"));
-      setPending(false);
-    }
-  }
-
-  async function addHousehold(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (!name.trim() || pending) return;
-    setPending(true);
-    try {
-      await createHousehold(name.trim(), includeDemoData);
       router.replace("/dashboard");
       router.refresh();
     } catch {
@@ -80,35 +64,63 @@ export function HouseholdSwitcher({ currentId, households }: { currentId: string
             <DialogTitle>{t("addHousehold")}</DialogTitle>
             <DialogDescription>{t("addHouseholdDescription")}</DialogDescription>
           </DialogHeader>
-          <form onSubmit={(event) => void addHousehold(event)} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="new-household-name">{t("householdName")}</Label>
-              <Input id="new-household-name" value={name} onChange={(event) => setName(event.target.value)} maxLength={100} required autoFocus />
-            </div>
-            <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-4">
-              <div>
-                <p id="household-demo-label" className="text-sm font-semibold">{t("sampleDataLabel")}</p>
-                <p id="household-demo-description" className="mt-1 text-xs text-muted-foreground">{t("sampleDataDescription")}</p>
-              </div>
-              <button
-                type="button"
-                role="switch"
-                aria-checked={includeDemoData}
-                aria-labelledby="household-demo-label"
-                aria-describedby="household-demo-description"
-                disabled={pending}
-                onClick={() => setIncludeDemoData((value) => !value)}
-                className={`relative h-7 w-12 shrink-0 rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-50 ${includeDemoData ? "bg-primary" : "bg-muted-foreground/40"}`}
-              >
-                <span className={`absolute top-1 left-1 size-5 rounded-full bg-background shadow-sm transition-transform ${includeDemoData ? "translate-x-5" : ""}`} />
-              </button>
-            </div>
-            <DialogFooter>
-              <Button type="submit" disabled={pending || !name.trim()}>{t("createHousehold")}</Button>
-            </DialogFooter>
-          </form>
+          <HouseholdCreationForm onCreated={() => setOpen(false)} />
         </DialogContent>
       </Dialog>
     </>
+  );
+}
+
+export function HouseholdCreationForm({ onCreated }: { onCreated?: () => void }) {
+  const t = useTranslations("Navigation");
+  const common = useTranslations("Common");
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [includeDemoData, setIncludeDemoData] = useState(false);
+  const [pending, setPending] = useState(false);
+
+  async function addHousehold(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!name.trim() || pending) return;
+    setPending(true);
+    try {
+      await createHousehold(name.trim(), includeDemoData);
+      onCreated?.();
+      router.replace("/dashboard");
+      router.refresh();
+    } catch {
+      toast.error(common("saveFailed"));
+      setPending(false);
+    }
+  }
+
+  return (
+    <form onSubmit={(event) => void addHousehold(event)} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="new-household-name">{t("householdName")}</Label>
+        <Input id="new-household-name" value={name} onChange={(event) => setName(event.target.value)} maxLength={100} required autoFocus />
+      </div>
+      <div className="flex items-center justify-between gap-4 rounded-lg border border-border p-4">
+        <div>
+          <p id="household-demo-label" className="text-sm font-semibold">{t("sampleDataLabel")}</p>
+          <p id="household-demo-description" className="mt-1 text-xs text-muted-foreground">{t("sampleDataDescription")}</p>
+        </div>
+        <button
+          type="button"
+          role="switch"
+          aria-checked={includeDemoData}
+          aria-labelledby="household-demo-label"
+          aria-describedby="household-demo-description"
+          disabled={pending}
+          onClick={() => setIncludeDemoData((value) => !value)}
+          className={`relative h-7 w-12 shrink-0 rounded-full transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:opacity-50 ${includeDemoData ? "bg-primary" : "bg-muted-foreground/40"}`}
+        >
+          <span className={`absolute top-1 left-1 size-5 rounded-full bg-background shadow-sm transition-transform ${includeDemoData ? "translate-x-5" : ""}`} />
+        </button>
+      </div>
+      <DialogFooter>
+        <Button type="submit" disabled={pending || !name.trim()}>{t("createHousehold")}</Button>
+      </DialogFooter>
+    </form>
   );
 }
