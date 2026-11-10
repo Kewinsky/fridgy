@@ -59,7 +59,7 @@ export function RecipeDetail({
   const missing = getMissingIngredients(matchedRecipe);
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
   const preferences = useDashboardData();
-  const conflicts = getRecipePreferenceConflicts(displayRecipe, preferences, Object.fromEntries(
+  const conflicts = getRecipePreferenceConflicts(matchedRecipe, preferences, Object.fromEntries(
     recipeAllergens.map((allergen) => [allergen, t(`allergens.options.${allergen}`)]),
   ));
   const conflictReasons = [

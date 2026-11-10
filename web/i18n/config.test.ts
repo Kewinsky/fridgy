@@ -11,6 +11,13 @@ function messageKeys(value: unknown, prefix = ""): string[] {
   );
 }
 
+function messageValues(value: Record<string, unknown>, prefix = ""): Record<string, string> {
+  return Object.fromEntries(Object.entries(value).flatMap(([key, item]) => {
+    const path = prefix ? `${prefix}.${key}` : key;
+    return typeof item === "string" ? [[path, item]] : Object.entries(messageValues(item as Record<string, unknown>, path));
+  }));
+}
+
 test("all locales expose the same message keys", () => {
   const keysByLocale = locales.map((locale) => {
     const messages = JSON.parse(
@@ -90,6 +97,27 @@ test("dashboard does not use English fallbacks", () => {
 
     for (const [key, value] of Object.entries(dashboard)) {
       assert.notEqual(value, english[key], `${locale}: Dashboard.${key}`);
+    }
+  }
+});
+
+test("all translated screens avoid English fallbacks and keep interpolation variables", () => {
+  const english = messageValues(JSON.parse(readFileSync(new URL("../messages/en.json", import.meta.url), "utf8")));
+  const shared = new Set(["Recipe.minutes", "RecipeForm.link.placeholder", "Receipt.upload.formats",
+    ...["instagram", "facebook", "tiktok", "youtube"].map((source) => `RecipeForm.link.sources.${source}`)]);
+  const sameByLanguage: Record<string, string[]> = {
+    de: ["Settings.preferences.diet.options.vegan", "Theme.system", "Inventory.editDialog.name", "Recipe.diet.options.vegan"],
+    fr: ["Settings.preferences.diet.allergiesLabel", "Cooking.options.meals.dessert", "Recipe.cuisine", "Recipe.nutrition.calories", "Recipe.allergens.options.lupin", "RecipeForm.recipeDescription", "RecipeForm.cuisine"],
+    es: ["Settings.tabs.general", "Errors.notFound.label"],
+  };
+  for (const locale of ["pl", "de", "fr", "es"] as const) {
+    const translated = messageValues(JSON.parse(readFileSync(new URL(`../messages/${locale}.json`, import.meta.url), "utf8")));
+    for (const [key, value] of Object.entries(translated)) {
+      if (locale !== "pl" && !shared.has(key) && !sameByLanguage[locale]?.includes(key)) {
+        assert.notEqual(value, english[key], `${locale}: ${key}`);
+      }
+      const variables = (text: string) => [...text.matchAll(/\{([a-zA-Z][\w]*)(?=,|\})/g)].map((match) => match[1]).sort();
+      assert.deepEqual(variables(value), variables(english[key]), `${locale}: ${key} variables`);
     }
   }
 });

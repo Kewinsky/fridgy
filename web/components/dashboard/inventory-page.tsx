@@ -52,7 +52,7 @@ import {
   type FreshnessStatus,
   type StorageLocation,
 } from "@/lib/demo-data";
-import { localizeDemoProduct } from "@/lib/demo-localization";
+import { localizeDemoProduct, localizeUnit } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 import {
   applyInventoryAction,
@@ -535,7 +535,7 @@ function ProductRowDetails({ product }: { product: DemoProduct }) {
           {product.isDemo ? <Badge variant="outline">{common("demoData")}</Badge> : null}
         </span>
         <span className="mt-1 block truncate text-xs text-muted-foreground">
-          {product.quantity.toLocaleString(locale)} {product.unit} ·{" "}
+          {product.quantity.toLocaleString(locale)} {localizeUnit(product.unit, product.quantity, locale)} ·{" "}
           {t(`locations.${storageLocationMessageKeys[product.storageLocation]}`)}
         </span>
         <span className="mt-2 block">

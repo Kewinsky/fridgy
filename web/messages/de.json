@@ -146,7 +146,10 @@
       }
     },
     "account": {
-      "groups": { "account": "Konto", "household": "Haushalt" },
+      "groups": {
+        "account": "Konto",
+        "household": "Haushalt"
+      },
       "avatar": {
         "title": "Profilbild",
         "description": "Das Bild, das in deinem Konto angezeigt wird.",
@@ -177,7 +180,7 @@
       "household": {
         "title": "Name des Haushalts",
         "description": "Dieser Name ist für alle Haushaltsmitglieder sichtbar.",
-        "nameLabel": "Name",
+        "nameLabel": "Name des Haushalts",
         "defaultName": "Dein Zuhause",
         "save": "Speichern",
         "cancel": "Abbrechen"
@@ -329,20 +332,20 @@
     "overdueNotice": "{count, plural, one {# Produkt ist über dem Datum – prüfe es vor der Verwendung.} other {# Produkte sind über dem Datum – prüfe sie vor der Verwendung.}}"
   },
   "Inventory": {
-    "metaTitle": "My inventory",
-    "metaDescription": "Search and organise your home inventory.",
+    "metaTitle": "Meine Vorräte",
+    "metaDescription": "Durchsuche und verwalte deine Vorräte zu Hause.",
     "all": "Alle",
     "eyebrow": "Was du zu Hause hast",
     "title": "Meine Vorräte",
-    "description": "{count, plural, one {# active product} other {# active products}}",
+    "description": "{count, plural, one {# aktives Produkt} other {# aktive Produkte}}",
     "cook": "Was soll ich kochen?",
     "search": "Produkte suchen",
     "searchPlaceholder": "Produkt suchen...",
     "delete": "Löschen",
     "cancel": "Abbrechen",
     "edit": "Bearbeiten",
-    "selectProduct": "Select {name}",
-    "productCount": "{count, plural, one {# product} other {# products}}",
+    "selectProduct": "{name} auswählen",
+    "productCount": "{count, plural, one {# Produkt} other {# Produkte}}",
     "pagination": {
       "rowsPerPage": "Pro Seite",
       "range": "{start}–{end} von {count}",
@@ -395,45 +398,45 @@
       "remove": "Filter {name} entfernen"
     },
     "bulk": {
-      "label": "Bulk actions",
-      "selected": "Selected: {count}",
+      "label": "Mehrere Produkte bearbeiten",
+      "selected": "Ausgewählt: {count}",
       "selectAll": "Alle auf dieser Seite auswählen",
-      "consumed": "Mark as used",
-      "moveTo": "Move to"
+      "consumed": "Als aufgebraucht markieren",
+      "moveTo": "Verschieben nach"
     },
     "toasts": {
-      "consumed": "Products marked as used.",
-      "moved": "Products moved.",
-      "removed": "Products deleted.",
-      "saved": "Product changes saved."
+      "consumed": "Produkte als aufgebraucht markiert.",
+      "moved": "Produkte verschoben.",
+      "removed": "Produkte gelöscht.",
+      "saved": "Produktänderungen gespeichert."
     },
     "empty": {
       "title": "Keine passenden Produkte",
       "description": "Ändere die Filter oder den Suchbegriff."
     },
     "editDialog": {
-      "title": "Edit product",
-      "description": "Change the details of one product.",
+      "title": "Produkt bearbeiten",
+      "description": "Ändere die Angaben zu diesem Produkt.",
       "name": "Name",
-      "quantity": "Quantity",
-      "unit": "Unit",
-      "unitPlaceholder": "e.g. pcs",
-      "category": "Category",
-      "location": "Location",
-      "date": "Use-by date",
-      "cancel": "Cancel",
-      "save": "Save changes",
+      "quantity": "Menge",
+      "unit": "Einheit",
+      "unitPlaceholder": "z. B. Stück",
+      "category": "Kategorie",
+      "location": "Lagerort",
+      "date": "Verbrauchsdatum",
+      "cancel": "Abbrechen",
+      "save": "Änderungen speichern",
       "errors": {
-        "required": "Enter a name, quantity and unit.",
-        "quantity": "Quantity must be greater than zero."
+        "required": "Gib Name, Menge und Einheit ein.",
+        "quantity": "Die Menge muss größer als null sein."
       }
     }
   },
   "DatePicker": {
-    "selectDate": "Select a date",
-    "previousMonth": "Previous month",
-    "nextMonth": "Next month",
-    "calendar": "Calendar"
+    "selectDate": "Datum auswählen",
+    "previousMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "calendar": "Kalender"
   },
   "Cooking": {
     "metaTitle": "Was soll ich kochen?",
@@ -479,8 +482,8 @@
         "breakfast": "Frühstück",
         "lunch": "Mittagessen",
         "dinner": "Abendessen",
-        "snack": "Snack",
-        "dessert": "Dessert",
+        "snack": "Zwischenmahlzeit",
+        "dessert": "Nachspeise",
         "soup": "Suppe"
       },
       "times": {
@@ -596,12 +599,12 @@
     "favorite": "Lieblingsrezept"
   },
   "CookingMode": {
-    "metaTitle": "Cooking mode",
-    "metaDescription": "A focused step-by-step recipe view.",
-    "notFound": "Recipe not found.",
-    "exit": "Exit cooking mode",
-    "progress": "{completed} of {total} steps",
-    "stepCompleted": "Mark step {number} as complete"
+    "metaTitle": "Kochmodus",
+    "metaDescription": "Koche Schritt für Schritt nach Rezept.",
+    "notFound": "Rezept nicht gefunden.",
+    "exit": "Kochmodus verlassen",
+    "progress": "{completed} von {total} Schritten",
+    "stepCompleted": "Schritt {number} als abgeschlossen markieren"
   },
   "FinishCooking": {
     "success": "Kochen gespeichert und Vorrat aktualisiert.",
@@ -621,10 +624,10 @@
     "saveOnly": "Kochen speichern"
   },
   "RecipeStats": {
-    "label": "Cooking history",
+    "label": "Kochverlauf",
     "count": "Gekocht",
     "lastCooked": "Zuletzt gekocht",
-    "never": "Not cooked yet"
+    "never": "Noch nicht gekocht"
   },
   "RecipeLibrary": {
     "metaTitle": "Meine Rezepte",
@@ -632,11 +635,11 @@
     "eyebrow": "Dein Kochbuch",
     "title": "Meine Rezepte",
     "description": "Speichere Favoriten, füge eigene Rezepte hinzu und finde generierte oder gekochte Gerichte wieder.",
-    "summary": "Recipe summary",
-    "allCookings": "total cooking sessions",
-    "favoriteRecipes": "favourite recipes",
-    "favoriteCuisine": "top cuisine",
-    "noData": "No data",
+    "summary": "Rezeptübersicht",
+    "allCookings": "Kochvorgänge insgesamt",
+    "favoriteRecipes": "Lieblingsrezepte",
+    "favoriteCuisine": "Beliebteste Küche",
+    "noData": "Keine Daten",
     "tabs": {
       "favorites": "Favoriten",
       "custom": "Eigene",
@@ -644,24 +647,24 @@
     },
     "historyRetention": "Generierte Rezepte, die nicht zu den Favoriten hinzugefügt wurden, werden nach 7 Tagen entfernt.",
     "emptyFavorites": {
-      "title": "No favourites",
-      "description": "Use the heart to save recipes you want to return to."
+      "title": "Noch keine Lieblingsrezepte",
+      "description": "Markiere Rezepte mit dem Herz, um sie später wiederzufinden."
     },
     "emptyCustom": {
-      "title": "No custom recipes yet",
-      "description": "Add a family recipe or a dish you want to keep."
+      "title": "Noch keine eigenen Rezepte",
+      "description": "Füge ein Familienrezept oder ein Gericht hinzu, das du behalten möchtest."
     },
     "emptyHistory": {
-      "title": "History is empty",
+      "title": "Der Verlauf ist leer",
       "description": "Generiere ein Rezept oder wähle „Kochen!“, damit es hier erscheint.",
-      "action": "Find a recipe"
+      "action": "Rezept finden"
     },
     "notFound": {
-      "title": "Recipe not found",
-      "description": "This recipe is no longer in your library.",
-      "action": "Back to recipes"
+      "title": "Rezept nicht gefunden",
+      "description": "Dieses Rezept ist nicht mehr in deiner Sammlung.",
+      "action": "Zurück zu den Rezepten"
     },
-    "yourRecipe": "Your recipe"
+    "yourRecipe": "Dein Rezept"
   },
   "RecipeForm": {
     "image": {
@@ -677,35 +680,35 @@
         "tooLarge": "Das Foto darf höchstens {maxMb} MB groß sein."
       }
     },
-    "add": "Add recipe",
-    "editLabel": "Edit {title}",
-    "deleteLabel": "Delete {title}",
-    "editTitle": "Edit recipe",
-    "addTitle": "Add your own recipe",
+    "add": "Rezept hinzufügen",
+    "editLabel": "{title} bearbeiten",
+    "deleteLabel": "{title} löschen",
+    "editTitle": "Rezept bearbeiten",
+    "addTitle": "Eigenes Rezept hinzufügen",
     "description": "Schreibe jede Zutat und jeden Schritt in eine eigene Zeile. Trenne die Menge mit | ab.",
-    "name": "Recipe name",
-    "recipeDescription": "Description",
-    "cuisine": "Cuisine",
-    "time": "Time (min)",
-    "servings": "Servings",
-    "ingredients": "Ingredients",
+    "name": "Rezeptname",
+    "recipeDescription": "Beschreibung",
+    "cuisine": "Küche",
+    "time": "Zeit (Min.)",
+    "servings": "Portionen",
+    "ingredients": "Zutaten",
     "ingredientsPlaceholder": "Nudeln | 200 g\nTomaten | 2 Stück",
-    "preparation": "Preparation",
-    "stepsPlaceholder": "Cook the pasta.\nPrepare the sauce.",
-    "cancel": "Cancel",
-    "saveChanges": "Save changes",
-    "save": "Save recipe",
-    "deleteTitle": "Delete recipe?",
-    "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
-    "delete": "Delete recipe",
+    "preparation": "Zubereitung",
+    "stepsPlaceholder": "Koche die Nudeln.\nBereite die Soße zu.",
+    "cancel": "Abbrechen",
+    "saveChanges": "Änderungen speichern",
+    "save": "Rezept speichern",
+    "deleteTitle": "Rezept löschen?",
+    "deleteDescription": "„{title}“ wird aus deiner Sammlung entfernt. Der Kochverlauf bleibt erhalten.",
+    "delete": "Rezept löschen",
     "errors": {
       "required": "Gib einen Namen, Zutaten und Zubereitungsschritte ein.",
       "timeAndServings": "Gib die Zubereitungszeit und die Anzahl der Portionen ein."
     },
     "toasts": {
-      "updated": "Recipe changes saved",
-      "created": "Recipe saved",
-      "deleted": "Recipe deleted"
+      "updated": "Rezeptänderungen gespeichert",
+      "created": "Rezept gespeichert",
+      "deleted": "Rezept gelöscht"
     },
     "addDescription": "Füge ein Rezept manuell hinzu oder bereite den Import über einen Link vor.",
     "tabs": {
@@ -773,20 +776,20 @@
   "Receipt": {
     "metaTitle": "Produkte hinzufügen",
     "metaDescription": "Produkte manuell oder mit einem Kassenbonfoto hinzufügen.",
-    "productCount": "{count, plural, one {# product} other {# products}}",
-    "remove": "Remove {name}",
+    "productCount": "{count, plural, one {# Produkt} other {# Produkte}}",
+    "remove": "{name} entfernen",
     "fields": {
       "product": "Produkt",
-      "productPlaceholder": "Product name",
-      "productFallback": "product",
+      "productPlaceholder": "Produktname",
+      "productFallback": "Produkt",
       "quantity": "Menge",
       "unit": "Einheit",
       "location": "Ort",
       "price": "Preis"
     },
     "toasts": {
-      "incomplete": "Enter the name, quantity and unit for every product.",
-      "invalidQuantity": "Every quantity must be a number greater than zero.",
+      "incomplete": "Gib für jedes Produkt Name, Menge und Einheit ein.",
+      "invalidQuantity": "Jede Menge muss eine Zahl größer als null sein.",
       "invalidFile": "Wähle ein gültiges JPG-, PNG- oder WebP-Bild.",
       "emptyFile": "Die ausgewählte Datei ist leer.",
       "fileTooLarge": "Das Bild darf höchstens {maxMb} MB groß sein.",
@@ -808,8 +811,8 @@
       "another": "Weitere Produkte hinzufügen"
     },
     "review": {
-      "eyebrow": "Step 2 of 2",
-      "title": "Review products",
+      "eyebrow": "Schritt 2 von 2",
+      "title": "Produkte prüfen",
       "description": "Prüfe die Produkte vor dem Speichern.",
       "scanInfoTitle": "Wie liest die KI den Kassenbon?",
       "scanNotice": "Die Daten sind Schätzungen – prüfe die Verpackung.",
@@ -817,9 +820,9 @@
       "scanInfoDate": "Auf Kassenbons steht normalerweise kein Haltbarkeitsdatum. Die KI schätzt ein Datum nach Produktart und vorgeschlagenem Lagerort, gerechnet ab dem Tag des Scans. Sie kennt weder das Etikett noch die Lagerbedingungen. Prüfe die Verpackung und korrigiere das Datum, besonders bei leicht verderblichen Lebensmitteln.",
       "estimatedDate": "Geschätztes Verbrauchsdatum",
       "back": "Zurück",
-      "addProduct": "Add product",
-      "checkData": "Review the data before confirming.",
-      "confirm": "Confirm products"
+      "addProduct": "Produkt hinzufügen",
+      "checkData": "Prüfe die Angaben vor dem Bestätigen.",
+      "confirm": "Produkte bestätigen"
     },
     "manual": {
       "eyebrow": "Schritt 1 von 2",
@@ -839,24 +842,24 @@
     "notFound": {
       "label": "Fehler 404",
       "title": "Seite nicht gefunden",
-      "description": "The address may have changed or the page no longer exists. Return home and try again.",
-      "action": "Back to home"
+      "description": "Die Adresse hat sich möglicherweise geändert oder die Seite existiert nicht mehr. Kehre zur Startseite zurück und versuche es erneut.",
+      "action": "Zur Startseite"
     },
     "page": {
-      "label": "Something went wrong",
-      "title": "Could not open the page",
-      "description": "Try again. If the problem continues, return to the home page.",
-      "code": "Error code: {code}",
+      "label": "Etwas ist schiefgelaufen",
+      "title": "Seite konnte nicht geöffnet werden",
+      "description": "Versuche es erneut. Falls das Problem bestehen bleibt, kehre zur Übersicht zurück.",
+      "code": "Fehlercode: {code}",
       "retry": "Erneut versuchen",
       "home": "Startseite"
     },
     "dashboard": {
-      "label": "Dashboard error",
-      "title": "Could not load this section",
-      "description": "Your data was not changed. Try again or return to overview.",
-      "code": "Error code: {code}",
+      "label": "Fehler im Dashboard",
+      "title": "Dieser Bereich konnte nicht geladen werden",
+      "description": "Deine Daten wurden nicht geändert. Versuche es erneut oder kehre zur Übersicht zurück.",
+      "code": "Fehlercode: {code}",
       "retry": "Erneut versuchen",
-      "overview": "Overview"
+      "overview": "Übersicht"
     }
   }
 }

@@ -26,13 +26,13 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 
 ## P0 – bezpieczeństwo żywności i danych
 
+- [x] Przy integracji AI sprawdzać dane na serwerze: limit długości uwag, dozwolone wartości odpowiedzi, limit kosztu i czasu żądania. Przekazywać uwagi jako dane użytkownika, nie instrukcje systemowe; walidować strukturę i skład każdej odpowiedzi przed pokazaniem lub zapisaniem.
+- [x] Ograniczyć pobieranie dla importu przepisów do znanych domen HTTPS, odrzucać przekierowania oraz ograniczyć rozmiar odpowiedzi i czas żądania. Przed obsługą dowolnych stron WWW potrzebna będzie osobna kontrola adresów i DNS.
 - [ ] Traktować alergie i wymagania diety jako twarde ograniczenia rekomendacji. Nie proponować dań z wykrytym konfliktem; przy brakujących lub niepewnych danych jasno pokazać „nie można potwierdzić”, bez obietnicy bezpieczeństwa. Obecna strona „Co ugotować?” tylko przesuwa konflikty na koniec listy.
 - [ ] Zbudować wiarygodne dane o składnikach, alergenach i diecie dla wszystkich typów przepisów, także własnych i generowanych. Nie wywodzić bezpieczeństwa wyłącznie z nazwy potrawy; uwzględnić skład konkretnych produktów i ostrzeżenie o kontakcie z alergenami.
-- [x] Przy integracji AI sprawdzać dane na serwerze: limit długości uwag, dozwolone wartości odpowiedzi, limit kosztu i czasu żądania. Przekazywać uwagi jako dane użytkownika, nie instrukcje systemowe; walidować strukturę i skład każdej odpowiedzi przed pokazaniem lub zapisaniem.
 - [ ] Przetestować RLS i uprawnienia Supabase dla dwóch gospodarstw i kilku domowników, w tym dostęp do zapasów, paragonów, przepisów, zdjęć, zaproszeń i funkcji SQL `security definer`. Testować bezpośrednie żądania do API, nie tylko ukryte przyciski.
 - [ ] Dodać limity nadużyć dla logowania, zaproszeń, analiz paragonów, generowania AI i wysyłania plików; ograniczyć koszt, liczbę żądań i rozmiar danych na użytkownika.
 - [ ] Walidować przesyłane obrazy na zaufanej granicy, usuwać zbędne metadane i bezpiecznie obsługiwać uszkodzone pliki. Obecna kontrola sygnatury obrazu przepisu i zdjęcia profilu działa w przeglądarce, którą można ominąć.
-- [x] Ograniczyć pobieranie dla importu przepisów do znanych domen HTTPS, odrzucać przekierowania oraz ograniczyć rozmiar odpowiedzi i czas żądania. Przed obsługą dowolnych stron WWW potrzebna będzie osobna kontrola adresów i DNS.
 - [ ] Sprawdzić proces usuwania konta i zdjęć: dziś kasowane jest zdjęcie profilu, lecz obrazy własnych przepisów mogą zostać w Storage. Opracować także wyjście właściciela z domu, który ma innych członków.
 
 ## P1 – spójność i pełne działanie funkcji
@@ -46,7 +46,7 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - [ ] Utrwalić lub świadomie porzucać postęp gotowania po odświeżeniu. Dziś zaznaczone kroki istnieją tylko w stanie strony.
 - [ ] Poprawić dopasowanie składników do zapasów: odmiany nazw, języki, jednostki i przeliczenia, produkty o podobnych nazwach oraz kilka opakowań tego samego składnika. Pokazać użytkownikowi, czego system nie dopasował.
 - [ ] Zastąpić demonstracyjne wartości odżywcze danymi ze wskazanym źródłem albo nie pokazywać ich jako pewnych. Sprawdzić ich zmianę po przeskalowaniu porcji.
-- [ ] Zweryfikować tłumaczenia we wszystkich pięciu językach. Test obecnie porównuje klucze, ale część tekstów poza polskim nadal jest po angielsku; poprawić też nazwy własnych przepisów i jednostek.
+- [x] Uzupełnić tłumaczenia w pięciu językach i sprawdzać w teście klucze, identyczne angielskie wpisy oraz zmienne interpolacji. Przetłumaczyć tytuły, składniki i kroki sześciu przepisów demonstracyjnych oraz trzech niezmienionych przepisów testowych; wyświetlać jednostki w języku interfejsu bez zmiany zapisanych danych. Treści przepisów dodanych lub zmienionych przez użytkownika pozostają w języku autora.
 - [ ] Sprawdzić eksport danych użytkownika: kompletność, poprawność po imporcie, zakres danych współdzielonego domu i bezpieczne pobieranie. Udokumentować zasady przechowywania i usuwania danych.
 
 ## P1 – dostępność i jakość obsługi

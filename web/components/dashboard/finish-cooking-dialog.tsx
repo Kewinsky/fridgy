@@ -24,6 +24,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import type { Recipe } from "@/lib/demo-recipes";
+import { localizeUnit } from "@/lib/demo-localization";
+import type { Locale } from "@/i18n/config";
 import {
   suggestRecipeDeductions,
   type InventoryDeductionSuggestion,
@@ -32,7 +34,7 @@ import {
 export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
   const t = useTranslations("FinishCooking");
   const common = useTranslations("Common");
-  const locale = useLocale();
+  const locale = useLocale() as Locale;
   const router = useRouter();
   const products = useInventory();
   const { finishCooking, deductionMode } = useDashboardData();
@@ -149,7 +151,7 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
                   <div className="mt-4 grid gap-2 sm:grid-cols-3">
                     <div className="flex items-center justify-between gap-3 rounded-lg bg-muted/60 px-3 py-2.5 sm:block">
                       <p className="text-xs font-semibold text-muted-foreground">{t("inStock")}</p>
-                      <p className="text-base font-bold tabular-nums sm:mt-1.5 sm:flex sm:h-11 sm:items-center">{product.quantity.toLocaleString(locale)} {product.unit}</p>
+                      <p className="text-base font-bold tabular-nums sm:mt-1.5 sm:flex sm:h-11 sm:items-center">{product.quantity.toLocaleString(locale)} {localizeUnit(product.unit, product.quantity, locale)}</p>
                     </div>
                     <div className="flex items-center justify-between gap-3 rounded-lg border border-border px-3 py-2.5 sm:block">
                       <Label htmlFor={inputId} className="text-xs font-semibold text-muted-foreground">
@@ -175,12 +177,12 @@ export function FinishCookingDialog({ recipe }: { recipe: Recipe }) {
                           }
                           className="h-11 min-w-16 flex-1 text-base font-bold tabular-nums md:text-base"
                         />
-                        <span className="shrink-0 text-base font-bold text-muted-foreground">{product.unit}</span>
+                        <span className="shrink-0 text-base font-bold text-muted-foreground">{localizeUnit(product.unit, 1, locale)}</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between gap-3 rounded-lg border border-primary/20 bg-primary/10 px-3 py-2.5 sm:block">
                       <p className="text-xs font-semibold text-foreground">{t("remaining")}</p>
-                      <p className="text-base font-bold tabular-nums text-foreground sm:mt-1.5 sm:flex sm:h-11 sm:items-center" aria-live="polite">{remaining.toLocaleString(locale)} {product.unit}</p>
+                      <p className="text-base font-bold tabular-nums text-foreground sm:mt-1.5 sm:flex sm:h-11 sm:items-center" aria-live="polite">{remaining.toLocaleString(locale)} {localizeUnit(product.unit, remaining, locale)}</p>
                     </div>
                   </div>
                 </div>

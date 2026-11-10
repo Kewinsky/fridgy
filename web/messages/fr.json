@@ -146,7 +146,10 @@
       }
     },
     "account": {
-      "groups": { "account": "Compte", "household": "Foyer" },
+      "groups": {
+        "account": "Compte",
+        "household": "Foyer"
+      },
       "avatar": {
         "title": "Photo de profil",
         "description": "La photo affichée sur votre compte.",
@@ -329,20 +332,20 @@
     "overdueNotice": "{count, plural, one {# produit a dépassé sa date – vérifiez-le avant utilisation.} other {# produits ont dépassé leur date – vérifiez-les avant utilisation.}}"
   },
   "Inventory": {
-    "metaTitle": "My inventory",
-    "metaDescription": "Search and organise your home inventory.",
+    "metaTitle": "Mes réserves",
+    "metaDescription": "Recherchez et gérez vos produits à la maison.",
     "all": "Tous",
     "eyebrow": "Ce que vous avez chez vous",
     "title": "Mes provisions",
-    "description": "{count, plural, one {# active product} other {# active products}}",
+    "description": "{count, plural, one {# produit actif} other {# produits actifs}}",
     "cook": "Que cuisiner ?",
     "search": "Rechercher des produits",
     "searchPlaceholder": "Rechercher un produit...",
     "delete": "Supprimer",
     "cancel": "Annuler",
     "edit": "Modifier",
-    "selectProduct": "Select {name}",
-    "productCount": "{count, plural, one {# product} other {# products}}",
+    "selectProduct": "Sélectionner {name}",
+    "productCount": "{count, plural, one {# produit} other {# produits}}",
     "pagination": {
       "rowsPerPage": "Par page",
       "range": "{start}–{end} sur {count}",
@@ -395,45 +398,45 @@
       "remove": "Supprimer le filtre {name}"
     },
     "bulk": {
-      "label": "Bulk actions",
-      "selected": "Selected: {count}",
+      "label": "Actions groupées",
+      "selected": "Sélectionnés : {count}",
       "selectAll": "Tout sélectionner sur cette page",
-      "consumed": "Mark as used",
-      "moveTo": "Move to"
+      "consumed": "Marquer comme épuisés",
+      "moveTo": "Déplacer vers"
     },
     "toasts": {
-      "consumed": "Products marked as used.",
-      "moved": "Products moved.",
-      "removed": "Products deleted.",
-      "saved": "Product changes saved."
+      "consumed": "Produits marqués comme épuisés.",
+      "moved": "Produits déplacés.",
+      "removed": "Produits supprimés.",
+      "saved": "Modifications des produits enregistrées."
     },
     "empty": {
       "title": "Aucun produit correspondant",
       "description": "Modifiez les filtres ou la recherche."
     },
     "editDialog": {
-      "title": "Edit product",
-      "description": "Change the details of one product.",
-      "name": "Name",
-      "quantity": "Quantity",
-      "unit": "Unit",
-      "unitPlaceholder": "e.g. pcs",
-      "category": "Category",
-      "location": "Location",
-      "date": "Use-by date",
-      "cancel": "Cancel",
-      "save": "Save changes",
+      "title": "Modifier le produit",
+      "description": "Modifiez les informations de ce produit.",
+      "name": "Nom",
+      "quantity": "Quantité",
+      "unit": "Unité",
+      "unitPlaceholder": "p. ex. pièces",
+      "category": "Catégorie",
+      "location": "Emplacement",
+      "date": "Date limite d'utilisation",
+      "cancel": "Annuler",
+      "save": "Enregistrer les modifications",
       "errors": {
-        "required": "Enter a name, quantity and unit.",
-        "quantity": "Quantity must be greater than zero."
+        "required": "Indiquez le nom, la quantité et l'unité.",
+        "quantity": "La quantité doit être supérieure à zéro."
       }
     }
   },
   "DatePicker": {
-    "selectDate": "Select a date",
-    "previousMonth": "Previous month",
-    "nextMonth": "Next month",
-    "calendar": "Calendar"
+    "selectDate": "Choisir une date",
+    "previousMonth": "Mois précédent",
+    "nextMonth": "Mois suivant",
+    "calendar": "Calendrier"
   },
   "Cooking": {
     "metaTitle": "Que cuisiner ?",
@@ -596,12 +599,12 @@
     "favorite": "Recette favorite"
   },
   "CookingMode": {
-    "metaTitle": "Cooking mode",
-    "metaDescription": "A focused step-by-step recipe view.",
-    "notFound": "Recipe not found.",
-    "exit": "Exit cooking mode",
-    "progress": "{completed} of {total} steps",
-    "stepCompleted": "Mark step {number} as complete"
+    "metaTitle": "Mode cuisine",
+    "metaDescription": "Suivez la recette étape par étape.",
+    "notFound": "Recette introuvable.",
+    "exit": "Quitter le mode cuisine",
+    "progress": "{completed} étapes sur {total}",
+    "stepCompleted": "Marquer l'étape {number} comme terminée"
   },
   "FinishCooking": {
     "success": "Préparation enregistrée et stock mis à jour.",
@@ -621,10 +624,10 @@
     "saveOnly": "Enregistrer la préparation"
   },
   "RecipeStats": {
-    "label": "Cooking history",
+    "label": "Historique de cuisine",
     "count": "Préparé",
     "lastCooked": "Dernière préparation",
-    "never": "Not cooked yet"
+    "never": "Pas encore cuisiné"
   },
   "RecipeLibrary": {
     "metaTitle": "Mes recettes",
@@ -632,11 +635,11 @@
     "eyebrow": "Votre livre de cuisine",
     "title": "Mes recettes",
     "description": "Enregistrez vos favoris, ajoutez vos recettes et retrouvez les plats générés ou cuisinés.",
-    "summary": "Recipe summary",
-    "allCookings": "total cooking sessions",
-    "favoriteRecipes": "favourite recipes",
-    "favoriteCuisine": "top cuisine",
-    "noData": "No data",
+    "summary": "Résumé des recettes",
+    "allCookings": "préparations au total",
+    "favoriteRecipes": "recettes favorites",
+    "favoriteCuisine": "cuisine préférée",
+    "noData": "Aucune donnée",
     "tabs": {
       "favorites": "Favoris",
       "custom": "Les miens",
@@ -644,24 +647,24 @@
     },
     "historyRetention": "Les recettes générées qui ne sont pas ajoutées aux favoris sont supprimées après 7 jours.",
     "emptyFavorites": {
-      "title": "No favourites",
-      "description": "Use the heart to save recipes you want to return to."
+      "title": "Aucune recette favorite",
+      "description": "Ajoutez un cœur aux recettes que vous souhaitez retrouver."
     },
     "emptyCustom": {
-      "title": "No custom recipes yet",
-      "description": "Add a family recipe or a dish you want to keep."
+      "title": "Aucune recette personnelle",
+      "description": "Ajoutez une recette de famille ou un plat que vous souhaitez garder."
     },
     "emptyHistory": {
-      "title": "History is empty",
+      "title": "L'historique est vide",
       "description": "Générez une recette ou choisissez « Cuisiner ! » pour la retrouver ici.",
-      "action": "Find a recipe"
+      "action": "Trouver une recette"
     },
     "notFound": {
-      "title": "Recipe not found",
-      "description": "This recipe is no longer in your library.",
-      "action": "Back to recipes"
+      "title": "Recette introuvable",
+      "description": "Cette recette ne figure plus dans votre collection.",
+      "action": "Retour aux recettes"
     },
-    "yourRecipe": "Your recipe"
+    "yourRecipe": "Votre recette"
   },
   "RecipeForm": {
     "image": {
@@ -677,35 +680,35 @@
         "tooLarge": "La photo ne peut pas dépasser {maxMb} Mo."
       }
     },
-    "add": "Add recipe",
-    "editLabel": "Edit {title}",
-    "deleteLabel": "Delete {title}",
-    "editTitle": "Edit recipe",
-    "addTitle": "Add your own recipe",
+    "add": "Ajouter une recette",
+    "editLabel": "Modifier {title}",
+    "deleteLabel": "Supprimer {title}",
+    "editTitle": "Modifier la recette",
+    "addTitle": "Ajouter votre recette",
     "description": "Saisissez chaque ingrédient et chaque étape sur une ligne. Séparez la quantité avec |.",
-    "name": "Recipe name",
+    "name": "Nom de la recette",
     "recipeDescription": "Description",
     "cuisine": "Cuisine",
-    "time": "Time (min)",
-    "servings": "Servings",
-    "ingredients": "Ingredients",
+    "time": "Temps (min)",
+    "servings": "Portions",
+    "ingredients": "Ingrédients",
     "ingredientsPlaceholder": "Pâtes | 200 g\nTomates | 2 pièces",
-    "preparation": "Preparation",
-    "stepsPlaceholder": "Cook the pasta.\nPrepare the sauce.",
-    "cancel": "Cancel",
-    "saveChanges": "Save changes",
-    "save": "Save recipe",
-    "deleteTitle": "Delete recipe?",
-    "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
-    "delete": "Delete recipe",
+    "preparation": "Préparation",
+    "stepsPlaceholder": "Faites cuire les pâtes.\nPréparez la sauce.",
+    "cancel": "Annuler",
+    "saveChanges": "Enregistrer les modifications",
+    "save": "Enregistrer la recette",
+    "deleteTitle": "Supprimer la recette ?",
+    "deleteDescription": "« {title} » disparaîtra de votre collection. L'historique de cuisine sera conservé.",
+    "delete": "Supprimer la recette",
     "errors": {
       "required": "Saisissez un nom, des ingrédients et les étapes de préparation.",
       "timeAndServings": "Indiquez le temps de préparation et le nombre de portions."
     },
     "toasts": {
-      "updated": "Recipe changes saved",
-      "created": "Recipe saved",
-      "deleted": "Recipe deleted"
+      "updated": "Modifications de la recette enregistrées",
+      "created": "Recette enregistrée",
+      "deleted": "Recette supprimée"
     },
     "addDescription": "Ajoutez une recette manuellement ou préparez son importation à partir d'un lien.",
     "tabs": {
@@ -773,20 +776,20 @@
   "Receipt": {
     "metaTitle": "Ajouter des produits",
     "metaDescription": "Ajoutez des produits manuellement ou depuis une photo de ticket.",
-    "productCount": "{count, plural, one {# product} other {# products}}",
-    "remove": "Remove {name}",
+    "productCount": "{count, plural, one {# produit} other {# produits}}",
+    "remove": "Supprimer {name}",
     "fields": {
       "product": "Produit",
-      "productPlaceholder": "Product name",
-      "productFallback": "product",
+      "productPlaceholder": "Nom du produit",
+      "productFallback": "produit",
       "quantity": "Quantité",
       "unit": "Unité",
       "location": "Emplacement",
       "price": "Prix"
     },
     "toasts": {
-      "incomplete": "Enter the name, quantity and unit for every product.",
-      "invalidQuantity": "Every quantity must be a number greater than zero.",
+      "incomplete": "Indiquez le nom, la quantité et l'unité de chaque produit.",
+      "invalidQuantity": "Chaque quantité doit être supérieure à zéro.",
       "invalidFile": "Choisissez une image JPG, PNG ou WebP valide.",
       "emptyFile": "Le fichier sélectionné est vide.",
       "fileTooLarge": "L'image ne peut pas dépasser {maxMb} Mo.",
@@ -808,8 +811,8 @@
       "another": "Ajouter d'autres produits"
     },
     "review": {
-      "eyebrow": "Step 2 of 2",
-      "title": "Review products",
+      "eyebrow": "Étape 2 sur 2",
+      "title": "Vérifier les produits",
       "description": "Vérifiez les produits avant de les enregistrer.",
       "scanInfoTitle": "Comment l'IA lit-elle le ticket ?",
       "scanNotice": "Les dates sont estimées – vérifiez les emballages.",
@@ -817,9 +820,9 @@
       "scanInfoDate": "Le ticket indique rarement la date de péremption. L'IA estime une date selon le type de produit et le lieu de stockage proposé, à partir du jour du scan. Elle ne connaît ni l'étiquette ni les conditions de stockage. Vérifiez l'emballage et corrigez la date, surtout pour les aliments périssables.",
       "estimatedDate": "Date d'utilisation estimée",
       "back": "Retour",
-      "addProduct": "Add product",
-      "checkData": "Review the data before confirming.",
-      "confirm": "Confirm products"
+      "addProduct": "Ajouter un produit",
+      "checkData": "Vérifiez les informations avant de confirmer.",
+      "confirm": "Confirmer les produits"
     },
     "manual": {
       "eyebrow": "Étape 1 sur 2",
@@ -839,24 +842,24 @@
     "notFound": {
       "label": "Erreur 404",
       "title": "Page introuvable",
-      "description": "The address may have changed or the page no longer exists. Return home and try again.",
-      "action": "Back to home"
+      "description": "L'adresse a peut-être changé ou la page n'existe plus. Revenez à l'accueil et réessayez.",
+      "action": "Retour à l'accueil"
     },
     "page": {
-      "label": "Something went wrong",
-      "title": "Could not open the page",
-      "description": "Try again. If the problem continues, return to the home page.",
-      "code": "Error code: {code}",
+      "label": "Une erreur est survenue",
+      "title": "Impossible d'ouvrir la page",
+      "description": "Réessayez. Si le problème persiste, revenez à l'accueil.",
+      "code": "Code d'erreur : {code}",
       "retry": "Réessayer",
       "home": "Accueil"
     },
     "dashboard": {
-      "label": "Dashboard error",
-      "title": "Could not load this section",
-      "description": "Your data was not changed. Try again or return to overview.",
-      "code": "Error code: {code}",
+      "label": "Erreur du tableau de bord",
+      "title": "Impossible de charger cette section",
+      "description": "Vos données n'ont pas été modifiées. Réessayez ou revenez à la vue d'ensemble.",
+      "code": "Code d'erreur : {code}",
       "retry": "Réessayer",
-      "overview": "Overview"
+      "overview": "Vue d'ensemble"
     }
   }
 }
