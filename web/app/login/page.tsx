@@ -26,11 +26,11 @@ type LoginPageProps = {
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const t = await getTranslations("Login");
   const supabase = await createClient();
-  const { data } = await supabase.auth.getClaims();
+  const { data } = await supabase.auth.getUser();
   const params = await searchParams;
   const nextPath = safeAuthPath(params.next);
 
-  if (data?.claims) {
+  if (data.user) {
     redirect(nextPath);
   }
 

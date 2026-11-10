@@ -11,6 +11,7 @@ import {
   UploadIcon,
   UserRoundIcon,
   UserPlusIcon,
+  CrownIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
@@ -20,6 +21,9 @@ import {
   saveHouseholdName,
   saveUsername,
   signOutEverywhere,
+  transferHouseholdOwnership,
+  removeHouseholdMember,
+  type HouseholdMember,
 } from "@/app/dashboard/settings-actions";
 
 import { Button } from "@/components/ui/button";
@@ -38,19 +42,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { getProfileImageSrc, MAX_PROFILE_IMAGE_MB } from "@/lib/profile-image";
 import { removeProfileImage, saveProfileImage } from "@/lib/profile-image-storage";
+import { createClient } from "@/lib/supabase/client";
 
 export function AccountSettings({
   email,
   username: initialUsername,
   avatarPath: initialAvatarPath,
   householdName,
+  householdId,
   isOwner,
+  members,
+  deletionStatus,
 }: {
   email: string;
   username: string;
   avatarPath: string | null;
   householdName: string;
+  householdId: string;
   isOwner: boolean;
+  members: HouseholdMember[];
+  deletionStatus: { soloOwnedCount: number; sharedOwnedCount: number };
 }) {
   const t = useTranslations("Settings.account");
   const householdT = useTranslations("Settings.householdUi");
@@ -68,6 +79,7 @@ export function AccountSettings({
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteLink, setInviteLink] = useState("");
+  const [currentMembers, setCurrentMembers] = useState(members);
   const hasNameChanges = name.trim() !== savedName;
   const hasUsernameChanges = username.trim() !== savedUsername;
   const avatarSrc = getProfileImageSrc(avatarPath);
@@ -176,12 +188,7 @@ export function AccountSettings({
         </h2>
         <div className="mt-4 space-y-5">
           <SettingsCard
-            title={
-              <span className="flex flex-wrap items-center gap-2">
-                {t("household.title")}
-                {isOwner ? <Badge variant="secondary">{householdT("owner")}</Badge> : null}
-              </span>
-            }
+            title={t("household.title")}
             description={t("household.description")}
           >
             <Field id="household-name" label={t("household.nameLabel")}>
@@ -264,6 +271,43 @@ export function AccountSettings({
                   </div>
                 ) : null}
               </Field>
+            </SettingsCard>
+          ) : null}
+          {isOwner ? (
+            <SettingsCard title={t("members.title")} description={t("members.description")}>
+              <ul className="divide-y divide-border">
+                {currentMembers.map((member) => (
+                  <li key={member.user_id} className="flex min-w-0 flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-medium">{member.username}</p>
+                      <p className="truncate text-xs text-muted-foreground">{member.email}</p>
+                    </div>
+                    {member.is_owner ? (
+                      <Badge variant="secondary">{householdT("owner")}</Badge>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        <MemberActionDialog
+                          kind="transfer"
+                          member={member}
+                          onConfirm={async () => {
+                            await transferHouseholdOwnership(householdId, member.user_id);
+                            router.refresh();
+                          }}
+                        />
+                        <MemberActionDialog
+                          kind="remove"
+                          member={member}
+                          onConfirm={async () => {
+                            await removeHouseholdMember(householdId, member.user_id);
+                            setCurrentMembers((previous) => previous.filter((item) => item.user_id !== member.user_id));
+                            router.refresh();
+                          }}
+                        />
+                      </div>
+                    )}
+                  </li>
+                ))}
+              </ul>
             </SettingsCard>
           ) : null}
         </div>
@@ -382,7 +426,7 @@ export function AccountSettings({
               >
                 <DownloadIcon aria-hidden="true" /> {t("data.export")}
               </Button>
-              <DeleteAccountDialog />
+              <DeleteAccountDialog key={`${deletionStatus.soloOwnedCount}-${deletionStatus.sharedOwnedCount}`} deletionStatus={deletionStatus} />
             </div>
           </SettingsCard>
         </div>
@@ -391,9 +435,91 @@ export function AccountSettings({
   );
 }
 
-function DeleteAccountDialog() {
+function MemberActionDialog({
+  kind,
+  member,
+  onConfirm,
+}: {
+  kind: "transfer" | "remove";
+  member: HouseholdMember;
+  onConfirm: () => Promise<void>;
+}) {
+  const t = useTranslations("Settings.account.members");
+  const common = useTranslations("Common");
+  const [open, setOpen] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  async function confirm() {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await onConfirm();
+      setOpen(false);
+      toast.success(t(`${kind}.success`));
+    } catch {
+      toast.error(common("saveFailed"));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>
+        {kind === "transfer" ? <CrownIcon aria-hidden="true" /> : <Trash2Icon aria-hidden="true" />}
+        {t(`${kind}.action`)}
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t(`${kind}.title`)}</DialogTitle>
+          <DialogDescription>{t(`${kind}.description`, { name: member.username })}</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <Button type="button" variant="outline" disabled={busy} onClick={() => setOpen(false)}>{t("cancel")}</Button>
+          <Button type="button" variant={kind === "remove" ? "destructive" : "default"} disabled={busy} onClick={() => void confirm()}>
+            {t(`${kind}.action`)}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function DeleteAccountDialog({ deletionStatus }: {
+  deletionStatus: { soloOwnedCount: number; sharedOwnedCount: number };
+}) {
   const t = useTranslations("Settings.account.deleteDialog");
   const common = useTranslations("Common");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [blockedByServer, setBlockedByServer] = useState(false);
+  const requiresTransfer = deletionStatus.sharedOwnedCount > 0 || blockedByServer;
+  let descriptionKey = "memberDescription";
+  if (requiresTransfer) descriptionKey = deletionStatus.sharedOwnedCount > 1 ? "transferMultipleDescription" : "transferDescription";
+  else if (deletionStatus.soloOwnedCount > 1) descriptionKey = "soloMultipleDescription";
+  else if (deletionStatus.soloOwnedCount === 1) descriptionKey = "soloDescription";
+
+  async function confirmDeletion() {
+    if (isDeleting) return;
+    setIsDeleting(true);
+    try {
+      const result = await deleteAccount();
+      if (result.error === "has_members") {
+        setBlockedByServer(true);
+        setIsDeleting(false);
+      } else {
+        try {
+          const { error } = await createClient().auth.signOut({ scope: "local" });
+          if (error) console.error("Could not clear deleted account session", error);
+        } catch (error) {
+          console.error("Could not clear deleted account session", error);
+        }
+        window.location.replace("/");
+      }
+    } catch {
+      toast.error(common("saveFailed"));
+      setIsDeleting(false);
+    }
+  }
 
   return (
     <Dialog>
@@ -404,30 +530,26 @@ function DeleteAccountDialog() {
       </DialogTrigger>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
+          <DialogTitle>{t(requiresTransfer ? "transferTitle" : "title")}</DialogTitle>
+          <DialogDescription>{t(descriptionKey)}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose
-            render={<Button type="button" variant="outline" className="h-11" />}
+            render={<Button type="button" variant="outline" className="h-11" disabled={isDeleting} />}
           >
-            {t("cancel")}
+            {t(requiresTransfer ? "understood" : "cancel")}
           </DialogClose>
-          <Button
-            type="button"
-            variant="destructive"
-            className="h-11"
-            onClick={() =>
-              void deleteAccount()
-                .then((result) => {
-                  if (result?.error === "has_members")
-                    toast.error(t("ownerHasMembers"));
-                })
-                .catch(() => toast.error(common("saveFailed")))
-            }
-          >
-            <Trash2Icon aria-hidden="true" /> {t("confirm")}
-          </Button>
+          {!requiresTransfer ? (
+            <Button
+              type="button"
+              variant="destructive"
+              className="h-11"
+              disabled={isDeleting}
+              onClick={() => void confirmDeletion()}
+            >
+              <Trash2Icon aria-hidden="true" /> {t("confirm")}
+            </Button>
+          ) : null}
         </DialogFooter>
       </DialogContent>
     </Dialog>

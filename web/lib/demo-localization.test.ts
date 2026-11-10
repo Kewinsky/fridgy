@@ -35,6 +35,25 @@ test("sample custom recipe copy is localized without changing its stored values"
   assert.deepEqual(localizeDemoRecipe(edited, "de").steps, edited.steps);
 });
 
+test("starter dessert is localized without translating edited recipes", () => {
+  const dessert = { ...demoRecipes[0], slug: "starter-dessert", title: "Pieczone jabłka z cynamonem", isDemo: true,
+    description: "Ciepły deser z trzech prostych składników.",
+    steps: ["Rozgrzej piekarnik do 180°C i wydrąż gniazda nasienne jabłek.", "Wymieszaj miód z cynamonem i napełnij jabłka.", "Piecz około 20 minut, aż jabłka zmiękną."],
+    ingredients: [
+      { name: "Jabłka", amount: "2 szt.", available: false },
+      { name: "Miód", amount: "20 g", available: false },
+      { name: "Cynamon", amount: "2 g", available: false },
+    ] };
+  for (const locale of ["en", "de", "fr", "es"] as const) {
+    const localized = localizeDemoRecipe(dessert, locale);
+    assert.notEqual(localized.title, dessert.title);
+    assert.notEqual(localized.steps[0], dessert.steps[0]);
+    assert.notEqual(localized.ingredients[0].name, dessert.ingredients[0].name);
+  }
+  const edited = { ...dessert, steps: ["Mój własny sposób.", ...dessert.steps.slice(1)] };
+  assert.deepEqual(localizeDemoRecipe(edited, "en").steps, edited.steps);
+});
+
 test("units are localized for display without changing quantities", () => {
   assert.equal(localizeAmount("2 szt.", "en"), "2 pcs");
   assert.equal(localizeAmount("1 puszka", "fr"), "1 boîte");

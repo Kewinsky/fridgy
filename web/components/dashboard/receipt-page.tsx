@@ -8,6 +8,7 @@ import {
   ChevronDownIcon,
   FileImageIcon,
   InfoIcon,
+  LeafIcon,
   PackagePlusIcon,
   PlusIcon,
   Trash2Icon,
@@ -32,6 +33,7 @@ import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { WordRotate } from "@/components/ui/word-rotate";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,6 +46,7 @@ import { validateReceiptImage } from "@/lib/receipt-image";
 type Step = "choose" | "analyzing" | "review" | "success";
 type Method = "receipt" | "manual";
 const MAX_SCAN_MB = 4;
+const RECEIPT_STAGE_DURATION_MS = 2000;
 type ReceiptItem = {
   id: string;
   name: string;
@@ -64,6 +67,7 @@ function validQuantity(value: string) {
 }
 
 const locations: StorageLocation[] = ["Lodówka", "Zamrażarka", "Spiżarnia"];
+const receiptCardClassName = "app-card flex min-h-[30rem] flex-col p-5 sm:p-7";
 
 export function ReceiptPage() {
   const t = useTranslations("Receipt");
@@ -100,6 +104,7 @@ export function ReceiptPage() {
     const currentRequest = ++requestId.current;
     const controller = new AbortController();
     scanAbort.current = controller;
+    const startedAt = Date.now();
     try {
       const form = new FormData();
       form.set("image", file);
@@ -113,6 +118,8 @@ export function ReceiptPage() {
         setStep("choose");
         return;
       }
+      await new Promise<void>((resolve) => window.setTimeout(resolve, Math.max(0, RECEIPT_STAGE_DURATION_MS * 2 + 800 - (Date.now() - startedAt))));
+      if (currentRequest !== requestId.current) return;
       setItems(result.items.map(({ estimatedDays, ...item }) => ({
         ...item,
         id: crypto.randomUUID(),
@@ -186,39 +193,39 @@ export function ReceiptPage() {
 
   if (step === "success") {
     return (
-      <section className="app-card mx-auto flex min-h-120 max-w-3xl flex-col items-center justify-center p-8 text-center">
-        <span className="flex size-20 items-center justify-center rounded-full bg-fresh-soft text-fresh">
-          <CheckIcon className="size-9" aria-hidden="true" />
-        </span>
-        <h1 className="mt-6 text-3xl font-extrabold">{t("success.title")}</h1>
-        <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
-          {t("success.description", { count: items.length })}
-        </p>
-        <div className="mt-7 flex flex-wrap justify-center gap-2">
-          <Button
-            nativeButton={false}
-            render={<Link href="/dashboard/zapasy" />}
-            className="h-11"
-          >
-            {t("success.inventory")}
-          </Button>
-          <Button
-            variant="outline"
-            className="h-11"
-            onClick={() => {
-              setItems([]);
-              setFileName("");
-              setStep("choose");
-            }}
-          >
-            {t("success.another")}
-          </Button>
-        </div>
-      </section>
+      <div className="flex min-h-[calc(100dvh-13rem)] items-center justify-center py-8 lg:min-h-[calc(100dvh-5.25rem)]">
+        <section className="app-card w-full max-w-xl px-6 py-10 text-center sm:p-12">
+          <div className="mx-auto flex max-w-md flex-col items-center">
+            <span className="relative flex size-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+              <LeafIcon className="size-8" aria-hidden="true" />
+              <span className="absolute -right-2 -bottom-2 flex size-8 items-center justify-center rounded-full bg-fresh-soft text-fresh ring-4 ring-card">
+                <CheckIcon className="size-5" aria-hidden="true" />
+              </span>
+            </span>
+            <h1 className="mt-8 text-3xl font-extrabold tracking-tight sm:text-4xl">{t("success.title")}</h1>
+            <p className="mt-3 text-base leading-6 text-muted-foreground" role="status">{t("success.description", { count: items.length })}</p>
+            <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row">
+              <Button nativeButton={false} render={<Link href="/dashboard/zapasy" />} className="h-11 sm:flex-1">{t("success.inventory")}</Button>
+              <Button
+                variant="outline"
+                className="h-11 sm:flex-1"
+                onClick={() => {
+                  setItems([]);
+                  setFileName("");
+                  setStep("choose");
+                }}
+              >
+                {t("success.another")}
+              </Button>
+            </div>
+          </div>
+        </section>
+      </div>
     );
   }
 
   if (step === "analyzing") {
+    const analysisStages = [t("analysis.reading"), t("analysis.categorizing"), t("analysis.preparing")];
     return (
       <div className="mx-auto max-w-3xl">
         <PageHeader
@@ -226,25 +233,19 @@ export function ReceiptPage() {
           title={t("analysis.title")}
           description={t("analysis.description")}
         />
-        <section
-          className="app-card overflow-hidden p-6 sm:p-10"
-          aria-label={t("analysis.title")}
-        >
-          <div className="mx-auto flex max-w-md flex-col items-center text-center">
+        <section className={receiptCardClassName} aria-label={t("analysis.title")}>
+          <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center text-center">
             <span className="relative flex size-24 items-center justify-center rounded-full bg-secondary text-primary">
-              <span
-                className="absolute inset-2 rounded-full border-2 border-primary/20 border-t-primary motion-safe:animate-spin"
-                aria-hidden="true"
-              />
+              <span className="absolute inset-2 rounded-full border-2 border-primary/20 border-t-primary motion-safe:animate-spin" aria-hidden="true" />
               <FileImageIcon className="size-9" aria-hidden="true" />
             </span>
-            <p className="mt-6 w-full truncate text-sm font-semibold text-foreground">
-              {fileName}
-            </p>
-            <p className="mt-6 text-sm text-muted-foreground" role="status">{t("analysis.working")}</p>
+            <p className="mt-6 w-full truncate text-sm font-semibold text-foreground" title={fileName}>{fileName}</p>
+            <div className="mt-4 flex min-h-16 w-full items-center justify-center">
+              <WordRotate words={analysisStages} duration={RECEIPT_STAGE_DURATION_MS} loop={false} className="text-sm text-muted-foreground" motionProps={{ initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -16 }, transition: { duration: 0.3, ease: "easeOut" } }} />
+            </div>
             <Button
-              variant="ghost"
-              className="mt-7 h-11"
+              variant="outline"
+              className="mt-4 h-11"
               onClick={() => { requestId.current++; scanAbort.current?.abort(); setStep("choose"); }}
             >
               {t("analysis.cancel")}
@@ -471,9 +472,9 @@ export function ReceiptPage() {
         title={t("manual.title")}
         description={t("manual.description")}
       />
-      <section className="app-card p-5 sm:p-7">
+      <section className={receiptCardClassName}>
         <div
-          className="subtle-grid flex min-h-72 flex-col items-center justify-center rounded-xl border border-dashed border-input bg-muted/30 px-5 py-8 text-center"
+          className="subtle-grid flex min-h-72 flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-input bg-muted/30 px-5 py-8 text-center"
           onDragOver={(event) => event.preventDefault()}
           onDrop={(event) => {
             event.preventDefault();

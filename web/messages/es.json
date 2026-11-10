@@ -70,11 +70,17 @@
     "member": "Miembro",
     "signOut": "Cerrar sesión",
     "addHousehold": "Añadir hogar",
-    "addHouseholdDescription": "Elige empezar desde cero o con datos de ejemplo. Las recetas siguen compartidas.",
+    "addHouseholdDescription": "Escribe un nombre para tu nuevo hogar.",
     "householdName": "Nombre del hogar",
     "createHousehold": "Crear hogar",
     "sampleDataLabel": "Añadir datos de ejemplo",
-    "sampleDataDescription": "5 productos en las existencias y 3 artículos en la lista de compras. Podrás eliminarlos más tarde."
+    "setupTitle": "Preparamos tu hogar",
+    "setupDescription": "Un momento más, estamos preparando todo.",
+    "setupProgress": "Paso {current} de {total}",
+    "setupHousehold": "Creamos tu hogar",
+    "setupSpace": "Configuramos tu espacio",
+    "setupDemo": "Añadimos datos de ejemplo",
+    "setupReady": "¡Ya casi está!"
   },
   "Settings": {
     "metaTitle": "Ajustes",
@@ -196,6 +202,24 @@
         "copy": "Copiar enlace",
         "copied": "Enlace copiado."
       },
+      "members": {
+        "title": "Miembros del hogar",
+        "description": "Solo el propietario puede eliminar miembros o transferir la propiedad.",
+        "cancel": "Cancelar",
+        "transfer": {
+          "action": "Transferir propiedad",
+          "title": "¿Transferir la propiedad del hogar?",
+          "description": "{name} será el propietario. Seguirás siendo miembro.",
+          "success": "Propiedad del hogar transferida."
+        },
+        "remove": {
+          "action": "Eliminar miembro",
+          "title": "¿Eliminar a este miembro?",
+          "description": "{name} perderá acceso al hogar, sus provisiones, lista de compras y recetas.",
+          "success": "Miembro eliminado."
+        }
+      },
+
       "sessions": {
         "title": "Sesiones activas",
         "description": "Cierra las sesiones de Fridgy en tus otros dispositivos.",
@@ -208,11 +232,16 @@
       },
       "deleteDialog": {
         "open": "Eliminar cuenta",
-        "title": "¿Eliminar la cuenta definitivamente?",
-        "description": "Se eliminarán la cuenta, las provisiones, las recetas y el historial de cocina. Esta acción no se puede deshacer.",
+        "title": "¿Seguro que quieres eliminar tu cuenta?",
+        "transferTitle": "Transfiere la propiedad del hogar",
+        "soloDescription": "Eliminaremos tu cuenta y el hogar del que eres el único miembro, junto con sus datos. Esta acción no se puede deshacer.",
+        "soloMultipleDescription": "Eliminaremos tu cuenta y los hogares de los que eres el único miembro, junto con sus datos. Esta acción no se puede deshacer.",
+        "memberDescription": "Tu cuenta se eliminará de forma permanente. Perderás el acceso a los hogares a los que perteneces. Esta acción no se puede deshacer.",
+        "transferDescription": "Para eliminar tu cuenta, primero transfiere la propiedad del hogar a otro miembro.",
+        "transferMultipleDescription": "Para eliminar tu cuenta, primero transfiere la propiedad de tus hogares a otros miembros.",
         "cancel": "Cancelar",
-        "confirm": "Eliminar cuenta",
-        "ownerHasMembers": "El propietario no puede eliminar su cuenta mientras haya otros miembros en el hogar."
+        "understood": "Entendido",
+        "confirm": "Eliminar cuenta"
       }
     },
     "advanced": {
@@ -301,7 +330,9 @@
       "welcomeTitle": "Empecemos a cocinar",
       "welcomeDescription": "Crea un hogar, añade productos de un recibo y encuentra una idea para tu primera comida.",
       "modalTitle": "¡Bienvenido a Fridgy!",
-      "modalDescription": "Primero crea tu hogar. Después podrás usar tus existencias y recetas.",
+      "modalDescription": "¿Cómo quieres llamar a tu hogar?",
+      "previewHousehold": "Tu hogar",
+      "startButton": "¡Empecemos!",
       "stepsEyebrow": "Primeros pasos",
       "stepsTitle": "Prepara tu cocina",
       "stepHousehold": "Crear un hogar",
@@ -829,12 +860,14 @@
     "analysis": {
       "title": "Preparando productos",
       "description": "Pronto podrás revisar y editar la lista de productos.",
-      "working": "Analizando la foto del recibo…",
+      "reading": "Leemos la foto del recibo",
+      "categorizing": "Identificamos y clasificamos los productos",
+      "preparing": "Preparamos la lista para revisarla",
       "cancel": "Cancelar"
     },
     "success": {
-      "title": "Inventario actualizado",
-      "description": "{count, plural, one {Se añadió # producto al inventario compartido.} other {Se añadieron # productos al inventario compartido.}}",
+      "title": "¡Inventario actualizado!",
+      "description": "{count, plural, one {Se añadió # producto a tu hogar.} other {Se añadieron # productos a tu hogar.}}",
       "inventory": "Ver inventario",
       "another": "Añadir más productos"
     },

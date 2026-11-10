@@ -7,7 +7,9 @@ import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 import { PROFILE_IMAGE_BUCKET } from "@/lib/profile-image";
+import { RECIPE_IMAGE_BUCKET } from "@/lib/recipe-image";
 import { recipeAllergens } from "@/lib/demo-recipes";
+import { shouldRelocateRecipeImage } from "@/lib/account-deletion";
 
 const profileSettings = z.object({
   notification_days: z.array(z.union([z.literal(0), z.literal(1), z.literal(3)])).max(3),
@@ -107,6 +109,33 @@ export async function createHouseholdInvitation(email: string) {
   return data.token as string;
 }
 
+export type HouseholdMember = { user_id: string; username: string; email: string; is_owner: boolean };
+
+export async function listHouseholdMembers(householdId: string): Promise<HouseholdMember[]> {
+  const { supabase } = await currentUser();
+  const { data, error } = await supabase.rpc("list_fridgy_household_members", {
+    target_household: z.uuid().parse(householdId),
+  });
+  if (error) throw new Error(error.message);
+  return (data ?? []) as HouseholdMember[];
+}
+
+export async function transferHouseholdOwnership(householdId: string, nextOwnerId: string) {
+  const { supabase } = await currentUser();
+  const { error } = await supabase.rpc("transfer_fridgy_household_owner", {
+    target_household: z.uuid().parse(householdId), next_owner: z.uuid().parse(nextOwnerId),
+  });
+  if (error) throw new Error(error.message);
+}
+
+export async function removeHouseholdMember(householdId: string, userId: string) {
+  const { supabase } = await currentUser();
+  const { error } = await supabase.rpc("remove_fridgy_household_member", {
+    target_household: z.uuid().parse(householdId), target_user: z.uuid().parse(userId),
+  });
+  if (error) throw new Error(error.message);
+}
+
 export async function exportAccountData() {
   const { supabase, user } = await currentUser();
   const { data: profile, error: profileError } = await supabase.from("profiles")
@@ -153,12 +182,65 @@ export async function deleteAccount() {
     if (membersError) throw new Error(membersError.message);
     if (members?.some((member) => member.user_id !== user.id)) return { error: "has_members" as const };
   }
-  const { error } = await admin.auth.admin.deleteUser(user.id);
-  if (error) throw new Error(error.message);
-  if (typeof profile.avatar_path === "string") {
-    await admin.storage.from(PROFILE_IMAGE_BUCKET).remove([`${user.id}/${profile.avatar_path}`]);
+  const deletedHouseholds = new Set((ownedHouseholds ?? []).map((household) => household.id));
+  const recipeStorage = admin.storage.from(RECIPE_IMAGE_BUCKET);
+  const imageNames: string[] = [];
+  const copiedImages = new Set<string>();
+  for (let offset = 0; ; offset += 1000) {
+    const { data: files, error: listError } = await recipeStorage.list(user.id, { limit: 1000, offset });
+    if (listError) throw new Error(listError.message);
+    imageNames.push(...(files ?? []).filter((file) => file.id).map((file) => file.name));
+    if (!files || files.length < 1000) break;
   }
-  redirect("/");
+  for (const filename of imageNames) {
+    const { data: references, error: referenceError } = await admin.from("recipes")
+      .select("household_id,slug,user_id,recipe").contains("recipe", { imagePath: filename });
+    if (referenceError) throw new Error(referenceError.message);
+    for (const reference of references ?? []) {
+      if (!shouldRelocateRecipeImage({ ...reference, recipe: reference.recipe as { imageOwnerId?: string } }, user.id, deletedHouseholds)) continue;
+      const destination = `${reference.household_id}/${filename}`;
+      if (!copiedImages.has(destination)) {
+        const { error: copyError } = await recipeStorage.copy(`${user.id}/${filename}`, destination);
+        if (copyError) {
+          const { error: existingError } = await recipeStorage.info(destination);
+          if (existingError) throw new Error(copyError.message);
+        }
+        copiedImages.add(destination);
+      }
+      const { error: updateError } = await admin.rpc("relocate_fridgy_recipe_image", {
+        target_household: reference.household_id,
+        target_slug: reference.slug,
+        filename,
+        previous_owner: user.id,
+      });
+      if (updateError) throw new Error(updateError.message);
+    }
+  }
+  const { error } = await admin.auth.admin.deleteUser(user.id);
+  if (error) {
+    if (error.message.includes("Transfer ownership")) return { error: "has_members" as const };
+    throw new Error(error.message);
+  }
+  for (let offset = 0; offset < imageNames.length; offset += 100) {
+    try {
+      const { error: cleanupError } = await recipeStorage.remove(
+        imageNames.slice(offset, offset + 100).map((name) => `${user.id}/${name}`),
+      );
+      if (cleanupError) console.error("Recipe image cleanup failed", cleanupError);
+    } catch (cleanupError) {
+      console.error("Recipe image cleanup failed", cleanupError);
+    }
+  }
+  if (typeof profile.avatar_path === "string") {
+    try {
+      const { error: avatarCleanupError } = await admin.storage.from(PROFILE_IMAGE_BUCKET)
+        .remove([`${user.id}/${profile.avatar_path}`]);
+      if (avatarCleanupError) console.error("Profile image cleanup failed", avatarCleanupError);
+    } catch (avatarCleanupError) {
+      console.error("Profile image cleanup failed", avatarCleanupError);
+    }
+  }
+  return { error: null };
 }
 
 export async function resetDemoData(expectedHouseholdId: string) {

@@ -70,11 +70,17 @@
     "member": "Member",
     "signOut": "Sign out",
     "addHousehold": "Add household",
-    "addHouseholdDescription": "Choose an empty start or sample data. Recipes stay shared.",
+    "addHouseholdDescription": "Enter a name for your new household.",
     "householdName": "Household name",
     "createHousehold": "Create household",
     "sampleDataLabel": "Add sample data",
-    "sampleDataDescription": "5 inventory products and 3 shopping items. You can remove them later."
+    "setupTitle": "Setting up your household",
+    "setupDescription": "Just a moment, we are getting everything ready.",
+    "setupProgress": "Step {current} of {total}",
+    "setupHousehold": "Creating your household",
+    "setupSpace": "Setting up your space",
+    "setupDemo": "Adding sample data",
+    "setupReady": "Almost ready!"
   },
   "Settings": {
     "metaTitle": "Settings",
@@ -196,6 +202,24 @@
         "copy": "Copy link",
         "copied": "Link copied."
       },
+      "members": {
+        "title": "Household members",
+        "description": "Only the owner can remove members or transfer ownership.",
+        "cancel": "Cancel",
+        "transfer": {
+          "action": "Transfer ownership",
+          "title": "Transfer household ownership?",
+          "description": "{name} will become the owner. You will remain a member.",
+          "success": "Household ownership transferred."
+        },
+        "remove": {
+          "action": "Remove member",
+          "title": "Remove this member?",
+          "description": "{name} will lose access to this household, its inventory, shopping list and recipes.",
+          "success": "Member removed."
+        }
+      },
+
       "sessions": {
         "title": "Active sessions",
         "description": "End Fridgy sessions on your other devices.",
@@ -208,11 +232,16 @@
       },
       "deleteDialog": {
         "open": "Delete account",
-        "title": "Permanently delete the account?",
-        "description": "Your account, inventory, recipes and cooking history will be deleted. This action cannot be undone.",
+        "title": "Are you sure you want to delete your account?",
+        "transferTitle": "Transfer household ownership",
+        "soloDescription": "We will delete your account and the household where you are the only member, including its data. This cannot be undone.",
+        "soloMultipleDescription": "We will delete your account and the households where you are the only member, including their data. This cannot be undone.",
+        "memberDescription": "Your account will be permanently deleted. You will lose access to the households you belong to. This cannot be undone.",
+        "transferDescription": "To delete your account, first transfer household ownership to another member.",
+        "transferMultipleDescription": "To delete your account, first transfer ownership of your households to other members.",
         "cancel": "Cancel",
-        "confirm": "Delete account",
-        "ownerHasMembers": "The owner cannot delete their account while other members are in the household."
+        "understood": "I understand",
+        "confirm": "Delete account"
       }
     },
     "advanced": {
@@ -301,7 +330,9 @@
       "welcomeTitle": "Let's start cooking",
       "welcomeDescription": "Create a household, add products from a receipt, and find an idea for your first meal.",
       "modalTitle": "Welcome to Fridgy!",
-      "modalDescription": "First, create your household. You can then use your stock and recipes.",
+      "modalDescription": "What would you like to call your household?",
+      "previewHousehold": "Your home",
+      "startButton": "Let's go!",
       "stepsEyebrow": "First steps",
       "stepsTitle": "Set up your kitchen",
       "stepHousehold": "Create a household",
@@ -829,12 +860,14 @@
     "analysis": {
       "title": "Preparing products",
       "description": "You will soon see a list of products to review and edit.",
-      "working": "Analyzing the receipt photo…",
+      "reading": "Reading the receipt photo",
+      "categorizing": "Recognizing and sorting products",
+      "preparing": "Preparing the list for review",
       "cancel": "Cancel"
     },
     "success": {
-      "title": "Inventory updated",
-      "description": "{count, plural, one {Added # product to the shared inventory.} other {Added # products to the shared inventory.}}",
+      "title": "Inventory updated!",
+      "description": "{count, plural, one {Added # product to your household.} other {Added # products to your household.}}",
       "inventory": "View inventory",
       "another": "Add more products"
     },

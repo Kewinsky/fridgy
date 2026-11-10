@@ -49,7 +49,7 @@ export async function readStoredRecipes(supabase: SupabaseClient, householdId: s
   return (data ?? []).map((row) => {
     const recipe = {
       ...validateStoredRecipe({ ...(row.recipe as object), slug: row.slug, source: row.source, createdAt: row.created_at }),
-      createdBy: row.user_id,
+      createdBy: row.user_id ?? undefined,
       isFavorite: row.is_favorite === true,
       ...(row.is_demo ? { isDemo: true } : {}),
     };

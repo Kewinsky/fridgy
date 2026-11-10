@@ -100,21 +100,25 @@ const sampleRecipeCopy: Record<Exclude<Locale, "pl">, Record<string, RecipeCopy 
     "Jajecznica z pomidorami": { title: "Scrambled eggs with tomatoes", description: "A simple breakfast with eggs and tomatoes.", ingredients: ["Eggs", "Tomatoes"], steps: ["Cut the tomatoes.", "Beat the eggs and cook them in a frying pan.", "Add the tomatoes and season to taste."] },
     "Makaron z pomidorami": { title: "Pasta with tomatoes", description: "Quick pasta with a simple tomato sauce.", ingredients: ["Pasta", "Tomatoes"], steps: ["Cook the pasta al dente.", "Cut the tomatoes and simmer them in a pan until they form a sauce.", "Combine the pasta with the sauce and season to taste."] },
     "Placki ziemniaczane": { title: "Potato pancakes", description: "Classic crispy potato pancakes.", ingredients: ["Potatoes", "Eggs", "Oil"], steps: ["Grate the potatoes and squeeze out the excess water.", "Mix with the egg and season.", "Fry small pancakes on both sides in hot oil."] },
+    "Pieczone jabłka z cynamonem": { title: "Baked apples with cinnamon", description: "A warm dessert with three simple ingredients.", ingredients: ["Apples", "Honey", "Cinnamon"], steps: ["Heat the oven to 180°C and core the apples.", "Mix the honey with the cinnamon and fill the apples.", "Bake for about 20 minutes, until the apples are soft."] },
   },
   de: {
     "Jajecznica z pomidorami": { title: "Rührei mit Tomaten", description: "Ein einfaches Frühstück mit Eiern und Tomaten.", ingredients: ["Eier", "Tomaten"], steps: ["Schneide die Tomaten.", "Verquirle die Eier und brate sie in der Pfanne.", "Gib die Tomaten dazu und würze nach Geschmack."] },
     "Makaron z pomidorami": { title: "Nudeln mit Tomaten", description: "Schnelle Nudeln mit einfacher Tomatensoße.", ingredients: ["Nudeln", "Tomaten"], steps: ["Koche die Nudeln al dente.", "Schneide die Tomaten und lass sie in der Pfanne zu einer Soße einkochen.", "Mische die Nudeln mit der Soße und würze nach Geschmack."] },
     "Placki ziemniaczane": { title: "Kartoffelpuffer", description: "Klassische knusprige Kartoffelpuffer.", ingredients: ["Kartoffeln", "Eier", "Öl"], steps: ["Reibe die Kartoffeln und drücke überschüssiges Wasser aus.", "Vermische sie mit dem Ei und würze die Masse.", "Brate kleine Puffer in heißem Öl von beiden Seiten."] },
+    "Pieczone jabłka z cynamonem": { title: "Bratäpfel mit Zimt", description: "Ein warmes Dessert aus drei einfachen Zutaten.", ingredients: ["Äpfel", "Honig", "Zimt"], steps: ["Heize den Ofen auf 180 °C vor und entkerne die Äpfel.", "Mische Honig und Zimt und fülle die Äpfel damit.", "Backe sie etwa 20 Minuten, bis sie weich sind."] },
   },
   fr: {
     "Jajecznica z pomidorami": { title: "Œufs brouillés aux tomates", description: "Un petit-déjeuner simple avec des œufs et des tomates.", ingredients: ["Œufs", "Tomates"], steps: ["Coupez les tomates.", "Battez les œufs et faites-les cuire à la poêle.", "Ajoutez les tomates et assaisonnez à votre goût."] },
     "Makaron z pomidorami": { title: "Pâtes aux tomates", description: "Des pâtes rapides avec une sauce tomate simple.", ingredients: ["Pâtes", "Tomates"], steps: ["Faites cuire les pâtes al dente.", "Coupez les tomates et laissez-les mijoter à la poêle pour obtenir une sauce.", "Mélangez les pâtes avec la sauce et assaisonnez à votre goût."] },
     "Placki ziemniaczane": { title: "Galettes de pommes de terre", description: "Des galettes de pommes de terre classiques et croustillantes.", ingredients: ["Pommes de terre", "Œufs", "Huile"], steps: ["Râpez les pommes de terre et pressez-les pour retirer l'excès d'eau.", "Mélangez-les avec l'œuf et assaisonnez.", "Faites dorer de petites galettes des deux côtés dans l'huile chaude."] },
+    "Pieczone jabłka z cynamonem": { title: "Pommes au four à la cannelle", description: "Un dessert chaud avec trois ingrédients simples.", ingredients: ["Pommes", "Miel", "Cannelle"], steps: ["Préchauffez le four à 180 °C et évidez les pommes.", "Mélangez le miel et la cannelle, puis garnissez les pommes.", "Faites cuire environ 20 minutes, jusqu'à ce que les pommes soient tendres."] },
   },
   es: {
     "Jajecznica z pomidorami": { title: "Huevos revueltos con tomate", description: "Un desayuno sencillo con huevos y tomates.", ingredients: ["Huevos", "Tomates"], steps: ["Corta los tomates.", "Bate los huevos y cocínalos en una sartén.", "Añade los tomates y sazona al gusto."] },
     "Makaron z pomidorami": { title: "Pasta con tomate", description: "Pasta rápida con una salsa de tomate sencilla.", ingredients: ["Pasta", "Tomates"], steps: ["Cuece la pasta al dente.", "Corta los tomates y cocínalos en una sartén hasta obtener una salsa.", "Mezcla la pasta con la salsa y sazona al gusto."] },
     "Placki ziemniaczane": { title: "Tortitas de patata", description: "Unas tortitas de patata clásicas y crujientes.", ingredients: ["Patatas", "Huevos", "Aceite"], steps: ["Ralla las patatas y escurre el exceso de agua.", "Mézclalas con el huevo y sazona.", "Fríe pequeñas tortitas por ambos lados en aceite caliente."] },
+    "Pieczone jabłka z cynamonem": { title: "Manzanas al horno con canela", description: "Un postre caliente con tres ingredientes sencillos.", ingredients: ["Manzanas", "Miel", "Canela"], steps: ["Calienta el horno a 180 °C y quita el corazón de las manzanas.", "Mezcla la miel con la canela y rellena las manzanas.", "Hornea unos 20 minutos, hasta que estén tiernas."] },
   },
 };
 
@@ -122,6 +126,7 @@ const sampleRecipeOriginals: Record<string, { description: string; steps: string
   "Jajecznica z pomidorami": { description: "Proste śniadanie z jajek i pomidorów.", steps: ["Pokrój pomidory.", "Roztrzep jajka i usmaż je na patelni.", "Dodaj pomidory i dopraw do smaku."], ingredients: ["Jajka", "Pomidory"] },
   "Makaron z pomidorami": { description: "Szybki makaron z prostym sosem pomidorowym.", steps: ["Ugotuj makaron al dente.", "Pokrój pomidory i duś je na patelni, aż powstanie sos.", "Połącz makaron z sosem i dopraw do smaku."], ingredients: ["Makaron", "Pomidory"] },
   "Placki ziemniaczane": { description: "Klasyczne chrupiące placki ziemniaczane.", steps: ["Zetrzyj ziemniaki i odciśnij nadmiar wody.", "Wymieszaj z jajkiem i dopraw.", "Smaż małe placki na rozgrzanym oleju z obu stron."], ingredients: ["Ziemniaki", "Jajka", "Olej"] },
+  "Pieczone jabłka z cynamonem": { description: "Ciepły deser z trzech prostych składników.", steps: ["Rozgrzej piekarnik do 180°C i wydrąż gniazda nasienne jabłek.", "Wymieszaj miód z cynamonem i napełnij jabłka.", "Piecz około 20 minut, aż jabłka zmiękną."], ingredients: ["Jabłka", "Miód", "Cynamon"] },
 };
 
 const productNames: Record<Exclude<Locale, "pl">, string[]> = {

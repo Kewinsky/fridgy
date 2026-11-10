@@ -70,11 +70,17 @@
     "member": "Członek",
     "signOut": "Wyloguj się",
     "addHousehold": "Dodaj domostwo",
-    "addHouseholdDescription": "Wybierz pusty start lub dane demonstracyjne. Przepisy pozostaną wspólne.",
+    "addHouseholdDescription": "Podaj nazwę nowego domostwa.",
     "householdName": "Nazwa domostwa",
     "createHousehold": "Utwórz domostwo",
     "sampleDataLabel": "Dodaj dane demonstracyjne",
-    "sampleDataDescription": "5 produktów w zapasach i 3 na liście zakupów. Możesz je później usunąć."
+    "setupTitle": "Przygotowujemy Twoje domostwo",
+    "setupDescription": "Jeszcze chwila, wszystko ustawiamy.",
+    "setupProgress": "Krok {current} z {total}",
+    "setupHousehold": "Tworzymy domostwo",
+    "setupSpace": "Konfigurujemy przestrzeń",
+    "setupDemo": "Dodajemy dane demonstracyjne",
+    "setupReady": "Już prawie gotowe!"
   },
   "Settings": {
     "metaTitle": "Ustawienia",
@@ -196,6 +202,24 @@
         "copy": "Kopiuj link",
         "copied": "Skopiowano link."
       },
+      "members": {
+        "title": "Domownicy",
+        "description": "Tylko właściciel może usuwać domowników i przekazać własność domu.",
+        "cancel": "Anuluj",
+        "transfer": {
+          "action": "Przekaż własność",
+          "title": "Przekazać własność domu?",
+          "description": "{name} zostanie właścicielem. Nadal pozostaniesz domownikiem.",
+          "success": "Własność domu została przekazana."
+        },
+        "remove": {
+          "action": "Usuń z domu",
+          "title": "Usunąć domownika?",
+          "description": "{name} straci dostęp do tego domu, jego zapasów, zakupów i przepisów.",
+          "success": "Domownik został usunięty."
+        }
+      },
+
       "sessions": {
         "title": "Aktywne sesje",
         "description": "Zakończ sesje Fridgy na pozostałych urządzeniach.",
@@ -208,11 +232,16 @@
       },
       "deleteDialog": {
         "open": "Usuń konto",
-        "title": "Trwale usunąć konto?",
-        "description": "Usunięte zostaną konto, zapasy, przepisy i historia gotowania. Tej operacji nie można cofnąć.",
+        "title": "Czy na pewno chcesz usunąć konto?",
+        "transferTitle": "Przekaż własność domostwa",
+        "soloDescription": "Usuniemy Twoje konto oraz domostwo, w którym jesteś jedynym członkiem, wraz z jego danymi. Tej operacji nie można cofnąć.",
+        "soloMultipleDescription": "Usuniemy Twoje konto oraz domostwa, w których jesteś jedynym członkiem, wraz z ich danymi. Tej operacji nie można cofnąć.",
+        "memberDescription": "Twoje konto zostanie trwale usunięte. Utracisz dostęp do domostw, do których należysz. Tej operacji nie można cofnąć.",
+        "transferDescription": "Aby usunąć konto, najpierw przekaż własność domostwa innemu domownikowi.",
+        "transferMultipleDescription": "Aby usunąć konto, najpierw przekaż własność prowadzonych domostw innym domownikom.",
         "cancel": "Anuluj",
-        "confirm": "Usuń konto",
-        "ownerHasMembers": "Nie można usunąć konta właściciela, dopóki w domostwie są inni członkowie."
+        "understood": "Rozumiem",
+        "confirm": "Usuń konto"
       }
     },
     "advanced": {
@@ -301,7 +330,9 @@
       "welcomeTitle": "Zacznijmy gotować",
       "welcomeDescription": "Utwórz domostwo, dodaj produkty z paragonu i znajdź pomysł na pierwszy posiłek.",
       "modalTitle": "Witaj we Fridgy!",
-      "modalDescription": "Na początek utwórz swoje domostwo. Dopiero potem będziesz mieć dostęp do zapasów i przepisów.",
+      "modalDescription": "Jak chcesz nazwać swoje domostwo?",
+      "previewHousehold": "Twój dom",
+      "startButton": "Zaczynamy!",
       "stepsEyebrow": "Pierwsze kroki",
       "stepsTitle": "Przygotuj swoją kuchnię",
       "stepHousehold": "Utwórz domostwo",
@@ -829,12 +860,14 @@
     "analysis": {
       "title": "Przygotowujemy produkty",
       "description": "Za chwilę zobaczysz listę produktów do sprawdzenia i edycji.",
-      "working": "Analizujemy zdjęcie paragonu…",
+      "reading": "Odczytujemy zdjęcie paragonu",
+      "categorizing": "Rozpoznajemy i kategoryzujemy produkty",
+      "preparing": "Przygotowujemy listę do sprawdzenia",
       "cancel": "Anuluj"
     },
     "success": {
-      "title": "Zapasy uzupełnione",
-      "description": "{count, plural, one {Dodano # produkt do wspólnych zapasów.} few {Dodano # produkty do wspólnych zapasów.} other {Dodano # produktów do wspólnych zapasów.}}",
+      "title": "Zapasy uzupełnione!",
+      "description": "{count, plural, one {Dodano # produkt do Twojego domostwa.} few {Dodano # produkty do Twojego domostwa.} other {Dodano # produktów do Twojego domostwa.}}",
       "inventory": "Zobacz zapasy",
       "another": "Dodaj kolejne produkty"
     },

@@ -70,11 +70,17 @@
     "member": "Membre",
     "signOut": "Se déconnecter",
     "addHousehold": "Ajouter un foyer",
-    "addHouseholdDescription": "Choisissez un départ à vide ou des données de démonstration. Les recettes restent partagées.",
+    "addHouseholdDescription": "Donnez un nom à votre nouveau foyer.",
     "householdName": "Nom du foyer",
     "createHousehold": "Créer le foyer",
     "sampleDataLabel": "Ajouter des données de démonstration",
-    "sampleDataDescription": "5 produits dans les stocks et 3 articles sur la liste de courses. Vous pourrez les supprimer plus tard."
+    "setupTitle": "Préparation de votre foyer",
+    "setupDescription": "Encore un instant, nous préparons tout.",
+    "setupProgress": "Étape {current} sur {total}",
+    "setupHousehold": "Création du foyer",
+    "setupSpace": "Configuration de votre espace",
+    "setupDemo": "Ajout des données de démonstration",
+    "setupReady": "C'est presque prêt !"
   },
   "Settings": {
     "metaTitle": "Paramètres",
@@ -196,6 +202,24 @@
         "copy": "Copier le lien",
         "copied": "Lien copié."
       },
+      "members": {
+        "title": "Membres du foyer",
+        "description": "Seul le propriétaire peut retirer des membres ou transférer la propriété.",
+        "cancel": "Annuler",
+        "transfer": {
+          "action": "Transférer la propriété",
+          "title": "Transférer la propriété du foyer ?",
+          "description": "{name} deviendra propriétaire. Vous resterez membre.",
+          "success": "Propriété du foyer transférée."
+        },
+        "remove": {
+          "action": "Retirer le membre",
+          "title": "Retirer ce membre ?",
+          "description": "{name} perdra l'accès au foyer, à ses provisions, à sa liste de courses et à ses recettes.",
+          "success": "Membre retiré."
+        }
+      },
+
       "sessions": {
         "title": "Sessions actives",
         "description": "Fermez les sessions Fridgy sur vos autres appareils.",
@@ -208,11 +232,16 @@
       },
       "deleteDialog": {
         "open": "Supprimer le compte",
-        "title": "Supprimer définitivement le compte ?",
-        "description": "Le compte, les provisions, les recettes et l'historique de cuisine seront supprimés. Cette action est irréversible.",
+        "title": "Voulez-vous vraiment supprimer votre compte ?",
+        "transferTitle": "Transférer la propriété du foyer",
+        "soloDescription": "Nous supprimerons votre compte et le foyer dont vous êtes le seul membre, ainsi que ses données. Cette action est irréversible.",
+        "soloMultipleDescription": "Nous supprimerons votre compte et les foyers dont vous êtes le seul membre, ainsi que leurs données. Cette action est irréversible.",
+        "memberDescription": "Votre compte sera définitivement supprimé. Vous perdrez l'accès aux foyers dont vous êtes membre. Cette action est irréversible.",
+        "transferDescription": "Pour supprimer votre compte, transférez d'abord la propriété du foyer à un autre membre.",
+        "transferMultipleDescription": "Pour supprimer votre compte, transférez d'abord la propriété de vos foyers à d'autres membres.",
         "cancel": "Annuler",
-        "confirm": "Supprimer le compte",
-        "ownerHasMembers": "Le propriétaire ne peut pas supprimer son compte tant que d'autres membres sont dans le foyer."
+        "understood": "J'ai compris",
+        "confirm": "Supprimer le compte"
       }
     },
     "advanced": {
@@ -301,7 +330,9 @@
       "welcomeTitle": "Commençons à cuisiner",
       "welcomeDescription": "Créez un foyer, ajoutez des produits depuis un ticket et trouvez une idée pour votre premier repas.",
       "modalTitle": "Bienvenue sur Fridgy !",
-      "modalDescription": "Créez d'abord votre foyer. Vous pourrez ensuite utiliser vos stocks et vos recettes.",
+      "modalDescription": "Comment souhaitez-vous appeler votre foyer ?",
+      "previewHousehold": "Votre foyer",
+      "startButton": "C'est parti !",
       "stepsEyebrow": "Premières étapes",
       "stepsTitle": "Préparez votre cuisine",
       "stepHousehold": "Créer un foyer",
@@ -829,12 +860,14 @@
     "analysis": {
       "title": "Préparation des produits",
       "description": "Vous pourrez bientôt vérifier et modifier la liste des produits.",
-      "working": "Analyse de la photo du ticket…",
+      "reading": "Lecture de la photo du ticket",
+      "categorizing": "Identification et classement des produits",
+      "preparing": "Préparation de la liste à vérifier",
       "cancel": "Annuler"
     },
     "success": {
-      "title": "Réserves mises à jour",
-      "description": "{count, plural, one {# produit a été ajouté aux réserves partagées.} other {# produits ont été ajoutés aux réserves partagées.}}",
+      "title": "Réserves mises à jour !",
+      "description": "{count, plural, one {# produit a été ajouté à votre foyer.} other {# produits ont été ajoutés à votre foyer.}}",
       "inventory": "Voir les réserves",
       "another": "Ajouter d'autres produits"
     },

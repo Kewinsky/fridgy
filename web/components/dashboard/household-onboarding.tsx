@@ -1,47 +1,71 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { CheckIcon, ChefHatIcon, HomeIcon, ReceiptTextIcon } from "lucide-react";
+import { CheckIcon, ChefHatIcon, HomeIcon, LeafIcon, ReceiptTextIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { signOut } from "@/app/dashboard/actions";
+import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { HouseholdCreationForm } from "@/components/dashboard/household-switcher";
-import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export function HouseholdOnboarding() {
   const t = useTranslations("Dashboard.onboarding");
-  const navigation = useTranslations("Navigation");
+  const dashboardT = useTranslations("Dashboard");
+  const navigationT = useTranslations("Navigation");
+  const [creating, setCreating] = useState(false);
+  const previewHousehold = t("previewHousehold");
 
   return (
-    <main className="min-h-dvh bg-background px-4 py-8 text-foreground sm:px-7 sm:py-12">
-      <div className="mx-auto max-w-5xl">
-        <p className="mb-6 text-xl font-extrabold text-primary">Fridgy</p>
-        <section className="relative overflow-hidden rounded-2xl bg-surface-strong p-6 text-surface-strong-foreground sm:p-10">
-          <div className="strong-grid pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" />
-          <div className="relative grid gap-8 lg:grid-cols-2 lg:items-center">
-            <div>
-              <p className="text-sm font-bold text-surface-strong-accent">{t("stepsEyebrow")}</p>
-              <h1 className="mt-3 text-3xl font-extrabold sm:text-5xl">{t("welcomeTitle")}</h1>
-              <p className="mt-4 max-w-md leading-7 text-surface-strong-foreground/80">{t("welcomeDescription")}</p>
-            </div>
-            <OnboardingSteps hasHousehold={false} hasProducts={false} hasCooked={false} />
+    <>
+      <div inert aria-hidden="true">
+        <DashboardShell email="" username="Fridgy" avatarPath={null} householdName={previewHousehold} householdId="preview" households={[{ id: "preview", name: previewHousehold, isOwner: true }]}>
+          <div className="space-y-5 pb-6">
+            <section className="relative isolate overflow-hidden rounded-2xl bg-surface-strong p-6 text-surface-strong-foreground sm:p-8 xl:p-10">
+              <div className="strong-grid pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" />
+              <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.8fr)] lg:items-center">
+                <div className="max-w-xl">
+                  <p className="text-sm font-bold text-surface-strong-accent">{dashboardT("householdEyebrow")}</p>
+                  <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-balance sm:text-4xl xl:text-5xl">{t("welcomeTitle")}</h1>
+                  <p className="mt-4 max-w-md leading-7 text-surface-strong-foreground/80">{t("welcomeDescription")}</p>
+                </div>
+                <OnboardingSteps hasHousehold={false} hasProducts={false} hasCooked={false} />
+              </div>
+            </section>
+            <section aria-label={dashboardT("snapshotTitle")} className="grid items-start gap-5 lg:grid-cols-[minmax(0,1.4fr)_minmax(300px,1fr)]">
+              <div className="app-card min-w-0 overflow-hidden">
+                <div className="flex items-center justify-between gap-4 px-5 pt-5 pb-4 sm:px-6 sm:pt-6">
+                  <div>
+                    <p className="text-xs font-bold uppercase tracking-wider text-primary">{dashboardT("expiringEyebrow")}</p>
+                    <h2 className="mt-1 text-xl font-extrabold">{dashboardT("expiringTitle")}</h2>
+                  </div>
+                  <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-lg font-bold text-primary">0</span>
+                </div>
+                <p className="px-5 py-5 text-sm text-muted-foreground sm:px-6">{dashboardT("expiringEmpty")}</p>
+                <div className="flex min-h-12 items-center border-t border-border px-5 text-sm font-semibold text-primary sm:px-6">{dashboardT("viewAll")}</div>
+              </div>
+              <section className="app-card min-w-0 p-5 sm:p-6">
+                <p className="text-xs font-bold uppercase tracking-wider text-primary">{dashboardT("consumedEyebrow")}</p>
+                <h2 className="mt-1 text-xl font-extrabold">{dashboardT("consumedTitle")}</h2>
+                <p className="mt-4 text-sm text-muted-foreground">{dashboardT("consumedEmpty")}</p>
+              </section>
+            </section>
           </div>
-        </section>
+        </DashboardShell>
       </div>
       <Dialog open onOpenChange={() => {}}>
-        <DialogContent showCloseButton={false} className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-extrabold">{t("modalTitle")}</DialogTitle>
-            <DialogDescription>{t("modalDescription")}</DialogDescription>
+        <DialogContent showCloseButton={false} className="gap-6 p-6 sm:max-w-md sm:p-8">
+          <DialogHeader className="items-center text-center">
+            <span className="mb-2 flex size-14 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-primary/20">
+              <LeafIcon className="size-7" aria-hidden="true" />
+            </span>
+            <DialogTitle className="text-2xl font-extrabold tracking-tight">{creating ? navigationT("setupTitle") : t("modalTitle")}</DialogTitle>
+            <DialogDescription className="text-base leading-6">{creating ? navigationT("setupDescription") : t("modalDescription")}</DialogDescription>
           </DialogHeader>
-          <HouseholdCreationForm />
-          <form action={signOut} className="text-center">
-            <Button type="submit" variant="ghost">{navigation("signOut")}</Button>
-          </form>
+          <HouseholdCreationForm onboarding onLoadingChange={setCreating} />
         </DialogContent>
       </Dialog>
-    </main>
+    </>
   );
 }
 

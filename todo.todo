@@ -5,7 +5,7 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 ## Co dziś jest demonstracją lub nie ma pełnej logiki
 
 - **Zapasy i lista zakupów:** zapisują się w Supabase i można je edytować. Przy dodawaniu domostwa użytkownik wybiera pusty start lub kilka oznaczonych danych testowych, które właściciel może później usunąć.
-- **Przepisy:** sześć przepisów w `web/lib/demo-recipes.ts` nadal zasila część widoków. Każdy użytkownik dostaje raz trzy oznaczone przepisy testowe w „Moje”. Przepisy własne i AI są dostępne we wszystkich jego domostwach oraz dla ich członków; ulubione i historia są osobiste.
+- **Przepisy:** sześć przepisów w `web/lib/demo-recipes.ts` nadal zasila część widoków. Przepisy własne i AI, ulubione oraz historia są przypisane do domostwa i wspólne dla jego członków. Włączenie danych demonstracyjnych dodaje zapasy, zakupy i – przy pierwszym włączeniu na koncie – trzy przepisy w „Moje”: śniadanie, obiad i deser. Czysty start nie dodaje tych danych.
 - **Pulpit:** pokazuje aktywne domostwo, dzienny pomysł AI, produkty z bliskim terminem i zużyte produkty do ponownego zakupu.
 - **„Co ugotować?”:** wysyła odpowiedzi formularza, liczbę porcji, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Późniejsze skalowanie przepisu nie jest planowane; nadal brakuje wspólnego źródła przepisów dla pulpitu.
 - **Dodawanie z paragonu:** zdjęcie jest analizowane przez AI, a rozpoznane produkty można poprawić przed dodaniem do zapasów. AI szacuje datę użycia na podstawie produktu i miejsca przechowywania; termin z opakowania trzeba zweryfikować. Skan wymaga klucza OpenAI. Limity żądań są zaplanowane osobno.
@@ -50,7 +50,7 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - [ ] Przetestować RLS i uprawnienia Supabase dla dwóch gospodarstw i kilku domowników, w tym dostęp do zapasów, paragonów, przepisów, zdjęć, zaproszeń i funkcji SQL `security definer`. Testować bezpośrednie żądania do API, nie tylko ukryte przyciski.
 - [ ] Dodać limity nadużyć dla logowania, zaproszeń, analiz paragonów, generowania AI i wysyłania plików; ograniczyć koszt, liczbę żądań i rozmiar danych na użytkownika.
 - [ ] Walidować przesyłane obrazy na zaufanej granicy, usuwać zbędne metadane i bezpiecznie obsługiwać uszkodzone pliki. Obecna kontrola sygnatury obrazu przepisu i zdjęcia profilu działa w przeglądarce, którą można ominąć.
-- [ ] Sprawdzić proces usuwania konta i zdjęć: dziś kasowane jest zdjęcie profilu, lecz obrazy własnych przepisów mogą zostać w Storage. Opracować także wyjście właściciela z domu, który ma innych członków.
+- [ ] Przetestować usuwanie konta na Supabase z kilkoma domami i domownikami. Kod wymaga przekazania własności wspólnego domu, zachowuje jego przepisy i przenosi ich obrazy, a prywatne pliki usuwa po skasowaniu konta. Zweryfikować także sprzątanie Storage przy awarii usługi.
 
 ## P1 – spójność danych i jakość
 

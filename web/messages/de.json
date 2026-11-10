@@ -70,11 +70,17 @@
     "member": "Mitglied",
     "signOut": "Abmelden",
     "addHousehold": "Haushalt hinzufügen",
-    "addHouseholdDescription": "Wähle einen leeren Start oder Beispieldaten. Rezepte bleiben geteilt.",
+    "addHouseholdDescription": "Gib einen Namen für deinen neuen Haushalt ein.",
     "householdName": "Name des Haushalts",
     "createHousehold": "Haushalt erstellen",
     "sampleDataLabel": "Beispieldaten hinzufügen",
-    "sampleDataDescription": "5 Produkte im Vorrat und 3 Einkaufsartikel. Du kannst sie später entfernen."
+    "setupTitle": "Wir richten deinen Haushalt ein",
+    "setupDescription": "Einen Moment noch, wir bereiten alles vor.",
+    "setupProgress": "Schritt {current} von {total}",
+    "setupHousehold": "Haushalt erstellen",
+    "setupSpace": "Bereich einrichten",
+    "setupDemo": "Beispieldaten hinzufügen",
+    "setupReady": "Fast fertig!"
   },
   "Settings": {
     "metaTitle": "Einstellungen",
@@ -196,6 +202,24 @@
         "copy": "Link kopieren",
         "copied": "Link kopiert."
       },
+      "members": {
+        "title": "Haushaltsmitglieder",
+        "description": "Nur der Eigentümer kann Mitglieder entfernen oder die Eigentümerschaft übertragen.",
+        "cancel": "Abbrechen",
+        "transfer": {
+          "action": "Eigentum übertragen",
+          "title": "Eigentum am Haushalt übertragen?",
+          "description": "{name} wird Eigentümer. Du bleibst Mitglied.",
+          "success": "Eigentum am Haushalt übertragen."
+        },
+        "remove": {
+          "action": "Mitglied entfernen",
+          "title": "Mitglied entfernen?",
+          "description": "{name} verliert den Zugriff auf diesen Haushalt, Vorräte, Einkaufsliste und Rezepte.",
+          "success": "Mitglied entfernt."
+        }
+      },
+
       "sessions": {
         "title": "Aktive Sitzungen",
         "description": "Beende Fridgy-Sitzungen auf deinen anderen Geräten.",
@@ -208,11 +232,16 @@
       },
       "deleteDialog": {
         "open": "Konto löschen",
-        "title": "Konto dauerhaft löschen?",
-        "description": "Konto, Vorräte, Rezepte und Kochverlauf werden gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+        "title": "Möchtest du dein Konto wirklich löschen?",
+        "transferTitle": "Haushalt übertragen",
+        "soloDescription": "Wir löschen dein Konto und den Haushalt, in dem du das einzige Mitglied bist, einschließlich aller zugehörigen Daten. Das kann nicht rückgängig gemacht werden.",
+        "soloMultipleDescription": "Wir löschen dein Konto und die Haushalte, in denen du das einzige Mitglied bist, einschließlich aller zugehörigen Daten. Das kann nicht rückgängig gemacht werden.",
+        "memberDescription": "Dein Konto wird dauerhaft gelöscht. Du verlierst den Zugang zu deinen Haushalten. Das kann nicht rückgängig gemacht werden.",
+        "transferDescription": "Um dein Konto zu löschen, übertrage zuerst den Haushalt an ein anderes Mitglied.",
+        "transferMultipleDescription": "Um dein Konto zu löschen, übertrage zuerst deine Haushalte an andere Mitglieder.",
         "cancel": "Abbrechen",
-        "confirm": "Konto löschen",
-        "ownerHasMembers": "Der Eigentümer kann sein Konto nicht löschen, solange andere Mitglieder im Haushalt sind."
+        "understood": "Verstanden",
+        "confirm": "Konto löschen"
       }
     },
     "advanced": {
@@ -301,7 +330,9 @@
       "welcomeTitle": "Lass uns kochen",
       "welcomeDescription": "Erstelle einen Haushalt, füge Produkte von einem Kassenbon hinzu und finde eine Idee für dein erstes Essen.",
       "modalTitle": "Willkommen bei Fridgy!",
-      "modalDescription": "Erstelle zuerst deinen Haushalt. Danach kannst du Vorräte und Rezepte nutzen.",
+      "modalDescription": "Wie möchtest du deinen Haushalt nennen?",
+      "previewHousehold": "Dein Zuhause",
+      "startButton": "Los geht's!",
       "stepsEyebrow": "Erste Schritte",
       "stepsTitle": "Richte deine Küche ein",
       "stepHousehold": "Haushalt erstellen",
@@ -829,12 +860,14 @@
     "analysis": {
       "title": "Produkte werden vorbereitet",
       "description": "Gleich kannst du die Produktliste prüfen und bearbeiten.",
-      "working": "Kassenbonfoto wird analysiert…",
+      "reading": "Kassenbonfoto wird gelesen",
+      "categorizing": "Produkte werden erkannt und sortiert",
+      "preparing": "Liste wird zur Prüfung vorbereitet",
       "cancel": "Abbrechen"
     },
     "success": {
-      "title": "Vorräte ergänzt",
-      "description": "{count, plural, one {# Produkt wurde zu den gemeinsamen Vorräten hinzugefügt.} other {# Produkte wurden zu den gemeinsamen Vorräten hinzugefügt.}}",
+      "title": "Vorräte ergänzt!",
+      "description": "{count, plural, one {# Produkt wurde deinem Haushalt hinzugefügt.} other {# Produkte wurden deinem Haushalt hinzugefügt.}}",
       "inventory": "Vorräte ansehen",
       "another": "Weitere Produkte hinzufügen"
     },

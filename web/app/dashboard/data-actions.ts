@@ -141,7 +141,7 @@ export async function updateCustomRecipe(recipe: CustomRecipe, expectedHousehold
   const { data, error } = await supabase.from("recipes").update({ recipe: valid })
     .eq("household_id", householdId).eq("slug", valid.slug).eq("source", "custom").select("slug,user_id,is_favorite").single();
   if (error || !data) throw new Error(error?.message ?? "Recipe not found");
-  return { ...valid, createdBy: data.user_id as string, isFavorite: data.is_favorite === true };
+  return { ...valid, createdBy: (data.user_id as string | null) ?? undefined, isFavorite: data.is_favorite === true };
 }
 
 export async function deleteCustomRecipe(slug: string, expectedHouseholdId: string) {

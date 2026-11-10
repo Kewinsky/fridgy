@@ -36,7 +36,11 @@ export const getCurrentDashboard = cache(async () => {
 
   const { data: profile, error: profileError } = await supabase.from("profiles")
     .select("household_id").eq("user_id", data.claims.sub).single();
-  if (profileError || !profile) throw new Error("Profile is missing. Apply the Supabase migration.");
+  if (profileError || !profile) {
+    const { data: currentUser } = await supabase.auth.getUser();
+    if (!currentUser.user) redirect("/login");
+    throw new Error("Profile is missing. Apply the Supabase migration.");
+  }
   if (!profile.household_id) return null;
 
   const initialData = await loadDashboardData(supabase, data.claims.sub);
