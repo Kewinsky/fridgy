@@ -8,7 +8,7 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - **Przepisy:** sześć przepisów w `web/lib/demo-recipes.ts` nadal zasila część widoków. Każdy użytkownik dostaje raz trzy oznaczone przepisy testowe w „Moje”. Przepisy własne i AI są dostępne we wszystkich jego domostwach oraz dla ich członków; ulubione i historia są osobiste.
 - **Pulpit:** pokazuje aktywne domostwo, dzienny pomysł AI, produkty z bliskim terminem i zużyte produkty do ponownego zakupu.
 - **„Co ugotować?”:** wysyła odpowiedzi formularza, liczbę porcji, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Późniejsze skalowanie przepisu nie jest planowane; nadal brakuje wspólnego źródła przepisów dla pulpitu.
-- **Dodawanie z paragonu:** zdjęcie jest analizowane przez AI, a rozpoznane produkty można poprawić przed dodaniem do zapasów. AI szacuje datę użycia na podstawie produktu i miejsca przechowywania; termin z opakowania trzeba zweryfikować. Skan wymaga klucza OpenAI i migracji limitu żądań.
+- **Dodawanie z paragonu:** zdjęcie jest analizowane przez AI, a rozpoznane produkty można poprawić przed dodaniem do zapasów. AI szacuje datę użycia na podstawie produktu i miejsca przechowywania; termin z opakowania trzeba zweryfikować. Skan wymaga klucza OpenAI. Limity żądań są zaplanowane osobno.
 - **Import przepisu z linku:** próbuje odczytać publiczny opis z Instagrama, Facebooka, TikToka lub YouTube i przygotowuje edytowalny przepis do zapisania w „Moje”. Gdy opis jest niedostępny lub nie zawiera składników i kroków, pokazuje odpowiedni komunikat. Nie analizuje filmu ani dźwięku; zdjęcie użytkownik dodaje sam.
 - **Ustawienia:** format daty wpływa na widok terminów produktów, kalendarz i historię gotowania. Waluta i cena z paragonu zostały usunięte. Dni powiadomień, tryb paragonu i zgody zapisują się, ale nie mają podłączonego działania. Preferowane kuchnie istnieją w profilu, lecz nie są używane.
 - **Mobile:** zawiera tylko ekran „Ready for development” i konfigurację klienta Supabase (`mobile/src/app/index.tsx`).
@@ -31,7 +31,6 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - [ ] Wprowadzić wysyłanie powiadomień o terminach produktów albo usunąć ustawienie dni powiadomień. Dodać zgody na kanał, strefę czasową, harmonogram, deduplikację i rezygnację.
 - [ ] Podłączyć preferowane kuchnie i zgodę na personalizację do doboru przepisów.
 - [ ] Doprowadzić zapraszanie domowników do końca: wysyłać zaproszenie lub jasno opisać ręczne udostępnienie linku; umożliwić podgląd i odwołanie zaproszeń oraz obsłużyć wygasłe linki.
-- [ ] Utrwalić lub świadomie porzucać postęp gotowania po odświeżeniu. Dziś zaznaczone kroki istnieją tylko w stanie strony.
 - [ ] Poprawić dopasowanie składników do zapasów: odmiany nazw, języki, jednostki i przeliczenia, produkty o podobnych nazwach oraz kilka opakowań tego samego składnika. Pokazać użytkownikowi, czego system nie dopasował.
 
 ### Mobile – jeśli wchodzi do pierwszego wydania

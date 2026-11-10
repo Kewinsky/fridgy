@@ -807,8 +807,7 @@
       "fileTooLarge": "Das Bild darf höchstens {maxMb} MB groß sein.",
       "analysisFailed": "Der Kassenbon konnte nicht gelesen werden. Versuche ein schärferes Foto.",
       "noProducts": "Keine Produkte auf dem Foto gefunden. Versuche es erneut oder füge sie manuell hinzu.",
-      "unavailable": "Der Kassenbon-Scan ist vorübergehend nicht verfügbar.",
-      "scanLimit": "Scan-Limit erreicht. Versuche es in einer Stunde erneut."
+      "unavailable": "Der Kassenbon-Scan ist vorübergehend nicht verfügbar."
     },
     "analysis": {
       "title": "Produkte werden vorbereitet",

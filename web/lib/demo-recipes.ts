@@ -2,6 +2,7 @@ export type Recipe = {
   slug: string;
   image?: string;
   imagePath?: string;
+  imageOwnerId?: string;
   title: string;
   description: string;
   time: number;

@@ -5,6 +5,7 @@ export type StoredRecipe = Recipe & {
   createdAt: string;
   createdBy?: string;
   isDemo?: boolean;
+  isFavorite?: boolean;
 };
 export type CustomRecipe = StoredRecipe & { source: "custom" };
 
@@ -25,6 +26,7 @@ export type RecipeLibrary = {
 export type RecipeDraft = {
   title: string;
   imagePath?: string;
+  imageOwnerId?: string;
   description: string;
   cuisine: string;
   time: number;
@@ -139,6 +141,7 @@ export function createCustomRecipe(draft: RecipeDraft, slug: string, createdAt: 
     slug,
     source: "custom",
     imagePath: draft.imagePath,
+    imageOwnerId: draft.imageOwnerId,
     title: draft.title.trim(),
     description: draft.description.trim() || "Twój własny przepis.",
     cuisine: draft.cuisine,

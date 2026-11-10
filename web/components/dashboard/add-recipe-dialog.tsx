@@ -24,6 +24,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { useRecipeLibraryActions } from "@/components/dashboard/use-recipe-library";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -127,6 +128,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const [checkingImage, setCheckingImage] = useState(false);
   const invalidFields = new Set(validationAttempted ? invalidRecipeFields(form) : []);
   const { saveCustomRecipe, updateCustomRecipe } = useRecipeLibraryActions();
+  const { userId } = useDashboardData();
 
   useEffect(() => {
     return () => {
@@ -192,10 +194,14 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
         if (imageFile) uploadedImagePath = await uploadRecipeImage(imageFile);
         const imagePath =
           uploadedImagePath ?? (removeImage ? undefined : recipe?.imagePath);
+        let imageOwnerId = recipe?.imageOwnerId;
+        if (uploadedImagePath) imageOwnerId = userId;
+        else if (removeImage) imageOwnerId = undefined;
         const customRecipe = createCustomRecipe(
           {
             title: form.title,
             imagePath,
+            imageOwnerId,
             description: form.description,
             cuisine: form.cuisine,
             time: totalTime,

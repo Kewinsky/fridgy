@@ -16,6 +16,7 @@ const storedRecipeSchema = z.object({
   cuisine: z.string().trim().min(1).max(100),
   servings: z.number().int().min(1).max(20),
   imagePath: z.string().regex(/^[0-9a-f-]{36}\.(?:jpg|jpeg|png|webp)$/).optional(),
+  imageOwnerId: z.uuid().optional(),
   ingredients: z.array(z.object({
     name: z.string().trim().min(1).max(150),
     amount: z.string().trim().min(1).max(100),
@@ -41,13 +42,15 @@ export function validateCustomRecipe(value: unknown): CustomRecipe {
   return recipe as CustomRecipe;
 }
 
-export async function readStoredRecipes(supabase: SupabaseClient): Promise<StoredRecipe[]> {
-  const { data, error } = await supabase.from("recipes").select("slug,source,recipe,created_at,is_demo,user_id").order("created_at", { ascending: false });
+export async function readStoredRecipes(supabase: SupabaseClient, householdId: string): Promise<StoredRecipe[]> {
+  const { data, error } = await supabase.from("recipes").select("slug,source,recipe,created_at,is_demo,is_favorite,user_id")
+    .eq("household_id", householdId).order("created_at", { ascending: false });
   if (error) throw new Error(error.message);
   return (data ?? []).map((row) => {
     const recipe = {
       ...validateStoredRecipe({ ...(row.recipe as object), slug: row.slug, source: row.source, createdAt: row.created_at }),
       createdBy: row.user_id,
+      isFavorite: row.is_favorite === true,
       ...(row.is_demo ? { isDemo: true } : {}),
     };
     if (recipe.source !== "ai") return recipe;

@@ -14,7 +14,6 @@ import {
   EditRecipeDialog,
 } from "@/components/dashboard/add-recipe-dialog";
 import { FavoriteRecipeButton } from "@/components/dashboard/recipe-actions";
-import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { RecipeImage } from "@/components/dashboard/recipe-image";
 import { capitalizeDifficulty, difficultyMessageKeys } from "@/components/dashboard/recipe-options";
 import { Button } from "@/components/ui/button";
@@ -40,7 +39,6 @@ export function RecipeCard({
   const t = useTranslations("Recipe");
   const libraryT = useTranslations("RecipeLibrary");
   const common = useTranslations("Common");
-  const { userId } = useDashboardData();
   const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
@@ -101,7 +99,7 @@ export function RecipeCard({
           >
             {t("viewRecipe")} <ArrowRightIcon aria-hidden="true" />
           </Button>
-          {!suggestion && customRecipe?.createdBy === userId ? (
+          {!suggestion && customRecipe ? (
             <div className="flex gap-2 self-end">
               <EditRecipeDialog recipe={customRecipe} />
               <DeleteRecipeDialog recipe={customRecipe} />

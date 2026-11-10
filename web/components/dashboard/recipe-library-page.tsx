@@ -16,7 +16,7 @@ import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsScrollableList, TabsTrigger } from "@/components/ui/tabs";
-import { demoRecipes, type Recipe } from "@/lib/demo-recipes";
+import type { Recipe } from "@/lib/demo-recipes";
 import { getHistoryRecipes } from "@/lib/recipe-library";
 import { daysUntilRecipePruned } from "@/lib/recipe-retention";
 
@@ -81,7 +81,7 @@ export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
     const timer = window.setInterval(update, 60_000);
     return () => window.clearInterval(timer);
   }, [tab]);
-  const allRecipes = [...savedRecipes, ...demoRecipes];
+  const allRecipes = savedRecipes;
   let recipes: Recipe[];
   let emptyState: ReactNode;
 
@@ -92,7 +92,7 @@ export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
     recipes = savedRecipes.filter((recipe) => recipe.source === "custom");
     emptyState = <EmptyState icon={BookOpenIcon} title={t("emptyCustom.title")} description={t("emptyCustom.description")} actionNode={<AddRecipeDialog />} />;
   } else {
-    recipes = getHistoryRecipes(savedRecipes, demoRecipes, library.history);
+    recipes = getHistoryRecipes(savedRecipes, [], library.history);
     emptyState = <EmptyState icon={HistoryIcon} title={t("emptyHistory.title")} description={t("emptyHistory.description")} href="/dashboard/co-ugotowac" action={t("emptyHistory.action")} />;
   }
 

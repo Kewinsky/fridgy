@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 import type { DemoProduct } from "@/lib/demo-data";
 import type { DateFormat } from "@/lib/date-format";
-import { emptyRecipeLibrary, type RecipeLibrary, type StoredRecipe } from "@/lib/recipe-library";
+import type { RecipeLibrary, StoredRecipe } from "@/lib/recipe-library";
 import { readStoredRecipes } from "@/lib/recipe-store";
 import type { ShoppingItem } from "@/lib/shopping-list";
 import { createClient } from "@/lib/supabase/server";
@@ -94,13 +94,14 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
   const householdId = profile.household_id as string;
   const { error: pruneError } = await supabase.rpc("prune_fridgy_recipe_history");
   if (pruneError && pruneError.code !== "PGRST202") throw new Error(pruneError.message);
-  const [products, shopping, library, recipes] = await Promise.all([
+  const [products, shopping, history, recipes] = await Promise.all([
     supabase.from("products").select("*").eq("household_id", householdId).order("created_at"),
     supabase.from("shopping_items").select("*").eq("household_id", householdId).order("created_at"),
-    supabase.from("recipe_libraries").select("library").eq("user_id", userId).single(),
-    readStoredRecipes(supabase),
+    supabase.from("cooking_history").select("id,recipe_slug,recipe_title,cuisine,cooked_at")
+      .eq("household_id", householdId).order("cooked_at", { ascending: false }),
+    readStoredRecipes(supabase, householdId),
   ]);
-  if (products.error || shopping.error || library.error) throw new Error("Could not load dashboard data.");
+  if (products.error || shopping.error || history.error) throw new Error("Could not load dashboard data.");
 
   return {
     userId,
@@ -116,7 +117,14 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
     shoppingItems: (shopping.data ?? []).map((item) => ({ id: item.id, name: item.name, done: item.done, isDemo: item.is_demo === true,
       ...(item.seed_key ? { seedKey: item.seed_key } : {}),
     })),
-    recipeLibrary: (library.data?.library ?? emptyRecipeLibrary) as RecipeLibrary,
+    recipeLibrary: {
+      version: 1,
+      favoriteSlugs: recipes.filter((recipe) => recipe.isFavorite).map((recipe) => recipe.slug),
+      history: (history.data ?? []).map((record) => ({
+        id: record.id, recipeSlug: record.recipe_slug, recipeTitle: record.recipe_title,
+        cuisine: record.cuisine, cookedAt: record.cooked_at,
+      })),
+    },
     recipes,
   };
 }

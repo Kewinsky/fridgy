@@ -807,8 +807,7 @@
       "fileTooLarge": "Zdjęcie może mieć maksymalnie {maxMb} MB.",
       "analysisFailed": "Nie udało się odczytać paragonu. Spróbuj z wyraźniejszym zdjęciem.",
       "noProducts": "Nie znaleziono produktów na zdjęciu. Spróbuj ponownie lub dodaj je ręcznie.",
-      "unavailable": "Skan paragonu jest chwilowo niedostępny.",
-      "scanLimit": "Limit skanów został wykorzystany. Spróbuj ponownie za godzinę."
+      "unavailable": "Skan paragonu jest chwilowo niedostępny."
     },
     "analysis": {
       "title": "Przygotowujemy produkty",

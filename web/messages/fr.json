@@ -807,8 +807,7 @@
       "fileTooLarge": "L'image ne peut pas dépasser {maxMb} Mo.",
       "analysisFailed": "Impossible de lire le ticket. Essayez une photo plus nette.",
       "noProducts": "Aucun produit trouvé sur la photo. Réessayez ou ajoutez-les manuellement.",
-      "unavailable": "L'analyse des tickets est temporairement indisponible.",
-      "scanLimit": "Limite d'analyses atteinte. Réessayez dans une heure."
+      "unavailable": "L'analyse des tickets est temporairement indisponible."
     },
     "analysis": {
       "title": "Préparation des produits",

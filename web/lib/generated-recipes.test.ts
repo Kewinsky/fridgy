@@ -56,19 +56,27 @@ test("reopens custom and AI recipes from the unified table", async () => {
   const custom = createCustomRecipe({
     title: "Kanapka", description: "Prosta", cuisine: "Polska", time: 5, servings: 1,
     ingredients: "Chleb | 2 szt.", steps: "Przygotuj kanapkę.",
+    imagePath: "3798a119-c64c-4a90-8a3b-aa0dfb2d62ba.jpg",
+    imageOwnerId: "4798a119-c64c-4a90-8a3b-aa0dfb2d62ba",
   }, "kanapka-1", "2026-11-09T10:00:00.000Z");
   const client = {
     from(table: string) {
       assert.equal(table, "recipes");
       return {
         select(columns: string) {
-          assert.equal(columns, "slug,source,recipe,created_at,is_demo,user_id");
+          assert.equal(columns, "slug,source,recipe,created_at,is_demo,is_favorite,user_id");
           return {
+            eq(column: string, value: string) {
+              assert.equal(column, "household_id");
+              assert.equal(value, "household-1");
+              return this;
+            },
             async order() {
               return {
                 data: [oldAiRecipe, custom].map((recipe) => ({
                   slug: recipe.slug, source: recipe.source, recipe, created_at: recipe.createdAt,
-                  is_demo: recipe.source === "custom", user_id: recipe.source === "custom" ? "user-2" : "user-1",
+                  is_demo: recipe.source === "custom", is_favorite: recipe.source === "custom",
+                  user_id: recipe.source === "custom" ? "user-2" : "user-1",
                 })),
                 error: null,
               };
@@ -79,7 +87,8 @@ test("reopens custom and AI recipes from the unified table", async () => {
     },
   } as unknown as SupabaseClient;
 
-  assert.deepEqual(await readStoredRecipes(client), [
-    { ...stored, createdBy: "user-1" }, { ...custom, isDemo: true, createdBy: "user-2" },
+  assert.deepEqual(await readStoredRecipes(client, "household-1"), [
+    { ...stored, createdBy: "user-1", isFavorite: false },
+    { ...custom, isDemo: true, createdBy: "user-2", isFavorite: true },
   ]);
 });

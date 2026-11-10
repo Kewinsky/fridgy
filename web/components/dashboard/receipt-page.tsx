@@ -107,7 +107,7 @@ export function ReceiptPage() {
       const result = await response.json() as { error?: string; items?: Array<Omit<ReceiptItem, "id" | "estimatedUseBy" | "quantity"> & { quantity: number; estimatedDays: number }> };
       if (currentRequest !== requestId.current) return;
       if (!response.ok || !result.items?.length) {
-        const knownErrors = ["emptyFile", "fileTooLarge", "invalidFile", "noProducts", "unavailable", "scanLimit"];
+        const knownErrors = ["emptyFile", "fileTooLarge", "invalidFile", "noProducts", "unavailable"];
         const reason = knownErrors.find((error) => error === result.error) ?? "analysisFailed";
         setFileError(reason === "fileTooLarge" ? t("toasts.fileTooLarge", { maxMb: MAX_SCAN_MB }) : t(`toasts.${reason}`));
         setStep("choose");

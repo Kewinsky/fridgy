@@ -807,8 +807,7 @@
       "fileTooLarge": "La imagen puede tener como máximo {maxMb} MB.",
       "analysisFailed": "No se pudo leer el recibo. Prueba con una foto más nítida.",
       "noProducts": "No se encontraron productos en la foto. Inténtalo de nuevo o añádelos manualmente.",
-      "unavailable": "El escaneo de recibos no está disponible temporalmente.",
-      "scanLimit": "Has alcanzado el límite de escaneos. Inténtalo de nuevo en una hora."
+      "unavailable": "El escaneo de recibos no está disponible temporalmente."
     },
     "analysis": {
       "title": "Preparando productos",

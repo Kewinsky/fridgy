@@ -113,18 +113,18 @@ export async function exportAccountData() {
     .select("*").eq("user_id", user.id).single();
   if (profileError || !profile) throw new Error("Profile not found");
   const householdId = profile.household_id;
-  const [household, products, shopping, recipes, receipts] = await Promise.all([
+  const [household, products, shopping, recipes, cookingHistory] = await Promise.all([
     supabase.from("households").select("id,name").eq("id", householdId).single(),
     supabase.from("products").select("*").eq("household_id", householdId),
     supabase.from("shopping_items").select("*").eq("household_id", householdId),
-    supabase.from("recipe_libraries").select("library").eq("user_id", user.id).single(),
-    supabase.from("receipts").select("*").eq("household_id", householdId),
+    supabase.from("recipes").select("*").eq("household_id", householdId),
+    supabase.from("cooking_history").select("*").eq("household_id", householdId),
   ]);
-  if (household.error || products.error || shopping.error || recipes.error || receipts.error)
+  if (household.error || products.error || shopping.error || recipes.error || cookingHistory.error)
     throw new Error("Export failed");
   return {
     email: user.email, profile, household: household.data, products: products.data,
-    shoppingItems: shopping.data, recipeLibrary: recipes.data?.library, receipts: receipts.data,
+    shoppingItems: shopping.data, recipes: recipes.data, cookingHistory: cookingHistory.data,
   };
 }
 

@@ -6,7 +6,6 @@ import { createClient } from "@/lib/supabase/server";
 import { productFromRow, productToRow } from "@/lib/dashboard-data";
 import type { DemoProduct } from "@/lib/demo-data";
 import type { ShoppingItem } from "@/lib/shopping-list";
-import type { RecipeLibrary } from "@/lib/recipe-library";
 import type { CustomRecipe } from "@/lib/recipe-library";
 import { validateCustomRecipe } from "@/lib/recipe-store";
 import { prepareGeneratedRecipe } from "@/lib/generated-recipes";
@@ -29,11 +28,6 @@ const productSchema = z.object({
   seedKey: z.string().max(50).optional(),
 });
 const shoppingSchema = z.object({ id: z.uuid(), name: z.string().trim().min(1).max(150), done: z.boolean(), isDemo: z.boolean().optional(), seedKey: z.string().max(50).optional() });
-const librarySchema = z.object({
-  version: z.literal(1),
-  favoriteSlugs: z.array(z.string().max(150)).max(1000),
-  history: z.array(z.record(z.string(), z.unknown())).max(5000),
-});
 
 async function authorizedClient(expectedHouseholdId?: string) {
   const supabase = await createClient();
@@ -102,20 +96,22 @@ export async function readShoppingItems(expectedHouseholdId: string): Promise<Sh
   }));
 }
 
-export async function persistRecipeLibrary(library: RecipeLibrary) {
-  const validLibrary = librarySchema.parse(library);
-  const { supabase, userId } = await authorizedClient();
-  const { error } = await supabase.from("recipe_libraries").update({ library: validLibrary }).eq("user_id", userId);
+export async function toggleRecipeFavorite(slug: string, expectedHouseholdId: string): Promise<boolean> {
+  const validSlug = z.string().trim().min(1).max(150).parse(slug);
+  const { supabase } = await authorizedClient(expectedHouseholdId);
+  const { data, error } = await supabase.rpc("toggle_fridgy_household_favorite", {
+    target_slug: validSlug, expected_household: expectedHouseholdId,
+  });
   if (error) throw new Error(error.message);
-  return library;
+  return z.boolean().parse(data);
 }
 
-export async function saveCustomRecipe(recipe: CustomRecipe) {
+export async function saveCustomRecipe(recipe: CustomRecipe, expectedHouseholdId: string) {
   const valid = validateCustomRecipe(recipe);
-  const { supabase, userId } = await authorizedClient();
-  const { error } = await supabase.from("recipes").insert({ user_id: userId, slug: valid.slug, source: "custom", recipe: valid, created_at: valid.createdAt });
+  const { supabase, userId, householdId } = await authorizedClient(expectedHouseholdId);
+  const { error } = await supabase.from("recipes").insert({ user_id: userId, household_id: householdId, slug: valid.slug, source: "custom", recipe: valid, created_at: valid.createdAt });
   if (error) throw new Error(error.message);
-  return { ...valid, createdBy: userId };
+  return { ...valid, createdBy: userId, isFavorite: false };
 }
 
 export async function importRecipeFromUrl(value: string, locale: string): Promise<ImportRecipeResult> {
@@ -139,25 +135,25 @@ export async function importRecipeFromUrl(value: string, locale: string): Promis
   }
 }
 
-export async function updateCustomRecipe(recipe: CustomRecipe) {
+export async function updateCustomRecipe(recipe: CustomRecipe, expectedHouseholdId: string) {
   const valid = validateCustomRecipe(recipe);
-  const { supabase, userId } = await authorizedClient();
+  const { supabase, householdId } = await authorizedClient(expectedHouseholdId);
   const { data, error } = await supabase.from("recipes").update({ recipe: valid })
-    .eq("user_id", userId).eq("slug", valid.slug).eq("source", "custom").select("slug").single();
+    .eq("household_id", householdId).eq("slug", valid.slug).eq("source", "custom").select("slug,user_id,is_favorite").single();
   if (error || !data) throw new Error(error?.message ?? "Recipe not found");
-  return { ...valid, createdBy: userId };
+  return { ...valid, createdBy: data.user_id as string, isFavorite: data.is_favorite === true };
 }
 
-export async function deleteCustomRecipe(slug: string) {
+export async function deleteCustomRecipe(slug: string, expectedHouseholdId: string) {
   const validSlug = z.string().trim().min(1).max(150).parse(slug);
-  const { supabase } = await authorizedClient();
-  const { error } = await supabase.rpc("delete_fridgy_custom_recipe", { target_slug: validSlug });
+  const { supabase } = await authorizedClient(expectedHouseholdId);
+  const { error } = await supabase.rpc("delete_fridgy_custom_recipe", { target_slug: validSlug, expected_household: expectedHouseholdId });
   if (error) throw new Error(error.message);
 }
 
 export async function generateRecipes(input: GenerationInput, expectedHouseholdId: string) {
   const validInput = generationInputSchema.parse(input);
-  const { supabase, userId } = await authorizedClient(expectedHouseholdId);
+  const { supabase, userId, householdId } = await authorizedClient(expectedHouseholdId);
   const dashboard = await loadDashboardData(supabase, userId);
   if (dashboard.householdId !== expectedHouseholdId) throw new Error("Active household changed. Refresh and try again.");
   const key = process.env.OPENAI_API_KEY;
@@ -175,7 +171,7 @@ export async function generateRecipes(input: GenerationInput, expectedHouseholdI
   if (batch.recipes.length < 3 && validInput.shopping !== "none") return { error: "notEnoughSuggestions" as const };
   const recipes = batch.recipes.map((recipe) => prepareGeneratedRecipe(recipe, crypto.randomUUID()));
   const { error } = await supabase.from("recipes").insert(recipes.map((recipe) => ({
-    user_id: userId, slug: recipe.slug, source: "ai", recipe, created_at: recipe.createdAt,
+    user_id: userId, household_id: householdId, slug: recipe.slug, source: "ai", recipe, created_at: recipe.createdAt,
   })));
   if (error) throw new Error(error.message);
   return { recipes, partial: recipes.length < 3, message: batch.message };

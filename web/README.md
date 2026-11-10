@@ -47,7 +47,7 @@ In Supabase Dashboard:
    Add the Supabase callback URL displayed on that provider page to the Google
    OAuth client.
 
-The dashboard requires a valid Supabase session. Products and shopping items are shared within a household. Recipes, cooking history, and preferences belong to the signed-in user. Household invitations create a link for the specified email; Fridgy does not send invitation emails yet. Manual receipts add products to the shared inventory. Photo/PDF scanning is not connected.
+The dashboard requires a valid Supabase session. Products, shopping items, recipes, favorites, and cooking history are shared within a household. Diet and other preferences belong to the signed-in user. Household invitations create a link for the specified email; Fridgy does not send invitation emails yet. Receipt scans analyze images, and confirmed products are added to the shared inventory without storing the receipt.
 
 ## Checks
 

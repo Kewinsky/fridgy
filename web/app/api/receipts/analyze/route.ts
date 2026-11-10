@@ -31,10 +31,6 @@ export async function POST(request: Request) {
   const mime = contentTypes[file.name.split(".").pop()?.toLowerCase() ?? ""];
   if (!mime) return Response.json({ error: "invalidFile" }, { status: 400 });
 
-  const { data: reserved, error: quotaError } = await supabase.rpc("reserve_fridgy_receipt_scan");
-  if (quotaError) return Response.json({ error: "unavailable" }, { status: 503 });
-  if (!reserved) return Response.json({ error: "scanLimit" }, { status: 429 });
-
   try {
     const items = await requestReceiptItems(key, Buffer.from(await file.arrayBuffer()), mime);
     if (!items.length) return Response.json({ error: "noProducts" }, { status: 422 });

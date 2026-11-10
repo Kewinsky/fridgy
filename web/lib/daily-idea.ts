@@ -13,14 +13,14 @@ export async function getDailyIdea(dashboard: DashboardData, locale: Locale): Pr
   const supabase = await createClient();
   // shortcut: daily ideas use Warsaw time until user time zones are stored.
   const date = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Warsaw" });
-  const target = { user_id: dashboard.userId, household_id: dashboard.householdId, idea_date: date };
+  const target = { household_id: dashboard.householdId, idea_date: date };
   const { data: existing, error: readError } = await supabase.from("daily_recipe_ideas")
     .select("status,recipe_slug,reserved_at").match(target).maybeSingle();
   if (readError) return { status: "unavailable" };
   if (existing) {
     if (existing.status === "pending" && Date.now() - new Date(existing.reserved_at).getTime() > 120_000) return { status: "failed" };
     if (existing.status !== "ready") return { status: existing.status === "pending" ? "pending" : "failed" };
-    const recipe = dashboard.recipes.find((item) => item.slug === existing.recipe_slug && item.createdBy === dashboard.userId);
+    const recipe = dashboard.recipes.find((item) => item.slug === existing.recipe_slug);
     return recipe ? { status: "ready", recipe } : { status: "unavailable" };
   }
 

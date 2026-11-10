@@ -807,8 +807,7 @@
       "fileTooLarge": "The image can be up to {maxMb} MB.",
       "analysisFailed": "Could not read the receipt. Try a clearer photo.",
       "noProducts": "No products were found in the photo. Try again or add them manually.",
-      "unavailable": "Receipt scanning is temporarily unavailable.",
-      "scanLimit": "Scan limit reached. Try again in an hour."
+      "unavailable": "Receipt scanning is temporarily unavailable."
     },
     "analysis": {
       "title": "Preparing products",
