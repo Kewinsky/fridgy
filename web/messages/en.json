@@ -471,6 +471,7 @@
       "emptyInventory": "You have no available stock. Add products or allow shopping to generate recipes.",
       "noMatches": "No recipe matched your requirements. Please try again.",
       "notEnoughSuggestions": "After checking the time, cuisine, allergies and available ingredients, we could not find 3 distinct recipes. Try more time, more cuisines or allow shopping.",
+      "priorityUnavailable": "Some selected products are no longer available or their estimated use-by date has passed. Change your answers and select them again.",
       "failed": "We could not save the recipes. Please try again."
     },
     "questionProgress": "Question {number} of 4",
@@ -484,6 +485,10 @@
     },
     "optional": {
       "title": "More preferences (optional)",
+      "priorityTitle": "Which products would you like to use?",
+      "priorityHint": "Choose up to 10 products. Those with the nearest dates come first. AI will use them when they fit a good dish. Check each product and its date.",
+      "priorityCount": "Selected: {count}/10",
+      "priorityEmpty": "No available products to choose from.",
       "notesLabel": "Anything else we should know?",
       "notesPlaceholder": "For example, no spicy food, something for kids, or use broccoli",
       "notesHint": "Your notes shape the generated suggestions.",

@@ -471,6 +471,7 @@
       "emptyInventory": "Nie masz dostępnych zapasów. Dodaj produkty albo pozwól na zakupy, aby wygenerować przepisy.",
       "noMatches": "Nie udało się znaleźć przepisu zgodnego z Twoimi ograniczeniami. Spróbuj ponownie.",
       "notEnoughSuggestions": "Po sprawdzeniu czasu, kuchni, alergii i dostępnych składników nie udało się zebrać 3 różnych przepisów. Możesz wydłużyć czas, wybrać więcej kuchni lub pozwolić na zakupy.",
+      "priorityUnavailable": "Wybrane produkty nie są już dostępne albo minął ich szacowany termin. Zmień odpowiedzi i wybierz je ponownie.",
       "failed": "Nie udało się zapisać przepisów. Spróbuj ponownie."
     },
     "questionProgress": "Pytanie {number} z 4",
@@ -484,6 +485,10 @@
     },
     "optional": {
       "title": "Dodatkowe preferencje (opcjonalnie)",
+      "priorityTitle": "Które produkty chcesz wykorzystać?",
+      "priorityHint": "Wybierz do 10 produktów. Te z bliskim terminem są na górze. AI uwzględni je, jeśli pasują do sensownego dania. Sprawdź termin i stan produktu.",
+      "priorityCount": "Wybrano: {count}/10",
+      "priorityEmpty": "Brak dostępnych produktów do wyboru.",
       "notesLabel": "Masz dodatkowe uwagi?",
       "notesPlaceholder": "Np. bez ostrych przypraw, coś dla dzieci albo wykorzystaj brokuły",
       "notesHint": "Uwagi wpływają na generowane propozycje.",

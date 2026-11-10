@@ -46,3 +46,8 @@ export function getFreshnessStatus(estimatedUseBy: string, now = new Date()): Fr
   if (daysLeft <= 7) return "week";
   return "calm";
 }
+
+export function isPrioritizableProduct(product: DemoProduct, now = new Date()) {
+  return product.status === "active" && product.quantity > 0
+    && getFreshnessStatus(product.estimatedUseBy, now) !== "overdue";
+}

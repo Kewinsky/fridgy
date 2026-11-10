@@ -4,7 +4,7 @@ import { z } from "zod";
 
 import { createClient } from "@/lib/supabase/server";
 import { productFromRow, productToRow } from "@/lib/dashboard-data";
-import type { DemoProduct } from "@/lib/demo-data";
+import { isPrioritizableProduct, type DemoProduct } from "@/lib/demo-data";
 import type { ShoppingItem } from "@/lib/shopping-list";
 import type { CustomRecipe } from "@/lib/recipe-library";
 import { validateCustomRecipe } from "@/lib/recipe-store";
@@ -156,6 +156,10 @@ export async function generateRecipes(input: GenerationInput, expectedHouseholdI
   const { supabase, userId, householdId } = await authorizedClient(expectedHouseholdId);
   const dashboard = await loadDashboardData(supabase, userId);
   if (dashboard.householdId !== expectedHouseholdId) throw new Error("Active household changed. Refresh and try again.");
+  const selectable = new Set(dashboard.products.filter((product) => isPrioritizableProduct(product)).map((product) => product.id));
+  if (validInput.priorityProductIds.some((id) => !selectable.has(id))) {
+    return { error: "priorityUnavailable" as const };
+  }
   const key = process.env.OPENAI_API_KEY;
   if (!key) return { error: "unavailable" as const };
   if (validInput.shopping === "none" && !dashboard.products.some((product) => product.status === "active" && product.quantity > 0)) {

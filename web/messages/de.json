@@ -471,6 +471,7 @@
       "emptyInventory": "Du hast keine verfügbaren Vorräte. Füge Produkte hinzu oder erlaube Einkäufe.",
       "noMatches": "Kein Rezept erfüllt deine Vorgaben. Versuche es erneut.",
       "notEnoughSuggestions": "Nach Prüfung von Zeit, Küche, Allergien und Vorräten wurden keine 3 unterschiedlichen Rezepte gefunden. Wähle mehr Zeit oder Küchen oder erlaube Einkäufe.",
+      "priorityUnavailable": "Einige ausgewählte Produkte sind nicht mehr verfügbar oder ihr geschätztes Verbrauchsdatum ist abgelaufen. Ändere deine Antworten und wähle sie erneut aus.",
       "failed": "Die Rezepte konnten nicht gespeichert werden. Versuche es erneut."
     },
     "questionProgress": "Frage {number} von 4",
@@ -484,6 +485,10 @@
     },
     "optional": {
       "title": "Weitere Wünsche (optional)",
+      "priorityTitle": "Welche Produkte möchtest du verwenden?",
+      "priorityHint": "Wähle bis zu 10 Produkte. Die mit dem nächsten Datum stehen oben. Die KI nutzt sie, wenn sie zu einem guten Gericht passen. Prüfe Datum und Zustand der Produkte.",
+      "priorityCount": "Ausgewählt: {count}/10",
+      "priorityEmpty": "Keine verfügbaren Produkte zur Auswahl.",
       "notesLabel": "Hast du weitere Wünsche?",
       "notesPlaceholder": "Zum Beispiel nicht scharf, etwas für Kinder oder Brokkoli verwenden",
       "notesHint": "Deine Angaben beeinflussen die Vorschläge.",

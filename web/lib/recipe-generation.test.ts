@@ -52,6 +52,18 @@ test("sends form answers and current stock to the model context", () => {
   assert.deepEqual(context.inventory, [{ name: "Marchew", quantity: 0.5, unit: "kg" }]);
   assert.equal(context.diet, "vegan");
   assert.equal(context.allergies, "milk,eggs");
+  assert.deepEqual(context.priorityProducts, []);
+});
+
+test("sends selected stock as a soft priority even when it follows the first 100 products", () => {
+  const selectedId = "3798a119-c64c-4a90-8a3b-aa0dfb2d62ba";
+  const selected = { ...products[0], id: selectedId, name: "Brokuły", estimatedUseBy: "2099-01-01" };
+  const stock = [...Array.from({ length: 100 }, (_, index) => ({ ...products[0], id: String(index), name: `Produkt ${index}` })), selected];
+  const chosen = generationInputSchema.parse({ ...input, priorityProductIds: [selectedId] });
+  const context = generationContext(chosen, stock, { diet: "none", allergies: "", excludedIngredients: "" }, []);
+  assert.equal(context.inventory[0].name, "Brokuły");
+  assert.deepEqual(context.priorityProducts, [{ name: "Brokuły", quantity: 0.5, unit: "kg", estimatedUseBy: "2099-01-01" }]);
+  assert.equal(generationInputSchema.safeParse({ ...input, priorityProductIds: [selectedId, selectedId] }).success, false);
 });
 
 test("rejects suggestions that exceed time, shopping or excluded ingredient limits", () => {
@@ -122,6 +134,7 @@ test("requests structured recipes and reads the model response", async () => {
     assert.match(body.instructions, /totals for all requested servings/);
     assert.match(body.instructions, /per serving/);
     assert.match(body.instructions, /inventory is a set of available options/);
+    assert.match(body.instructions, /Priority products are a soft preference/);
     assert.match(body.instructions, /Start from a known dish/);
     assert.match(body.instructions, /Tap water is always available/);
     assert.equal(body.store, false);

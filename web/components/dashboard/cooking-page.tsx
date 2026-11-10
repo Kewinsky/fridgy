@@ -16,6 +16,7 @@ import type { StoredRecipe } from "@/lib/recipe-library";
 import type { Locale } from "@/i18n/config";
 import { cuisineMessageKeys, cuisines as recipeCuisines, type Cuisine } from "@/components/dashboard/recipe-options";
 import { cn } from "@/lib/utils";
+import { getFreshnessStatus, isPrioritizableProduct } from "@/lib/demo-data";
 
 const meals = ["breakfast", "lunch", "dinner", "snack", "dessert", "soup"] as const;
 const times = ["15", "30", "60", "any"] as const;
@@ -25,22 +26,27 @@ const maxNotesLength = 500;
 export function CookingPage() {
   const t = useTranslations("Cooking");
   const recipeT = useTranslations("Recipe.cuisineOptions");
+  const freshnessT = useTranslations("Inventory.freshness");
   const locale = useLocale() as Locale;
-  const { addRecipes, householdId } = useDashboardData();
+  const { addRecipes, householdId, products } = useDashboardData();
   const [meal, setMeal] = useState<(typeof meals)[number]>("lunch");
   const [time, setTime] = useState<(typeof times)[number]>("30");
   const [servings, setServings] = useState(2);
   const [selectedCuisines, setSelectedCuisines] = useState<Cuisine[]>([]);
   const [shopping, setShopping] = useState<(typeof shoppingOptions)[number]>("two");
   const [savedRecipes, setSavedRecipes] = useState<(typeof savedRecipeOptions)[number]>("include");
+  const [priorityProductIds, setPriorityProductIds] = useState<string[]>([]);
   const [notes, setNotes] = useState("");
   const [showRecipes, setShowRecipes] = useState(false);
   const [recipes, setRecipes] = useState<StoredRecipe[]>([]);
-  const [error, setError] = useState<"unavailable" | "emptyInventory" | "noMatches" | "notEnoughSuggestions" | "failed" | null>(null);
+  const [error, setError] = useState<"unavailable" | "emptyInventory" | "noMatches" | "notEnoughSuggestions" | "priorityUnavailable" | "failed" | null>(null);
   const [partial, setPartial] = useState(false);
   const [aiMessage, setAiMessage] = useState<string | null>(null);
   const [loadingPhase, setLoadingPhase] = useState<"initial" | "more" | null>(null);
   const pending = useRef(false);
+  const selectableProducts = products
+    .filter((product) => isPrioritizableProduct(product))
+    .sort((a, b) => a.estimatedUseBy.localeCompare(b.estimatedUseBy) || a.name.localeCompare(b.name, locale));
 
   async function requestSuggestions(more: boolean) {
     if (pending.current) return;
@@ -52,7 +58,7 @@ export function CookingPage() {
     setAiMessage(null);
     try {
       const result = await generateRecipes({
-        meal, servings, time, shopping, cuisines: selectedCuisines, savedRecipes, notes, locale,
+        meal, servings, time, shopping, cuisines: selectedCuisines, savedRecipes, priorityProductIds, notes, locale,
         excludeTitles: more ? recipes.slice(-100).map((recipe) => recipe.title) : [],
       }, householdId);
       if (result.error) {
@@ -206,6 +212,42 @@ export function CookingPage() {
               <div>
                 <h2 className="mb-3 font-bold">{t("questions.saved")}</h2>
                 <Chips options={savedRecipeOptions} value={savedRecipes} onChange={setSavedRecipes} getLabel={(value) => t(`options.saved.${value}`)} label={t("questions.saved")} />
+              </div>
+              <div>
+                <h2 className="font-bold">{t("optional.priorityTitle")}</h2>
+                <p className="mt-1 text-sm text-muted-foreground">{t("optional.priorityHint")}</p>
+                {selectableProducts.length ? (
+                  <>
+                    <p className="mt-3 text-xs text-muted-foreground">{t("optional.priorityCount", { count: priorityProductIds.length })}</p>
+                    <div role="group" aria-label={t("optional.priorityTitle")} className="mt-2 grid max-h-64 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
+                      {selectableProducts.map((product) => {
+                        const selected = priorityProductIds.includes(product.id);
+                        const freshness = getFreshnessStatus(product.estimatedUseBy);
+                        return (
+                          <Button
+                            key={product.id}
+                            type="button"
+                            variant={selected ? "secondary" : "outline"}
+                            aria-pressed={selected}
+                            disabled={!selected && priorityProductIds.length >= 10}
+                            onClick={() => setPriorityProductIds((current) => current.includes(product.id)
+                              ? current.filter((id) => id !== product.id) : [...current, product.id])}
+                            className={cn("h-auto min-h-14 justify-start gap-2 px-3 py-2 text-left whitespace-normal", selected && "border-primary text-primary")}
+                          >
+                            <span className="flex size-5 shrink-0 items-center justify-center rounded border border-current/40">
+                              {selected ? <CheckIcon className="size-4" aria-hidden="true" /> : null}
+                            </span>
+                            <span className="min-w-0 flex-1">
+                              <span className="block break-words font-semibold">{product.name}</span>
+                              <span className="block text-xs text-muted-foreground">{product.quantity} {product.unit}</span>
+                            </span>
+                            {freshness !== "calm" ? <span className="shrink-0 rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">{freshnessT(freshness)}</span> : null}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : <p className="mt-3 text-sm text-muted-foreground">{t("optional.priorityEmpty")}</p>}
               </div>
               <div>
                 <label htmlFor="cooking-notes" className="mb-3 block font-bold">{t("optional.notesLabel")}</label>

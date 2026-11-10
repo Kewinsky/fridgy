@@ -471,6 +471,7 @@
       "emptyInventory": "Vous n'avez aucun produit disponible. Ajoutez des produits ou autorisez les achats.",
       "noMatches": "Aucune recette ne respecte vos critères. Réessayez.",
       "notEnoughSuggestions": "Après vérification du temps, de la cuisine, des allergies et du stock, nous n'avons pas trouvé 3 recettes différentes. Essayez plus de temps, plus de cuisines ou autorisez les achats.",
+      "priorityUnavailable": "Certains produits sélectionnés ne sont plus disponibles ou leur date estimée est dépassée. Modifiez vos réponses et sélectionnez-les à nouveau.",
       "failed": "Les recettes n'ont pas pu être enregistrées. Réessayez."
     },
     "questionProgress": "Question {number} sur 4",
@@ -484,6 +485,10 @@
     },
     "optional": {
       "title": "Autres préférences (facultatif)",
+      "priorityTitle": "Quels produits souhaitez-vous utiliser ?",
+      "priorityHint": "Choisissez jusqu'à 10 produits. Les dates les plus proches sont en haut. L'IA les utilisera s'ils conviennent à un bon plat. Vérifiez la date et l'état de chaque produit.",
+      "priorityCount": "Sélectionnés : {count}/10",
+      "priorityEmpty": "Aucun produit disponible à sélectionner.",
       "notesLabel": "Avez-vous d'autres souhaits ?",
       "notesPlaceholder": "Par exemple, pas épicé, pour les enfants ou utiliser du brocoli",
       "notesHint": "Vos remarques influencent les suggestions générées.",
