@@ -343,6 +343,14 @@
     "edit": "Edytuj",
     "selectProduct": "Zaznacz {name}",
     "productCount": "{count, plural, one {# produkt} few {# produkty} other {# produktów}}",
+    "pagination": {
+      "rowsPerPage": "Na stronie",
+      "range": "{start}–{end} z {count}",
+      "navigation": "Strony zapasów",
+      "page": "Strona {page} z {pages}",
+      "previous": "Poprzednia strona",
+      "next": "Następna strona"
+    },
     "locations": {
       "fridge": "Lodówka",
       "freezer": "Zamrażarka",
@@ -380,12 +388,16 @@
       "label": "Filtry zapasów",
       "location": "Miejsce",
       "category": "Kategoria",
-      "freshness": "Termin"
+      "freshness": "Termin",
+      "searchCategory": "Szukaj kategorii",
+      "noCategory": "Nie znaleziono kategorii",
+      "clear": "Wyczyść filtry",
+      "remove": "Usuń filtr {name}"
     },
     "bulk": {
       "label": "Akcje zbiorcze",
       "selected": "Zaznaczono: {count}",
-      "selectAll": "Zaznacz wszystkie",
+      "selectAll": "Zaznacz wszystkie na tej stronie",
       "consumed": "Oznacz jako zużyte",
       "moveTo": "Przenieś do"
     },

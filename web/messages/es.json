@@ -343,6 +343,14 @@
     "edit": "Editar",
     "selectProduct": "Select {name}",
     "productCount": "{count, plural, one {# product} other {# products}}",
+    "pagination": {
+      "rowsPerPage": "Por página",
+      "range": "{start}–{end} de {count}",
+      "navigation": "Páginas del inventario",
+      "page": "Página {page} de {pages}",
+      "previous": "Página anterior",
+      "next": "Página siguiente"
+    },
     "locations": {
       "fridge": "Nevera",
       "freezer": "Congelador",
@@ -380,12 +388,16 @@
       "label": "Filtros de provisiones",
       "location": "Lugar",
       "category": "Categoría",
-      "freshness": "Caducidad"
+      "freshness": "Caducidad",
+      "searchCategory": "Buscar categorías",
+      "noCategory": "No se encontraron categorías",
+      "clear": "Borrar filtros",
+      "remove": "Quitar filtro {name}"
     },
     "bulk": {
       "label": "Bulk actions",
       "selected": "Selected: {count}",
-      "selectAll": "Select all",
+      "selectAll": "Seleccionar todos en esta página",
       "consumed": "Mark as used",
       "moveTo": "Move to"
     },

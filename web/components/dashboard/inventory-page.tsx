@@ -1,11 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import {
   CheckCheckIcon,
+  CheckIcon,
   ChefHatIcon,
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
   PackageIcon,
   PencilIcon,
   SearchIcon,
@@ -15,21 +19,16 @@ import {
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/dashboard/page-header";
-import {
-  FilterBadgeGroup,
-  type FilterBadgeOption,
-} from "@/components/dashboard/filter-badge-group";
 import { FreshnessLabel } from "@/components/dashboard/freshness-label";
 import {
   productCategories,
-  productCategoryAppearance,
   productCategoryMessageKeys,
+  type ProductCategory,
 } from "@/components/dashboard/product-category-options";
 import { ProductEditDialog } from "@/components/dashboard/product-edit-dialog";
 import { ProductVisual } from "@/components/dashboard/product-visual";
 import {
   StorageLocationIcon,
-  storageLocationEmojis,
   storageLocationMessageKeys,
 } from "@/components/dashboard/storage-location-icon";
 import { Button } from "@/components/ui/button";
@@ -46,9 +45,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
-  getFreshnessStatus,
   type DemoProduct,
   type FreshnessStatus,
   type StorageLocation,
@@ -60,10 +59,11 @@ import {
   type InventoryAction,
 } from "@/lib/inventory-actions";
 import { cn } from "@/lib/utils";
+import { paginate } from "@/lib/pagination";
+import { matchesInventoryFilters } from "@/lib/inventory-filters";
 
-type LocationFilter = "Wszystkie" | StorageLocation;
-type CategoryFilter = "Wszystkie" | (typeof productCategories)[number];
-type FreshnessFilter = "all" | FreshnessStatus;
+const locations = ["Lodówka", "Zamrażarka", "Spiżarnia"] as const;
+const freshnessOptions = ["overdue", "today", "soon", "week", "calm"] as const;
 
 export function InventoryPage() {
   const t = useTranslations("Inventory");
@@ -72,44 +72,25 @@ export function InventoryPage() {
   const products = useInventory();
   const { updateInventory } = useInventoryActions();
   const [query, setQuery] = useState("");
-  const [location, setLocation] = useState<LocationFilter>("Wszystkie");
-  const [category, setCategory] = useState<CategoryFilter>("Wszystkie");
-  const [freshness, setFreshness] = useState<FreshnessFilter>("all");
+  const [selectedLocations, setSelectedLocations] = useState<StorageLocation[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<ProductCategory[]>([]);
+  const [selectedFreshness, setSelectedFreshness] = useState<FreshnessStatus[]>([]);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [tableLoading, setTableLoading] = useState(process.env.NODE_ENV === "development");
+  const listRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!tableLoading) return;
     const timer = window.setTimeout(() => setTableLoading(false), 900);
     return () => window.clearTimeout(timer);
   }, [tableLoading]);
-  const locationFilters: FilterBadgeOption<LocationFilter>[] = [
-    { value: "Wszystkie", label: t("all") },
-    ...(["Lodówka", "Zamrażarka", "Spiżarnia"] as const).map((value) => ({
-      value,
-      label: t(`locations.${storageLocationMessageKeys[value]}`),
-      emoji: storageLocationEmojis[value],
-    })),
-  ];
-  const categoryFilters: FilterBadgeOption<CategoryFilter>[] = [
-    { value: "Wszystkie", label: t("all") },
-    ...productCategories.map((value) => ({
-      value,
-      label: t(`categories.${productCategoryMessageKeys[value]}`),
-      emoji: productCategoryAppearance[value].emoji,
-      className: productCategoryAppearance[value].className,
-    })),
-  ];
-  const freshnessFilters: FilterBadgeOption<FreshnessFilter>[] = [
-    { value: "all", label: t("all") },
-    { value: "overdue", label: t("freshness.overdue"), emoji: "⛔" },
-    { value: "today", label: t("freshness.today"), emoji: "🔥" },
-    { value: "soon", label: t("freshness.soon"), emoji: "⏳" },
-    { value: "week", label: t("freshness.week"), emoji: "🗓️" },
-    { value: "calm", label: t("freshness.calm"), emoji: "🌿" },
-  ];
+  const locationFilters = locations.map((value) => ({ value, label: t(`locations.${storageLocationMessageKeys[value]}`) }));
+  const categoryFilters = productCategories.map((value) => ({ value, label: t(`categories.${productCategoryMessageKeys[value]}`) }));
+  const freshnessFilters = freshnessOptions.map((value) => ({ value, label: t(`freshness.${value}`) }));
   const activeProducts = products.filter(
     (product) => product.status === "active",
   );
@@ -117,17 +98,42 @@ export function InventoryPage() {
     const normalizedQuery = query.trim().toLocaleLowerCase(locale);
     return products.filter(
       (product) =>
-        product.status === "active" &&
-        (location === "Wszystkie" || product.storageLocation === location) &&
-        (category === "Wszystkie" || product.category === category) &&
-        (freshness === "all" ||
-          getFreshnessStatus(product.estimatedUseBy) === freshness) &&
+        matchesInventoryFilters(product, selectedLocations, selectedCategories, selectedFreshness) &&
         localizeDemoProduct(product, locale).name.toLocaleLowerCase(locale).includes(normalizedQuery),
     );
-  }, [category, freshness, locale, location, products, query]);
+  }, [locale, products, query, selectedCategories, selectedFreshness, selectedLocations]);
+  const { items: visibleProducts, page: currentPage, pageCount, start, end } = paginate(filtered, page, pageSize);
   const allVisibleSelected =
-    filtered.length > 0 &&
-    filtered.every((product) => selectedIds.has(product.id));
+    visibleProducts.length > 0 &&
+    visibleProducts.every((product) => selectedIds.has(product.id));
+
+  function goToPage(nextPage: number) {
+    setPage(nextPage);
+    listRef.current?.scrollIntoView({ block: "start" });
+  }
+
+  function toggleLocation(value: StorageLocation) {
+    setSelectedLocations((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+    setPage(1);
+  }
+
+  function toggleCategory(value: ProductCategory) {
+    setSelectedCategories((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+    setPage(1);
+  }
+
+  function toggleFreshness(value: FreshnessStatus) {
+    setSelectedFreshness((current) => current.includes(value) ? current.filter((item) => item !== value) : [...current, value]);
+    setPage(1);
+  }
+
+  function clearFilters() {
+    setQuery("");
+    setSelectedLocations([]);
+    setSelectedCategories([]);
+    setSelectedFreshness([]);
+    setPage(1);
+  }
 
   function toggleEditing() {
     setEditing((current) => !current);
@@ -147,8 +153,8 @@ export function InventoryPage() {
     setSelectedIds((current) => {
       const next = new Set(current);
       if (allVisibleSelected)
-        filtered.forEach((product) => next.delete(product.id));
-      else filtered.forEach((product) => next.add(product.id));
+        visibleProducts.forEach((product) => next.delete(product.id));
+      else visibleProducts.forEach((product) => next.add(product.id));
       return next;
     });
   }
@@ -226,31 +232,24 @@ export function InventoryPage() {
           />
           <Input
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
+            onChange={(event) => { setQuery(event.target.value); setPage(1); }}
             placeholder={t("searchPlaceholder")}
             className="h-11 pl-10"
           />
         </label>
-        <div className="mt-2 grid divide-y divide-border xl:grid-cols-3 xl:divide-x xl:divide-y-0">
-          <FilterBadgeGroup
-            label={t("filters.location")}
-            options={locationFilters}
-            value={location}
-            onChange={setLocation}
-          />
-          <FilterBadgeGroup
-            label={t("filters.category")}
-            options={categoryFilters}
-            value={category}
-            onChange={setCategory}
-          />
-          <FilterBadgeGroup
-            label={t("filters.freshness")}
-            options={freshnessFilters}
-            value={freshness}
-            onChange={setFreshness}
-          />
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <InventoryFilter label={t("filters.location")} allLabel={t("all")} options={locationFilters} selected={selectedLocations} onToggle={toggleLocation} />
+          <InventoryFilter label={t("filters.category")} allLabel={t("all")} options={categoryFilters} selected={selectedCategories} onToggle={toggleCategory} searchPlaceholder={t("filters.searchCategory")} emptyLabel={t("filters.noCategory")} />
+          <InventoryFilter label={t("filters.freshness")} allLabel={t("all")} options={freshnessFilters} selected={selectedFreshness} onToggle={toggleFreshness} />
         </div>
+        {query || selectedLocations.length || selectedCategories.length || selectedFreshness.length ? (
+          <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+            {selectedLocations.map((value) => <FilterChip key={value} label={`${t("filters.location")}: ${t(`locations.${storageLocationMessageKeys[value]}`)}`} onRemove={() => toggleLocation(value)} />)}
+            {selectedCategories.map((value) => <FilterChip key={value} label={`${t("filters.category")}: ${t(`categories.${productCategoryMessageKeys[value]}`)}`} onRemove={() => toggleCategory(value)} />)}
+            {selectedFreshness.map((value) => <FilterChip key={value} label={`${t("filters.freshness")}: ${t(`freshness.${value}`)}`} onRemove={() => toggleFreshness(value)} />)}
+            <Button variant="ghost" className="h-11 text-sm" onClick={clearFilters}>{t("filters.clear")}</Button>
+          </div>
+        ) : null}
       </section>
 
       {editing ? (
@@ -325,12 +324,12 @@ export function InventoryPage() {
         </section>
       ) : null}
 
-      <section className="app-card px-5" aria-busy={tableLoading}>
+      <section ref={listRef} className="app-card px-5" aria-busy={tableLoading}>
         <div className="flex items-center justify-between border-b border-border py-4">
           <h2 className="flex flex-wrap items-baseline gap-x-2 font-extrabold">
-            {location === "Wszystkie"
-              ? t("all")
-              : t(`locations.${storageLocationMessageKeys[location]}`)}
+            {selectedLocations.length === 1
+              ? t(`locations.${storageLocationMessageKeys[selectedLocations[0]]}`)
+              : t("title")}
             <span className="text-xs font-normal text-muted-foreground">
               ({t("productCount", { count: filtered.length })})
             </span>
@@ -351,7 +350,7 @@ export function InventoryPage() {
         {tableLoading ? (
           <InventoryTableSkeleton />
         ) : filtered.length ? (
-          filtered.map((product) =>
+          visibleProducts.map((product) =>
             editing ? (
               <label
                 key={product.id}
@@ -395,6 +394,36 @@ export function InventoryPage() {
             </p>
           </div>
         )}
+        {filtered.length > 0 && !tableLoading ? (
+          <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border py-4 text-sm">
+            <div className="flex items-center gap-3">
+              <span className="text-muted-foreground">{t("pagination.rowsPerPage")}</span>
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  aria-label={t("pagination.rowsPerPage")}
+                  render={<Button variant="outline" className="h-11 min-w-20 justify-between">{pageSize}<ChevronDownIcon aria-hidden="true" /></Button>}
+                />
+                <DropdownMenuContent align="start" className="min-w-20">
+                  {[10, 20, 30].map((size) => (
+                    <DropdownMenuItem key={size} onClick={() => { setPageSize(size); goToPage(1); }}>
+                      {size} {size === pageSize ? <CheckIcon className="ml-auto size-4" aria-hidden="true" /> : null}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <span className="text-muted-foreground">{t("pagination.range", { start, end, count: filtered.length })}</span>
+            </div>
+            <nav aria-label={t("pagination.navigation")} className="flex items-center gap-2">
+              <Button variant="outline" size="icon-lg" aria-label={t("pagination.previous")} disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)}>
+                <ChevronLeftIcon aria-hidden="true" />
+              </Button>
+              <span className="min-w-24 text-center font-semibold tabular-nums">{t("pagination.page", { page: currentPage, pages: pageCount })}</span>
+              <Button variant="outline" size="icon-lg" aria-label={t("pagination.next")} disabled={currentPage === pageCount} onClick={() => goToPage(currentPage + 1)}>
+                <ChevronRightIcon aria-hidden="true" />
+              </Button>
+            </nav>
+          </div>
+        ) : null}
       </section>
 
       {productToEdit ? (
@@ -406,6 +435,71 @@ export function InventoryPage() {
         />
       ) : null}
     </>
+  );
+}
+
+function InventoryFilter<T extends string>({
+  label,
+  allLabel,
+  options,
+  selected,
+  onToggle,
+  searchPlaceholder,
+  emptyLabel,
+}: {
+  label: string;
+  allLabel: string;
+  options: readonly { value: T; label: string }[];
+  selected: readonly T[];
+  onToggle: (value: T) => void;
+  searchPlaceholder?: string;
+  emptyLabel?: string;
+}) {
+  const [search, setSearch] = useState("");
+  const visibleOptions = options.filter((option) => option.label.toLocaleLowerCase().includes(search.trim().toLocaleLowerCase()));
+
+  return (
+    <Popover onOpenChange={(open) => { if (!open) setSearch(""); }}>
+      <PopoverTrigger render={
+        <Button type="button" variant="outline" className="h-11 w-full justify-between px-3 font-normal" aria-label={`${label}: ${selected.length || allLabel}`}>
+          <span className="truncate">{label}</span>
+          <span className="ml-auto rounded-md bg-secondary px-2 py-1 text-xs font-semibold text-primary">{selected.length || allLabel}</span>
+          <ChevronDownIcon className="size-4 text-muted-foreground" aria-hidden="true" />
+        </Button>
+      } />
+      <PopoverContent align="start" className="w-72 max-w-[calc(100vw-2rem)] p-2">
+        {searchPlaceholder ? <Input value={search} onChange={(event) => setSearch(event.target.value)} placeholder={searchPlaceholder} aria-label={searchPlaceholder} className="mb-2 h-10" /> : null}
+        <div role="group" aria-label={label} className="max-h-64 overflow-y-auto">
+          {visibleOptions.length ? visibleOptions.map((option) => {
+            const checked = selected.includes(option.value);
+            return (
+              <button
+                key={option.value}
+                type="button"
+                role="checkbox"
+                aria-checked={checked}
+                onClick={() => onToggle(option.value)}
+                className="flex min-h-11 w-full items-center gap-3 rounded-md px-2 text-left text-sm hover:bg-accent focus-visible:outline-2 focus-visible:outline-ring"
+              >
+                <span className={cn("flex size-5 shrink-0 items-center justify-center rounded border", checked ? "border-primary bg-primary text-primary-foreground" : "border-input")}>
+                  {checked ? <CheckIcon className="size-3.5" aria-hidden="true" /> : null}
+                </span>
+                <span>{option.label}</span>
+              </button>
+            );
+          }) : <p className="px-2 py-3 text-sm text-muted-foreground">{emptyLabel}</p>}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+function FilterChip({ label, onRemove }: { label: string; onRemove: () => void }) {
+  const t = useTranslations("Inventory.filters");
+  return (
+    <Button type="button" variant="secondary" className="min-h-11 max-w-full rounded-full px-3 text-left text-xs whitespace-normal" aria-label={t("remove", { name: label })} onClick={onRemove}>
+      {label} <XIcon className="size-3.5" aria-hidden="true" />
+    </Button>
   );
 }
 

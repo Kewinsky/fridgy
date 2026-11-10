@@ -343,6 +343,14 @@
     "edit": "Modifier",
     "selectProduct": "Select {name}",
     "productCount": "{count, plural, one {# product} other {# products}}",
+    "pagination": {
+      "rowsPerPage": "Par page",
+      "range": "{start}–{end} sur {count}",
+      "navigation": "Pages des réserves",
+      "page": "Page {page} sur {pages}",
+      "previous": "Page précédente",
+      "next": "Page suivante"
+    },
     "locations": {
       "fridge": "Réfrigérateur",
       "freezer": "Congélateur",
@@ -380,12 +388,16 @@
       "label": "Filtres des provisions",
       "location": "Emplacement",
       "category": "Catégorie",
-      "freshness": "Date limite"
+      "freshness": "Date limite",
+      "searchCategory": "Rechercher une catégorie",
+      "noCategory": "Aucune catégorie trouvée",
+      "clear": "Effacer les filtres",
+      "remove": "Supprimer le filtre {name}"
     },
     "bulk": {
       "label": "Bulk actions",
       "selected": "Selected: {count}",
-      "selectAll": "Select all",
+      "selectAll": "Tout sélectionner sur cette page",
       "consumed": "Mark as used",
       "moveTo": "Move to"
     },

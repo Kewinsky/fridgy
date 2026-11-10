@@ -343,6 +343,14 @@
     "edit": "Edit",
     "selectProduct": "Select {name}",
     "productCount": "{count, plural, one {# product} other {# products}}",
+    "pagination": {
+      "rowsPerPage": "Per page",
+      "range": "{start}–{end} of {count}",
+      "navigation": "Inventory pages",
+      "page": "Page {page} of {pages}",
+      "previous": "Previous page",
+      "next": "Next page"
+    },
     "locations": {
       "fridge": "Fridge",
       "freezer": "Freezer",
@@ -380,12 +388,16 @@
       "label": "Inventory filters",
       "location": "Location",
       "category": "Category",
-      "freshness": "Use-by date"
+      "freshness": "Use-by date",
+      "searchCategory": "Search categories",
+      "noCategory": "No categories found",
+      "clear": "Clear filters",
+      "remove": "Remove {name} filter"
     },
     "bulk": {
       "label": "Bulk actions",
       "selected": "Selected: {count}",
-      "selectAll": "Select all",
+      "selectAll": "Select all on this page",
       "consumed": "Mark as used",
       "moveTo": "Move to"
     },

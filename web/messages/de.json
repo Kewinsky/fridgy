@@ -343,6 +343,14 @@
     "edit": "Bearbeiten",
     "selectProduct": "Select {name}",
     "productCount": "{count, plural, one {# product} other {# products}}",
+    "pagination": {
+      "rowsPerPage": "Pro Seite",
+      "range": "{start}–{end} von {count}",
+      "navigation": "Vorratsseiten",
+      "page": "Seite {page} von {pages}",
+      "previous": "Vorherige Seite",
+      "next": "Nächste Seite"
+    },
     "locations": {
       "fridge": "Kühlschrank",
       "freezer": "Gefrierschrank",
@@ -380,12 +388,16 @@
       "label": "Vorratsfilter",
       "location": "Ort",
       "category": "Kategorie",
-      "freshness": "Haltbarkeit"
+      "freshness": "Haltbarkeit",
+      "searchCategory": "Kategorien suchen",
+      "noCategory": "Keine Kategorien gefunden",
+      "clear": "Filter löschen",
+      "remove": "Filter {name} entfernen"
     },
     "bulk": {
       "label": "Bulk actions",
       "selected": "Selected: {count}",
-      "selectAll": "Select all",
+      "selectAll": "Alle auf dieser Seite auswählen",
       "consumed": "Mark as used",
       "moveTo": "Move to"
     },
