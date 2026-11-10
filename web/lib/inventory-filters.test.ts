@@ -19,4 +19,7 @@ test("matches any selected value within a filter and every active filter group",
 test("empty selections show active products only", () => {
   assert.equal(matchesInventoryFilters(product, [], [], []), true);
   assert.equal(matchesInventoryFilters({ ...product, status: "consumed" }, [], [], []), false);
+  assert.equal(matchesInventoryFilters({ ...product, status: "consumed" }, [], [], [], "consumed"), true);
+  assert.equal(matchesInventoryFilters({ ...product, status: "consumed" }, [], [], ["today"], "consumed"), true);
+  assert.equal(matchesInventoryFilters(product, [], [], [], "consumed"), false);
 });

@@ -300,6 +300,7 @@
     "addReceipt": "Add products",
     "cookNow": "What should I cook?",
     "viewAll": "View all",
+    "viewConsumed": "View used-up products",
     "shoppingEyebrow": "To buy",
     "shoppingPreview": "Shopping list",
     "shoppingEmpty": "There is nothing to buy on your list.",
@@ -315,7 +316,7 @@
     "consumedEyebrow": "Restock",
     "consumedTitle": "What ran out",
     "consumedEmpty": "No products are marked as used up.",
-    "addToShopping": "Add to shopping list",
+    "addToShopping": "Add selected",
     "dailyEyebrow": "For your kitchen",
     "dailyTitle": "Today's idea",
     "dailyLoading": "Preparing today's idea…",
@@ -328,7 +329,11 @@
     "expiringCountLabel": "with a date within 7 days",
     "stockCountLabel": "products in stock",
     "expiringEmpty": "No products have a date within the next 7 days.",
-    "overdueNotice": "{count, plural, one {# product is past its date – check it before use.} other {# products are past their date – check them before use.}}"
+    "overdueNotice": "{count, plural, one {# product is past its date – check it before use.} other {# products are past their date – check them before use.}}",
+    "removeConsumed": "Remove selected",
+    "consumedMoved": "Products are on the shopping list and have been removed from inventory.",
+    "consumedRemoved": "Selected products were removed from inventory.",
+    "consumedRemovalFailed": "Products are on the shopping list, but could not be removed from inventory. Please try again."
   },
   "Inventory": {
     "metaTitle": "My inventory",
@@ -336,6 +341,7 @@
     "all": "All",
     "eyebrow": "What you have at home",
     "title": "My inventory",
+    "tabs": { "label": "Product status", "active": "Available", "consumed": "Used up" },
     "description": "{count, plural, one {# active product} other {# active products}}",
     "cook": "What should I cook?",
     "search": "Search products",
@@ -343,6 +349,7 @@
     "delete": "Delete",
     "cancel": "Cancel",
     "edit": "Edit",
+    "restoreSelected": "Restore selected",
     "selectProduct": "Select {name}",
     "productCount": "{count, plural, one {# product} other {# products}}",
     "pagination": {
@@ -401,13 +408,16 @@
       "selected": "Selected: {count}",
       "selectAll": "Select all on this page",
       "consumed": "Mark as used",
-      "moveTo": "Move to"
+      "moveTo": "Move to",
+      "restoreNeedsQuantity": "A selected product has quantity 0. Restore it separately and enter a quantity."
     },
     "toasts": {
       "consumed": "Products marked as used.",
       "moved": "Products moved.",
       "removed": "Products deleted.",
-      "saved": "Product changes saved."
+      "saved": "Product changes saved.",
+      "restored": "Product is available in inventory again.",
+      "restoredMany": "Selected products are available in inventory again."
     },
     "empty": {
       "title": "No matching products",
@@ -416,6 +426,8 @@
     "editDialog": {
       "title": "Edit product",
       "description": "Change the details of one product.",
+      "restoreTitle": "Restore product",
+      "restoreDescription": "Check the quantity, location and date before restoring this product to available inventory. Quantity must be greater than zero.",
       "name": "Name",
       "quantity": "Quantity",
       "unit": "Unit",
@@ -425,6 +437,7 @@
       "date": "Use-by date",
       "cancel": "Cancel",
       "save": "Save changes",
+      "restore": "Restore to inventory",
       "errors": {
         "required": "Enter a name, quantity and unit.",
         "quantity": "Quantity must be greater than zero."
@@ -645,6 +658,7 @@
       "history": "History"
     },
     "historyRetention": "Generated recipes that are not added to favourites are removed after 7 days.",
+    "historyExpiry": { "days": "Disappears in {count} days", "tomorrow": "Disappears tomorrow", "today": "Disappears today" },
     "emptyFavorites": {
       "title": "No favourites",
       "description": "Use the heart to save recipes you want to return to."

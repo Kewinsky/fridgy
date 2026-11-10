@@ -9,13 +9,12 @@ import {
 } from "lucide-react";
 
 import { ConsumedProductsCard } from "@/components/dashboard/consumed-products-card";
+import { ProductRowDetails } from "@/components/dashboard/product-row-details";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentDashboard, type DashboardData } from "@/lib/dashboard-data";
 import { getDailyIdea } from "@/lib/daily-idea";
 import { getFreshnessStatus } from "@/lib/demo-data";
-import { formatUserDate } from "@/lib/date-format";
-import { localizeDemoProduct } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,7 +24,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function DashboardPage() {
   const t = await getTranslations("Dashboard");
-  const inventoryT = await getTranslations("Inventory");
   const locale = await getLocale() as Locale;
   const { initialData, householdName } = await getCurrentDashboard();
   const activeProducts = initialData.products.filter((product) => product.status === "active");
@@ -90,17 +88,9 @@ export default async function DashboardPage() {
           </div>
           {expiringProducts.length ? (
             <ul className="divide-y divide-border px-5 sm:px-6">
-              {expiringProducts.slice(0, 5).map(({ product, status }) => (
-                <li key={product.id} className="flex min-w-0 items-center gap-4 py-3">
-                  <time dateTime={product.estimatedUseBy} className="flex h-11 w-24 shrink-0 items-center justify-center rounded-lg bg-secondary text-xs font-bold text-primary">
-                    {formatUserDate(product.estimatedUseBy, initialData.dateFormat)}
-                  </time>
-                  <div className="flex min-w-0 flex-1 flex-wrap items-center justify-between gap-x-3 gap-y-1">
-                    <span className="min-w-0 break-words text-sm font-semibold">{localizeDemoProduct(product, locale).name}</span>
-                    <span className={status === "today" ? "rounded-full bg-destructive/10 px-2.5 py-1 text-xs font-semibold text-destructive" : "rounded-full bg-secondary px-2.5 py-1 text-xs font-semibold text-primary"}>
-                      {inventoryT(`freshness.${status}`)}
-                    </span>
-                  </div>
+              {expiringProducts.slice(0, 5).map(({ product }) => (
+                <li key={product.id} className="flex min-w-0 items-center gap-3 py-3.5 sm:gap-4">
+                  <ProductRowDetails product={product} />
                 </li>
               ))}
             </ul>

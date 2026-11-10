@@ -8,6 +8,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("metaTitle"), description: t("metaDescription") };
 }
 
-export default function InventoryRoute() {
-  return <InventoryPage />;
+export default async function InventoryRoute({ searchParams }: {
+  searchParams: Promise<{ tab?: string | string[] }>;
+}) {
+  const tab = (await searchParams).tab === "consumed" ? "consumed" : "active";
+  return <InventoryPage initialTab={tab} />;
 }

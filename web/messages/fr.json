@@ -300,6 +300,7 @@
     "addReceipt": "Ajouter des produits",
     "cookNow": "Que cuisiner ?",
     "viewAll": "Tout voir",
+    "viewConsumed": "Voir les produits épuisés",
     "shoppingEyebrow": "À acheter",
     "shoppingPreview": "Liste de courses",
     "shoppingEmpty": "Aucun produit à acheter sur votre liste.",
@@ -315,7 +316,7 @@
     "consumedEyebrow": "À renouveler",
     "consumedTitle": "Ce qui est épuisé",
     "consumedEmpty": "Aucun produit n'est marqué comme épuisé.",
-    "addToShopping": "Ajouter aux courses",
+    "addToShopping": "Ajouter la sélection",
     "dailyEyebrow": "Pour votre cuisine",
     "dailyTitle": "Idée du jour",
     "dailyLoading": "Préparation de l'idée du jour…",
@@ -328,7 +329,11 @@
     "expiringCountLabel": "avec une date dans les 7 jours",
     "stockCountLabel": "produits en stock",
     "expiringEmpty": "Aucun produit n'a de date dans les 7 prochains jours.",
-    "overdueNotice": "{count, plural, one {# produit a dépassé sa date – vérifiez-le avant utilisation.} other {# produits ont dépassé leur date – vérifiez-les avant utilisation.}}"
+    "overdueNotice": "{count, plural, one {# produit a dépassé sa date – vérifiez-le avant utilisation.} other {# produits ont dépassé leur date – vérifiez-les avant utilisation.}}",
+    "removeConsumed": "Supprimer la sélection",
+    "consumedMoved": "Les produits sont sur la liste de courses et ont été retirés des stocks.",
+    "consumedRemoved": "Les produits sélectionnés ont été retirés des stocks.",
+    "consumedRemovalFailed": "Les produits sont sur la liste de courses, mais n'ont pas pu être retirés des stocks. Réessayez."
   },
   "Inventory": {
     "metaTitle": "Mes réserves",
@@ -336,6 +341,7 @@
     "all": "Tous",
     "eyebrow": "Ce que vous avez chez vous",
     "title": "Mes provisions",
+    "tabs": { "label": "État des produits", "active": "Disponibles", "consumed": "Épuisés" },
     "description": "{count, plural, one {# produit actif} other {# produits actifs}}",
     "cook": "Que cuisiner ?",
     "search": "Rechercher des produits",
@@ -343,6 +349,7 @@
     "delete": "Supprimer",
     "cancel": "Annuler",
     "edit": "Modifier",
+    "restoreSelected": "Restaurer la sélection",
     "selectProduct": "Sélectionner {name}",
     "productCount": "{count, plural, one {# produit} other {# produits}}",
     "pagination": {
@@ -401,13 +408,16 @@
       "selected": "Sélectionnés : {count}",
       "selectAll": "Tout sélectionner sur cette page",
       "consumed": "Marquer comme épuisés",
-      "moveTo": "Déplacer vers"
+      "moveTo": "Déplacer vers",
+      "restoreNeedsQuantity": "Un produit sélectionné a une quantité de 0. Restaurez-le séparément et indiquez une quantité."
     },
     "toasts": {
       "consumed": "Produits marqués comme épuisés.",
       "moved": "Produits déplacés.",
       "removed": "Produits supprimés.",
-      "saved": "Modifications des produits enregistrées."
+      "saved": "Modifications des produits enregistrées.",
+      "restored": "Le produit est de nouveau disponible dans les stocks.",
+      "restoredMany": "Les produits sélectionnés sont de nouveau disponibles dans les stocks."
     },
     "empty": {
       "title": "Aucun produit correspondant",
@@ -416,6 +426,8 @@
     "editDialog": {
       "title": "Modifier le produit",
       "description": "Modifiez les informations de ce produit.",
+      "restoreTitle": "Restaurer le produit",
+      "restoreDescription": "Vérifiez la quantité, l'emplacement et la date avant de remettre ce produit dans les stocks disponibles. La quantité doit être supérieure à zéro.",
       "name": "Nom",
       "quantity": "Quantité",
       "unit": "Unité",
@@ -425,6 +437,7 @@
       "date": "Date limite d'utilisation",
       "cancel": "Annuler",
       "save": "Enregistrer les modifications",
+      "restore": "Remettre en stock",
       "errors": {
         "required": "Indiquez le nom, la quantité et l'unité.",
         "quantity": "La quantité doit être supérieure à zéro."
@@ -645,6 +658,7 @@
       "history": "Historique"
     },
     "historyRetention": "Les recettes générées qui ne sont pas ajoutées aux favoris sont supprimées après 7 jours.",
+    "historyExpiry": { "days": "Disparaît dans {count} jours", "tomorrow": "Disparaît demain", "today": "Disparaît aujourd'hui" },
     "emptyFavorites": {
       "title": "Aucune recette favorite",
       "description": "Ajoutez un cœur aux recettes que vous souhaitez retrouver."

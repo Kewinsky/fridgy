@@ -71,6 +71,9 @@ export function ProductEditDialog({
   const invalidUnit = validationAttempted && !unit.trim();
   const invalidCategory = validationAttempted && !category.trim();
   const invalidDate = validationAttempted && !estimatedUseBy;
+  let submitLabel = t("save");
+  if (product.status === "consumed") submitLabel = t("restore");
+  if (isPending) submitLabel = common("saving");
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -98,6 +101,7 @@ export function ProductEditDialog({
         category: category.trim(),
         storageLocation: location,
         estimatedUseBy,
+        status: "active",
       });
     });
   }
@@ -106,20 +110,20 @@ export function ProductEditDialog({
     <Dialog open onOpenChange={(open) => { if (!open && !isPending) onClose(); }}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{t("title")}</DialogTitle>
-          <DialogDescription>{t("description")}</DialogDescription>
+          <DialogTitle>{t(product.status === "consumed" ? "restoreTitle" : "title")}</DialogTitle>
+          <DialogDescription>{t(product.status === "consumed" ? "restoreDescription" : "description")}</DialogDescription>
         </DialogHeader>
 
         <form id="edit-product-form" onSubmit={submit} className="grid gap-4" noValidate>
           <div className="grid gap-2">
             <Label htmlFor="product-name" className={invalidName ? "text-destructive" : undefined}>{t("name")}</Label>
-            <Input id="product-name" value={name} onChange={(event) => setName(event.target.value)} className="h-11" required aria-invalid={invalidName} autoFocus />
+            <Input id="product-name" value={name} onChange={(event) => setName(event.target.value)} className="h-11" required aria-invalid={invalidName} autoFocus={product.status === "active" || product.quantity > 0} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
               <Label htmlFor="product-quantity" className={invalidQuantity ? "text-destructive" : undefined}>{t("quantity")}</Label>
-              <Input id="product-quantity" value={quantity} onChange={(event) => setQuantity(event.target.value)} inputMode="decimal" className="h-11" required aria-invalid={invalidQuantity} />
+              <Input id="product-quantity" value={quantity} onChange={(event) => setQuantity(event.target.value)} inputMode="decimal" className="h-11" required aria-invalid={invalidQuantity} autoFocus={product.status === "consumed" && product.quantity === 0} />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="product-unit" className={invalidUnit ? "text-destructive" : undefined}>{t("unit")}</Label>
@@ -192,7 +196,7 @@ export function ProductEditDialog({
 
         <DialogFooter>
           <Button type="button" variant="outline" className="h-11" disabled={isPending} onClick={onClose}>{t("cancel")}</Button>
-          <Button type="submit" form="edit-product-form" className="h-11" disabled={isPending} aria-busy={isPending}>{isPending ? common("saving") : t("save")}</Button>
+          <Button type="submit" form="edit-product-form" className="h-11" disabled={isPending} aria-busy={isPending}>{submitLabel}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

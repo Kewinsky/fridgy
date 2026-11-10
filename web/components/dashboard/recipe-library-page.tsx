@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import Link from "next/link";
 import {
   BookOpenIcon,
@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsScrollableList, TabsTrigger } from "@/components/ui/tabs";
 import { demoRecipes, type Recipe } from "@/lib/demo-recipes";
 import { getHistoryRecipes } from "@/lib/recipe-library";
+import { daysUntilRecipePruned } from "@/lib/recipe-retention";
 
 export type RecipeLibraryTab = "favorites" | "custom" | "history";
 
@@ -71,6 +72,15 @@ export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
   const t = useTranslations("RecipeLibrary");
   const library = useRecipeLibrary();
   const { recipes: savedRecipes } = useDashboardData();
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    if (tab !== "history") return;
+    const update = () => setNow(new Date());
+    update();
+    const timer = window.setInterval(update, 60_000);
+    return () => window.clearInterval(timer);
+  }, [tab]);
   const allRecipes = [...savedRecipes, ...demoRecipes];
   let recipes: Recipe[];
   let emptyState: ReactNode;
@@ -90,7 +100,15 @@ export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
 
   return (
     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-      {recipes.map((recipe) => <RecipeCard key={recipe.slug} recipe={recipe} variant="library" />)}
+      {recipes.map((recipe) => {
+        let expiryDays: number | null = null;
+        if (tab === "history" && now && "source" in recipe && recipe.source === "ai"
+          && "createdAt" in recipe && typeof recipe.createdAt === "string"
+          && !library.favoriteSlugs.includes(recipe.slug)) {
+          expiryDays = daysUntilRecipePruned(recipe.createdAt, now);
+        }
+        return <RecipeCard key={recipe.slug} recipe={recipe} variant="library" expiryDays={expiryDays} />;
+      })}
     </div>
   );
 }

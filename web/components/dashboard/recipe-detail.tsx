@@ -25,6 +25,7 @@ import { RecipeCookingStats } from "@/components/dashboard/recipe-cooking-stats"
 import { RecipeImage } from "@/components/dashboard/recipe-image";
 import {
   cuisineMessageKeys,
+  capitalizeDifficulty,
   difficultyMessageKeys,
   isCuisine,
 } from "@/components/dashboard/recipe-options";
@@ -58,6 +59,7 @@ export function RecipeDetail({
   const imageSrc = getRecipeImageSrc(recipe);
   const missing = getMissingIngredients(matchedRecipe);
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
+  const difficulty = capitalizeDifficulty(recipe.difficulty);
   const preferences = useDashboardData();
   const conflicts = getRecipePreferenceConflicts(matchedRecipe, preferences, Object.fromEntries(
     recipeAllergens.map((allergen) => [allergen, t(`allergens.options.${allergen}`)]),
@@ -100,7 +102,7 @@ export function RecipeDetail({
               <RecipeFact icon={<ClockIcon />} label={t("totalTime")} value={t("minutes", { count: recipe.time })} />
               <RecipeFact icon={<UsersIcon />} label={t("servingsLabel")} value={`${recipe.servings}`} />
               <RecipeFact icon={<Globe2Icon />} label={t("cuisine")} value={isCuisine(recipe.cuisine) ? t(`cuisineOptions.${cuisineMessageKeys[recipe.cuisine]}`) : recipe.cuisine} />
-              <RecipeFact icon={<ChefHatIcon />} label={t("difficulty")} value={difficultyMessageKeys[recipe.difficulty] ? t(`difficultyOptions.${difficultyMessageKeys[recipe.difficulty]}`) : recipe.difficulty} />
+              <RecipeFact icon={<ChefHatIcon />} label={t("difficulty")} value={difficultyMessageKeys[difficulty] ? t(`difficultyOptions.${difficultyMessageKeys[difficulty]}`) : difficulty} />
             </div>
           </section>
 

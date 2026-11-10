@@ -300,6 +300,7 @@
     "addReceipt": "Añadir productos",
     "cookNow": "¿Qué cocino?",
     "viewAll": "Ver todo",
+    "viewConsumed": "Ver productos agotados",
     "shoppingEyebrow": "Por comprar",
     "shoppingPreview": "Lista de compras",
     "shoppingEmpty": "No hay productos pendientes en la lista.",
@@ -315,7 +316,7 @@
     "consumedEyebrow": "Para reponer",
     "consumedTitle": "Qué se ha agotado",
     "consumedEmpty": "No hay productos marcados como agotados.",
-    "addToShopping": "Añadir a compras",
+    "addToShopping": "Añadir seleccionados",
     "dailyEyebrow": "Para tu cocina",
     "dailyTitle": "Idea para hoy",
     "dailyLoading": "Preparando la idea de hoy…",
@@ -328,7 +329,11 @@
     "expiringCountLabel": "con fecha en los próximos 7 días",
     "stockCountLabel": "productos en las provisiones",
     "expiringEmpty": "Ningún producto tiene una fecha en los próximos 7 días.",
-    "overdueNotice": "{count, plural, one {# producto ha superado su fecha – revísalo antes de usarlo.} other {# productos han superado su fecha – revísalos antes de usarlos.}}"
+    "overdueNotice": "{count, plural, one {# producto ha superado su fecha – revísalo antes de usarlo.} other {# productos han superado su fecha – revísalos antes de usarlos.}}",
+    "removeConsumed": "Eliminar seleccionados",
+    "consumedMoved": "Los productos están en la lista de compras y se han eliminado del inventario.",
+    "consumedRemoved": "Los productos seleccionados se han eliminado del inventario.",
+    "consumedRemovalFailed": "Los productos están en la lista de compras, pero no se han podido eliminar del inventario. Inténtalo de nuevo."
   },
   "Inventory": {
     "metaTitle": "Mis existencias",
@@ -336,6 +341,7 @@
     "all": "Todos",
     "eyebrow": "Lo que tienes en casa",
     "title": "Mis provisiones",
+    "tabs": { "label": "Estado de los productos", "active": "Disponibles", "consumed": "Agotados" },
     "description": "{count, plural, one {# producto activo} other {# productos activos}}",
     "cook": "¿Qué cocino?",
     "search": "Buscar productos",
@@ -343,6 +349,7 @@
     "delete": "Eliminar",
     "cancel": "Cancelar",
     "edit": "Editar",
+    "restoreSelected": "Restaurar seleccionados",
     "selectProduct": "Seleccionar {name}",
     "productCount": "{count, plural, one {# producto} other {# productos}}",
     "pagination": {
@@ -401,13 +408,16 @@
       "selected": "Seleccionados: {count}",
       "selectAll": "Seleccionar todos en esta página",
       "consumed": "Marcar como agotados",
-      "moveTo": "Mover a"
+      "moveTo": "Mover a",
+      "restoreNeedsQuantity": "Un producto seleccionado tiene cantidad 0. Restáuralo por separado e introduce una cantidad."
     },
     "toasts": {
       "consumed": "Productos marcados como agotados.",
       "moved": "Productos movidos.",
       "removed": "Productos eliminados.",
-      "saved": "Cambios en el producto guardados."
+      "saved": "Cambios en el producto guardados.",
+      "restored": "El producto vuelve a estar disponible en el inventario.",
+      "restoredMany": "Los productos seleccionados vuelven a estar disponibles en el inventario."
     },
     "empty": {
       "title": "No hay productos coincidentes",
@@ -416,6 +426,8 @@
     "editDialog": {
       "title": "Editar producto",
       "description": "Cambia los datos de este producto.",
+      "restoreTitle": "Restaurar producto",
+      "restoreDescription": "Comprueba la cantidad, la ubicación y la fecha antes de devolver este producto al inventario disponible. La cantidad debe ser mayor que cero.",
       "name": "Nombre",
       "quantity": "Cantidad",
       "unit": "Unidad",
@@ -425,6 +437,7 @@
       "date": "Fecha de consumo",
       "cancel": "Cancelar",
       "save": "Guardar cambios",
+      "restore": "Restaurar en el inventario",
       "errors": {
         "required": "Introduce el nombre, la cantidad y la unidad.",
         "quantity": "La cantidad debe ser mayor que cero."
@@ -645,6 +658,7 @@
       "history": "Historial"
     },
     "historyRetention": "Las recetas generadas que no se añaden a favoritos se eliminan tras 7 días.",
+    "historyExpiry": { "days": "Desaparece en {count} días", "tomorrow": "Desaparece mañana", "today": "Desaparece hoy" },
     "emptyFavorites": {
       "title": "Sin recetas favoritas",
       "description": "Marca con el corazón las recetas que quieras volver a ver."

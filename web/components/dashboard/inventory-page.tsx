@@ -12,32 +12,29 @@ import {
   ChevronRightIcon,
   PackageIcon,
   PencilIcon,
+  RotateCcwIcon,
   SearchIcon,
+  ShoppingCartPlusIcon,
   Trash2Icon,
   XIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/dashboard/page-header";
-import { FreshnessLabel } from "@/components/dashboard/freshness-label";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import {
   productCategories,
   productCategoryMessageKeys,
   type ProductCategory,
 } from "@/components/dashboard/product-category-options";
 import { ProductEditDialog } from "@/components/dashboard/product-edit-dialog";
-import { ProductVisual } from "@/components/dashboard/product-visual";
+import { ProductRowDetails } from "@/components/dashboard/product-row-details";
 import {
   StorageLocationIcon,
   storageLocationMessageKeys,
 } from "@/components/dashboard/storage-location-icon";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  useInventory,
-  useInventoryActions,
-} from "@/components/dashboard/use-inventory";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,12 +44,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tabs, TabsContent, TabsScrollableList, TabsTrigger } from "@/components/ui/tabs";
 import {
   type DemoProduct,
   type FreshnessStatus,
   type StorageLocation,
 } from "@/lib/demo-data";
-import { localizeDemoProduct, localizeUnit } from "@/lib/demo-localization";
+import { localizeDemoProduct } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 import {
   applyInventoryAction,
@@ -61,16 +59,18 @@ import {
 import { cn } from "@/lib/utils";
 import { paginate } from "@/lib/pagination";
 import { matchesInventoryFilters } from "@/lib/inventory-filters";
+import { mergeShoppingItems } from "@/lib/shopping-list";
 
 const locations = ["Lodówka", "Zamrażarka", "Spiżarnia"] as const;
 const freshnessOptions = ["overdue", "today", "soon", "week", "calm"] as const;
 
-export function InventoryPage() {
+export function InventoryPage({ initialTab = "active" }: { initialTab?: "active" | "consumed" }) {
   const t = useTranslations("Inventory");
+  const dashboardT = useTranslations("Dashboard");
   const common = useTranslations("Common");
   const locale = useLocale() as Locale;
-  const products = useInventory();
-  const { updateInventory } = useInventoryActions();
+  const { products, updateInventory, updateShoppingItems } = useDashboardData();
+  const [tab, setTab] = useState(initialTab);
   const [query, setQuery] = useState("");
   const [selectedLocations, setSelectedLocations] = useState<StorageLocation[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<ProductCategory[]>([]);
@@ -80,6 +80,7 @@ export function InventoryPage() {
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [pending, setPending] = useState(false);
   const [tableLoading, setTableLoading] = useState(process.env.NODE_ENV === "development");
   const listRef = useRef<HTMLElement>(null);
 
@@ -94,18 +95,22 @@ export function InventoryPage() {
   const activeProducts = products.filter(
     (product) => product.status === "active",
   );
+  const consumedCount = products.length - activeProducts.length;
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase(locale);
     return products.filter(
       (product) =>
-        matchesInventoryFilters(product, selectedLocations, selectedCategories, selectedFreshness) &&
+        matchesInventoryFilters(product, selectedLocations, selectedCategories, selectedFreshness, tab) &&
         localizeDemoProduct(product, locale).name.toLocaleLowerCase(locale).includes(normalizedQuery),
     );
-  }, [locale, products, query, selectedCategories, selectedFreshness, selectedLocations]);
+  }, [locale, products, query, selectedCategories, selectedFreshness, selectedLocations, tab]);
   const { items: visibleProducts, page: currentPage, pageCount, start, end } = paginate(filtered, page, pageSize);
   const allVisibleSelected =
     visibleProducts.length > 0 &&
     visibleProducts.every((product) => selectedIds.has(product.id));
+  let listTitle = t("title");
+  if (tab === "consumed") listTitle = t("tabs.consumed");
+  else if (selectedLocations.length === 1) listTitle = t(`locations.${storageLocationMessageKeys[selectedLocations[0]]}`);
 
   function goToPage(nextPage: number) {
     setPage(nextPage);
@@ -135,6 +140,18 @@ export function InventoryPage() {
     setPage(1);
   }
 
+  function changeTab(value: string) {
+    if (value !== "active" && value !== "consumed") return;
+    setTab(value);
+    clearFilters();
+    setEditing(false);
+    setSelectedIds(new Set());
+    const url = new URL(window.location.href);
+    if (value === "consumed") url.searchParams.set("tab", value);
+    else url.searchParams.delete("tab");
+    window.history.replaceState(null, "", url);
+  }
+
   function toggleEditing() {
     setEditing((current) => !current);
     setSelectedIds(new Set());
@@ -160,10 +177,11 @@ export function InventoryPage() {
   }
 
   async function runBulkAction(action: InventoryAction) {
-    if (!selectedIds.size) return;
+    if (!selectedIds.size || pending) return;
     const frozenUntil = new Date(Date.now() + 45 * 86_400_000)
       .toISOString()
       .slice(0, 10);
+    setPending(true);
     try {
       await updateInventory((current) =>
         applyInventoryAction(current, selectedIds, action, frozenUntil),
@@ -171,6 +189,8 @@ export function InventoryPage() {
     } catch {
       toast.error(common("saveFailed"));
       return;
+    } finally {
+      setPending(false);
     }
     toast.success(
       action.type === "consume"
@@ -183,6 +203,55 @@ export function InventoryPage() {
     );
     setSelectedIds(new Set());
     setEditing(false);
+  }
+
+  async function addConsumedToShopping() {
+    if (!selectedIds.size || pending) return;
+    const selected = products.filter((product) => product.status === "consumed" && selectedIds.has(product.id));
+    if (!selected.length) return;
+    const names = selected.map((product) => localizeDemoProduct(product, locale).name);
+    const ids = new Set(selected.map((product) => product.id));
+    setPending(true);
+    try {
+      await updateShoppingItems((current) => mergeShoppingItems(current, names).items);
+    } catch {
+      toast.error(common("saveFailed"));
+      setPending(false);
+      return;
+    }
+    try {
+      await updateInventory((current) => current.filter((product) => !ids.has(product.id)));
+      setSelectedIds(new Set());
+      toast.success(dashboardT("consumedMoved"));
+    } catch {
+      toast.error(dashboardT("consumedRemovalFailed"));
+    } finally {
+      setPending(false);
+    }
+  }
+
+  async function restoreSelected() {
+    if (!selectedIds.size || pending) return;
+    const selected = products.filter((product) => product.status === "consumed" && selectedIds.has(product.id));
+    if (!selected.length) return;
+    if (selected.some((product) => product.quantity <= 0)) {
+      if (selected.length === 1) setProductToEdit(localizeDemoProduct(selected[0], locale));
+      else toast.info(t("bulk.restoreNeedsQuantity"));
+      return;
+    }
+    const ids = new Set(selected.map((product) => product.id));
+    setPending(true);
+    try {
+      await updateInventory((current) => current.map((product) =>
+        product.status === "consumed" && ids.has(product.id) ? { ...product, status: "active" as const } : product,
+      ));
+      setSelectedIds(new Set());
+      toast.success(t(selected.length === 1 ? "toasts.restored" : "toasts.restoredMany"));
+    } catch {
+      toast.error(common("saveFailed"));
+    } finally {
+      setPending(false);
+    }
   }
 
   async function saveProduct(updatedProduct: DemoProduct) {
@@ -202,7 +271,12 @@ export function InventoryPage() {
       return;
     }
     setProductToEdit(null);
-    toast.success(t("toasts.saved"));
+    setSelectedIds((current) => {
+      const next = new Set(current);
+      next.delete(updatedProduct.id);
+      return next;
+    });
+    toast.success(t(original?.status === "consumed" ? "toasts.restored" : "toasts.saved"));
   }
 
   return (
@@ -223,6 +297,12 @@ export function InventoryPage() {
         }
       />
 
+      <Tabs value={tab} onValueChange={changeTab} className="mb-5">
+        <TabsScrollableList aria-label={t("tabs.label")}>
+          <TabsTrigger value="active" className="h-9 px-4">{t("tabs.active")} <span className="tabular-nums">{activeProducts.length}</span></TabsTrigger>
+          <TabsTrigger value="consumed" className="h-9 px-4">{t("tabs.consumed")} <span className="tabular-nums">{consumedCount}</span></TabsTrigger>
+        </TabsScrollableList>
+        <TabsContent value={tab} className="pt-3">
       <section className="app-card mb-5 p-3" aria-label={t("filters.label")}>
         <label className="relative block">
           <span className="sr-only">{t("search")}</span>
@@ -237,6 +317,7 @@ export function InventoryPage() {
             className="h-11 pl-10"
           />
         </label>
+        {tab === "active" ? <>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           <InventoryFilter label={t("filters.location")} allLabel={t("all")} options={locationFilters} selected={selectedLocations} onToggle={toggleLocation} />
           <InventoryFilter label={t("filters.category")} allLabel={t("all")} options={categoryFilters} selected={selectedCategories} onToggle={toggleCategory} searchPlaceholder={t("filters.searchCategory")} emptyLabel={t("filters.noCategory")} />
@@ -250,9 +331,10 @@ export function InventoryPage() {
             <Button variant="ghost" className="h-11 text-sm" onClick={clearFilters}>{t("filters.clear")}</Button>
           </div>
         ) : null}
+        </> : null}
       </section>
 
-      {editing ? (
+      {editing || tab === "consumed" ? (
         <section
           className="app-card mb-5 flex flex-col gap-3 p-4 sm:flex-row sm:items-center"
           aria-label={t("bulk.label")}
@@ -264,6 +346,7 @@ export function InventoryPage() {
             <Checkbox
               id="select-visible-products"
               checked={allVisibleSelected}
+              disabled={pending}
               onCheckedChange={toggleVisible}
             />
             <span className="text-sm font-semibold">
@@ -272,16 +355,17 @@ export function InventoryPage() {
             <span className="sr-only">{t("bulk.selectAll")}</span>
           </label>
           <div className="flex flex-wrap gap-2">
+            {tab === "active" ? <>
             <Button
               className="h-11"
-              disabled={!selectedIds.size}
+              disabled={pending || !selectedIds.size}
               onClick={() => runBulkAction({ type: "consume" })}
             >
               <CheckCheckIcon aria-hidden="true" /> {t("bulk.consumed")}
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger
-                disabled={!selectedIds.size}
+                disabled={pending || !selectedIds.size}
                 render={
                   <Button variant="outline" className="h-11">
                     <PackageIcon aria-hidden="true" /> {t("bulk.moveTo")}
@@ -312,10 +396,18 @@ export function InventoryPage() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            </> : <>
+              <Button className="h-11" disabled={pending || !selectedIds.size} onClick={addConsumedToShopping}>
+                <ShoppingCartPlusIcon aria-hidden="true" /> {dashboardT("addToShopping")}
+              </Button>
+              <Button variant="outline" className="h-11" disabled={pending || !selectedIds.size} onClick={restoreSelected}>
+                <RotateCcwIcon aria-hidden="true" /> {t("restoreSelected")}
+              </Button>
+            </>}
             <Button
               variant="destructive"
               className="h-11"
-              disabled={!selectedIds.size}
+              disabled={pending || !selectedIds.size}
               onClick={() => runBulkAction({ type: "remove" })}
             >
               <Trash2Icon aria-hidden="true" /> {t("delete")}
@@ -327,14 +419,12 @@ export function InventoryPage() {
       <section ref={listRef} className="app-card px-5" aria-busy={tableLoading}>
         <div className="flex items-center justify-between border-b border-border py-4">
           <h2 className="flex flex-wrap items-baseline gap-x-2 font-extrabold">
-            {selectedLocations.length === 1
-              ? t(`locations.${storageLocationMessageKeys[selectedLocations[0]]}`)
-              : t("title")}
+            {listTitle}
             <span className="text-xs font-normal text-muted-foreground">
               ({t("productCount", { count: filtered.length })})
             </span>
           </h2>
-          <Button
+          {tab === "active" ? <Button
             variant={editing ? "secondary" : "outline"}
             className="h-11"
             onClick={toggleEditing}
@@ -345,13 +435,13 @@ export function InventoryPage() {
               <PencilIcon aria-hidden="true" />
             )}
             {editing ? t("cancel") : t("edit")}
-          </Button>
+          </Button> : null}
         </div>
         {tableLoading ? (
           <InventoryTableSkeleton />
         ) : filtered.length ? (
           visibleProducts.map((product) =>
-            editing ? (
+            editing || tab === "consumed" ? (
               <label
                 key={product.id}
                 htmlFor={`select-${product.id}`}
@@ -364,6 +454,7 @@ export function InventoryPage() {
                   <Checkbox
                     id={`select-${product.id}`}
                     checked={selectedIds.has(product.id)}
+                    disabled={pending}
                     onCheckedChange={() => toggleProduct(product.id)}
                   />
                   <span className="sr-only">{t("selectProduct", { name: product.name })}</span>
@@ -388,10 +479,8 @@ export function InventoryPage() {
               className="mx-auto text-muted-foreground"
               aria-hidden="true"
             />
-            <p className="mt-3 font-bold">{t("empty.title")}</p>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {t("empty.description")}
-            </p>
+            <p className="mt-3 font-bold">{tab === "consumed" ? dashboardT("consumedEmpty") : t("empty.title")}</p>
+            {tab === "active" ? <p className="mt-1 text-sm text-muted-foreground">{t("empty.description")}</p> : null}
           </div>
         )}
         {filtered.length > 0 && !tableLoading ? (
@@ -425,6 +514,8 @@ export function InventoryPage() {
           </div>
         ) : null}
       </section>
+        </TabsContent>
+      </Tabs>
 
       {productToEdit ? (
         <ProductEditDialog
@@ -517,31 +608,5 @@ function InventoryTableSkeleton() {
         </div>
       ))}
     </div>
-  );
-}
-
-function ProductRowDetails({ product }: { product: DemoProduct }) {
-  const t = useTranslations("Inventory");
-  const common = useTranslations("Common");
-  const locale = useLocale() as Locale;
-  const displayProduct = localizeDemoProduct(product, locale);
-
-  return (
-    <>
-      <ProductVisual category={product.category} />
-      <span className="min-w-0 flex-1">
-        <span className="flex flex-wrap items-center gap-2 text-sm font-bold text-foreground">
-          <span className="truncate">{displayProduct.name}</span>
-          {product.isDemo ? <Badge variant="outline">{common("demoData")}</Badge> : null}
-        </span>
-        <span className="mt-1 block truncate text-xs text-muted-foreground">
-          {product.quantity.toLocaleString(locale)} {localizeUnit(product.unit, product.quantity, locale)} ·{" "}
-          {t(`locations.${storageLocationMessageKeys[product.storageLocation]}`)}
-        </span>
-        <span className="mt-2 block">
-          <FreshnessLabel date={product.estimatedUseBy} />
-        </span>
-      </span>
-    </>
   );
 }
