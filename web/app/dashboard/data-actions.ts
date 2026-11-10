@@ -14,6 +14,7 @@ import { collectGeneratedRecipes, generationInputSchema, type GenerationInput } 
 import type { Recipe } from "@/lib/demo-recipes";
 import { loadDashboardData } from "@/lib/dashboard-data";
 import { productCategories } from "@/components/dashboard/product-category-options";
+import { extractRecipeDraft, fetchPublicDescription, importLocaleSchema, parseImportUrl, type ImportRecipeResult } from "@/lib/recipe-import";
 
 const productSchema = z.object({
   id: z.uuid(),
@@ -115,6 +116,27 @@ export async function saveCustomRecipe(recipe: CustomRecipe) {
   const { error } = await supabase.from("recipes").insert({ user_id: userId, slug: valid.slug, source: "custom", recipe: valid, created_at: valid.createdAt });
   if (error) throw new Error(error.message);
   return { ...valid, createdBy: userId };
+}
+
+export async function importRecipeFromUrl(value: string, locale: string): Promise<ImportRecipeResult> {
+  await authorizedClient();
+  const url = parseImportUrl(value);
+  if (!url) return { error: "invalidUrl" };
+  if (!importLocaleSchema.safeParse(locale).success) return { error: "unsupported" };
+  const key = process.env.OPENAI_API_KEY;
+  if (!key) return { error: "serviceUnavailable" };
+  let description: string | null;
+  try {
+    description = await fetchPublicDescription(url);
+  } catch {
+    return { error: "unavailable" };
+  }
+  if (!description) return { error: "unavailable" };
+  try {
+    return await extractRecipeDraft(key, description, locale);
+  } catch {
+    return { error: "serviceUnavailable" };
+  }
 }
 
 export async function updateCustomRecipe(recipe: CustomRecipe) {

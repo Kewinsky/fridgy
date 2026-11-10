@@ -146,7 +146,10 @@
       }
     },
     "account": {
-      "groups": { "account": "Konto", "household": "Dom" },
+      "groups": {
+        "account": "Konto",
+        "household": "Dom"
+      },
       "avatar": {
         "title": "Zdjęcie profilowe",
         "description": "Zdjęcie widoczne na Twoim koncie.",
@@ -699,7 +702,8 @@
     "deleteDescription": "Przepis „{title}” zniknie z Twojej biblioteki. Historia gotowania pozostanie zachowana.",
     "delete": "Usuń przepis",
     "errors": {
-      "required": "Uzupełnij nazwę, składniki i sposób przygotowania."
+      "required": "Uzupełnij nazwę, składniki i sposób przygotowania.",
+      "timeAndServings": "Uzupełnij czas przygotowania i liczbę porcji."
     },
     "toasts": {
       "updated": "Zapisano zmiany przepisu",
@@ -713,16 +717,25 @@
     },
     "link": {
       "title": "Dodaj przepis z linku",
-      "description": "W przyszłości Fridgy odczyta składniki i kroki ze strony lub filmu. Wklej link, aby zobaczyć przygotowany przepływ.",
-      "supported": "Planowane źródła",
+      "description": "Spróbujemy odczytać publiczny opis posta i przygotować z niego przepis. Nie analizujemy filmu ani dźwięku. Import zadziała tylko wtedy, gdy opis zawiera składniki i sposób przygotowania.",
+      "supported": "Sprawdzane źródła",
       "label": "Link do przepisu lub filmu",
       "placeholder": "https://instagram.com/reel/...",
       "action": "Importuj przepis",
-      "comingSoon": "Importowanie przepisów z linku będzie dostępne wkrótce.",
-      "error": "Wpisz poprawny link zaczynający się od http:// lub https://.",
+      "loading": "Sprawdzamy opis…",
+      "analysisTitle": "Sprawdzamy link",
+      "analysisDescription": "Odczytujemy publiczny opis i sprawdzamy, czy zawiera przepis. To może chwilę potrwać.",
+      "review": "Przepis odczytano z opisu. Sprawdź składniki i kroki, uzupełnij brakujące dane i dodaj własne zdjęcie, jeśli chcesz. Alergeny produktów zweryfikuj na opakowaniach.",
+      "errors": {
+        "invalidUrl": "Wklej link HTTPS do posta na Instagramie, Facebooku, TikToku lub YouTube.",
+        "unsupported": "Nieobsługiwany język aplikacji.",
+        "unavailable": "Nie udało się odczytać publicznego opisu. Sprawdź dostępność posta lub dodaj przepis ręcznie.",
+        "noRecipe": "Opis nie zawiera wystarczających składników i kroków. Dodaj przepis ręcznie.",
+        "serviceUnavailable": "Nie udało się przygotować przepisu z opisu. Spróbuj ponownie później."
+      },
       "sources": {
-        "website": "Strona WWW",
         "instagram": "Instagram Reels",
+        "facebook": "Facebook",
         "tiktok": "TikTok",
         "youtube": "YouTube"
       }

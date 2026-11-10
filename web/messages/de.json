@@ -699,7 +699,8 @@
     "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
     "delete": "Delete recipe",
     "errors": {
-      "required": "Gib einen Namen, Zutaten und Zubereitungsschritte ein."
+      "required": "Gib einen Namen, Zutaten und Zubereitungsschritte ein.",
+      "timeAndServings": "Gib die Zubereitungszeit und die Anzahl der Portionen ein."
     },
     "toasts": {
       "updated": "Recipe changes saved",
@@ -713,16 +714,25 @@
     },
     "link": {
       "title": "Rezept über einen Link hinzufügen",
-      "description": "In Zukunft liest Fridgy Zutaten und Schritte aus einer Webseite oder einem Video. Füge einen Link ein, um den vorbereiteten Ablauf zu sehen.",
-      "supported": "Geplante Quellen",
+      "description": "Wir versuchen, die öffentliche Beschreibung zu lesen und daraus ein Rezept zu erstellen. Video und Ton werden nicht analysiert. Die Beschreibung muss Zutaten und Schritte enthalten.",
+      "supported": "Prüfbare Quellen",
       "label": "Link zum Rezept oder Video",
       "placeholder": "https://instagram.com/reel/...",
       "action": "Rezept importieren",
-      "comingSoon": "Der Rezeptimport über Links ist bald verfügbar.",
-      "error": "Gib einen gültigen Link ein, der mit http:// oder https:// beginnt.",
+      "loading": "Beschreibung wird geprüft…",
+      "analysisTitle": "Link wird geprüft",
+      "analysisDescription": "Wir lesen die öffentliche Beschreibung und prüfen, ob sie ein Rezept enthält. Das kann einen Moment dauern.",
+      "review": "Rezept aus der Beschreibung erstellt. Prüfe Zutaten und Schritte, ergänze fehlende Angaben und füge bei Bedarf ein eigenes Foto hinzu. Prüfe Allergene auf den Verpackungen.",
+      "errors": {
+        "invalidUrl": "Füge einen HTTPS-Link zu einem Beitrag auf Instagram, Facebook, TikTok oder YouTube ein.",
+        "unsupported": "Nicht unterstützte App-Sprache.",
+        "unavailable": "Die öffentliche Beschreibung konnte nicht gelesen werden. Prüfe den Beitrag oder füge das Rezept manuell hinzu.",
+        "noRecipe": "Die Beschreibung enthält nicht genug Zutaten und Schritte. Füge das Rezept manuell hinzu.",
+        "serviceUnavailable": "Aus der Beschreibung konnte kein Rezept erstellt werden. Versuche es später erneut."
+      },
       "sources": {
-        "website": "Webseite",
         "instagram": "Instagram Reels",
+        "facebook": "Facebook",
         "tiktok": "TikTok",
         "youtube": "YouTube"
       }

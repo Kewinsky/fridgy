@@ -699,7 +699,8 @@
     "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
     "delete": "Delete recipe",
     "errors": {
-      "required": "Introduce un nombre, ingredientes y pasos de preparación."
+      "required": "Introduce un nombre, ingredientes y pasos de preparación.",
+      "timeAndServings": "Indica el tiempo de preparación y el número de raciones."
     },
     "toasts": {
       "updated": "Recipe changes saved",
@@ -713,16 +714,25 @@
     },
     "link": {
       "title": "Añadir receta desde un enlace",
-      "description": "En el futuro, Fridgy podrá leer los ingredientes y pasos de una página o vídeo. Pega un enlace para ver el flujo preparado.",
-      "supported": "Fuentes previstas",
+      "description": "Intentaremos leer la descripción pública y convertirla en receta. No analizamos el vídeo ni el audio. La descripción debe incluir ingredientes y pasos.",
+      "supported": "Fuentes que podemos revisar",
       "label": "Enlace de la receta o vídeo",
       "placeholder": "https://instagram.com/reel/...",
       "action": "Importar receta",
-      "comingSoon": "La importación de recetas desde enlaces estará disponible pronto.",
-      "error": "Introduce un enlace válido que empiece por http:// o https://.",
+      "loading": "Revisando la descripción…",
+      "analysisTitle": "Revisando el enlace",
+      "analysisDescription": "Leemos la descripción pública y comprobamos si contiene una receta. Esto puede tardar un momento.",
+      "review": "Receta extraída de la descripción. Revisa ingredientes y pasos, completa los datos que falten y añade tu propia foto si quieres. Comprueba los alérgenos en los envases.",
+      "errors": {
+        "invalidUrl": "Pega un enlace HTTPS de Instagram, Facebook, TikTok o YouTube.",
+        "unsupported": "Idioma de la aplicación no compatible.",
+        "unavailable": "No se pudo leer la descripción pública. Revisa la publicación o añade la receta manualmente.",
+        "noRecipe": "La descripción no contiene suficientes ingredientes y pasos. Añade la receta manualmente.",
+        "serviceUnavailable": "No se pudo preparar la receta a partir de la descripción. Inténtalo más tarde."
+      },
       "sources": {
-        "website": "Página web",
         "instagram": "Instagram Reels",
+        "facebook": "Facebook",
         "tiktok": "TikTok",
         "youtube": "YouTube"
       }

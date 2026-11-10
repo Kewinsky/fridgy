@@ -699,7 +699,8 @@
     "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
     "delete": "Delete recipe",
     "errors": {
-      "required": "Enter a name, ingredients and preparation steps."
+      "required": "Enter a name, ingredients and preparation steps.",
+      "timeAndServings": "Enter the preparation time and number of servings."
     },
     "toasts": {
       "updated": "Recipe changes saved",
@@ -713,16 +714,25 @@
     },
     "link": {
       "title": "Add recipe from a link",
-      "description": "In the future, Fridgy will read ingredients and steps from a website or video. Paste a link to preview the prepared flow.",
-      "supported": "Planned sources",
+      "description": "We will try to read the public post description and turn it into a recipe. We do not analyze video or audio. The description must include ingredients and steps.",
+      "supported": "Sources we can check",
       "label": "Recipe or video link",
       "placeholder": "https://instagram.com/reel/...",
       "action": "Import recipe",
-      "comingSoon": "Recipe import from links will be available soon.",
-      "error": "Enter a valid link starting with http:// or https://.",
+      "loading": "Checking the description…",
+      "analysisTitle": "Checking the link",
+      "analysisDescription": "We are reading the public description and checking whether it contains a recipe. This may take a moment.",
+      "review": "Recipe extracted from the description. Check the ingredients and steps, fill in missing details, and add your own photo if you want. Verify product allergens on the packaging.",
+      "errors": {
+        "invalidUrl": "Paste an HTTPS post link from Instagram, Facebook, TikTok or YouTube.",
+        "unsupported": "Unsupported app language.",
+        "unavailable": "We could not read a public description. Check the post or add the recipe manually.",
+        "noRecipe": "The description does not contain enough ingredients and steps. Add the recipe manually.",
+        "serviceUnavailable": "We could not prepare a recipe from this description. Try again later."
+      },
       "sources": {
-        "website": "Website",
         "instagram": "Instagram Reels",
+        "facebook": "Facebook",
         "tiktok": "TikTok",
         "youtube": "YouTube"
       }

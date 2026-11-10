@@ -1,15 +1,29 @@
 "use client";
 
-import { type FormEvent, useEffect, useId, useRef, useState, useTransition } from "react";
+import {
+  type FormEvent,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import Image from "next/image";
-import { CheckIcon, ChevronDownIcon, FileImageIcon, LinkIcon, PencilIcon, PenLineIcon, PlusIcon, Trash2Icon, UploadIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  FileImageIcon,
+  LinkIcon,
+  PencilIcon,
+  PenLineIcon,
+  PlusIcon,
+  Trash2Icon,
+  UploadIcon,
+} from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import {
-  useRecipeLibraryActions,
-} from "@/components/dashboard/use-recipe-library";
-import { Badge } from "@/components/ui/badge";
+import { useRecipeLibraryActions } from "@/components/dashboard/use-recipe-library";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -35,9 +49,21 @@ import {
   slugifyRecipeTitle,
   type CustomRecipe,
 } from "@/lib/recipe-library";
-import { cuisineMessageKeys, cuisines } from "@/components/dashboard/recipe-options";
-import { getRecipeImageSrc, MAX_RECIPE_IMAGE_MB, validateRecipeImage } from "@/lib/recipe-image";
-import { deleteRecipeImage, uploadRecipeImage } from "@/lib/recipe-image-storage";
+import {
+  cuisineMessageKeys,
+  cuisines,
+} from "@/components/dashboard/recipe-options";
+import {
+  getRecipeImageSrc,
+  MAX_RECIPE_IMAGE_MB,
+  validateRecipeImage,
+} from "@/lib/recipe-image";
+import {
+  deleteRecipeImage,
+  uploadRecipeImage,
+} from "@/lib/recipe-image-storage";
+import { importRecipeFromUrl } from "@/app/dashboard/data-actions";
+import type { ImportedRecipeDraft } from "@/lib/recipe-import";
 
 type RecipeFormState = {
   title: string;
@@ -56,7 +82,10 @@ function getInitialForm(recipe?: CustomRecipe): RecipeFormState {
     cuisine: recipe?.cuisine ?? "Inna",
     time: String(recipe?.time ?? 30),
     servings: String(recipe?.servings ?? 2),
-    ingredients: recipe?.ingredients.map((ingredient) => `${ingredient.name} | ${ingredient.amount}`).join("\n") ?? "",
+    ingredients:
+      recipe?.ingredients
+        .map((ingredient) => `${ingredient.name} | ${ingredient.amount}`)
+        .join("\n") ?? "",
     steps: recipe?.steps.join("\n") ?? "",
   };
 }
@@ -75,6 +104,8 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const editing = Boolean(recipe);
   const fieldId = useId();
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState("manual");
+  const [imported, setImported] = useState(false);
   const [form, setForm] = useState(() => getInitialForm(recipe));
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -86,7 +117,9 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const { saveCustomRecipe, updateCustomRecipe } = useRecipeLibraryActions();
 
   useEffect(() => {
-    return () => { if (previewUrl) URL.revokeObjectURL(previewUrl); };
+    return () => {
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+    };
   }, [previewUrl]);
 
   function update(field: keyof RecipeFormState, value: string) {
@@ -97,6 +130,8 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
     if (nextOpen) {
       setForm(getInitialForm(recipe));
       setError("");
+      setTab("manual");
+      setImported(false);
     }
     setImageFile(null);
     setPreviewUrl(null);
@@ -111,7 +146,9 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
     try {
       const validationError = await validateRecipeImage(file);
       if (validationError) {
-        setImageError(t(`image.errors.${validationError}`, { maxMb: MAX_RECIPE_IMAGE_MB }));
+        setImageError(
+          t(`image.errors.${validationError}`, { maxMb: MAX_RECIPE_IMAGE_MB }),
+        );
         return;
       }
       setImageError("");
@@ -126,8 +163,26 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isPending || checkingImage || imageError) return;
-    if (!form.title.trim() || !form.ingredients.trim() || !form.steps.trim() || form.ingredients.split("\n").some((line) => line.trim() && !line.split("|")[0].trim())) {
+    if (
+      !form.title.trim() ||
+      !form.ingredients.trim() ||
+      !form.steps.trim() ||
+      form.ingredients
+        .split("\n")
+        .some((line) => line.trim() && !line.split("|")[0].trim())
+    ) {
       setError(t("errors.required"));
+      return;
+    }
+    if (
+      !Number.isInteger(Number(form.time)) ||
+      Number(form.time) < 1 ||
+      Number(form.time) > 480 ||
+      !Number.isInteger(Number(form.servings)) ||
+      Number(form.servings) < 1 ||
+      Number(form.servings) > 20
+    ) {
+      setError(t("errors.timeAndServings"));
       return;
     }
 
@@ -137,7 +192,8 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
       let uploadedImagePath: string | undefined;
       try {
         if (imageFile) uploadedImagePath = await uploadRecipeImage(imageFile);
-        const imagePath = uploadedImagePath ?? (removeImage ? undefined : recipe?.imagePath);
+        const imagePath =
+          uploadedImagePath ?? (removeImage ? undefined : recipe?.imagePath);
         const customRecipe = createCustomRecipe(
           {
             title: form.title,
@@ -145,15 +201,22 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
             description: form.description,
             cuisine: form.cuisine,
             time: totalTime,
-            activeTime: recipe?.activeTime && recipe.activeTime <= totalTime ? recipe.activeTime : undefined,
+            activeTime:
+              recipe?.activeTime && recipe.activeTime <= totalTime
+                ? recipe.activeTime
+                : undefined,
             servings: Math.max(1, Number(form.servings) || 1),
             ingredients: form.ingredients,
             steps: form.steps,
-            nutrition: recipe?.macros && recipe.calories ? { calories: recipe.calories, ...recipe.macros } : undefined,
+            nutrition:
+              recipe?.macros && recipe.calories
+                ? { calories: recipe.calories, ...recipe.macros }
+                : undefined,
             allergens: recipe?.allergens,
             dietTags: recipe?.dietTags,
           },
-          recipe?.slug ?? `${slugifyRecipeTitle(form.title) || "przepis"}-${crypto.randomUUID().slice(0, 8)}`,
+          recipe?.slug ??
+            `${slugifyRecipeTitle(form.title) || "przepis"}-${crypto.randomUUID().slice(0, 8)}`,
           recipe?.createdAt ?? new Date().toISOString(),
         );
         if (editing) await updateCustomRecipe(customRecipe);
@@ -162,7 +225,8 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
           void deleteRecipeImage(recipe.imagePath).catch(() => {});
         }
       } catch {
-        if (uploadedImagePath) void deleteRecipeImage(uploadedImagePath).catch(() => {});
+        if (uploadedImagePath)
+          void deleteRecipeImage(uploadedImagePath).catch(() => {});
         setError(common("saveFailed"));
         return;
       }
@@ -172,17 +236,33 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={(nextOpen) => { if (!isPending) changeOpen(nextOpen); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!isPending) changeOpen(nextOpen);
+      }}
+    >
       <DialogTrigger
         render={
           editing ? (
-            <Button variant="outline" size="icon-lg" className="size-11" aria-label={t("editLabel", { title: recipe?.title ?? "" })} />
+            <Button
+              variant="outline"
+              size="icon-lg"
+              className="size-11"
+              aria-label={t("editLabel", { title: recipe?.title ?? "" })}
+            />
           ) : (
             <Button className="h-11" />
           )
         }
       >
-        {editing ? <PencilIcon aria-hidden="true" /> : <><PlusIcon aria-hidden="true" /> {t("add")}</>}
+        {editing ? (
+          <PencilIcon aria-hidden="true" />
+        ) : (
+          <>
+            <PlusIcon aria-hidden="true" /> {t("add")}
+          </>
+        )}
       </DialogTrigger>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
@@ -197,18 +277,27 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
             fieldId={fieldId}
             form={form}
             error={error}
+            imported={imported}
             saving={isPending}
-            imageSrc={previewUrl ?? (!removeImage && recipe ? getRecipeImageSrc(recipe) : null)}
+            imageSrc={
+              previewUrl ??
+              (!removeImage && recipe ? getRecipeImageSrc(recipe) : null)
+            }
             imageError={imageError}
             checkingImage={checkingImage}
             selectImage={selectImage}
-            removeImage={() => { setImageFile(null); setPreviewUrl(null); setRemoveImage(true); setImageError(""); }}
+            removeImage={() => {
+              setImageFile(null);
+              setPreviewUrl(null);
+              setRemoveImage(true);
+              setImageError("");
+            }}
             update={update}
             submit={submit}
             close={() => changeOpen(false)}
           />
         ) : (
-          <Tabs defaultValue="manual">
+          <Tabs value={tab} onValueChange={setTab}>
             <TabsList className="h-11!">
               <TabsTrigger value="manual" className="h-9 px-3">
                 <PenLineIcon aria-hidden="true" /> {t("tabs.manual")}
@@ -223,19 +312,54 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
                 fieldId={fieldId}
                 form={form}
                 error={error}
+                imported={imported}
                 saving={isPending}
                 imageSrc={previewUrl}
                 imageError={imageError}
                 checkingImage={checkingImage}
                 selectImage={selectImage}
-                removeImage={() => { setImageFile(null); setPreviewUrl(null); setRemoveImage(true); setImageError(""); }}
+                removeImage={() => {
+                  setImageFile(null);
+                  setPreviewUrl(null);
+                  setRemoveImage(true);
+                  setImageError("");
+                }}
                 update={update}
                 submit={submit}
                 close={() => changeOpen(false)}
               />
             </TabsContent>
             <TabsContent value="link" className="pt-3">
-              <LinkRecipeForm close={() => setOpen(false)} />
+              <LinkRecipeForm
+                close={() => changeOpen(false)}
+                onImported={(draft) => {
+                  setForm({
+                    title: draft.title,
+                    description: draft.description,
+                    cuisine: cuisines.includes(
+                      draft.cuisine as (typeof cuisines)[number],
+                    )
+                      ? draft.cuisine
+                      : "Inna",
+                    time: draft.time === null ? "" : String(draft.time),
+                    servings:
+                      draft.servings === null ? "" : String(draft.servings),
+                    ingredients: draft.ingredients
+                      .map(
+                        (ingredient) =>
+                          `${ingredient.name} | ${ingredient.amount}`,
+                      )
+                      .join("\n"),
+                    steps: draft.steps.join("\n"),
+                  });
+                  setError("");
+                  setImageFile(null);
+                  setPreviewUrl(null);
+                  setRemoveImage(false);
+                  setImported(true);
+                  setTab("manual");
+                }}
+              />
             </TabsContent>
           </Tabs>
         )}
@@ -249,6 +373,7 @@ function ManualRecipeForm({
   fieldId,
   form,
   error,
+  imported,
   saving,
   imageSrc,
   imageError,
@@ -263,6 +388,7 @@ function ManualRecipeForm({
   fieldId: string;
   form: RecipeFormState;
   error: string;
+  imported: boolean;
   saving: boolean;
   imageSrc: string | null;
   imageError: string;
@@ -282,135 +408,320 @@ function ManualRecipeForm({
 
   return (
     <form onSubmit={submit} className="grid gap-4">
-          <div className="grid gap-2">
-            <Label htmlFor={`${fieldId}-image`}>{t("image.label")}</Label>
-            <input
-              ref={imageInputRef}
-              id={`${fieldId}-image`}
-              type="file"
-              accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
-              className="sr-only"
-              aria-label={t("image.choose")}
-              onChange={(event) => {
-                const file = event.currentTarget.files?.[0];
-                event.currentTarget.value = "";
-                if (file) void selectImage(file);
-              }}
-            />
-            <div
-              className="subtle-grid flex min-h-56 flex-col items-center justify-center rounded-xl border border-dashed border-input bg-muted/30 px-5 py-6 text-center"
-              onDragOver={(event) => event.preventDefault()}
-              onDrop={(event) => {
-                event.preventDefault();
-                if (!saving && !checkingImage && event.dataTransfer.files[0]) void selectImage(event.dataTransfer.files[0]);
-              }}
+      {imported ? (
+        <p
+          role="status"
+          className="rounded-lg border border-primary/30 bg-primary/10 p-3 text-sm leading-6"
+        >
+          {t("link.review")}
+        </p>
+      ) : null}
+      <div className="grid gap-2">
+        <Label htmlFor={`${fieldId}-image`}>{t("image.label")}</Label>
+        <input
+          ref={imageInputRef}
+          id={`${fieldId}-image`}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
+          className="sr-only"
+          aria-label={t("image.choose")}
+          onChange={(event) => {
+            const file = event.currentTarget.files?.[0];
+            event.currentTarget.value = "";
+            if (file) void selectImage(file);
+          }}
+        />
+        <div
+          className="subtle-grid flex min-h-56 flex-col items-center justify-center rounded-xl border border-dashed border-input bg-muted/30 px-5 py-6 text-center"
+          onDragOver={(event) => event.preventDefault()}
+          onDrop={(event) => {
+            event.preventDefault();
+            if (!saving && !checkingImage && event.dataTransfer.files[0])
+              void selectImage(event.dataTransfer.files[0]);
+          }}
+        >
+          {imageSrc ? (
+            <div className="relative h-36 w-full overflow-hidden rounded-lg bg-secondary">
+              <Image
+                src={imageSrc}
+                alt=""
+                fill
+                sizes="(max-width: 640px) 100vw, 640px"
+                className="object-cover"
+                unoptimized
+              />
+            </div>
+          ) : (
+            <>
+              <span className="flex size-14 items-center justify-center rounded-full bg-card text-primary shadow-sm">
+                <FileImageIcon className="size-6" aria-hidden="true" />
+              </span>
+              <p className="mt-4 text-lg font-extrabold">{t("image.title")}</p>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {t("image.description")}
+              </p>
+            </>
+          )}
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <Button
+              type="button"
+              className="h-11"
+              disabled={saving || checkingImage}
+              onClick={() => imageInputRef.current?.click()}
             >
-              {imageSrc ? (
-                <div className="relative h-36 w-full overflow-hidden rounded-lg bg-secondary">
-                  <Image src={imageSrc} alt="" fill sizes="(max-width: 640px) 100vw, 640px" className="object-cover" unoptimized />
-                </div>
-              ) : (
-                <>
-                  <span className="flex size-14 items-center justify-center rounded-full bg-card text-primary shadow-sm">
-                    <FileImageIcon className="size-6" aria-hidden="true" />
+              <UploadIcon aria-hidden="true" />{" "}
+              {t(imageSrc ? "image.change" : "image.choose")}
+            </Button>
+            {imageSrc ? (
+              <Button
+                type="button"
+                variant="outline"
+                className="h-11"
+                disabled={saving || checkingImage}
+                onClick={removeImage}
+              >
+                {t("image.remove")}
+              </Button>
+            ) : null}
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            {t("image.formats", { maxMb: MAX_RECIPE_IMAGE_MB })}
+          </p>
+        </div>
+        {imageError ? (
+          <p role="alert" className="text-sm text-destructive">
+            {imageError}
+          </p>
+        ) : null}
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field
+          label={t("name")}
+          htmlFor={`${fieldId}-title`}
+          className="sm:col-span-2"
+        >
+          <Input
+            id={`${fieldId}-title`}
+            className="h-11"
+            value={form.title}
+            onChange={(event) => update("title", event.target.value)}
+          />
+        </Field>
+        <Field
+          label={t("recipeDescription")}
+          htmlFor={`${fieldId}-description`}
+          className="sm:col-span-2"
+        >
+          <Input
+            id={`${fieldId}-description`}
+            className="h-11"
+            value={form.description}
+            onChange={(event) => update("description", event.target.value)}
+          />
+        </Field>
+        <Field
+          label={t("cuisine")}
+          htmlFor={`${fieldId}-cuisine`}
+          className="sm:col-span-2"
+        >
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              id={`${fieldId}-cuisine`}
+              render={
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11 w-full justify-between px-3 font-normal"
+                >
+                  <span>
+                    {recipeT(
+                      `cuisineOptions.${cuisineMessageKeys[form.cuisine as keyof typeof cuisineMessageKeys] ?? "other"}`,
+                    )}
                   </span>
-                  <p className="mt-4 text-lg font-extrabold">{t("image.title")}</p>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">{t("image.description")}</p>
-                </>
-              )}
-              <div className="mt-4 flex flex-wrap justify-center gap-2">
-                <Button type="button" className="h-11" disabled={saving || checkingImage} onClick={() => imageInputRef.current?.click()}>
-                  <UploadIcon aria-hidden="true" /> {t(imageSrc ? "image.change" : "image.choose")}
+                  <ChevronDownIcon
+                    className="text-muted-foreground"
+                    aria-hidden="true"
+                  />
                 </Button>
-                {imageSrc ? <Button type="button" variant="outline" className="h-11" disabled={saving || checkingImage} onClick={removeImage}>{t("image.remove")}</Button> : null}
-              </div>
-              <p className="mt-3 text-xs text-muted-foreground">{t("image.formats", { maxMb: MAX_RECIPE_IMAGE_MB })}</p>
-            </div>
-            {imageError ? <p role="alert" className="text-sm text-destructive">{imageError}</p> : null}
-          </div>
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Field label={t("name")} htmlFor={`${fieldId}-title`} className="sm:col-span-2">
-              <Input id={`${fieldId}-title`} className="h-11" value={form.title} onChange={(event) => update("title", event.target.value)} />
-            </Field>
-            <Field label={t("recipeDescription")} htmlFor={`${fieldId}-description`} className="sm:col-span-2">
-              <Input id={`${fieldId}-description`} className="h-11" value={form.description} onChange={(event) => update("description", event.target.value)} />
-            </Field>
-            <Field label={t("cuisine")} htmlFor={`${fieldId}-cuisine`} className="sm:col-span-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  id={`${fieldId}-cuisine`}
-                  render={
-                    <Button type="button" variant="outline" className="h-11 w-full justify-between px-3 font-normal">
-                      <span>{recipeT(`cuisineOptions.${cuisineMessageKeys[form.cuisine as keyof typeof cuisineMessageKeys] ?? "other"}`)}</span>
-                      <ChevronDownIcon className="text-muted-foreground" aria-hidden="true" />
-                    </Button>
-                  }
-                />
-                <DropdownMenuContent align="start" className="min-w-(--anchor-width)">
-                  {cuisines.map((cuisine) => (
-                    <DropdownMenuItem key={cuisine} onClick={() => update("cuisine", cuisine)}>
-                      <span className="flex-1">{recipeT(`cuisineOptions.${cuisineMessageKeys[cuisine]}`)}</span>
-                      {form.cuisine === cuisine ? <CheckIcon aria-hidden="true" /> : null}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </Field>
-            <div className="grid grid-cols-2 gap-3 sm:col-span-2">
-              <Field label={t("time")} htmlFor={`${fieldId}-time`}>
-                <Input id={`${fieldId}-time`} type="number" min="1" className="h-11" value={form.time} onChange={(event) => update("time", event.target.value)} />
-              </Field>
-              <Field label={t("servings")} htmlFor={`${fieldId}-servings`}>
-                <Input id={`${fieldId}-servings`} type="number" min="1" className="h-11" value={form.servings} onChange={(event) => update("servings", event.target.value)} />
-              </Field>
-            </div>
-            <Field label={t("ingredients")} htmlFor={`${fieldId}-ingredients`} className="sm:col-span-2">
-              <Textarea id={`${fieldId}-ingredients`} placeholder={t("ingredientsPlaceholder")} value={form.ingredients} onChange={(event) => update("ingredients", event.target.value)} />
-            </Field>
-            <Field label={t("preparation")} htmlFor={`${fieldId}-steps`} className="sm:col-span-2">
-              <Textarea id={`${fieldId}-steps`} placeholder={t("stepsPlaceholder")} value={form.steps} onChange={(event) => update("steps", event.target.value)} />
-            </Field>
-          </div>
-          {error ? <p role="alert" className="text-sm font-semibold text-destructive">{error}</p> : null}
-          <DialogFooter>
-            <Button type="button" variant="outline" className="h-11" disabled={saving} onClick={close}>{t("cancel")}</Button>
-            <Button type="submit" className="h-11" disabled={saving || checkingImage || Boolean(imageError)} aria-busy={saving}>{saveLabel}</Button>
-          </DialogFooter>
+              }
+            />
+            <DropdownMenuContent
+              align="start"
+              className="min-w-(--anchor-width)"
+            >
+              {cuisines.map((cuisine) => (
+                <DropdownMenuItem
+                  key={cuisine}
+                  onClick={() => update("cuisine", cuisine)}
+                >
+                  <span className="flex-1">
+                    {recipeT(`cuisineOptions.${cuisineMessageKeys[cuisine]}`)}
+                  </span>
+                  {form.cuisine === cuisine ? (
+                    <CheckIcon aria-hidden="true" />
+                  ) : null}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </Field>
+        <div className="grid grid-cols-2 gap-3 sm:col-span-2">
+          <Field label={t("time")} htmlFor={`${fieldId}-time`}>
+            <Input
+              id={`${fieldId}-time`}
+              type="number"
+              min="1"
+              max="480"
+              className="h-11"
+              value={form.time}
+              onChange={(event) => update("time", event.target.value)}
+            />
+          </Field>
+          <Field label={t("servings")} htmlFor={`${fieldId}-servings`}>
+            <Input
+              id={`${fieldId}-servings`}
+              type="number"
+              min="1"
+              max="20"
+              className="h-11"
+              value={form.servings}
+              onChange={(event) => update("servings", event.target.value)}
+            />
+          </Field>
+        </div>
+        <Field
+          label={t("ingredients")}
+          htmlFor={`${fieldId}-ingredients`}
+          className="sm:col-span-2"
+        >
+          <Textarea
+            id={`${fieldId}-ingredients`}
+            placeholder={t("ingredientsPlaceholder")}
+            value={form.ingredients}
+            onChange={(event) => update("ingredients", event.target.value)}
+          />
+        </Field>
+        <Field
+          label={t("preparation")}
+          htmlFor={`${fieldId}-steps`}
+          className="sm:col-span-2"
+        >
+          <Textarea
+            id={`${fieldId}-steps`}
+            placeholder={t("stepsPlaceholder")}
+            value={form.steps}
+            onChange={(event) => update("steps", event.target.value)}
+          />
+        </Field>
+      </div>
+      {error ? (
+        <p role="alert" className="text-sm font-semibold text-destructive">
+          {error}
+        </p>
+      ) : null}
+      <DialogFooter>
+        <Button
+          type="button"
+          variant="outline"
+          className="h-11"
+          disabled={saving}
+          onClick={close}
+        >
+          {t("cancel")}
+        </Button>
+        <Button
+          type="submit"
+          className="h-11"
+          disabled={saving || checkingImage || Boolean(imageError)}
+          aria-busy={saving}
+        >
+          {saveLabel}
+        </Button>
+      </DialogFooter>
     </form>
   );
 }
 
-function LinkRecipeForm({ close }: { close: () => void }) {
+function LinkRecipeForm({
+  close,
+  onImported,
+}: {
+  close: () => void;
+  onImported: (draft: ImportedRecipeDraft) => void;
+}) {
   const t = useTranslations("RecipeForm");
+  const locale = useLocale();
   const fieldId = useId();
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
+  const [isPending, startTransition] = useTransition();
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    try {
-      const parsedUrl = new URL(url);
-      if (!["http:", "https:"].includes(parsedUrl.protocol)) throw new Error();
-    } catch {
-      setError(t("link.error"));
-      return;
-    }
     setError("");
-    toast.info(t("link.comingSoon"));
+    startTransition(async () => {
+      try {
+        const result = await importRecipeFromUrl(url.trim(), locale);
+        if ("error" in result) setError(t(`link.errors.${result.error}`));
+        else onImported(result.draft);
+      } catch {
+        setError(t("link.errors.serviceUnavailable"));
+      }
+    });
+  }
+
+  if (isPending) {
+    return (
+      <div
+        className="flex min-h-72 flex-col items-center justify-center rounded-xl border border-border bg-muted/30 px-6 py-8 text-center"
+        role="status"
+        aria-live="polite"
+      >
+        <span className="relative flex size-20 items-center justify-center rounded-full bg-secondary text-primary">
+          <span
+            className="absolute inset-2 rounded-full border-2 border-primary/20 border-t-primary motion-safe:animate-spin"
+            aria-hidden="true"
+          />
+          <LinkIcon className="size-8" aria-hidden="true" />
+        </span>
+        <p className="mt-5 text-lg font-bold">{t("link.analysisTitle")}</p>
+        <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
+          {t("link.analysisDescription")}
+        </p>
+      </div>
+    );
   }
 
   return (
     <form onSubmit={submit} className="grid gap-5">
       <div className="rounded-xl border border-border bg-muted/30 p-5">
-        <span className="flex size-10 items-center justify-center rounded-lg bg-secondary text-primary">
-          <LinkIcon className="size-5" aria-hidden="true" />
-        </span>
-        <h3 className="mt-4 text-base font-bold">{t("link.title")}</h3>
-        <p className="mt-1 text-sm leading-6 text-muted-foreground">{t("link.description")}</p>
-        <div className="mt-4 flex flex-wrap gap-2" aria-label={t("link.supported")}>
-          {(["website", "instagram", "tiktok", "youtube"] as const).map((source) => (
-            <Badge key={source} variant="outline">{t(`link.sources.${source}`)}</Badge>
-          ))}
+        <h3 className="text-base font-bold">{t("link.title")}</h3>
+        <p className="mt-1 text-sm leading-6 text-muted-foreground">
+          {t("link.description")}
+        </p>
+        <div
+          className="mt-4 flex flex-wrap gap-2"
+          aria-label={t("link.supported")}
+        >
+          {(["instagram", "facebook", "tiktok", "youtube"] as const).map(
+            (source) => (
+              <span
+                key={source}
+                className="flex size-10 items-center justify-center rounded-lg border border-border bg-white"
+                role="img"
+                aria-label={t(`link.sources.${source}`)}
+                title={t(`link.sources.${source}`)}
+              >
+                <Image
+                  src={`/social/${source}.svg`}
+                  alt=""
+                  width={22}
+                  height={22}
+                  unoptimized
+                />
+              </span>
+            ),
+          )}
         </div>
       </div>
       <Field label={t("link.label")} htmlFor={`${fieldId}-url`}>
@@ -421,13 +732,34 @@ function LinkRecipeForm({ close }: { close: () => void }) {
           placeholder={t("link.placeholder")}
           value={url}
           onChange={(event) => setUrl(event.target.value)}
+          disabled={isPending}
           autoFocus
         />
       </Field>
-      {error ? <p role="alert" className="text-sm font-semibold text-destructive">{error}</p> : null}
+      {error ? (
+        <p role="alert" className="text-sm font-semibold text-destructive">
+          {error}
+        </p>
+      ) : null}
       <DialogFooter>
-        <Button type="button" variant="outline" className="h-11" onClick={close}>{t("cancel")}</Button>
-        <Button type="submit" className="h-11"><LinkIcon aria-hidden="true" /> {t("link.action")}</Button>
+        <Button
+          type="button"
+          variant="outline"
+          className="h-11"
+          disabled={isPending}
+          onClick={close}
+        >
+          {t("cancel")}
+        </Button>
+        <Button
+          type="submit"
+          className="h-11"
+          disabled={isPending}
+          aria-busy={isPending}
+        >
+          <LinkIcon aria-hidden="true" />{" "}
+          {isPending ? t("link.loading") : t("link.action")}
+        </Button>
       </DialogFooter>
     </form>
   );
@@ -445,7 +777,8 @@ export function DeleteRecipeDialog({ recipe }: { recipe: CustomRecipe }) {
     startTransition(async () => {
       try {
         await deleteCustomRecipe(recipe.slug);
-        if (recipe.imagePath) void deleteRecipeImage(recipe.imagePath).catch(() => {});
+        if (recipe.imagePath)
+          void deleteRecipeImage(recipe.imagePath).catch(() => {});
       } catch {
         toast.error(common("saveFailed"));
         return;
@@ -456,10 +789,20 @@ export function DeleteRecipeDialog({ recipe }: { recipe: CustomRecipe }) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={(nextOpen) => { if (!isPending) setOpen(nextOpen); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!isPending) setOpen(nextOpen);
+      }}
+    >
       <DialogTrigger
         render={
-          <Button variant="destructive" size="icon-lg" className="size-11" aria-label={t("deleteLabel", { title: recipe.title })} />
+          <Button
+            variant="destructive"
+            size="icon-lg"
+            className="size-11"
+            aria-label={t("deleteLabel", { title: recipe.title })}
+          />
         }
       >
         <Trash2Icon aria-hidden="true" />
@@ -472,8 +815,25 @@ export function DeleteRecipeDialog({ recipe }: { recipe: CustomRecipe }) {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button type="button" variant="outline" className="h-11" disabled={isPending} onClick={() => setOpen(false)}>{t("cancel")}</Button>
-          <Button type="button" variant="destructive" className="h-11" disabled={isPending} aria-busy={isPending} onClick={removeRecipe}>{isPending ? common("deleting") : t("delete")}</Button>
+          <Button
+            type="button"
+            variant="outline"
+            className="h-11"
+            disabled={isPending}
+            onClick={() => setOpen(false)}
+          >
+            {t("cancel")}
+          </Button>
+          <Button
+            type="button"
+            variant="destructive"
+            className="h-11"
+            disabled={isPending}
+            aria-busy={isPending}
+            onClick={removeRecipe}
+          >
+            {isPending ? common("deleting") : t("delete")}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -493,7 +853,9 @@ function Field({
 }) {
   return (
     <div className={className}>
-      <Label htmlFor={htmlFor} className="mb-2">{label}</Label>
+      <Label htmlFor={htmlFor} className="mb-2">
+        {label}
+      </Label>
       {children}
     </div>
   );

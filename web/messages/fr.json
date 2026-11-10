@@ -699,7 +699,8 @@
     "deleteDescription": "'{title}' will disappear from your library. Cooking history will be kept.",
     "delete": "Delete recipe",
     "errors": {
-      "required": "Saisissez un nom, des ingrédients et les étapes de préparation."
+      "required": "Saisissez un nom, des ingrédients et les étapes de préparation.",
+      "timeAndServings": "Indiquez le temps de préparation et le nombre de portions."
     },
     "toasts": {
       "updated": "Recipe changes saved",
@@ -713,16 +714,25 @@
     },
     "link": {
       "title": "Ajouter une recette depuis un lien",
-      "description": "À l'avenir, Fridgy pourra lire les ingrédients et les étapes depuis une page ou une vidéo. Collez un lien pour afficher le parcours prévu.",
-      "supported": "Sources prévues",
+      "description": "Nous essaierons de lire la description publique pour en faire une recette. Nous n'analysons ni la vidéo ni le son. La description doit contenir les ingrédients et les étapes.",
+      "supported": "Sources vérifiables",
       "label": "Lien vers la recette ou la vidéo",
       "placeholder": "https://instagram.com/reel/...",
       "action": "Importer la recette",
-      "comingSoon": "L'importation de recettes depuis un lien sera bientôt disponible.",
-      "error": "Saisissez un lien valide commençant par http:// ou https://.",
+      "loading": "Vérification de la description…",
+      "analysisTitle": "Vérification du lien",
+      "analysisDescription": "Nous lisons la description publique et vérifions si elle contient une recette. Cela peut prendre un moment.",
+      "review": "Recette extraite de la description. Vérifiez les ingrédients et les étapes, complétez les données manquantes et ajoutez votre propre photo si vous le souhaitez. Vérifiez les allergènes sur les emballages.",
+      "errors": {
+        "invalidUrl": "Collez un lien HTTPS vers une publication Instagram, Facebook, TikTok ou YouTube.",
+        "unsupported": "Langue de l'application non prise en charge.",
+        "unavailable": "Impossible de lire la description publique. Vérifiez la publication ou ajoutez la recette manuellement.",
+        "noRecipe": "La description ne contient pas assez d'ingrédients et d'étapes. Ajoutez la recette manuellement.",
+        "serviceUnavailable": "Impossible de préparer la recette à partir de la description. Réessayez plus tard."
+      },
       "sources": {
-        "website": "Site web",
         "instagram": "Instagram Reels",
+        "facebook": "Facebook",
         "tiktok": "TikTok",
         "youtube": "YouTube"
       }
