@@ -146,7 +146,10 @@
       }
     },
     "account": {
-      "groups": { "account": "Account", "household": "Home" },
+      "groups": {
+        "account": "Account",
+        "household": "Home"
+      },
       "avatar": {
         "title": "Profile photo",
         "description": "The photo shown on your account.",
@@ -214,9 +217,8 @@
     },
     "advanced": {
       "regional": {
-        "title": "Currency and date format",
-        "description": "Formats used for prices, receipts and product dates.",
-        "currencyLabel": "Currency",
+        "title": "Date format",
+        "description": "Choose how product dates and cooking dates are displayed.",
         "dateLabel": "Date format"
       },
       "privacy": {
@@ -781,8 +783,7 @@
       "productFallback": "product",
       "quantity": "Quantity",
       "unit": "Unit",
-      "location": "Location",
-      "price": "Price"
+      "location": "Location"
     },
     "toasts": {
       "incomplete": "Enter the name, quantity and unit for every product.",
@@ -813,7 +814,7 @@
       "description": "Review the products before saving them.",
       "scanInfoTitle": "How does AI read the receipt?",
       "scanNotice": "Dates are estimates – check the packaging.",
-      "scanInfoRead": "AI reads product names, quantities and prices from the receipt. It suggests categories and storage locations from product names.",
+      "scanInfoRead": "AI reads product names and quantities from the receipt. It suggests categories and storage locations from product names.",
       "scanInfoDate": "Receipts usually do not show use-by dates. AI estimates a date from the product type and suggested storage, counting from the scan day. It cannot see the package label or know how the product was stored. Check the package and correct the date, especially for perishable foods.",
       "estimatedDate": "Estimated use-by date",
       "back": "Back",

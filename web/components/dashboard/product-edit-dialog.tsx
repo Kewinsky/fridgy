@@ -11,6 +11,7 @@ import {
   type ProductCategory,
 } from "@/components/dashboard/product-category-options";
 import { ProductUnitSelect } from "@/components/dashboard/product-unit-select";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import {
   StorageLocationIcon,
   storageLocationMessageKeys,
@@ -54,6 +55,7 @@ export function ProductEditDialog({
   const t = useTranslations("Inventory.editDialog");
   const common = useTranslations("Common");
   const inventoryT = useTranslations("Inventory");
+  const { dateFormat } = useDashboardData();
   const [name, setName] = useState(product.name);
   const [quantity, setQuantity] = useState(String(product.quantity));
   const [unit, setUnit] = useState(product.unit);
@@ -183,7 +185,7 @@ export function ProductEditDialog({
 
           <div className="grid gap-2">
             <Label htmlFor="product-date" className={invalidDate ? "text-destructive" : undefined}>{t("date")}</Label>
-            <DatePicker id="product-date" value={estimatedUseBy} onValueChange={setEstimatedUseBy} invalid={invalidDate} />
+            <DatePicker id="product-date" value={estimatedUseBy} dateFormat={dateFormat} onValueChange={setEstimatedUseBy} invalid={invalidDate} />
           </div>
 
         </form>

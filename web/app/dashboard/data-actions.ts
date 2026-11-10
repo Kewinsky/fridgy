@@ -182,7 +182,7 @@ export async function generateRecipes(input: GenerationInput, expectedHouseholdI
 }
 
 export async function saveManualReceipt(items: Array<{
-  name: string; quantity: number; unit: string; storageLocation: string; category: string; estimatedUseBy: string; price: string;
+  name: string; quantity: number; unit: string; storageLocation: string; category: string; estimatedUseBy: string;
 }>, expectedHouseholdId: string) {
   const validItems = z.array(z.object({
     name: z.string().trim().min(1).max(150),
@@ -191,7 +191,6 @@ export async function saveManualReceipt(items: Array<{
     storageLocation: z.enum(["Lodówka", "Zamrażarka", "Spiżarnia"]),
     category: z.enum(productCategories),
     estimatedUseBy: z.iso.date(),
-    price: z.string().max(30),
   })).min(1).max(100).parse(items);
   const { supabase } = await authorizedClient(expectedHouseholdId);
   const { error } = await supabase.rpc("save_manual_receipt_for_household", {

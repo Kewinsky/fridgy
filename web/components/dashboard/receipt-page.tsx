@@ -52,7 +52,6 @@ type ReceiptItem = {
   storageLocation: StorageLocation;
   category: ProductCategory;
   estimatedUseBy: string;
-  price: string;
 };
 
 function defaultUseBy() {
@@ -80,7 +79,7 @@ export function ReceiptPage() {
   const requestId = useRef(0);
   const scanAbort = useRef<AbortController | null>(null);
   const [isPending, startTransition] = useTransition();
-  const { refreshInventory, householdId } = useDashboardData();
+  const { refreshInventory, householdId, dateFormat } = useDashboardData();
 
   async function handleReceiptFile(file: File | undefined) {
     if (!file) return;
@@ -147,7 +146,6 @@ export function ReceiptPage() {
         storageLocation: "Lodówka",
         category: "Inne",
         estimatedUseBy: defaultUseBy(),
-        price: "",
       },
     ]);
   }
@@ -175,7 +173,6 @@ export function ReceiptPage() {
             storageLocation: item.storageLocation,
             category: item.category,
             estimatedUseBy: item.estimatedUseBy,
-            price: item.price,
           })),
           householdId,
         );
@@ -297,7 +294,7 @@ export function ReceiptPage() {
           {items.map((item) => (
             <div
               key={item.id}
-              className="grid gap-3 border-b border-border p-4 last:border-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_92px_44px] lg:px-5"
+              className="grid gap-3 border-b border-border p-4 last:border-0 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_44px] lg:px-5"
             >
               <div className="flex items-end gap-2">
                 <div className="grid min-w-0 flex-1 gap-2">
@@ -344,23 +341,6 @@ export function ReceiptPage() {
                   invalid={validationAttempted && !item.unit.trim()}
                 />
               </div>
-              <div className="grid gap-2">
-                <Label
-                  htmlFor={`receipt-price-${item.id}`}
-                >
-                  {t("fields.price")}
-                </Label>
-                <Input
-                  id={`receipt-price-${item.id}`}
-                  value={item.price}
-                  onChange={(event) =>
-                    updateItem(item.id, { price: event.target.value })
-                  }
-                  inputMode="decimal"
-                  placeholder="0,00"
-                  className="h-11"
-                />
-              </div>
               <Button
                 variant="destructive"
                 size="icon-lg"
@@ -370,7 +350,7 @@ export function ReceiptPage() {
               >
                 <Trash2Icon aria-hidden="true" />
               </Button>
-              <div className="grid gap-3 sm:grid-cols-2 lg:col-span-4 lg:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2 lg:col-span-3 lg:grid-cols-3">
                 <div className="grid gap-2">
                   <Label htmlFor={`receipt-category-${item.id}`}>
                     {inventoryT("editDialog.category")}
@@ -419,6 +399,7 @@ export function ReceiptPage() {
                   <DatePicker
                     id={`receipt-date-${item.id}`}
                     value={item.estimatedUseBy}
+                    dateFormat={dateFormat}
                     invalid={validationAttempted && !item.estimatedUseBy}
                     onValueChange={(estimatedUseBy) =>
                       updateItem(item.id, { estimatedUseBy })
@@ -555,7 +536,6 @@ export function ReceiptPage() {
               storageLocation: "Lodówka",
               category: "Inne",
               estimatedUseBy: defaultUseBy(),
-              price: "",
             },
           ]);
           setStep("review");

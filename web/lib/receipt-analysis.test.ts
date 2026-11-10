@@ -9,7 +9,6 @@ const item = {
   unit: "kg",
   category: "Warzywa",
   storageLocation: "Lodówka",
-  price: "8,67",
   estimatedDays: 4,
 };
 
@@ -39,4 +38,9 @@ test("accepts the new grocery categories and a per-product date estimate", () =>
     assert.equal(parsed.items[0].category, category);
     assert.equal(parsed.items[0].estimatedDays, 30);
   }
+});
+
+test("does not keep a price if an AI response includes one", () => {
+  const parsed = receiptItemsSchema.parse({ items: [{ ...item, price: "8,67" }] });
+  assert.equal("price" in parsed.items[0], false);
 });

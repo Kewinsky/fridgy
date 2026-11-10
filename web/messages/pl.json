@@ -217,9 +217,8 @@
     },
     "advanced": {
       "regional": {
-        "title": "Waluta i format daty",
-        "description": "Formaty używane w cenach, paragonach i terminach produktów.",
-        "currencyLabel": "Waluta",
+        "title": "Format daty",
+        "description": "Wybierz sposób wyświetlania terminów produktów i dat gotowania.",
         "dateLabel": "Format daty"
       },
       "privacy": {
@@ -784,8 +783,7 @@
       "productFallback": "produkt",
       "quantity": "Ilość",
       "unit": "Jednostka",
-      "location": "Miejsce",
-      "price": "Cena"
+      "location": "Miejsce"
     },
     "toasts": {
       "incomplete": "Uzupełnij nazwę, ilość i jednostkę każdego produktu.",
@@ -816,7 +814,7 @@
       "description": "Sprawdź dane produktów przed zapisaniem.",
       "scanInfoTitle": "Jak AI odczytuje paragon?",
       "scanNotice": "Daty są szacowane – sprawdź je na opakowaniach.",
-      "scanInfoRead": "AI odczytuje z paragonu nazwy, ilości i ceny. Kategorię oraz miejsce przechowywania proponuje na podstawie nazwy produktu.",
+      "scanInfoRead": "AI odczytuje z paragonu nazwy i ilości produktów. Kategorię oraz miejsce przechowywania proponuje na podstawie nazwy produktu.",
       "scanInfoDate": "Paragon zwykle nie pokazuje daty przydatności. AI szacuje datę na podstawie rodzaju produktu i zakładanego miejsca przechowywania, licząc od dnia skanu. Nie zna daty z etykiety ani warunków przechowywania. Sprawdź opakowanie i popraw datę, zwłaszcza przy produktach szybko psujących się.",
       "estimatedDate": "Szacowana data użycia",
       "back": "Wróć",

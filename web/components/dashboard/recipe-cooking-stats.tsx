@@ -1,14 +1,16 @@
 "use client";
 
 import { CalendarClockIcon, HistoryIcon } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { getCookingCount } from "@/lib/recipe-library";
+import { formatUserDate } from "@/lib/date-format";
 
 export function RecipeCookingStats({ slug }: { slug: string }) {
   const t = useTranslations("RecipeStats");
-  const format = useFormatter();
+  const { dateFormat } = useDashboardData();
   const library = useRecipeLibrary();
   const count = getCookingCount(library, slug);
   const latest = library.history.find((record) => record.recipeSlug === slug);
@@ -28,7 +30,7 @@ export function RecipeCookingStats({ slug }: { slug: string }) {
         label={t("lastCooked")}
         value={
           latest
-            ? format.dateTime(new Date(latest.cookedAt), { dateStyle: "medium" })
+            ? formatUserDate(new Date(latest.cookedAt), dateFormat)
             : t("never")
         }
       />

@@ -16,7 +16,6 @@ const profileSettings = z.object({
   excluded_ingredients: z.string().max(500),
   deduction_mode: z.enum(["always", "never", "ask"]),
   receipt_mode: z.enum(["automatic", "review"]),
-  currency: z.enum(["PLN", "EUR", "GBP", "CHF"]),
   date_format: z.enum(["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"]),
   preferred_cuisines: z.array(z.string().max(50)).max(20),
   personalization_consent: z.boolean(),

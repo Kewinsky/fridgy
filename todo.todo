@@ -10,10 +10,12 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - **„Co ugotować?”:** wysyła odpowiedzi formularza, liczbę porcji, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Późniejsze skalowanie przepisu nie jest planowane; nadal brakuje wspólnego źródła przepisów dla pulpitu.
 - **Dodawanie z paragonu:** zdjęcie jest analizowane przez AI, a rozpoznane produkty można poprawić przed dodaniem do zapasów. AI szacuje datę użycia na podstawie produktu i miejsca przechowywania; termin z opakowania trzeba zweryfikować. Skan wymaga klucza OpenAI i migracji limitu żądań.
 - **Import przepisu z linku:** próbuje odczytać publiczny opis z Instagrama, Facebooka, TikToka lub YouTube i przygotowuje edytowalny przepis do zapisania w „Moje”. Gdy opis jest niedostępny lub nie zawiera składników i kroków, pokazuje odpowiedni komunikat. Nie analizuje filmu ani dźwięku; zdjęcie użytkownik dodaje sam.
-- **Ustawienia:** dni powiadomień, tryb paragonu, waluta, format daty i zgody zapisują się, ale nie mają podłączonego działania. Preferowane kuchnie istnieją w profilu, lecz nie są używane.
+- **Ustawienia:** format daty wpływa na widok terminów produktów, kalendarz i historię gotowania. Waluta i cena z paragonu zostały usunięte. Dni powiadomień, tryb paragonu i zgody zapisują się, ale nie mają podłączonego działania. Preferowane kuchnie istnieją w profilu, lecz nie są używane.
 - **Mobile:** zawiera tylko ekran „Ready for development” i konfigurację klienta Supabase (`mobile/src/app/index.tsx`).
 
-## P0 – działający produkt webowy
+## Funkcje produktu
+
+### Web – zrobione (P0 i P1)
 
 - [x] Zastąpić demonstracyjne „Co ugotować?” prawdziwym doborem przepisów lub generowaniem AI. Przekazywać posiłek, porcje, czas, możliwość zakupów, wybrane kuchnie, zapisane przepisy, uwagi, zapasy i ustawienia diety; usunąć sztuczne opóźnienie.
 - [x] Ustalić źródło przepisów poza sześcioma pozycjami w kodzie: katalog, przepisy użytkownika i/lub generowanie. Zapewnić zapis, ponowne otwarcie i historię przepisów wygenerowanych; inaczej link i historia mogą prowadzić do nieistniejącego dania.
@@ -22,6 +24,22 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - [x] Podłączyć skan paragonu do OCR/analizy obrazu z rzeczywistym przesyłaniem pliku, obsługą błędów i ekranem korekty przed zapisem. Usunąć podstawianie przykładowych produktów i pozorny postęp analizy.
 - [x] Wdrożyć import przepisu z URL dla publicznych opisów postów na Instagramie, Facebooku, TikToku i YouTube: pobranie opisu, ekstrakcję, edytowalny podgląd, obsługę błędów i zapis. Film, dźwięk i miniatura nie są importowane.
 - [x] Oznaczyć testowe produkty, zakupy i przepisy. Usunięcie danych testowych kasuje rekordy `is_demo = true` w bieżącym domostwie oraz przykładowe przepisy użytkownika. Edytowany rekord demo pozostaje testowy.
+- [x] Usunąć nieużywaną walutę i ceny z paragonów; zastosować wybrany format daty w zapasach, na pulpicie, w kalendarzu i historii gotowania. Migracja usuwa kolumnę waluty i stare ceny z zapisanych paragonów.
+
+### Web – do zrobienia (P1)
+
+- [ ] Wprowadzić wysyłanie powiadomień o terminach produktów albo usunąć ustawienie dni powiadomień. Dodać zgody na kanał, strefę czasową, harmonogram, deduplikację i rezygnację.
+- [ ] Podłączyć preferowane kuchnie i zgodę na personalizację do doboru przepisów.
+- [ ] Doprowadzić zapraszanie domowników do końca: wysyłać zaproszenie lub jasno opisać ręczne udostępnienie linku; umożliwić podgląd i odwołanie zaproszeń oraz obsłużyć wygasłe linki.
+- [ ] Utrwalić lub świadomie porzucać postęp gotowania po odświeżeniu. Dziś zaznaczone kroki istnieją tylko w stanie strony.
+- [ ] Poprawić dopasowanie składników do zapasów: odmiany nazw, języki, jednostki i przeliczenia, produkty o podobnych nazwach oraz kilka opakowań tego samego składnika. Pokazać użytkownikowi, czego system nie dopasował.
+
+### Mobile – jeśli wchodzi do pierwszego wydania
+
+- [ ] Zdecydować, czy pierwsza produkcja obejmuje mobile. Jeśli tak, zbudować rzeczywiste ekrany i przepływy dla logowania, zapasów, zakupów, paragonów, przepisów, gotowania i ustawień; dziś jest tylko ekran startowy.
+
+## P0 – weryfikacja działania produktu webowego
+
 - [ ] Przetestować na Supabase cały przepływ „przepis → gotowanie → odjęcie zapasów → historia”, w tym zmianę zapasu przez innego domownika podczas gotowania i brak wystarczającej ilości przy zapisie. Testy jednostkowe obejmują już przeliczenia g/kg i ml/l, kilka opakowań oraz częściowe zużycie; funkcja SQL zapisuje odjęcia i historię w jednej transakcji, ale nie ma testu integracyjnego całej ścieżki.
 
 ## P0 – bezpieczeństwo żywności i danych
@@ -35,16 +53,10 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - [ ] Walidować przesyłane obrazy na zaufanej granicy, usuwać zbędne metadane i bezpiecznie obsługiwać uszkodzone pliki. Obecna kontrola sygnatury obrazu przepisu i zdjęcia profilu działa w przeglądarce, którą można ominąć.
 - [ ] Sprawdzić proces usuwania konta i zdjęć: dziś kasowane jest zdjęcie profilu, lecz obrazy własnych przepisów mogą zostać w Storage. Opracować także wyjście właściciela z domu, który ma innych członków.
 
-## P1 – spójność i pełne działanie funkcji
+## P1 – spójność danych i jakość
 
-- [ ] Wprowadzić wysyłanie powiadomień o terminach produktów albo usunąć ustawienie dni powiadomień. Dodać zgody na kanał, strefę czasową, harmonogram, deduplikację i rezygnację.
-- [ ] Podłączyć tryb paragonu „automatycznie / do sprawdzenia” do rzeczywistego przepływu po analizie. Dla automatycznego zapisu określić próg pewności i bezpieczny sposób cofnięcia.
-- [ ] Zastosować wybraną walutę i format daty w całym produkcie albo usunąć te ustawienia. Ustalić znaczenie pola ceny z paragonu, które jest dziś przechowywane jako tekst, bez obliczeń.
-- [ ] Podłączyć preferowane kuchnie i zgodę na personalizację do doboru przepisów. Zgoda na analitykę powinna faktycznie sterować zbieraniem danych; bez analityki usunąć martwe ustawienie.
-- [ ] Doprowadzić zapraszanie domowników do końca: wysyłać zaproszenie lub jasno opisać ręczne udostępnienie linku; umożliwić podgląd i odwołanie zaproszeń oraz obsłużyć wygasłe linki.
+- [ ] Sprawić, by zgoda na analitykę faktycznie sterowała zbieraniem danych; bez analityki usunąć martwe ustawienie.
 - [ ] Usunąć ryzyko nadpisania zmian przy równoczesnej pracy domowników i kart przeglądarki. Aktualizacje zapasów, listy zakupów i całej biblioteki przepisów używają lokalnej kopii stanu; potrzebne są operacje atomowe lub kontrola wersji.
-- [ ] Utrwalić lub świadomie porzucać postęp gotowania po odświeżeniu. Dziś zaznaczone kroki istnieją tylko w stanie strony.
-- [ ] Poprawić dopasowanie składników do zapasów: odmiany nazw, języki, jednostki i przeliczenia, produkty o podobnych nazwach oraz kilka opakowań tego samego składnika. Pokazać użytkownikowi, czego system nie dopasował.
 - [ ] Zastąpić demonstracyjne wartości odżywcze danymi ze wskazanym źródłem albo nie pokazywać ich jako pewnych. Sprawdzić ich zmianę po przeskalowaniu porcji.
 - [x] Uzupełnić tłumaczenia w pięciu językach i sprawdzać w teście klucze, identyczne angielskie wpisy oraz zmienne interpolacji. Przetłumaczyć tytuły, składniki i kroki sześciu przepisów demonstracyjnych oraz trzech niezmienionych przepisów testowych; wyświetlać jednostki w języku interfejsu bez zmiany zapisanych danych. Treści przepisów dodanych lub zmienionych przez użytkownika pozostają w języku autora.
 - [ ] Sprawdzić eksport danych użytkownika: kompletność, poprawność po imporcie, zakres danych współdzielonego domu i bezpieczne pobieranie. Udokumentować zasady przechowywania i usuwania danych.
@@ -67,7 +79,6 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 
 ## Mobile – przed wydaniem aplikacji mobilnej
 
-- [ ] Zdecydować, czy pierwsza produkcja obejmuje mobile. Jeśli tak, zbudować rzeczywiste ekrany i przepływy dla logowania, zapasów, zakupów, paragonów, przepisów, gotowania i ustawień; dziś jest tylko ekran startowy.
 - [ ] Sprawdzić sesję Supabase na iOS i Androidzie: logowanie, powrót z linku, odświeżanie sesji, wylogowanie i bezpieczne przechowywanie danych.
 - [ ] Dodać testy mobile, dostępność natywną, obsługę uprawnień aparatu/zdjęć, stanu offline oraz konfigurację i próbne wydania sklepowe.
 

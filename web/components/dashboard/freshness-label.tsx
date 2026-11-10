@@ -1,9 +1,11 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
-import { formatEstimatedDate, getFreshnessStatus } from "@/lib/demo-data";
+import { getFreshnessStatus } from "@/lib/demo-data";
+import { formatUserDate } from "@/lib/date-format";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 
 const statuses = {
   overdue: {
@@ -30,7 +32,7 @@ const statuses = {
 
 export function FreshnessLabel({ date }: { date: string }) {
   const t = useTranslations("Inventory.freshness");
-  const locale = useLocale();
+  const { dateFormat } = useDashboardData();
   const status = statuses[getFreshnessStatus(date)];
 
   return (
@@ -43,7 +45,7 @@ export function FreshnessLabel({ date }: { date: string }) {
         {t(status.labelKey)}
       </Badge>
       <span className="text-[11px] text-muted-foreground">
-        {t("estimatedDate", { date: formatEstimatedDate(date, locale) })}
+        {t("estimatedDate", { date: formatUserDate(date, dateFormat) })}
       </span>
     </span>
   );

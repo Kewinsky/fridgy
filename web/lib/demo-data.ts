@@ -46,12 +46,3 @@ export function getFreshnessStatus(estimatedUseBy: string, now = new Date()): Fr
   if (daysLeft <= 7) return "week";
   return "calm";
 }
-
-export function formatEstimatedDate(date: string, locale = "pl-PL") {
-  return new Intl.DateTimeFormat(locale, {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  }).format(new Date(`${date}T12:00:00Z`));
-}

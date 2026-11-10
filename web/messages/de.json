@@ -217,9 +217,8 @@
     },
     "advanced": {
       "regional": {
-        "title": "Währung und Datumsformat",
-        "description": "Formate für Preise, Kassenbons und Produktdaten.",
-        "currencyLabel": "Währung",
+        "title": "Datumsformat",
+        "description": "Wähle, wie Produktdaten und Kochdaten angezeigt werden.",
         "dateLabel": "Datumsformat"
       },
       "privacy": {
@@ -784,8 +783,7 @@
       "productFallback": "Produkt",
       "quantity": "Menge",
       "unit": "Einheit",
-      "location": "Ort",
-      "price": "Preis"
+      "location": "Ort"
     },
     "toasts": {
       "incomplete": "Gib für jedes Produkt Name, Menge und Einheit ein.",
@@ -816,7 +814,7 @@
       "description": "Prüfe die Produkte vor dem Speichern.",
       "scanInfoTitle": "Wie liest die KI den Kassenbon?",
       "scanNotice": "Die Daten sind Schätzungen – prüfe die Verpackung.",
-      "scanInfoRead": "Die KI liest Produktnamen, Mengen und Preise vom Kassenbon. Kategorie und Lagerort schlägt sie anhand des Produktnamens vor.",
+      "scanInfoRead": "Die KI liest Produktnamen und Mengen vom Kassenbon. Kategorie und Lagerort schlägt sie anhand des Produktnamens vor.",
       "scanInfoDate": "Auf Kassenbons steht normalerweise kein Haltbarkeitsdatum. Die KI schätzt ein Datum nach Produktart und vorgeschlagenem Lagerort, gerechnet ab dem Tag des Scans. Sie kennt weder das Etikett noch die Lagerbedingungen. Prüfe die Verpackung und korrigiere das Datum, besonders bei leicht verderblichen Lebensmitteln.",
       "estimatedDate": "Geschätztes Verbrauchsdatum",
       "back": "Zurück",

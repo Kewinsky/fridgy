@@ -21,17 +21,20 @@ import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { formatUserDate, type DateFormat } from "@/lib/date-format";
 
 const dateLocales = { pl, en: enUS, de, fr, es } as const;
 
 export function DatePicker({
   id,
   value,
+  dateFormat,
   onValueChange,
   invalid = false,
 }: {
   id?: string;
   value: string;
+  dateFormat: DateFormat;
   onValueChange: (value: string) => void;
   invalid?: boolean;
 }) {
@@ -54,7 +57,7 @@ export function DatePicker({
         render={
           <Button type="button" variant="outline" aria-invalid={invalid} className="h-11 w-full justify-start px-3 font-normal aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20">
             <CalendarIcon aria-hidden="true" />
-            {selectedDate ? format(selectedDate, "d MMMM yyyy", { locale: dateLocale }) : t("selectDate")}
+            {selectedDate ? formatUserDate(value, dateFormat) : t("selectDate")}
           </Button>
         }
       />

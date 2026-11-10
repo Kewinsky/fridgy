@@ -5,6 +5,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 
 import type { DemoProduct } from "@/lib/demo-data";
+import type { DateFormat } from "@/lib/date-format";
 import { emptyRecipeLibrary, type RecipeLibrary, type StoredRecipe } from "@/lib/recipe-library";
 import { readStoredRecipes } from "@/lib/recipe-store";
 import type { ShoppingItem } from "@/lib/shopping-list";
@@ -19,6 +20,7 @@ export type DashboardData = {
   diet: "none" | "vegetarian" | "vegan" | "pescatarian";
   allergies: string;
   excludedIngredients: string;
+  dateFormat: DateFormat;
   products: DemoProduct[];
   shoppingItems: ShoppingItem[];
   recipeLibrary: RecipeLibrary;
@@ -86,7 +88,7 @@ export function productToRow(product: DemoProduct, householdId: string) {
 
 export async function loadDashboardData(supabase: SupabaseClient, userId: string): Promise<DashboardData> {
   const { data: profile, error: profileError } = await supabase
-    .from("profiles").select("household_id,username,avatar_path,deduction_mode,diet,allergies,excluded_ingredients").eq("user_id", userId).single();
+    .from("profiles").select("household_id,username,avatar_path,deduction_mode,diet,allergies,excluded_ingredients,date_format").eq("user_id", userId).single();
   if (profileError || !profile) throw new Error("Profile is missing. Apply the Supabase migration.");
 
   const householdId = profile.household_id as string;
@@ -109,6 +111,7 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
     diet: profile.diet as DashboardData["diet"],
     allergies: String(profile.allergies ?? ""),
     excludedIngredients: String(profile.excluded_ingredients ?? ""),
+    dateFormat: profile.date_format as DateFormat,
     products: (products.data ?? []).map(productFromRow),
     shoppingItems: (shopping.data ?? []).map((item) => ({ id: item.id, name: item.name, done: item.done, isDemo: item.is_demo === true,
       ...(item.seed_key ? { seedKey: item.seed_key } : {}),

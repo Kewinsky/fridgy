@@ -217,9 +217,8 @@
     },
     "advanced": {
       "regional": {
-        "title": "Devise et format de date",
-        "description": "Formats utilisés pour les prix, les reçus et les dates des produits.",
-        "currencyLabel": "Devise",
+        "title": "Format de date",
+        "description": "Choisissez comment afficher les dates des produits et des préparations.",
         "dateLabel": "Format de date"
       },
       "privacy": {
@@ -784,8 +783,7 @@
       "productFallback": "produit",
       "quantity": "Quantité",
       "unit": "Unité",
-      "location": "Emplacement",
-      "price": "Prix"
+      "location": "Emplacement"
     },
     "toasts": {
       "incomplete": "Indiquez le nom, la quantité et l'unité de chaque produit.",
@@ -816,7 +814,7 @@
       "description": "Vérifiez les produits avant de les enregistrer.",
       "scanInfoTitle": "Comment l'IA lit-elle le ticket ?",
       "scanNotice": "Les dates sont estimées – vérifiez les emballages.",
-      "scanInfoRead": "L'IA lit les noms, quantités et prix sur le ticket. Elle propose la catégorie et le lieu de stockage à partir du nom du produit.",
+      "scanInfoRead": "L'IA lit les noms et les quantités des produits sur le ticket. Elle propose la catégorie et le lieu de stockage à partir du nom du produit.",
       "scanInfoDate": "Le ticket indique rarement la date de péremption. L'IA estime une date selon le type de produit et le lieu de stockage proposé, à partir du jour du scan. Elle ne connaît ni l'étiquette ni les conditions de stockage. Vérifiez l'emballage et corrigez la date, surtout pour les aliments périssables.",
       "estimatedDate": "Date d'utilisation estimée",
       "back": "Retour",

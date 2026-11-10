@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentDashboard, type DashboardData } from "@/lib/dashboard-data";
 import { getDailyIdea } from "@/lib/daily-idea";
 import { getFreshnessStatus } from "@/lib/demo-data";
+import { formatUserDate } from "@/lib/date-format";
 import { localizeDemoProduct } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
 
@@ -91,8 +92,8 @@ export default async function DashboardPage() {
             <ul className="divide-y divide-border px-5 sm:px-6">
               {expiringProducts.slice(0, 5).map(({ product, status }) => (
                 <li key={product.id} className="flex min-w-0 items-center gap-4 py-3">
-                  <time dateTime={product.estimatedUseBy} className="flex h-11 w-16 shrink-0 items-center justify-center rounded-lg bg-secondary text-xs font-bold text-primary">
-                    {new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", timeZone: "UTC" }).format(new Date(`${product.estimatedUseBy}T12:00:00Z`))}
+                  <time dateTime={product.estimatedUseBy} className="flex h-11 w-24 shrink-0 items-center justify-center rounded-lg bg-secondary text-xs font-bold text-primary">
+                    {formatUserDate(product.estimatedUseBy, initialData.dateFormat)}
                   </time>
                   <div className="flex min-w-0 flex-1 flex-wrap items-center justify-between gap-x-3 gap-y-1">
                     <span className="min-w-0 break-words text-sm font-semibold">{localizeDemoProduct(product, locale).name}</span>

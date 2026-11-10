@@ -217,9 +217,8 @@
     },
     "advanced": {
       "regional": {
-        "title": "Moneda y formato de fecha",
-        "description": "Formatos usados para precios, recibos y fechas de los productos.",
-        "currencyLabel": "Moneda",
+        "title": "Formato de fecha",
+        "description": "Elige cómo se muestran las fechas de los productos y de las preparaciones.",
         "dateLabel": "Formato de fecha"
       },
       "privacy": {
@@ -784,8 +783,7 @@
       "productFallback": "producto",
       "quantity": "Cantidad",
       "unit": "Unidad",
-      "location": "Lugar",
-      "price": "Precio"
+      "location": "Lugar"
     },
     "toasts": {
       "incomplete": "Introduce el nombre, la cantidad y la unidad de cada producto.",
@@ -816,7 +814,7 @@
       "description": "Revisa los productos antes de guardarlos.",
       "scanInfoTitle": "¿Cómo lee la IA el recibo?",
       "scanNotice": "Las fechas son estimaciones – comprueba los envases.",
-      "scanInfoRead": "La IA lee nombres, cantidades y precios del recibo. Sugiere la categoría y el lugar de almacenamiento según el nombre del producto.",
+      "scanInfoRead": "La IA lee nombres y cantidades de los productos del recibo. Sugiere la categoría y el lugar de almacenamiento según el nombre del producto.",
       "scanInfoDate": "El recibo normalmente no muestra la fecha de caducidad. La IA estima una fecha según el tipo de producto y el almacenamiento sugerido, desde el día del escaneo. No conoce la etiqueta ni las condiciones de conservación. Comprueba el envase y corrige la fecha, especialmente para alimentos perecederos.",
       "estimatedDate": "Fecha de uso estimada",
       "back": "Volver",

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -25,30 +26,25 @@ import {
 export function AdvancedSettings({ version, initialSettings, isHouseholdOwner }: { version: string; initialSettings: ProfileSettings; isHouseholdOwner: boolean }) {
   const t = useTranslations("Settings.advanced");
   const common = useTranslations("Common");
+  const router = useRouter();
+  const { setDateFormat } = useDashboardData();
   const [settings, setSettings] = useState(initialSettings);
 
   async function save<K extends keyof ProfileSettings>(key: K, value: ProfileSettings[K]) {
     try {
       await saveProfileSetting(key, value);
       setSettings((current) => ({ ...current, [key]: value }));
+      if (key === "date_format") {
+        setDateFormat(value as ProfileSettings["date_format"]);
+        router.refresh();
+      }
       toast.success(common("saved"));
     } catch { toast.error(common("saveFailed")); }
   }
 
   return (
     <>
-      <PreferenceCard
-        title={t("regional.currencyLabel")}
-        description={t("regional.description")}
-      >
-        <SettingsDropdown
-          ariaLabel={t("regional.currencyLabel")}
-          value={settings.currency}
-          onValueChange={(value) => void save("currency", value as ProfileSettings["currency"])}
-          options={["PLN", "EUR", "GBP", "CHF"].map((value) => ({ value, label: value }))}
-        />
-      </PreferenceCard>
-      <PreferenceCard title={t("regional.dateLabel")}>
+      <PreferenceCard title={t("regional.dateLabel")} description={t("regional.description")}>
         <SettingsDropdown
           ariaLabel={t("regional.dateLabel")}
           value={settings.date_format}
