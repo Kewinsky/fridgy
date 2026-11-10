@@ -23,6 +23,7 @@ import { localizeDemoRecipe } from "@/lib/demo-localization";
 import { getRecipeImageSrc } from "@/lib/recipe-image";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { cn } from "@/lib/utils";
 
 export function RecipeCard({
@@ -39,6 +40,7 @@ export function RecipeCard({
   const t = useTranslations("Recipe");
   const libraryT = useTranslations("RecipeLibrary");
   const common = useTranslations("Common");
+  const { isHouseholdOwner } = useDashboardData();
   const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
@@ -99,7 +101,7 @@ export function RecipeCard({
           >
             {t("viewRecipe")} <ArrowRightIcon aria-hidden="true" />
           </Button>
-          {!suggestion && customRecipe ? (
+          {!suggestion && customRecipe && isHouseholdOwner ? (
             <div className="flex gap-2 self-end">
               <EditRecipeDialog recipe={customRecipe} />
               <DeleteRecipeDialog recipe={customRecipe} />

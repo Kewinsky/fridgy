@@ -7,6 +7,8 @@ import { useTranslations } from "next-intl";
 
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
 import { HouseholdCreationForm } from "@/components/dashboard/household-switcher";
+import { JoinHouseholdForm } from "@/components/dashboard/join-household-form";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export function HouseholdOnboarding() {
@@ -14,6 +16,16 @@ export function HouseholdOnboarding() {
   const dashboardT = useTranslations("Dashboard");
   const navigationT = useTranslations("Navigation");
   const [creating, setCreating] = useState(false);
+  const [joining, setJoining] = useState(false);
+  let modalTitle = t("modalTitle");
+  let modalDescription = t("modalDescription");
+  if (joining) {
+    modalTitle = navigationT("join.title");
+    modalDescription = navigationT("join.description");
+  } else if (creating) {
+    modalTitle = navigationT("setupTitle");
+    modalDescription = navigationT("setupDescription");
+  }
   const previewHousehold = t("previewHousehold");
 
   return (
@@ -59,10 +71,11 @@ export function HouseholdOnboarding() {
             <span className="mb-2 flex size-14 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-primary/20">
               <LeafIcon className="size-7" aria-hidden="true" />
             </span>
-            <DialogTitle className="text-2xl font-extrabold tracking-tight">{creating ? navigationT("setupTitle") : t("modalTitle")}</DialogTitle>
-            <DialogDescription className="text-base leading-6">{creating ? navigationT("setupDescription") : t("modalDescription")}</DialogDescription>
+            <DialogTitle className="text-2xl font-extrabold tracking-tight">{modalTitle}</DialogTitle>
+            <DialogDescription className="text-base leading-6">{modalDescription}</DialogDescription>
           </DialogHeader>
-          <HouseholdCreationForm onboarding onLoadingChange={setCreating} />
+          {joining ? <JoinHouseholdForm /> : <HouseholdCreationForm onboarding onLoadingChange={setCreating} />}
+          {!creating ? <Button type="button" variant="ghost" className="w-full" onClick={() => setJoining((value) => !value)}>{joining ? navigationT("join.createInstead") : navigationT("join.title")}</Button> : null}
         </DialogContent>
       </Dialog>
     </>

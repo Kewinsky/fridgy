@@ -11,7 +11,7 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import packageJson from "@/package.json";
 import { createClient } from "@/lib/supabase/server";
 import type { ProfileSettings } from "@/app/dashboard/settings-actions";
-import { listHouseholdMembers } from "@/app/dashboard/settings-actions";
+import { getHouseholdJoinCode, listHouseholdJoinRequests, listHouseholdMembers } from "@/app/dashboard/settings-actions";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Settings");
@@ -31,8 +31,10 @@ export default async function SettingsPage() {
   if (householdError || !household) throw new Error("Could not load household");
   const settings = profile as ProfileSettings;
   const isOwner = household.owner_id === auth.user.id;
-  const [members, ownedResult] = await Promise.all([
+  const [members, joinCode, joinRequests, ownedResult] = await Promise.all([
     isOwner ? listHouseholdMembers(profile.household_id) : Promise.resolve([]),
+    isOwner ? getHouseholdJoinCode(profile.household_id) : Promise.resolve(""),
+    isOwner ? listHouseholdJoinRequests(profile.household_id) : Promise.resolve([]),
     supabase.from("households").select("id").eq("owner_id", auth.user.id),
   ]);
   if (ownedResult.error) throw new Error("Could not load owned households");
@@ -76,7 +78,7 @@ export default async function SettingsPage() {
             <AdvancedSettings version={packageJson.version} initialSettings={settings} isHouseholdOwner={household.owner_id === auth.user.id} />
           </div>
         }
-        account={<AccountSettings key={profile.household_id} email={auth.user.email ?? ""} username={String(profile.username)} avatarPath={typeof profile.avatar_path === "string" ? profile.avatar_path : null} householdId={profile.household_id} householdName={household.name} isOwner={isOwner} members={members} deletionStatus={deletionStatus} />}
+        account={<AccountSettings key={profile.household_id} email={auth.user.email ?? ""} username={String(profile.username)} avatarPath={typeof profile.avatar_path === "string" ? profile.avatar_path : null} householdId={profile.household_id} householdName={household.name} isOwner={isOwner} members={members} joinCode={joinCode} joinRequests={joinRequests} deletionStatus={deletionStatus} />}
         preferences={<PreferenceSettings initialSettings={settings} />}
       />
     </>

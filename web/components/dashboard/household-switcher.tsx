@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { JoinHouseholdForm } from "@/components/dashboard/join-household-form";
 import type { HouseholdOption } from "@/lib/dashboard-data";
 
 export function HouseholdSwitcher({ currentId, households }: { currentId: string; households: HouseholdOption[] }) {
@@ -19,6 +20,7 @@ export function HouseholdSwitcher({ currentId, households }: { currentId: string
   const common = useTranslations("Common");
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [joinOpen, setJoinOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [creating, setCreating] = useState(false);
   const current = households.find((household) => household.id === currentId);
@@ -57,6 +59,9 @@ export function HouseholdSwitcher({ currentId, households }: { currentId: string
           <DropdownMenuItem onClick={() => setOpen(true)}>
             <PlusIcon aria-hidden="true" /> {t("addHousehold")}
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setJoinOpen(true)}>
+            <HomeIcon aria-hidden="true" /> {t("join.title")}
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <Dialog open={open} onOpenChange={(nextOpen) => { if (!creating) setOpen(nextOpen); }}>
@@ -66,6 +71,15 @@ export function HouseholdSwitcher({ currentId, households }: { currentId: string
             <DialogDescription>{t(creating ? "setupDescription" : "addHouseholdDescription")}</DialogDescription>
           </DialogHeader>
           <HouseholdCreationForm onLoadingChange={setCreating} onCreated={() => { setCreating(false); setOpen(false); }} />
+        </DialogContent>
+      </Dialog>
+      <Dialog open={joinOpen} onOpenChange={setJoinOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("join.title")}</DialogTitle>
+            <DialogDescription>{t("join.description")}</DialogDescription>
+          </DialogHeader>
+          <JoinHouseholdForm onJoined={() => setJoinOpen(false)} />
         </DialogContent>
       </Dialog>
     </>

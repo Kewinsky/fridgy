@@ -9,10 +9,11 @@
     "demoData": "Beispieldaten"
   },
   "Invitation": {
-    "title": "Einem Haushalt beitreten",
-    "description": "Du siehst dann die gemeinsamen Vorräte und die Einkaufsliste. Deine eigenen Rezepte bleiben in deinem Konto.",
-    "accept": "Haushalt beitreten",
-    "error": "Die Einladung konnte nicht angenommen werden. Prüfe die E-Mail-Adresse oder ob der Link abgelaufen ist."
+    "title": "Beitritt anfragen",
+    "description": "Der Eigentümer muss deine Anfrage bestätigen.",
+    "accept": "Anfrage senden",
+    "error": "Dieser Link ist ungültig oder abgelaufen.",
+    "requested": "Anfrage gesendet. Der Eigentümer muss sie bestätigen."
   },
   "Metadata": {
     "description": "Lebensmittel zu Hause verwalten und weniger verschwenden."
@@ -80,7 +81,21 @@
     "setupHousehold": "Haushalt erstellen",
     "setupSpace": "Bereich einrichten",
     "setupDemo": "Beispieldaten hinzufügen",
-    "setupReady": "Fast fertig!"
+    "setupReady": "Fast fertig!",
+    "join": {
+      "title": "Haushalt beitreten",
+      "description": "Gib den Code des Eigentümers ein. Nach seiner Zustimmung erhältst du Zugang.",
+      "codeLabel": "Haushaltscode",
+      "requestAccess": "Zugang anfragen",
+      "invalid": "Zu diesem Code wurde kein Haushalt gefunden.",
+      "alreadyMember": "Du hast bereits Zugang zu diesem Haushalt.",
+      "waiting": "Anfrage gesendet. Der Eigentümer muss zustimmen.",
+      "checkStatus": "Status prüfen",
+      "approved": "Der Eigentümer hat deine Anfrage bestätigt.",
+      "denied": "Die Anfrage wurde abgelehnt oder der Code ist ungültig.",
+      "stillWaiting": "Deine Anfrage wartet noch auf eine Entscheidung.",
+      "createInstead": "Eigenen Haushalt erstellen"
+    }
   },
   "Settings": {
     "metaTitle": "Einstellungen",
@@ -192,18 +207,28 @@
         "cancel": "Abbrechen"
       },
       "invite": {
-        "title": "Haushaltsmitglied einladen",
-        "description": "Erstelle einen Link für diese E-Mail-Adresse und teile ihn mit deinem Haushaltsmitglied.",
-        "emailLabel": "E-Mail des Haushaltsmitglieds",
-        "placeholder": "mitglied@example.com",
-        "action": "Einladung erstellen",
-        "created": "Der Einladungslink kann jetzt geteilt werden.",
-        "linkLabel": "Einladungslink",
-        "copy": "Link kopieren",
-        "copied": "Link kopiert."
+        "title": "Beitrittscode",
+        "description": "Teile diesen Code mit eingeladenen Personen. Zugang erhalten sie erst nach deiner Zustimmung.",
+        "codeLabel": "Haushaltscode",
+        "copy": "Code kopieren",
+        "copied": "Code kopiert.",
+        "rotate": "Neuen Code erstellen",
+        "rotateTitle": "Beitrittscode ändern?",
+        "rotateDescription": "Der alte Code wird ungültig und offene Anfragen werden abgelehnt.",
+        "rotated": "Code geändert.",
+        "pendingTitle": "Beitrittsanfragen",
+        "requestsDescription": "Bestätige Personen, die dem Haushalt beitreten dürfen, oder lehne ihre Anfragen ab.",
+        "refresh": "Aktualisieren",
+        "noRequests": "Keine offenen Anfragen.",
+        "approve": "Bestätigen",
+        "deny": "Ablehnen",
+        "approved": "Anfrage bestätigt.",
+        "denied": "Anfrage abgelehnt."
       },
       "members": {
         "title": "Haushaltsmitglieder",
+        "manage": "Mitglieder anzeigen",
+        "preview": "Vorschau 10 + 10",
         "description": "Nur der Eigentümer kann Mitglieder entfernen oder die Eigentümerschaft übertragen.",
         "cancel": "Abbrechen",
         "transfer": {
@@ -249,20 +274,6 @@
         "title": "Datumsformat",
         "description": "Wähle, wie Produktdaten und Kochdaten angezeigt werden.",
         "dateLabel": "Datumsformat"
-      },
-      "privacy": {
-        "title": "Datenschutz und Datenanalyse",
-        "description": "Wähle, wie Fridgy App-Daten verwenden darf.",
-        "options": {
-          "personalization": {
-            "title": "Personalisierte Vorschläge",
-            "description": "Vorräte und Kochverlauf für passende Rezeptvorschläge verwenden."
-          },
-          "analytics": {
-            "title": "Anonyme Analyse",
-            "description": "Anonyme Nutzungsdaten teilen, um die App zu verbessern."
-          }
-        }
       },
       "demo": {
         "title": "Demo-Daten",

@@ -10,12 +10,18 @@ import {
   Trash2Icon,
   UploadIcon,
   UserRoundIcon,
-  UserPlusIcon,
   CrownIcon,
+  CopyIcon,
+  RefreshCwIcon,
+  UsersRoundIcon,
+  CircleAlertIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
-  createHouseholdInvitation,
+  decideHouseholdJoin,
+  listHouseholdJoinRequests,
+  listHouseholdMembers,
+  rotateHouseholdJoinCode,
   deleteAccount,
   exportAccountData,
   saveHouseholdName,
@@ -24,6 +30,7 @@ import {
   transferHouseholdOwnership,
   removeHouseholdMember,
   type HouseholdMember,
+  type HouseholdJoinRequest,
 } from "@/app/dashboard/settings-actions";
 
 import { Button } from "@/components/ui/button";
@@ -40,6 +47,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getProfileImageSrc, MAX_PROFILE_IMAGE_MB } from "@/lib/profile-image";
 import { removeProfileImage, saveProfileImage } from "@/lib/profile-image-storage";
 import { createClient } from "@/lib/supabase/client";
@@ -52,6 +60,8 @@ export function AccountSettings({
   householdId,
   isOwner,
   members,
+  joinCode: initialJoinCode,
+  joinRequests: initialJoinRequests,
   deletionStatus,
 }: {
   email: string;
@@ -61,6 +71,8 @@ export function AccountSettings({
   householdId: string;
   isOwner: boolean;
   members: HouseholdMember[];
+  joinCode: string;
+  joinRequests: HouseholdJoinRequest[];
   deletionStatus: { soloOwnedCount: number; sharedOwnedCount: number };
 }) {
   const t = useTranslations("Settings.account");
@@ -77,8 +89,11 @@ export function AccountSettings({
   const [isSavingAvatar, setIsSavingAvatar] = useState(false);
   const [avatarError, setAvatarError] = useState("");
   const avatarInputRef = useRef<HTMLInputElement>(null);
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [inviteLink, setInviteLink] = useState("");
+  const [joinCode, setJoinCode] = useState(initialJoinCode);
+  const [joinRequests, setJoinRequests] = useState(initialJoinRequests);
+  const [joinBusy, setJoinBusy] = useState(false);
+  const [rotateOpen, setRotateOpen] = useState(false);
+  const [peopleOpen, setPeopleOpen] = useState(false);
   const [currentMembers, setCurrentMembers] = useState(members);
   const hasNameChanges = name.trim() !== savedName;
   const hasUsernameChanges = username.trim() !== savedUsername;
@@ -154,13 +169,51 @@ export function AccountSettings({
     }
   }
 
-  async function invite() {
+  async function rotateCode() {
+    if (joinBusy) return;
+    setJoinBusy(true);
     try {
-      const token = await createHouseholdInvitation(inviteEmail);
-      setInviteLink(`${window.location.origin}/invite/${token}`);
-      toast.success(t("invite.created"));
+      setJoinCode(await rotateHouseholdJoinCode(householdId));
+      setJoinRequests([]);
+      setRotateOpen(false);
+      toast.success(t("invite.rotated"));
     } catch {
       toast.error(common("saveFailed"));
+    } finally {
+      setJoinBusy(false);
+    }
+  }
+
+  async function decideRequest(requestId: string, approve: boolean) {
+    if (joinBusy) return;
+    setJoinBusy(true);
+    try {
+      await decideHouseholdJoin(requestId, approve);
+      setJoinRequests((current) => current.filter((request) => request.id !== requestId));
+      if (approve) setCurrentMembers(await listHouseholdMembers(householdId));
+      router.refresh();
+      toast.success(t(approve ? "invite.approved" : "invite.denied"));
+    } catch {
+      toast.error(common("saveFailed"));
+    } finally {
+      setJoinBusy(false);
+    }
+  }
+
+  async function refreshPeople() {
+    if (joinBusy) return;
+    setJoinBusy(true);
+    try {
+      const [requests, members] = await Promise.all([
+        listHouseholdJoinRequests(householdId),
+        listHouseholdMembers(householdId),
+      ]);
+      setJoinRequests(requests);
+      setCurrentMembers(members);
+    } catch {
+      toast.error(common("saveFailed"));
+    } finally {
+      setJoinBusy(false);
     }
   }
 
@@ -195,7 +248,7 @@ export function AccountSettings({
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Input
                   id="household-name"
-                  className="h-11 min-w-0 flex-1"
+                  className="h-11 min-w-0 shrink-0 sm:flex-1"
                   value={name}
                   onChange={(event) => setName(event.target.value)}
                   readOnly={!isOwner}
@@ -234,80 +287,113 @@ export function AccountSettings({
               title={t("invite.title")}
               description={t("invite.description")}
             >
-              <Field id="invite-email" label={t("invite.emailLabel")}>
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Input
-                    id="invite-email"
-                    className="h-11 min-w-0 flex-1"
-                    type="email"
-                    placeholder={t("invite.placeholder")}
-                    value={inviteEmail}
-                    onChange={(event) => setInviteEmail(event.target.value)}
-                  />
-                  <Button
-                    type="button"
-                    className="h-11 shrink-0"
-                    onClick={invite}
-                    disabled={!inviteEmail}
-                  >
-                    <UserPlusIcon aria-hidden="true" /> {t("invite.action")}
-                  </Button>
-                </div>
-                {inviteLink ? (
-                  <div className="mt-3 grid gap-2">
-                    <Input aria-label={t("invite.linkLabel")} value={inviteLink} disabled />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() =>
-                        void navigator.clipboard
-                          .writeText(inviteLink)
-                          .then(() => toast.success(t("invite.copied")))
-                          .catch(() => toast.error(common("saveFailed")))
-                      }
-                    >
-                      {t("invite.copy")}
-                    </Button>
-                  </div>
-                ) : null}
-              </Field>
+              <div className="flex flex-wrap items-center justify-end gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  title={t("invite.copy")}
+                  aria-label={`${t("invite.copy")}: ${joinCode}`}
+                  className="group relative h-11 min-w-32 bg-muted px-3 font-mono text-base font-bold tracking-[0.16em]"
+                  onClick={() => void navigator.clipboard.writeText(joinCode).then(() => toast.success(t("invite.copied"))).catch(() => toast.error(common("saveFailed")))}
+                >
+                  {joinCode}
+                  <CopyIcon className="absolute top-1/2 right-2 size-3 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-70 group-focus-visible:opacity-70" aria-hidden="true" />
+                </Button>
+                <Dialog open={rotateOpen} onOpenChange={setRotateOpen}>
+                  <DialogTrigger render={<Button type="button" variant="outline" size="icon" className="size-11" title={t("invite.rotate")} aria-label={t("invite.rotate")} disabled={joinBusy} />}>
+                    <RefreshCwIcon aria-hidden="true" />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader><DialogTitle>{t("invite.rotateTitle")}</DialogTitle><DialogDescription>{t("invite.rotateDescription")}</DialogDescription></DialogHeader>
+                    <DialogFooter><Button type="button" variant="outline" className="h-11" onClick={() => setRotateOpen(false)}>{t("members.cancel")}</Button><Button type="button" className="h-11" disabled={joinBusy} onClick={() => void rotateCode()}>{t("invite.rotate")}</Button></DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </SettingsCard>
           ) : null}
           {isOwner ? (
             <SettingsCard title={t("members.title")} description={t("members.description")}>
-              <ul className="divide-y divide-border">
-                {currentMembers.map((member) => (
-                  <li key={member.user_id} className="flex min-w-0 flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{member.username}</p>
-                      <p className="truncate text-xs text-muted-foreground">{member.email}</p>
-                    </div>
-                    {member.is_owner ? (
-                      <Badge variant="secondary">{householdT("owner")}</Badge>
-                    ) : (
-                      <div className="flex flex-wrap gap-2">
-                        <MemberActionDialog
-                          kind="transfer"
-                          member={member}
-                          onConfirm={async () => {
-                            await transferHouseholdOwnership(householdId, member.user_id);
-                            router.refresh();
-                          }}
-                        />
-                        <MemberActionDialog
-                          kind="remove"
-                          member={member}
-                          onConfirm={async () => {
-                            await removeHouseholdMember(householdId, member.user_id);
-                            setCurrentMembers((previous) => previous.filter((item) => item.user_id !== member.user_id));
-                            router.refresh();
-                          }}
-                        />
-                      </div>
-                    )}
-                  </li>
-                ))}
-              </ul>
+              <div className="flex justify-end">
+                <Dialog open={peopleOpen} onOpenChange={(open) => {
+                  setPeopleOpen(open);
+                  if (open) void refreshPeople();
+                }}>
+                  <DialogTrigger render={<Button type="button" variant="outline" className="h-11" />}>
+                    {joinRequests.length ? <CircleAlertIcon className="text-amber-500" aria-hidden="true" /> : <UsersRoundIcon aria-hidden="true" />}
+                    {t("members.manage")}
+                    {joinRequests.length ? <Badge variant="secondary" className="bg-amber-500/15 text-amber-700 dark:text-amber-300">{joinRequests.length}<span className="sr-only">{t("invite.pendingTitle")}</span></Badge> : null}
+                  </DialogTrigger>
+                  <DialogContent className="max-h-[calc(100dvh-2rem)] sm:max-w-xl">
+                    <DialogHeader className="pr-10">
+                      <DialogTitle>{t("members.title")}</DialogTitle>
+                      <DialogDescription>{t("members.description")}</DialogDescription>
+                    </DialogHeader>
+                    <Tabs defaultValue="members" className="min-h-0">
+                      <TabsList className="h-11! w-full">
+                        <TabsTrigger value="members" className="h-9 px-3">{t("members.title")} <span className="tabular-nums">{currentMembers.length}</span></TabsTrigger>
+                        <TabsTrigger value="requests" className="h-9 px-3">{t("invite.pendingTitle")} <span className="tabular-nums">{joinRequests.length}</span></TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="members" className="max-h-[60dvh] overflow-y-auto pt-2">
+                        <ul className="divide-y divide-border">
+                          {currentMembers.map((member) => (
+                            <li key={member.user_id} className="flex min-w-0 flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
+                              <div className="min-w-0 flex-1">
+                                <p className="flex min-w-0 items-center gap-2 text-sm font-medium">
+                                  <span className="truncate">{member.username}</span>
+                                  {member.is_owner ? <Badge variant="secondary">{householdT("owner")}</Badge> : null}
+                                </p>
+                                <p className="truncate text-xs text-muted-foreground">{member.email}</p>
+                              </div>
+                              {!member.is_owner ? (
+                                <div className="flex flex-wrap gap-2">
+                                  <MemberActionDialog
+                                    kind="transfer"
+                                    member={member}
+                                    onConfirm={async () => {
+                                      await transferHouseholdOwnership(householdId, member.user_id);
+                                      router.refresh();
+                                    }}
+                                  />
+                                  <MemberActionDialog
+                                    kind="remove"
+                                    member={member}
+                                    onConfirm={async () => {
+                                      await removeHouseholdMember(householdId, member.user_id);
+                                      setCurrentMembers((previous) => previous.filter((item) => item.user_id !== member.user_id));
+                                      router.refresh();
+                                    }}
+                                  />
+                                </div>
+                              ) : null}
+                            </li>
+                          ))}
+                        </ul>
+                      </TabsContent>
+                      <TabsContent value="requests" className="max-h-[60dvh] overflow-y-auto pt-2">
+                        <div className="flex justify-end">
+                          <Button type="button" variant="ghost" className="h-11" disabled={joinBusy} onClick={() => void refreshPeople()}>
+                            <RefreshCwIcon aria-hidden="true" />{t("invite.refresh")}
+                          </Button>
+                        </div>
+                        {joinRequests.length ? (
+                          <ul className="divide-y divide-border">
+                            {joinRequests.map((request) => (
+                              <li key={request.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
+                                <div className="min-w-0 flex-1">
+                                  <p className="truncate text-sm font-medium">{request.username}</p>
+                                  <p className="truncate text-xs text-muted-foreground">{request.email}</p>
+                                </div>
+                                <Button type="button" className="h-11" disabled={joinBusy} onClick={() => void decideRequest(request.id, true)}>{t("invite.approve")}</Button>
+                                <Button type="button" variant="outline" className="h-11" disabled={joinBusy} onClick={() => void decideRequest(request.id, false)}>{t("invite.deny")}</Button>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : <p className="py-5 text-center text-sm text-muted-foreground">{t("invite.noRequests")}</p>}
+                      </TabsContent>
+                    </Tabs>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </SettingsCard>
           ) : null}
         </div>
@@ -333,7 +419,7 @@ export function AccountSettings({
                 if (file) void uploadAvatar(file);
               }}
             />
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center justify-end gap-2">
               <span className="relative flex size-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-secondary text-primary">
                 {avatarSrc ? <Image src={avatarSrc} alt={t("avatar.alt")} fill sizes="48px" className="object-cover" unoptimized /> : <UserRoundIcon className="size-6" aria-hidden="true" />}
               </span>
@@ -357,7 +443,7 @@ export function AccountSettings({
               <div className="flex flex-col gap-2 sm:flex-row">
                 <Input
                   id="account-username"
-                  className="h-11 min-w-0 flex-1"
+                  className="h-11 min-w-0 shrink-0 sm:flex-1"
                   autoComplete="nickname"
                   value={username}
                   onChange={(event) => setUsername(event.target.value)}
@@ -465,7 +551,7 @@ function MemberActionDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button type="button" variant="outline" size="sm" />}>
+      <DialogTrigger render={<Button type="button" variant="outline" className="h-11" />}>
         {kind === "transfer" ? <CrownIcon aria-hidden="true" /> : <Trash2Icon aria-hidden="true" />}
         {t(`${kind}.action`)}
       </DialogTrigger>
@@ -475,8 +561,8 @@ function MemberActionDialog({
           <DialogDescription>{t(`${kind}.description`, { name: member.username })}</DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button type="button" variant="outline" disabled={busy} onClick={() => setOpen(false)}>{t("cancel")}</Button>
-          <Button type="button" variant={kind === "remove" ? "destructive" : "default"} disabled={busy} onClick={() => void confirm()}>
+          <Button type="button" variant="outline" className="h-11" disabled={busy} onClick={() => setOpen(false)}>{t("cancel")}</Button>
+          <Button type="button" variant={kind === "remove" ? "destructive" : "default"} className="h-11" disabled={busy} onClick={() => void confirm()}>
             {t(`${kind}.action`)}
           </Button>
         </DialogFooter>

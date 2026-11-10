@@ -206,7 +206,7 @@ export function RecipeDetail({
             {showFavoriteAction ? (
               <FavoriteRecipeButton slug={recipe.slug} compact />
             ) : null}
-            {customRecipe ? (
+            {customRecipe && preferences.isHouseholdOwner ? (
               <>
                 <EditRecipeDialog recipe={customRecipe} />
                 <DeleteRecipeDialog recipe={customRecipe} />

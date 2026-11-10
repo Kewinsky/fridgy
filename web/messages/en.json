@@ -9,10 +9,11 @@
     "demoData": "Sample data"
   },
   "Invitation": {
-    "title": "Join a household",
-    "description": "You will see the shared inventory and shopping list. Your personal recipes will stay in your account.",
-    "accept": "Join household",
-    "error": "Could not accept the invitation. Check the email address or whether the link has expired."
+    "title": "Request to join",
+    "description": "The owner must approve your request before you can join.",
+    "accept": "Send request",
+    "error": "This link is invalid or expired.",
+    "requested": "Request sent. The household owner needs to approve it."
   },
   "Metadata": {
     "description": "Manage your food at home and waste less."
@@ -80,7 +81,21 @@
     "setupHousehold": "Creating your household",
     "setupSpace": "Setting up your space",
     "setupDemo": "Adding sample data",
-    "setupReady": "Almost ready!"
+    "setupReady": "Almost ready!",
+    "join": {
+      "title": "Join a household",
+      "description": "Enter the code from the owner. You will get access after they approve your request.",
+      "codeLabel": "Household code",
+      "requestAccess": "Request access",
+      "invalid": "No household found for this code.",
+      "alreadyMember": "You already have access to this household.",
+      "waiting": "Request sent. The owner needs to approve it.",
+      "checkStatus": "Check status",
+      "approved": "The owner approved your request.",
+      "denied": "The request was declined or the code expired.",
+      "stillWaiting": "Your request is still waiting.",
+      "createInstead": "Create your own household"
+    }
   },
   "Settings": {
     "metaTitle": "Settings",
@@ -192,18 +207,28 @@
         "cancel": "Cancel"
       },
       "invite": {
-        "title": "Invite a household member",
-        "description": "Create a link for this email address and share it with your household member.",
-        "emailLabel": "Household member's email",
-        "placeholder": "member@example.com",
-        "action": "Create invitation",
-        "created": "Your invitation link is ready to share.",
-        "linkLabel": "Invitation link",
-        "copy": "Copy link",
-        "copied": "Link copied."
+        "title": "Join code",
+        "description": "Share this code with someone you want to invite. They will get access only after you approve their request.",
+        "codeLabel": "Household code",
+        "copy": "Copy code",
+        "copied": "Code copied.",
+        "rotate": "Create new code",
+        "rotateTitle": "Change the join code?",
+        "rotateDescription": "The old code will stop working and pending requests will be declined.",
+        "rotated": "Code changed.",
+        "pendingTitle": "Join requests",
+        "requestsDescription": "Approve people who can join the household, or decline their requests.",
+        "refresh": "Refresh",
+        "noRequests": "No pending requests.",
+        "approve": "Approve",
+        "deny": "Decline",
+        "approved": "Request approved.",
+        "denied": "Request declined."
       },
       "members": {
         "title": "Household members",
+        "manage": "View members",
+        "preview": "Preview 10 + 10",
         "description": "Only the owner can remove members or transfer ownership.",
         "cancel": "Cancel",
         "transfer": {
@@ -249,20 +274,6 @@
         "title": "Date format",
         "description": "Choose how product dates and cooking dates are displayed.",
         "dateLabel": "Date format"
-      },
-      "privacy": {
-        "title": "Privacy and data analysis",
-        "description": "Choose how Fridgy may use application data.",
-        "options": {
-          "personalization": {
-            "title": "Personalised suggestions",
-            "description": "Use inventory and cooking history to tailor recipe suggestions."
-          },
-          "analytics": {
-            "title": "Anonymous analytics",
-            "description": "Share anonymous usage data to help improve the application."
-          }
-        }
       },
       "demo": {
         "title": "Demo data",

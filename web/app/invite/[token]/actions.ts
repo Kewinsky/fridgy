@@ -12,5 +12,5 @@ export async function acceptInvitation(token: string) {
   if (error || !data.user) redirect(`/login?next=/invite/${validToken}`);
   const { error: inviteError } = await supabase.rpc("accept_household_invitation", { invite_token: validToken });
   if (inviteError) throw new Error(inviteError.message);
-  redirect("/dashboard");
+  redirect(`/invite/${validToken}?requested=1`);
 }

@@ -9,10 +9,11 @@
     "demoData": "Dane testowe"
   },
   "Invitation": {
-    "title": "Dołącz do gospodarstwa domowego",
-    "description": "Po dołączeniu zobaczysz wspólne zapasy i listę zakupów. Twoje osobiste przepisy pozostaną na koncie.",
-    "accept": "Dołącz",
-    "error": "Nie można przyjąć zaproszenia. Sprawdź adres e-mail lub ważność linku."
+    "title": "Poproś o dołączenie",
+    "description": "Po wysłaniu prośby właściciel musi ją zaakceptować.",
+    "accept": "Wyślij prośbę",
+    "error": "Ten link jest nieprawidłowy lub wygasł.",
+    "requested": "Prośba została wysłana. Właściciel domostwa musi ją zaakceptować."
   },
   "Metadata": {
     "description": "Domowe zapasy bez marnowania."
@@ -80,7 +81,21 @@
     "setupHousehold": "Tworzymy domostwo",
     "setupSpace": "Konfigurujemy przestrzeń",
     "setupDemo": "Dodajemy dane demonstracyjne",
-    "setupReady": "Już prawie gotowe!"
+    "setupReady": "Już prawie gotowe!",
+    "join": {
+      "title": "Dołącz do domostwa",
+      "description": "Wpisz kod od właściciela. Gdy zaakceptuje Twoją prośbę, uzyskasz dostęp do domostwa.",
+      "codeLabel": "Kod domostwa",
+      "requestAccess": "Poproś o dołączenie",
+      "invalid": "Nie znaleziono domostwa z takim kodem.",
+      "alreadyMember": "Masz już dostęp do tego domostwa.",
+      "waiting": "Prośba została wysłana. Czeka na decyzję właściciela.",
+      "checkStatus": "Sprawdź status",
+      "approved": "Właściciel zaakceptował Twoją prośbę.",
+      "denied": "Prośba została odrzucona lub kod stracił ważność.",
+      "stillWaiting": "Prośba nadal czeka na decyzję.",
+      "createInstead": "Utwórz własne domostwo"
+    }
   },
   "Settings": {
     "metaTitle": "Ustawienia",
@@ -192,18 +207,28 @@
         "cancel": "Anuluj"
       },
       "invite": {
-        "title": "Zaproś domownika",
-        "description": "Utwórz link dla podanego adresu e-mail i udostępnij go domownikowi.",
-        "emailLabel": "Adres e-mail domownika",
-        "placeholder": "domownik@example.com",
-        "action": "Utwórz zaproszenie",
-        "created": "Link zaproszenia jest gotowy do udostępnienia.",
-        "linkLabel": "Link zaproszenia",
-        "copy": "Kopiuj link",
-        "copied": "Skopiowano link."
+        "title": "Kod dołączenia",
+        "description": "Udostępnij ten kod osobie, którą chcesz zaprosić. Dostęp otrzyma dopiero po Twojej akceptacji.",
+        "codeLabel": "Kod domostwa",
+        "copy": "Kopiuj kod",
+        "copied": "Skopiowano kod.",
+        "rotate": "Wygeneruj nowy kod",
+        "rotateTitle": "Zmienić kod dołączenia?",
+        "rotateDescription": "Stary kod przestanie działać, a oczekujące prośby zostaną odrzucone.",
+        "rotated": "Kod został zmieniony.",
+        "pendingTitle": "Prośby o dołączenie",
+        "requestsDescription": "Zaakceptuj osoby, które mogą dołączyć do domostwa, lub odrzuć ich prośby.",
+        "refresh": "Odśwież",
+        "noRequests": "Brak oczekujących próśb.",
+        "approve": "Akceptuj",
+        "deny": "Odrzuć",
+        "approved": "Prośba została zaakceptowana.",
+        "denied": "Prośba została odrzucona."
       },
       "members": {
         "title": "Domownicy",
+        "manage": "Pokaż domowników",
+        "preview": "Podgląd 10 + 10",
         "description": "Tylko właściciel może usuwać domowników i przekazać własność domu.",
         "cancel": "Anuluj",
         "transfer": {
@@ -249,20 +274,6 @@
         "title": "Format daty",
         "description": "Wybierz sposób wyświetlania terminów produktów i dat gotowania.",
         "dateLabel": "Format daty"
-      },
-      "privacy": {
-        "title": "Prywatność i analiza danych",
-        "description": "Wybierz, w jaki sposób Fridgy może wykorzystywać dane aplikacji.",
-        "options": {
-          "personalization": {
-            "title": "Personalizacja propozycji",
-            "description": "Wykorzystuj zapasy i historię gotowania do dopasowania przepisów."
-          },
-          "analytics": {
-            "title": "Anonimowa analityka",
-            "description": "Udostępniaj anonimowe dane o użyciu, aby pomagać ulepszać aplikację."
-          }
-        }
       },
       "demo": {
         "title": "Dane demonstracyjne",

@@ -10,6 +10,7 @@ import type { CustomRecipe, StoredRecipe } from "@/lib/recipe-library";
 import type { ShoppingItem } from "@/lib/shopping-list";
 
 type DashboardStore = DashboardData & {
+  isHouseholdOwner: boolean;
   updateInventory: (update: (current: DemoProduct[]) => DemoProduct[]) => Promise<void>;
   refreshInventory: () => Promise<void>;
   updateShoppingItems: (update: (current: ShoppingItem[]) => ShoppingItem[]) => Promise<void>;
@@ -26,7 +27,7 @@ type DashboardStore = DashboardData & {
 
 const DashboardContext = createContext<DashboardStore | null>(null);
 
-export function DashboardDataProvider({ initialData, children }: { initialData: DashboardData; children: ReactNode }) {
+export function DashboardDataProvider({ initialData, isHouseholdOwner, children }: { initialData: DashboardData; isHouseholdOwner: boolean; children: ReactNode }) {
   const [products, setProducts] = useState(initialData.products);
   const [shoppingItems, setShoppingItems] = useState(initialData.shoppingItems);
   const [recipeLibrary, setRecipeLibrary] = useState(initialData.recipeLibrary);
@@ -132,7 +133,7 @@ export function DashboardDataProvider({ initialData, children }: { initialData: 
 
   return (
     <DashboardContext.Provider value={{
-      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, recipes, deductionMode, dateFormat,
+      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, recipes, deductionMode, dateFormat, isHouseholdOwner,
       updateInventory, refreshInventory, updateShoppingItems, toggleFavorite,
       saveCustomRecipe: saveCustom, updateCustomRecipe: updateCustom, deleteCustomRecipe: deleteCustom,
       addRecipes: (added) => setRecipes((current) => [...added, ...current]),

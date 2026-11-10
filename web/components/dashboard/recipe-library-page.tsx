@@ -28,6 +28,7 @@ export function RecipeLibraryPage({ favorites, custom, history }: {
   history: ReactNode;
 }) {
   const t = useTranslations("RecipeLibrary");
+  const { isHouseholdOwner } = useDashboardData();
 
   return (
     <>
@@ -35,7 +36,7 @@ export function RecipeLibraryPage({ favorites, custom, history }: {
         eyebrow={t("eyebrow")}
         title={t("title")}
         description={t("description")}
-        actions={<AddRecipeDialog />}
+        actions={isHouseholdOwner ? <AddRecipeDialog /> : null}
       />
 
       <Tabs defaultValue="favorites">
@@ -71,7 +72,7 @@ export function RecipeLibraryPage({ favorites, custom, history }: {
 export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
   const t = useTranslations("RecipeLibrary");
   const library = useRecipeLibrary();
-  const { recipes: savedRecipes } = useDashboardData();
+  const { recipes: savedRecipes, isHouseholdOwner } = useDashboardData();
   const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -90,7 +91,7 @@ export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
     emptyState = <EmptyState icon={HeartIcon} title={t("emptyFavorites.title")} description={t("emptyFavorites.description")} />;
   } else if (tab === "custom") {
     recipes = savedRecipes.filter((recipe) => recipe.source === "custom");
-    emptyState = <EmptyState icon={BookOpenIcon} title={t("emptyCustom.title")} description={t("emptyCustom.description")} actionNode={<AddRecipeDialog />} />;
+    emptyState = <EmptyState icon={BookOpenIcon} title={t("emptyCustom.title")} description={t("emptyCustom.description")} actionNode={isHouseholdOwner ? <AddRecipeDialog /> : undefined} />;
   } else {
     recipes = getHistoryRecipes(savedRecipes, [], library.history);
     emptyState = <EmptyState icon={HistoryIcon} title={t("emptyHistory.title")} description={t("emptyHistory.description")} href="/dashboard/co-ugotowac" action={t("emptyHistory.action")} />;

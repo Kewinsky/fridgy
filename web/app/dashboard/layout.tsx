@@ -8,7 +8,7 @@ import { getCurrentDashboard } from "@/lib/dashboard-data";
 export default async function DashboardLayout({ children }: { children: ReactNode }) {
   const dashboard = await getCurrentDashboard();
   if (!dashboard) return <HouseholdOnboarding />;
-  const { initialData, email, householdName, households } = dashboard;
+  const { initialData, email, householdName, households, isHouseholdOwner } = dashboard;
 
-  return <DashboardDataProvider key={initialData.householdId} initialData={initialData}><DashboardShell email={email} username={initialData.username} avatarPath={initialData.avatarPath} householdName={householdName} householdId={initialData.householdId} households={households}>{children}</DashboardShell></DashboardDataProvider>;
+  return <DashboardDataProvider key={initialData.householdId} initialData={initialData} isHouseholdOwner={isHouseholdOwner}><DashboardShell email={email} username={initialData.username} avatarPath={initialData.avatarPath} householdName={householdName} householdId={initialData.householdId} households={households}>{children}</DashboardShell></DashboardDataProvider>;
 }

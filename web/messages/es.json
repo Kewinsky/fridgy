@@ -9,10 +9,11 @@
     "demoData": "Datos de ejemplo"
   },
   "Invitation": {
-    "title": "Unirse a un hogar",
-    "description": "Verás el inventario y la lista de compras compartidos. Tus recetas personales seguirán en tu cuenta.",
-    "accept": "Unirse al hogar",
-    "error": "No se pudo aceptar la invitación. Comprueba el correo electrónico o si el enlace ha caducado."
+    "title": "Solicitar acceso",
+    "description": "El propietario debe aprobar tu solicitud para unirte.",
+    "accept": "Enviar solicitud",
+    "error": "Este enlace no es válido o ha caducado.",
+    "requested": "Solicitud enviada. El propietario debe aprobarla."
   },
   "Metadata": {
     "description": "Gestiona tus alimentos en casa y desperdicia menos."
@@ -80,7 +81,21 @@
     "setupHousehold": "Creamos tu hogar",
     "setupSpace": "Configuramos tu espacio",
     "setupDemo": "Añadimos datos de ejemplo",
-    "setupReady": "¡Ya casi está!"
+    "setupReady": "¡Ya casi está!",
+    "join": {
+      "title": "Unirse a un hogar",
+      "description": "Introduce el código del propietario. Tendrás acceso cuando apruebe tu solicitud.",
+      "codeLabel": "Código del hogar",
+      "requestAccess": "Solicitar acceso",
+      "invalid": "No hay ningún hogar con este código.",
+      "alreadyMember": "Ya tienes acceso a este hogar.",
+      "waiting": "Solicitud enviada. El propietario debe aprobarla.",
+      "checkStatus": "Consultar estado",
+      "approved": "El propietario aprobó tu solicitud.",
+      "denied": "La solicitud fue rechazada o el código ya no es válido.",
+      "stillWaiting": "Tu solicitud sigue pendiente.",
+      "createInstead": "Crear tu propio hogar"
+    }
   },
   "Settings": {
     "metaTitle": "Ajustes",
@@ -192,18 +207,28 @@
         "cancel": "Cancelar"
       },
       "invite": {
-        "title": "Invitar a un miembro",
-        "description": "Crea un enlace para este correo y compártelo con la persona invitada.",
-        "emailLabel": "Correo del miembro",
-        "placeholder": "miembro@example.com",
-        "action": "Crear invitación",
-        "created": "El enlace de invitación está listo para compartir.",
-        "linkLabel": "Enlace de invitación",
-        "copy": "Copiar enlace",
-        "copied": "Enlace copiado."
+        "title": "Código de acceso",
+        "description": "Comparte este código con quien quieras invitar. Tendrá acceso solo después de tu aprobación.",
+        "codeLabel": "Código del hogar",
+        "copy": "Copiar código",
+        "copied": "Código copiado.",
+        "rotate": "Crear otro código",
+        "rotateTitle": "¿Cambiar el código de acceso?",
+        "rotateDescription": "El código anterior dejará de funcionar y se rechazarán las solicitudes pendientes.",
+        "rotated": "Código actualizado.",
+        "pendingTitle": "Solicitudes de acceso",
+        "requestsDescription": "Aprueba a las personas que pueden unirse al hogar o rechaza sus solicitudes.",
+        "refresh": "Actualizar",
+        "noRequests": "No hay solicitudes pendientes.",
+        "approve": "Aprobar",
+        "deny": "Rechazar",
+        "approved": "Solicitud aprobada.",
+        "denied": "Solicitud rechazada."
       },
       "members": {
         "title": "Miembros del hogar",
+        "manage": "Ver miembros",
+        "preview": "Vista previa 10 + 10",
         "description": "Solo el propietario puede eliminar miembros o transferir la propiedad.",
         "cancel": "Cancelar",
         "transfer": {
@@ -249,20 +274,6 @@
         "title": "Formato de fecha",
         "description": "Elige cómo se muestran las fechas de los productos y de las preparaciones.",
         "dateLabel": "Formato de fecha"
-      },
-      "privacy": {
-        "title": "Privacidad y análisis de datos",
-        "description": "Elige cómo puede usar Fridgy los datos de la aplicación.",
-        "options": {
-          "personalization": {
-            "title": "Propuestas personalizadas",
-            "description": "Usar las provisiones y el historial de cocina para adaptar las recetas."
-          },
-          "analytics": {
-            "title": "Análisis anónimo",
-            "description": "Compartir datos de uso anónimos para ayudar a mejorar la aplicación."
-          }
-        }
       },
       "demo": {
         "title": "Datos de demostración",

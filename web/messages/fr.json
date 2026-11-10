@@ -9,10 +9,11 @@
     "demoData": "Données de démonstration"
   },
   "Invitation": {
-    "title": "Rejoindre un foyer",
-    "description": "Vous verrez les réserves et la liste de courses partagées. Vos recettes personnelles resteront sur votre compte.",
-    "accept": "Rejoindre le foyer",
-    "error": "Impossible d'accepter l'invitation. Vérifiez l'adresse e-mail ou la validité du lien."
+    "title": "Demander à rejoindre",
+    "description": "Le propriétaire doit accepter votre demande.",
+    "accept": "Envoyer la demande",
+    "error": "Ce lien est invalide ou expiré.",
+    "requested": "Demande envoyée. Le propriétaire doit l’accepter."
   },
   "Metadata": {
     "description": "Gérez vos aliments à la maison et gaspillez moins."
@@ -80,7 +81,21 @@
     "setupHousehold": "Création du foyer",
     "setupSpace": "Configuration de votre espace",
     "setupDemo": "Ajout des données de démonstration",
-    "setupReady": "C'est presque prêt !"
+    "setupReady": "C'est presque prêt !",
+    "join": {
+      "title": "Rejoindre un foyer",
+      "description": "Saisissez le code du propriétaire. Vous aurez accès au foyer après son accord.",
+      "codeLabel": "Code du foyer",
+      "requestAccess": "Demander l'accès",
+      "invalid": "Aucun foyer ne correspond à ce code.",
+      "alreadyMember": "Vous avez déjà accès à ce foyer.",
+      "waiting": "Demande envoyée. Le propriétaire doit l'accepter.",
+      "checkStatus": "Vérifier le statut",
+      "approved": "Le propriétaire a accepté votre demande.",
+      "denied": "La demande a été refusée ou le code a expiré.",
+      "stillWaiting": "Votre demande est encore en attente.",
+      "createInstead": "Créer votre propre foyer"
+    }
   },
   "Settings": {
     "metaTitle": "Paramètres",
@@ -192,18 +207,28 @@
         "cancel": "Annuler"
       },
       "invite": {
-        "title": "Inviter un membre",
-        "description": "Créez un lien pour cette adresse e-mail et partagez-le avec un membre du foyer.",
-        "emailLabel": "Adresse e-mail du membre",
-        "placeholder": "membre@example.com",
-        "action": "Créer une invitation",
-        "created": "Le lien d'invitation est prêt à être partagé.",
-        "linkLabel": "Lien d'invitation",
-        "copy": "Copier le lien",
-        "copied": "Lien copié."
+        "title": "Code d’accès",
+        "description": "Partagez ce code avec la personne invitée. Elle aura accès après votre accord.",
+        "codeLabel": "Code du foyer",
+        "copy": "Copier le code",
+        "copied": "Code copié.",
+        "rotate": "Créer un nouveau code",
+        "rotateTitle": "Changer le code d’accès ?",
+        "rotateDescription": "L’ancien code cessera de fonctionner et les demandes en attente seront refusées.",
+        "rotated": "Code modifié.",
+        "pendingTitle": "Demandes d’accès",
+        "requestsDescription": "Acceptez les personnes qui peuvent rejoindre le foyer ou refusez leurs demandes.",
+        "refresh": "Actualiser",
+        "noRequests": "Aucune demande en attente.",
+        "approve": "Accepter",
+        "deny": "Refuser",
+        "approved": "Demande acceptée.",
+        "denied": "Demande refusée."
       },
       "members": {
         "title": "Membres du foyer",
+        "manage": "Voir les membres",
+        "preview": "Aperçu 10 + 10",
         "description": "Seul le propriétaire peut retirer des membres ou transférer la propriété.",
         "cancel": "Annuler",
         "transfer": {
@@ -249,20 +274,6 @@
         "title": "Format de date",
         "description": "Choisissez comment afficher les dates des produits et des préparations.",
         "dateLabel": "Format de date"
-      },
-      "privacy": {
-        "title": "Confidentialité et analyse des données",
-        "description": "Choisissez comment Fridgy peut utiliser les données de l'application.",
-        "options": {
-          "personalization": {
-            "title": "Suggestions personnalisées",
-            "description": "Utiliser les provisions et l'historique de cuisine pour adapter les recettes."
-          },
-          "analytics": {
-            "title": "Analyse anonyme",
-            "description": "Partager des données d'utilisation anonymes pour améliorer l'application."
-          }
-        }
       },
       "demo": {
         "title": "Données de démonstration",

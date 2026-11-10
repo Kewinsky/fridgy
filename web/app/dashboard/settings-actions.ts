@@ -20,8 +20,6 @@ const profileSettings = z.object({
   receipt_mode: z.enum(["automatic", "review"]),
   date_format: z.enum(["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"]),
   preferred_cuisines: z.array(z.string().max(50)).max(20),
-  personalization_consent: z.boolean(),
-  analytics_consent: z.boolean(),
 });
 
 export type ProfileSettings = z.infer<typeof profileSettings>;
@@ -93,20 +91,51 @@ export async function switchHousehold(id: string) {
   if (error) throw new Error(error.message);
 }
 
-export async function createHouseholdInvitation(email: string) {
-  const validEmail = z.email().max(254).parse(email.trim().toLowerCase());
-  const { supabase, user } = await currentUser();
-  const { data: profile, error: profileError } = await supabase.from("profiles")
-    .select("household_id").eq("user_id", user.id).single();
-  if (profileError || !profile) throw new Error("Profile not found");
-  const { data: household, error: householdError } = await supabase.from("households")
-    .select("id").eq("id", profile.household_id).eq("owner_id", user.id).single();
-  if (householdError || !household) throw new Error("Only the household owner can invite members");
-  const { data, error } = await supabase.from("household_invitations").insert({
-    household_id: household.id, email: validEmail, created_by: user.id,
-  }).select("token").single();
-  if (error || !data) throw new Error(error?.message ?? "Invitation failed");
-  return data.token as string;
+export async function getHouseholdJoinCode(householdId: string) {
+  const { supabase } = await currentUser();
+  const { data, error } = await supabase.rpc("get_fridgy_join_code", { target_household: z.uuid().parse(householdId) });
+  if (error || typeof data !== "string") throw new Error(error?.message ?? "Join code unavailable");
+  return data;
+}
+
+export async function rotateHouseholdJoinCode(householdId: string) {
+  const { supabase } = await currentUser();
+  const { data, error } = await supabase.rpc("rotate_fridgy_join_code", { target_household: z.uuid().parse(householdId) });
+  if (error || typeof data !== "string") throw new Error(error?.message ?? "Join code unavailable");
+  return data;
+}
+
+export async function requestHouseholdJoin(code: string) {
+  const validCode = z.string().trim().toUpperCase().regex(/^[A-Z0-9]{6}$/).safeParse(code);
+  if (!validCode.success) return "invalid" as const;
+  const { supabase } = await currentUser();
+  const { data, error } = await supabase.rpc("request_fridgy_household_join", { join_code: validCode.data });
+  if (error) throw new Error(error.message);
+  return z.enum(["invalid", "requested", "pending", "member"]).parse(data);
+}
+
+export async function getMyJoinStatus(code: string) {
+  const { supabase } = await currentUser();
+  const { data, error } = await supabase.rpc("get_my_fridgy_join_status", { join_code: z.string().regex(/^[A-Z0-9]{6}$/).parse(code) });
+  if (error) throw new Error(error.message);
+  return z.enum(["none", "pending", "approved", "denied"]).parse(data);
+}
+
+export type HouseholdJoinRequest = { id: string; username: string; email: string; requested_at: string };
+
+export async function listHouseholdJoinRequests(householdId: string): Promise<HouseholdJoinRequest[]> {
+  const { supabase } = await currentUser();
+  const { data, error } = await supabase.rpc("list_fridgy_join_requests", { target_household: z.uuid().parse(householdId) });
+  if (error) throw new Error(error.message);
+  return (data ?? []) as HouseholdJoinRequest[];
+}
+
+export async function decideHouseholdJoin(requestId: string, approve: boolean) {
+  const { supabase } = await currentUser();
+  const { error } = await supabase.rpc("decide_fridgy_household_join", {
+    join_request: z.uuid().parse(requestId), approve: z.boolean().parse(approve),
+  });
+  if (error) throw new Error(error.message);
 }
 
 export type HouseholdMember = { user_id: string; username: string; email: string; is_owner: boolean };

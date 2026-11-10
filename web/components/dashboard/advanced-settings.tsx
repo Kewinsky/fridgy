@@ -11,7 +11,6 @@ import { PreferenceCard, SettingsDropdown } from "@/components/dashboard/prefere
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -52,22 +51,6 @@ export function AdvancedSettings({ version, initialSettings, isHouseholdOwner }:
           options={["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"].map((value) => ({ value, label: value }))}
         />
       </PreferenceCard>
-
-      {(["personalization", "analytics"] as const).map((option) => (
-        <PreferenceCard
-          key={option}
-          title={t(`privacy.options.${option}.title`)}
-          description={t(`privacy.options.${option}.description`)}
-        >
-          <div className="flex justify-end">
-            <Checkbox
-              aria-label={t(`privacy.options.${option}.title`)}
-              checked={option === "personalization" ? settings.personalization_consent : settings.analytics_consent}
-              onCheckedChange={(checked) => void save(option === "personalization" ? "personalization_consent" : "analytics_consent", checked === true)}
-            />
-          </div>
-        </PreferenceCard>
-      ))}
 
       {isHouseholdOwner ? (
         <PreferenceCard title={t("demo.title")} description={t("demo.description")}>
