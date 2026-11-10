@@ -357,7 +357,11 @@
       "fish": "Poisson",
       "bakery": "Boulangerie",
       "dryGoods": "Produits secs",
-      "preserves": "Conserves"
+      "preserves": "Conserves",
+      "drinks": "Boissons",
+      "sweetsAndSnacks": "Confiseries et snacks",
+      "seasoningsAndExtras": "Épices et condiments",
+      "other": "Autres"
     },
     "freshness": {
       "overdue": "Périmé",
@@ -758,28 +762,22 @@
       "location": "Emplacement",
       "price": "Prix"
     },
-    "demo": {
-      "milk": "2% milk",
-      "tomatoes": "Raspberry tomatoes",
-      "chicken": "Chicken breast"
-    },
     "toasts": {
       "incomplete": "Enter the name, quantity and unit for every product.",
       "invalidQuantity": "Every quantity must be a number greater than zero.",
-      "invalidFile": "Choisissez une image JPG, PNG, WebP, HEIC ou HEIF valide.",
+      "invalidFile": "Choisissez une image JPG, PNG ou WebP valide.",
       "emptyFile": "Le fichier sélectionné est vide.",
-      "fileTooLarge": "L'image ne peut pas dépasser {maxMb} Mo."
+      "fileTooLarge": "L'image ne peut pas dépasser {maxMb} Mo.",
+      "analysisFailed": "Impossible de lire le ticket. Essayez une photo plus nette.",
+      "noProducts": "Aucun produit trouvé sur la photo. Réessayez ou ajoutez-les manuellement.",
+      "unavailable": "L'analyse des tickets est temporairement indisponible.",
+      "scanLimit": "Limite d'analyses atteinte. Réessayez dans une heure."
     },
     "analysis": {
       "title": "Préparation des produits",
       "description": "Vous pourrez bientôt vérifier et modifier la liste des produits.",
-      "progress": "Progression de la préparation des produits",
-      "cancel": "Annuler",
-      "stages": {
-        "reading": "Lecture de l'image",
-        "recognizing": "Reconnaissance des produits",
-        "categorizing": "Classement des produits"
-      }
+      "working": "Analyse de la photo du ticket…",
+      "cancel": "Annuler"
     },
     "success": {
       "title": "Réserves mises à jour",
@@ -791,7 +789,11 @@
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
       "description": "Vérifiez les produits avant de les enregistrer.",
-      "demoNotice": "Ces produits sont des exemples, pas les résultats de votre photo. Si vous les confirmez, ils seront ajoutés à vos réserves.",
+      "scanInfoTitle": "Comment l'IA lit-elle le ticket ?",
+      "scanNotice": "Les dates sont estimées – vérifiez les emballages.",
+      "scanInfoRead": "L'IA lit les noms, quantités et prix sur le ticket. Elle propose la catégorie et le lieu de stockage à partir du nom du produit.",
+      "scanInfoDate": "Le ticket indique rarement la date de péremption. L'IA estime une date selon le type de produit et le lieu de stockage proposé, à partir du jour du scan. Elle ne connaît ni l'étiquette ni les conditions de stockage. Vérifiez l'emballage et corrigez la date, surtout pour les aliments périssables.",
+      "estimatedDate": "Date d'utilisation estimée",
       "back": "Retour",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
@@ -806,9 +808,9 @@
     "upload": {
       "description": "Ajoutez une photo de ticket depuis votre téléphone ou votre ordinateur, puis vérifiez les produits.",
       "fileTitle": "Envoyer un ticket",
-      "formats": "JPG, PNG, WebP, HEIC ou HEIF · max. {maxMb} Mo",
+      "formats": "JPG, PNG, WebP · max. {maxMb} Mo",
       "selectFile": "Choisir une photo",
-      "notice": "Dans cette version, l'image reste sur votre appareil – l'analyse affiche un exemple."
+      "notice": "La photo sera envoyée pour analyse par l'IA. Les produits ne seront ajoutés qu'après votre confirmation."
     }
   },
   "Errors": {

@@ -13,6 +13,7 @@ import { prepareGeneratedRecipe } from "@/lib/generated-recipes";
 import { collectGeneratedRecipes, generationInputSchema, type GenerationInput } from "@/lib/recipe-generation";
 import type { Recipe } from "@/lib/demo-recipes";
 import { loadDashboardData } from "@/lib/dashboard-data";
+import { productCategories } from "@/components/dashboard/product-category-options";
 
 const productSchema = z.object({
   id: z.uuid(),
@@ -166,7 +167,7 @@ export async function saveManualReceipt(items: Array<{
     quantity: z.number().positive().max(100000),
     unit: z.string().trim().min(1).max(30),
     storageLocation: z.enum(["Lodówka", "Zamrażarka", "Spiżarnia"]),
-    category: z.enum(["Owoce", "Nabiał", "Warzywa", "Mięso", "Mrożonki", "Ryby", "Pieczywo", "Sypkie", "Przetwory"]),
+    category: z.enum(productCategories),
     estimatedUseBy: z.iso.date(),
     price: z.string().max(30),
   })).min(1).max(100).parse(items);

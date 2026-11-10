@@ -357,7 +357,11 @@
       "fish": "Ryby",
       "bakery": "Pieczywo",
       "dryGoods": "Sypkie",
-      "preserves": "Przetwory"
+      "preserves": "Przetwory",
+      "drinks": "Napoje",
+      "sweetsAndSnacks": "Słodycze i przekąski",
+      "seasoningsAndExtras": "Przyprawy i dodatki",
+      "other": "Inne"
     },
     "freshness": {
       "overdue": "Po terminie",
@@ -758,28 +762,22 @@
       "location": "Miejsce",
       "price": "Cena"
     },
-    "demo": {
-      "milk": "Mleko 2%",
-      "tomatoes": "Pomidory malinowe",
-      "chicken": "Pierś z kurczaka"
-    },
     "toasts": {
       "incomplete": "Uzupełnij nazwę, ilość i jednostkę każdego produktu.",
       "invalidQuantity": "Każda ilość musi być liczbą większą od zera.",
-      "invalidFile": "Wybierz prawidłowe zdjęcie JPG, PNG, WebP, HEIC lub HEIF.",
+      "invalidFile": "Wybierz prawidłowe zdjęcie JPG, PNG lub WebP.",
       "emptyFile": "Wybrany plik jest pusty.",
-      "fileTooLarge": "Zdjęcie może mieć maksymalnie {maxMb} MB."
+      "fileTooLarge": "Zdjęcie może mieć maksymalnie {maxMb} MB.",
+      "analysisFailed": "Nie udało się odczytać paragonu. Spróbuj z wyraźniejszym zdjęciem.",
+      "noProducts": "Nie znaleziono produktów na zdjęciu. Spróbuj ponownie lub dodaj je ręcznie.",
+      "unavailable": "Skan paragonu jest chwilowo niedostępny.",
+      "scanLimit": "Limit skanów został wykorzystany. Spróbuj ponownie za godzinę."
     },
     "analysis": {
       "title": "Przygotowujemy produkty",
       "description": "Za chwilę zobaczysz listę produktów do sprawdzenia i edycji.",
-      "progress": "Postęp przygotowania produktów",
-      "cancel": "Anuluj",
-      "stages": {
-        "reading": "Wczytywanie zdjęcia",
-        "recognizing": "Rozpoznawanie produktów",
-        "categorizing": "Kategoryzowanie produktów"
-      }
+      "working": "Analizujemy zdjęcie paragonu…",
+      "cancel": "Anuluj"
     },
     "success": {
       "title": "Zapasy uzupełnione",
@@ -791,7 +789,11 @@
       "eyebrow": "Krok 2 z 2",
       "title": "Sprawdź produkty",
       "description": "Sprawdź dane produktów przed zapisaniem.",
-      "demoNotice": "To przykładowe produkty, a nie wynik analizy przesłanego zdjęcia. Jeśli je zatwierdzisz, zostaną dodane do zapasów.",
+      "scanInfoTitle": "Jak AI odczytuje paragon?",
+      "scanNotice": "Daty są szacowane – sprawdź je na opakowaniach.",
+      "scanInfoRead": "AI odczytuje z paragonu nazwy, ilości i ceny. Kategorię oraz miejsce przechowywania proponuje na podstawie nazwy produktu.",
+      "scanInfoDate": "Paragon zwykle nie pokazuje daty przydatności. AI szacuje datę na podstawie rodzaju produktu i zakładanego miejsca przechowywania, licząc od dnia skanu. Nie zna daty z etykiety ani warunków przechowywania. Sprawdź opakowanie i popraw datę, zwłaszcza przy produktach szybko psujących się.",
+      "estimatedDate": "Szacowana data użycia",
       "back": "Wróć",
       "addProduct": "Dodaj produkt",
       "checkData": "Sprawdź dane przed zatwierdzeniem.",
@@ -806,9 +808,9 @@
     "upload": {
       "description": "Dodaj zdjęcie paragonu z telefonu lub komputera. Potem sprawdzisz listę produktów.",
       "fileTitle": "Prześlij paragon",
-      "formats": "JPG, PNG, WebP, HEIC lub HEIF · maks. {maxMb} MB",
+      "formats": "JPG, PNG, WebP · maks. {maxMb} MB",
       "selectFile": "Wybierz zdjęcie",
-      "notice": "W tej wersji zdjęcie pozostaje na urządzeniu – analiza pokazuje przykładowy wynik."
+      "notice": "Zdjęcie zostanie przesłane do analizy AI. Produkty dodamy dopiero po Twoim zatwierdzeniu."
     }
   },
   "Errors": {

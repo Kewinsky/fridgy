@@ -357,7 +357,11 @@
       "fish": "Pescado",
       "bakery": "Panadería",
       "dryGoods": "Productos secos",
-      "preserves": "Conservas"
+      "preserves": "Conservas",
+      "drinks": "Bebidas",
+      "sweetsAndSnacks": "Dulces y aperitivos",
+      "seasoningsAndExtras": "Especias y complementos",
+      "other": "Otros"
     },
     "freshness": {
       "overdue": "Caducado",
@@ -758,28 +762,22 @@
       "location": "Lugar",
       "price": "Precio"
     },
-    "demo": {
-      "milk": "2% milk",
-      "tomatoes": "Raspberry tomatoes",
-      "chicken": "Chicken breast"
-    },
     "toasts": {
       "incomplete": "Enter the name, quantity and unit for every product.",
       "invalidQuantity": "Every quantity must be a number greater than zero.",
-      "invalidFile": "Elige una imagen JPG, PNG, WebP, HEIC o HEIF válida.",
+      "invalidFile": "Elige una imagen JPG, PNG o WebP válida.",
       "emptyFile": "El archivo seleccionado está vacío.",
-      "fileTooLarge": "La imagen puede tener como máximo {maxMb} MB."
+      "fileTooLarge": "La imagen puede tener como máximo {maxMb} MB.",
+      "analysisFailed": "No se pudo leer el recibo. Prueba con una foto más nítida.",
+      "noProducts": "No se encontraron productos en la foto. Inténtalo de nuevo o añádelos manualmente.",
+      "unavailable": "El escaneo de recibos no está disponible temporalmente.",
+      "scanLimit": "Has alcanzado el límite de escaneos. Inténtalo de nuevo en una hora."
     },
     "analysis": {
       "title": "Preparando productos",
       "description": "Pronto podrás revisar y editar la lista de productos.",
-      "progress": "Progreso de preparación de productos",
-      "cancel": "Cancelar",
-      "stages": {
-        "reading": "Leyendo la imagen",
-        "recognizing": "Reconociendo productos",
-        "categorizing": "Clasificando productos"
-      }
+      "working": "Analizando la foto del recibo…",
+      "cancel": "Cancelar"
     },
     "success": {
       "title": "Inventario actualizado",
@@ -791,7 +789,11 @@
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
       "description": "Revisa los productos antes de guardarlos.",
-      "demoNotice": "Estos son productos de ejemplo, no resultados de tu foto. Si los confirmas, se añadirán al inventario.",
+      "scanInfoTitle": "¿Cómo lee la IA el recibo?",
+      "scanNotice": "Las fechas son estimaciones – comprueba los envases.",
+      "scanInfoRead": "La IA lee nombres, cantidades y precios del recibo. Sugiere la categoría y el lugar de almacenamiento según el nombre del producto.",
+      "scanInfoDate": "El recibo normalmente no muestra la fecha de caducidad. La IA estima una fecha según el tipo de producto y el almacenamiento sugerido, desde el día del escaneo. No conoce la etiqueta ni las condiciones de conservación. Comprueba el envase y corrige la fecha, especialmente para alimentos perecederos.",
+      "estimatedDate": "Fecha de uso estimada",
       "back": "Volver",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
@@ -806,9 +808,9 @@
     "upload": {
       "description": "Añade una foto del recibo desde el teléfono o el ordenador y después revisa los productos.",
       "fileTitle": "Subir recibo",
-      "formats": "JPG, PNG, WebP, HEIC o HEIF · máx. {maxMb} MB",
+      "formats": "JPG, PNG, WebP · máx. {maxMb} MB",
       "selectFile": "Elegir foto",
-      "notice": "En esta versión, la imagen permanece en tu dispositivo – el análisis muestra un ejemplo."
+      "notice": "La foto se enviará para análisis con IA. Los productos solo se añadirán tras tu confirmación."
     }
   },
   "Errors": {

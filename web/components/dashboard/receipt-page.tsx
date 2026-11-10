@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { addDays, format } from "date-fns";
 import Link from "next/link";
 import {
   CheckIcon,
   ChevronDownIcon,
   FileImageIcon,
-  LoaderCircleIcon,
+  InfoIcon,
   PackagePlusIcon,
   PlusIcon,
   Trash2Icon,
@@ -39,14 +39,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import type { StorageLocation } from "@/lib/demo-data";
-import {
-  MAX_RECEIPT_IMAGE_MB,
-  validateReceiptImage,
-} from "@/lib/receipt-image";
+import { validateReceiptImage } from "@/lib/receipt-image";
 
 type Step = "choose" | "analyzing" | "review" | "success";
 type Method = "receipt" | "manual";
-const analysisStages = ["reading", "recognizing", "categorizing"] as const;
+const MAX_SCAN_MB = 4;
 type ReceiptItem = {
   id: string;
   name: string;
@@ -62,42 +59,6 @@ function defaultUseBy() {
   return format(addDays(new Date(), 7), "yyyy-MM-dd");
 }
 
-function getSampleItems(
-  t: ReturnType<typeof useTranslations<"Receipt">>,
-): ReceiptItem[] {
-  return [
-    {
-      id: "r1",
-      name: t("demo.milk"),
-      quantity: "1",
-      unit: "l",
-      storageLocation: "Lodówka",
-      category: "Nabiał",
-      estimatedUseBy: defaultUseBy(),
-      price: "3,49",
-    },
-    {
-      id: "r2",
-      name: t("demo.tomatoes"),
-      quantity: "0,62",
-      unit: "kg",
-      storageLocation: "Lodówka",
-      category: "Warzywa",
-      estimatedUseBy: defaultUseBy(),
-      price: "8,67",
-    },
-    {
-      id: "r3",
-      name: t("demo.chicken"),
-      quantity: "0,54",
-      unit: "kg",
-      storageLocation: "Lodówka",
-      category: "Mięso",
-      estimatedUseBy: defaultUseBy(),
-      price: "13,49",
-    },
-  ];
-}
 const locations: StorageLocation[] = ["Lodówka", "Zamrażarka", "Spiżarnia"];
 
 export function ReceiptPage() {
@@ -110,39 +71,56 @@ export function ReceiptPage() {
   const [items, setItems] = useState<ReceiptItem[]>([]);
   const [fileName, setFileName] = useState("");
   const [fileError, setFileError] = useState("");
-  const [analysisStage, setAnalysisStage] = useState(0);
+  const requestId = useRef(0);
+  const scanAbort = useRef<AbortController | null>(null);
   const [isPending, startTransition] = useTransition();
   const { refreshInventory, householdId } = useDashboardData();
-
-  useEffect(() => {
-    if (step !== "analyzing") return;
-    const timer = window.setTimeout(() => {
-      if (analysisStage < analysisStages.length - 1) {
-        setAnalysisStage((current) => current + 1);
-      } else {
-        setStep("review");
-      }
-    }, 900);
-    return () => window.clearTimeout(timer);
-  }, [analysisStage, step]);
 
   async function handleReceiptFile(file: File | undefined) {
     if (!file) return;
     setFileError("");
-    const error = await validateReceiptImage(file);
-    if (error) {
+    const error = file.size > MAX_SCAN_MB * 1024 * 1024 ? "fileTooLarge" : await validateReceiptImage(file);
+    if (error || !/\.(jpe?g|png|webp)$/i.test(file.name)) {
       setFileError(
         error === "fileTooLarge"
-          ? t("toasts.fileTooLarge", { maxMb: MAX_RECEIPT_IMAGE_MB })
-          : t(`toasts.${error}`),
+          ? t("toasts.fileTooLarge", { maxMb: MAX_SCAN_MB })
+          : t(`toasts.${error ?? "invalidFile"}`),
       );
       return;
     }
     setMethod("receipt");
     setFileName(file.name);
-    setItems(getSampleItems(t));
-    setAnalysisStage(0);
     setStep("analyzing");
+    const currentRequest = ++requestId.current;
+    const controller = new AbortController();
+    scanAbort.current = controller;
+    try {
+      const form = new FormData();
+      form.set("image", file);
+      const response = await fetch("/api/receipts/analyze", { method: "POST", body: form, signal: controller.signal });
+      const result = await response.json() as { error?: string; items?: Array<Omit<ReceiptItem, "id" | "estimatedUseBy" | "quantity"> & { quantity: number; estimatedDays: number }> };
+      if (currentRequest !== requestId.current) return;
+      if (!response.ok || !result.items?.length) {
+        const knownErrors = ["emptyFile", "fileTooLarge", "invalidFile", "noProducts", "unavailable", "scanLimit"];
+        const reason = knownErrors.find((error) => error === result.error) ?? "analysisFailed";
+        setFileError(reason === "fileTooLarge" ? t("toasts.fileTooLarge", { maxMb: MAX_SCAN_MB }) : t(`toasts.${reason}`));
+        setStep("choose");
+        return;
+      }
+      setItems(result.items.map(({ estimatedDays, ...item }) => ({
+        ...item,
+        id: crypto.randomUUID(),
+        quantity: String(item.quantity),
+        estimatedUseBy: format(addDays(new Date(), estimatedDays), "yyyy-MM-dd"),
+      })));
+      setStep("review");
+    } catch {
+      if (currentRequest !== requestId.current) return;
+      setFileError(t("toasts.analysisFailed"));
+      setStep("choose");
+    } finally {
+      if (currentRequest === requestId.current) scanAbort.current = null;
+    }
   }
 
   function updateItem(id: string, patch: Partial<ReceiptItem>) {
@@ -160,7 +138,7 @@ export function ReceiptPage() {
         quantity: "1",
         unit: "szt.",
         storageLocation: "Lodówka",
-        category: "Przetwory",
+        category: "Inne",
         estimatedUseBy: defaultUseBy(),
         price: "",
       },
@@ -249,7 +227,6 @@ export function ReceiptPage() {
   }
 
   if (step === "analyzing") {
-    const progress = [30, 65, 95][analysisStage];
     return (
       <div className="mx-auto max-w-3xl">
         <PageHeader
@@ -272,50 +249,11 @@ export function ReceiptPage() {
             <p className="mt-6 w-full truncate text-sm font-semibold text-foreground">
               {fileName}
             </p>
-            <div
-              className="mt-6 h-2 w-full overflow-hidden rounded-full bg-secondary"
-              role="progressbar"
-              aria-label={t("analysis.progress")}
-              aria-valuenow={progress}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            >
-              <div
-                className="h-full rounded-full bg-primary transition-[width] duration-700 motion-reduce:transition-none"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <ol className="mt-7 w-full space-y-3 text-left">
-              {analysisStages.map((stage, index) => (
-                <li key={stage} className="flex items-center gap-3 text-sm">
-                  <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-secondary text-primary">
-                    {index < analysisStage ? (
-                      <CheckIcon className="size-4" aria-hidden="true" />
-                    ) : null}
-                    {index === analysisStage ? (
-                      <LoaderCircleIcon
-                        className="size-4 motion-safe:animate-spin"
-                        aria-hidden="true"
-                      />
-                    ) : null}
-                    {index > analysisStage ? index + 1 : null}
-                  </span>
-                  <span
-                    className={
-                      index === analysisStage
-                        ? "font-semibold text-foreground"
-                        : "text-muted-foreground"
-                    }
-                  >
-                    {t(`analysis.stages.${stage}`)}
-                  </span>
-                </li>
-              ))}
-            </ol>
+            <p className="mt-6 text-sm text-muted-foreground" role="status">{t("analysis.working")}</p>
             <Button
               variant="ghost"
               className="mt-7 h-11"
-              onClick={() => setStep("choose")}
+              onClick={() => { requestId.current++; scanAbort.current?.abort(); setStep("choose"); }}
             >
               {t("analysis.cancel")}
             </Button>
@@ -344,9 +282,20 @@ export function ReceiptPage() {
         />
 
         {method === "receipt" ? (
-          <p className="mb-5 rounded-lg border border-primary/20 bg-secondary/60 px-4 py-3 text-sm text-foreground">
-            {t("review.demoNotice")}
-          </p>
+          <details className="group mb-5 overflow-hidden rounded-xl border border-primary/25 bg-secondary/40">
+            <summary className="flex min-h-16 cursor-pointer list-none items-center gap-3 px-4 py-3 transition-colors hover:bg-secondary/70 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring [&::-webkit-details-marker]:hidden">
+              <InfoIcon className="size-5 shrink-0 text-primary" aria-hidden="true" />
+              <span className="min-w-0 flex-1">
+                <span className="block text-sm font-bold">{t("review.scanInfoTitle")}</span>
+                <span className="block text-xs text-muted-foreground">{t("review.scanNotice")}</span>
+              </span>
+              <ChevronDownIcon className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 motion-reduce:transition-none group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <div className="space-y-2 border-t border-primary/15 px-4 py-4 text-sm leading-6 text-muted-foreground">
+              <p>{t("review.scanInfoRead")}</p>
+              <p>{t("review.scanInfoDate")}</p>
+            </div>
+          </details>
         ) : null}
 
         <section className="app-card overflow-hidden">
@@ -465,7 +414,7 @@ export function ReceiptPage() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor={`receipt-date-${item.id}`}>
-                    {inventoryT("editDialog.date")}
+                    {method === "receipt" ? t("review.estimatedDate") : inventoryT("editDialog.date")}
                   </Label>
                   <DatePicker
                     id={`receipt-date-${item.id}`}
@@ -561,7 +510,7 @@ export function ReceiptPage() {
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*,.heic,.heif"
+            accept="image/jpeg,image/png,image/webp"
             className="hidden"
             aria-label={t("upload.selectFile")}
             onChange={(event) => {
@@ -578,7 +527,7 @@ export function ReceiptPage() {
             <UploadIcon aria-hidden="true" /> {t("upload.selectFile")}
           </Button>
           <p className="mt-3 text-xs text-muted-foreground">
-            {t("upload.formats", { maxMb: MAX_RECEIPT_IMAGE_MB })}
+            {t("upload.formats", { maxMb: MAX_SCAN_MB })}
           </p>
         </div>
         {fileError ? (
@@ -602,7 +551,7 @@ export function ReceiptPage() {
               quantity: "1",
               unit: "szt.",
               storageLocation: "Lodówka",
-              category: "Przetwory",
+              category: "Inne",
               estimatedUseBy: defaultUseBy(),
               price: "",
             },

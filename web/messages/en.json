@@ -357,7 +357,11 @@
       "fish": "Fish",
       "bakery": "Bakery",
       "dryGoods": "Dry goods",
-      "preserves": "Preserves"
+      "preserves": "Preserves",
+      "drinks": "Drinks",
+      "sweetsAndSnacks": "Sweets and snacks",
+      "seasoningsAndExtras": "Seasonings and extras",
+      "other": "Other"
     },
     "freshness": {
       "overdue": "Expired",
@@ -758,28 +762,22 @@
       "location": "Location",
       "price": "Price"
     },
-    "demo": {
-      "milk": "2% milk",
-      "tomatoes": "Raspberry tomatoes",
-      "chicken": "Chicken breast"
-    },
     "toasts": {
       "incomplete": "Enter the name, quantity and unit for every product.",
       "invalidQuantity": "Every quantity must be a number greater than zero.",
-      "invalidFile": "Select a valid JPG, PNG, WebP, HEIC or HEIF image.",
+      "invalidFile": "Select a valid JPG, PNG or WebP image.",
       "emptyFile": "The selected file is empty.",
-      "fileTooLarge": "The image can be up to {maxMb} MB."
+      "fileTooLarge": "The image can be up to {maxMb} MB.",
+      "analysisFailed": "Could not read the receipt. Try a clearer photo.",
+      "noProducts": "No products were found in the photo. Try again or add them manually.",
+      "unavailable": "Receipt scanning is temporarily unavailable.",
+      "scanLimit": "Scan limit reached. Try again in an hour."
     },
     "analysis": {
       "title": "Preparing products",
       "description": "You will soon see a list of products to review and edit.",
-      "progress": "Product preparation progress",
-      "cancel": "Cancel",
-      "stages": {
-        "reading": "Reading the image",
-        "recognizing": "Recognizing products",
-        "categorizing": "Categorizing products"
-      }
+      "working": "Analyzing the receipt photo…",
+      "cancel": "Cancel"
     },
     "success": {
       "title": "Inventory updated",
@@ -791,7 +789,11 @@
       "eyebrow": "Step 2 of 2",
       "title": "Review products",
       "description": "Review the products before saving them.",
-      "demoNotice": "These are sample products, not results from your photo. If you confirm them, they will be added to your inventory.",
+      "scanInfoTitle": "How does AI read the receipt?",
+      "scanNotice": "Dates are estimates – check the packaging.",
+      "scanInfoRead": "AI reads product names, quantities and prices from the receipt. It suggests categories and storage locations from product names.",
+      "scanInfoDate": "Receipts usually do not show use-by dates. AI estimates a date from the product type and suggested storage, counting from the scan day. It cannot see the package label or know how the product was stored. Check the package and correct the date, especially for perishable foods.",
+      "estimatedDate": "Estimated use-by date",
       "back": "Back",
       "addProduct": "Add product",
       "checkData": "Review the data before confirming.",
@@ -806,9 +808,9 @@
     "upload": {
       "description": "Add a receipt photo from your phone or computer. Then review the product list.",
       "fileTitle": "Upload receipt",
-      "formats": "JPG, PNG, WebP, HEIC or HEIF · max. {maxMb} MB",
+      "formats": "JPG, PNG, WebP · max. {maxMb} MB",
       "selectFile": "Select photo",
-      "notice": "In this version, the image stays on your device – analysis shows sample results."
+      "notice": "The photo will be sent for AI analysis. Products are added only after you confirm them."
     }
   },
   "Errors": {

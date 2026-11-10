@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
-import { BookOpenCheckIcon, CheckIcon, ChefHatIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
+import { BookOpenCheckIcon, CheckIcon, ChefHatIcon, ChevronDownIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
 
 import { generateRecipes } from "@/app/dashboard/data-actions";
 import { PageHeader } from "@/components/dashboard/page-header";
@@ -177,9 +177,14 @@ export function CookingPage() {
               <Chips options={shoppingOptions} value={shopping} onChange={setShopping} getLabel={(value) => t(`options.shopping.${value}`)} label={t("questions.shopping")} />
             </Question>
           </div>
-          <details className="app-card mt-5 p-5">
-            <summary className="cursor-pointer font-extrabold">{t("optional.title")}</summary>
-            <div className="mt-5 space-y-6">
+          <details className="group app-card mt-5 overflow-hidden">
+            <summary className="flex min-h-20 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-secondary/40 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring group-open:border-b group-open:border-border group-open:bg-secondary/30 [&::-webkit-details-marker]:hidden">
+              <span className="font-extrabold">{t("optional.title")}</span>
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-card text-muted-foreground">
+                <ChevronDownIcon className="size-5 transition-transform duration-200 motion-reduce:transition-none group-open:rotate-180" aria-hidden="true" />
+              </span>
+            </summary>
+            <div className="space-y-6 p-5">
               <div>
                 <h2 className="mb-3 font-bold">{t("questions.cuisine")}</h2>
                 <div className="flex flex-wrap gap-2">

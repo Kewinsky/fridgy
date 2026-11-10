@@ -6,11 +6,11 @@ import {
   ArrowRightIcon,
   ChefHatIcon,
   PackagePlusIcon,
-  SparklesIcon,
 } from "lucide-react";
 
 import { ConsumedProductsCard } from "@/components/dashboard/consumed-products-card";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { getCurrentDashboard, type DashboardData } from "@/lib/dashboard-data";
 import { getDailyIdea } from "@/lib/daily-idea";
 import { getFreshnessStatus } from "@/lib/demo-data";
@@ -59,7 +59,20 @@ export default async function DashboardPage() {
                 ) : null}
               </div>
             </div>
-            <Suspense fallback={<div className="flex min-h-64 items-center rounded-2xl border border-surface-strong-foreground/15 bg-surface-strong-foreground/10 p-5 text-surface-strong-foreground/80">{t("dailyLoading")}</div>}>
+            <Suspense fallback={
+              <section className="flex min-h-64 min-w-0 flex-col rounded-2xl border border-surface-strong-foreground/15 bg-surface-strong-foreground/10 p-5 sm:p-6" aria-busy="true">
+                <p className="sr-only" role="status">{t("dailyLoading")}</p>
+                <p className="text-xs font-bold uppercase tracking-[0.14em] text-surface-strong-accent">{t("dailyEyebrow")}</p>
+                <h2 className="mt-1 text-xl font-extrabold">{t("dailyTitle")}</h2>
+                <div className="mt-5 space-y-3" aria-hidden="true">
+                  <Skeleton className="h-6 w-4/5 max-w-72 bg-surface-strong-foreground/15" />
+                  <Skeleton className="h-4 w-full bg-surface-strong-foreground/15" />
+                  <Skeleton className="h-4 w-2/3 bg-surface-strong-foreground/15" />
+                  <Skeleton className="mt-5 h-4 w-36 bg-surface-strong-foreground/15" />
+                  <Skeleton className="mt-5 h-5 w-28 bg-surface-strong-foreground/15" />
+                </div>
+              </section>
+            }>
               <DailyIdeaCard dashboard={initialData} locale={locale} />
             </Suspense>
           </div>
@@ -108,8 +121,7 @@ async function DailyIdeaCard({ dashboard, locale }: { dashboard: DashboardData; 
 
   return (
     <section className="flex min-h-64 min-w-0 flex-col rounded-2xl border border-surface-strong-foreground/15 bg-surface-strong-foreground/10 p-5 sm:p-6">
-      <span className="flex size-11 items-center justify-center rounded-xl bg-surface-strong-foreground/10 text-surface-strong-accent"><SparklesIcon aria-hidden="true" /></span>
-      <p className="mt-5 text-xs font-bold uppercase tracking-[0.14em] text-surface-strong-accent">{t("dailyEyebrow")}</p>
+      <p className="text-xs font-bold uppercase tracking-[0.14em] text-surface-strong-accent">{t("dailyEyebrow")}</p>
       <h2 className="mt-1 text-xl font-extrabold">{t("dailyTitle")}</h2>
       {idea.status === "ready" ? (
         <>
@@ -121,7 +133,7 @@ async function DailyIdeaCard({ dashboard, locale }: { dashboard: DashboardData; 
       ) : (
         <>
           <p className="mt-4 text-sm leading-6 text-surface-strong-foreground/80">{t(`dailyStatus.${idea.status}`)}</p>
-          <Link href={idea.status === "empty" ? "/dashboard/dodaj-produkty" : "/dashboard/co-ugotowac"} className="mt-4 inline-flex min-h-11 items-center gap-2 self-start text-sm font-semibold text-surface-strong-accent hover:underline focus-visible:outline-2 focus-visible:outline-ring">{idea.status === "empty" ? t("addReceipt") : t("cookNow")} <ArrowRightIcon className="size-4" aria-hidden="true" /></Link>
+          {idea.status === "empty" ? <Link href="/dashboard/dodaj-produkty" className="mt-4 inline-flex min-h-11 items-center gap-2 self-start text-sm font-semibold text-surface-strong-accent hover:underline focus-visible:outline-2 focus-visible:outline-ring">{t("addReceipt")} <ArrowRightIcon className="size-4" aria-hidden="true" /></Link> : null}
         </>
       )}
     </section>

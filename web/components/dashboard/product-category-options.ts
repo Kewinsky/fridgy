@@ -8,6 +8,10 @@ export const productCategories = [
   "Pieczywo",
   "Sypkie",
   "Przetwory",
+  "Napoje",
+  "Słodycze i przekąski",
+  "Przyprawy i dodatki",
+  "Inne",
 ] as const;
 
 export type ProductCategory = (typeof productCategories)[number];
@@ -22,6 +26,10 @@ export const productCategoryMessageKeys: Record<ProductCategory, string> = {
   Pieczywo: "bakery",
   Sypkie: "dryGoods",
   Przetwory: "preserves",
+  Napoje: "drinks",
+  "Słodycze i przekąski": "sweetsAndSnacks",
+  "Przyprawy i dodatki": "seasoningsAndExtras",
+  Inne: "other",
 };
 
 export const productCategoryAppearance: Record<
@@ -38,4 +46,8 @@ export const productCategoryAppearance: Record<
   Pieczywo: { emoji: "🍞", className: "border-amber-300 bg-amber-100 text-amber-800 dark:border-amber-800 dark:bg-amber-950/60 dark:text-amber-200" },
   Sypkie: { emoji: "🌾", className: "border-yellow-300 bg-yellow-100 text-yellow-800 dark:border-yellow-800 dark:bg-yellow-950/60 dark:text-yellow-200" },
   Przetwory: { emoji: "🫙", className: "border-violet-300 bg-violet-100 text-violet-800 dark:border-violet-800 dark:bg-violet-950/60 dark:text-violet-200" },
+  Napoje: { emoji: "🥤", className: "border-sky-300 bg-sky-100 text-sky-800 dark:border-sky-800 dark:bg-sky-950/60 dark:text-sky-200" },
+  "Słodycze i przekąski": { emoji: "🍫", className: "border-pink-300 bg-pink-100 text-pink-800 dark:border-pink-800 dark:bg-pink-950/60 dark:text-pink-200" },
+  "Przyprawy i dodatki": { emoji: "🧂", className: "border-orange-300 bg-orange-100 text-orange-800 dark:border-orange-800 dark:bg-orange-950/60 dark:text-orange-200" },
+  Inne: { emoji: "📦", className: "border-slate-300 bg-slate-100 text-slate-800 dark:border-slate-800 dark:bg-slate-950/60 dark:text-slate-200" },
 };

@@ -9,6 +9,7 @@ import {
   ChefHatIcon,
   BookOpenCheckIcon,
   ChevronDownIcon,
+  CirclePlusIcon,
   HomeIcon,
   LeafIcon,
   ListChecksIcon,
@@ -131,6 +132,7 @@ export function DashboardShell({
             }
             className="h-11 w-full"
           >
+            <CirclePlusIcon aria-hidden="true" />
             {t("receipt")}
           </Button>
         </div>

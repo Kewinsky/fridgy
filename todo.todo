@@ -8,7 +8,7 @@ Stan na 2026-11-09. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - **Przepisy:** sześć przepisów w `web/lib/demo-recipes.ts` nadal zasila część widoków. Każdy użytkownik dostaje raz trzy oznaczone przepisy testowe w „Moje”. Przepisy własne i AI są dostępne we wszystkich jego domostwach oraz dla ich członków; ulubione i historia są osobiste.
 - **Pulpit:** pokazuje aktywne domostwo, dzienny pomysł AI, produkty z bliskim terminem i zużyte produkty do ponownego zakupu.
 - **„Co ugotować?”:** wysyła odpowiedzi formularza, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Brakuje skalowania istniejącego przepisu po zmianie liczby porcji i wspólnego źródła przepisów dla pulpitu.
-- **Dodawanie z paragonu:** wybrany obraz nie jest analizowany ani wysyłany do usługi OCR; po opóźnieniu pojawiają się trzy przykładowe produkty (`web/components/dashboard/receipt-page.tsx`). Ręczne dodawanie produktów działa i zapisuje paragon oraz zapasy.
+- **Dodawanie z paragonu:** zdjęcie jest analizowane przez AI, a rozpoznane produkty można poprawić przed dodaniem do zapasów. AI szacuje datę użycia na podstawie produktu i miejsca przechowywania; termin z opakowania trzeba zweryfikować. Skan wymaga klucza OpenAI i migracji limitu żądań.
 - **Import przepisu z linku:** sprawdza format URL, po czym pokazuje komunikat „wkrótce” (`web/components/dashboard/add-recipe-dialog.tsx`).
 - **Ustawienia:** dni powiadomień, tryb paragonu, waluta, format daty i zgody zapisują się, ale nie mają podłączonego działania. Preferowane kuchnie istnieją w profilu, lecz nie są używane.
 - **Mobile:** zawiera tylko ekran „Ready for development” i konfigurację klienta Supabase (`mobile/src/app/index.tsx`).
@@ -19,7 +19,7 @@ Stan na 2026-11-09. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - [x] Ustalić źródło przepisów poza sześcioma pozycjami w kodzie: katalog, przepisy użytkownika i/lub generowanie. Zapewnić zapis, ponowne otwarcie i historię przepisów wygenerowanych; inaczej link i historia mogą prowadzić do nieistniejącego dania.
 - [x] Dodać oznaczenie rodzaju posiłku do przepisów albo obsłużyć je w generatorze. Obecne przepisy nie mają tej cechy, więc pytanie o śniadanie/obiad/kolację nie może ich wiarygodnie filtrować.
 - [ ] Sprawić, by wybór liczby porcji skalował ilości składników, listę braków i sugerowane odjęcia z zapasów. Sprawdzić jednostki, zaokrąglenia oraz sytuację, gdy w zapasach jest mniej niż potrzeba.
-- [ ] Podłączyć skan paragonu do OCR/analizy obrazu z rzeczywistym przesyłaniem pliku, obsługą błędów i ekranem korekty przed zapisem. Usunąć podstawianie przykładowych produktów i pozorny postęp analizy.
+- [x] Podłączyć skan paragonu do OCR/analizy obrazu z rzeczywistym przesyłaniem pliku, obsługą błędów i ekranem korekty przed zapisem. Usunąć podstawianie przykładowych produktów i pozorny postęp analizy.
 - [ ] Zdecydować, czy import przepisu z URL wchodzi do pierwszego wydania. Jeśli tak, zbudować pobieranie, ekstrakcję, podgląd i zapis; jeśli nie, usunąć z interfejsu przycisk, który dziś kończy się komunikatem „wkrótce”.
 - [x] Oznaczyć testowe produkty, zakupy i przepisy. Usunięcie danych testowych kasuje rekordy `is_demo = true` w bieżącym domostwie oraz przykładowe przepisy użytkownika. Edytowany rekord demo pozostaje testowy.
 - [ ] Sprawdzić cały przepływ „przepis → gotowanie → odjęcie zapasów → historia”: zgodność jednostek, kilka pasujących produktów, częściowe zużycie, brak składnika i zmianę zapasu przez innego domownika w trakcie gotowania.
