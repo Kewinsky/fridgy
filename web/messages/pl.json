@@ -645,7 +645,7 @@
       "custom": "Moje",
       "history": "Historia"
     },
-    "historyRetention": "Wygenerowane przepisy bez serca są usuwane po 7 dniach. Ulubione zostają.",
+    "historyRetention": "Wygenerowane przepisy, których nie dodano do ulubionych, są usuwane po 7 dniach.",
     "emptyFavorites": {
       "title": "Brak ulubionych",
       "description": "Dodaj sercem przepisy, do których chcesz szybko wracać."

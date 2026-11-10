@@ -642,7 +642,7 @@
       "custom": "Eigene",
       "history": "Verlauf"
     },
-    "historyRetention": "Generierte Rezepte ohne Herz werden nach 7 Tagen entfernt. Favoriten bleiben.",
+    "historyRetention": "Generierte Rezepte, die nicht zu den Favoriten hinzugefügt wurden, werden nach 7 Tagen entfernt.",
     "emptyFavorites": {
       "title": "No favourites",
       "description": "Use the heart to save recipes you want to return to."

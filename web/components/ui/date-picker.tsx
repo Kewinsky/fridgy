@@ -28,10 +28,12 @@ export function DatePicker({
   id,
   value,
   onValueChange,
+  invalid = false,
 }: {
   id?: string;
   value: string;
   onValueChange: (value: string) => void;
+  invalid?: boolean;
 }) {
   const locale = useLocale();
   const t = useTranslations("DatePicker");
@@ -50,7 +52,7 @@ export function DatePicker({
       <PopoverTrigger
         id={id}
         render={
-          <Button type="button" variant="outline" className="h-11 w-full justify-start px-3 font-normal">
+          <Button type="button" variant="outline" aria-invalid={invalid} className="h-11 w-full justify-start px-3 font-normal aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20">
             <CalendarIcon aria-hidden="true" />
             {selectedDate ? format(selectedDate, "d MMMM yyyy", { locale: dateLocale }) : t("selectDate")}
           </Button>

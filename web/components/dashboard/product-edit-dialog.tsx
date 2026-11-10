@@ -37,6 +37,11 @@ import type { DemoProduct, StorageLocation } from "@/lib/demo-data";
 
 const locations: StorageLocation[] = ["Lodówka", "Zamrażarka", "Spiżarnia"];
 
+function validQuantity(value: string) {
+  const quantity = Number(value.replace(",", "."));
+  return Number.isFinite(quantity) && quantity > 0;
+}
+
 export function ProductEditDialog({
   product,
   onClose,
@@ -57,20 +62,28 @@ export function ProductEditDialog({
   );
   const [location, setLocation] = useState<StorageLocation>(product.storageLocation);
   const [estimatedUseBy, setEstimatedUseBy] = useState(product.estimatedUseBy);
-  const [error, setError] = useState("");
+  const [validationAttempted, setValidationAttempted] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const invalidName = validationAttempted && !name.trim();
+  const invalidQuantity = validationAttempted && !validQuantity(quantity);
+  const invalidUnit = validationAttempted && !unit.trim();
+  const invalidCategory = validationAttempted && !category.trim();
+  const invalidDate = validationAttempted && !estimatedUseBy;
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const parsedQuantity = Number(quantity.replace(",", "."));
 
-    if (!name.trim() || !unit.trim() || !category.trim() || !estimatedUseBy) {
-      setError(t("errors.required"));
-      return;
-    }
-
-    if (!Number.isFinite(parsedQuantity) || parsedQuantity <= 0) {
-      setError(t("errors.quantity"));
+    const firstInvalid = [
+      !name.trim() && "product-name",
+      !validQuantity(quantity) && "product-quantity",
+      !unit.trim() && "product-unit",
+      !category.trim() && "product-category",
+      !estimatedUseBy && "product-date",
+    ].find(Boolean);
+    if (firstInvalid) {
+      setValidationAttempted(true);
+      document.getElementById(firstInvalid)?.focus();
       return;
     }
 
@@ -97,28 +110,28 @@ export function ProductEditDialog({
 
         <form id="edit-product-form" onSubmit={submit} className="grid gap-4" noValidate>
           <div className="grid gap-2">
-            <Label htmlFor="product-name">{t("name")}</Label>
-            <Input id="product-name" value={name} onChange={(event) => setName(event.target.value)} className="h-11" autoFocus />
+            <Label htmlFor="product-name" className={invalidName ? "text-destructive" : undefined}>{t("name")}</Label>
+            <Input id="product-name" value={name} onChange={(event) => setName(event.target.value)} className="h-11" required aria-invalid={invalidName} autoFocus />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
-              <Label htmlFor="product-quantity">{t("quantity")}</Label>
-              <Input id="product-quantity" value={quantity} onChange={(event) => setQuantity(event.target.value)} inputMode="decimal" className="h-11" />
+              <Label htmlFor="product-quantity" className={invalidQuantity ? "text-destructive" : undefined}>{t("quantity")}</Label>
+              <Input id="product-quantity" value={quantity} onChange={(event) => setQuantity(event.target.value)} inputMode="decimal" className="h-11" required aria-invalid={invalidQuantity} />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="product-unit">{t("unit")}</Label>
-              <ProductUnitSelect id="product-unit" value={unit} onValueChange={setUnit} />
+              <Label htmlFor="product-unit" className={invalidUnit ? "text-destructive" : undefined}>{t("unit")}</Label>
+              <ProductUnitSelect id="product-unit" value={unit} onValueChange={setUnit} invalid={invalidUnit} />
             </div>
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="product-category">{t("category")}</Label>
+            <Label htmlFor="product-category" className={invalidCategory ? "text-destructive" : undefined}>{t("category")}</Label>
             <DropdownMenu>
               <DropdownMenuTrigger
                 id="product-category"
                 render={
-                  <Button type="button" variant="outline" className="h-11 w-full justify-between px-3 font-normal">
+                  <Button type="button" variant="outline" aria-invalid={invalidCategory} className="h-11 w-full justify-between px-3 font-normal aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20">
                     <span className="flex min-w-0 items-center gap-2">
                       <span aria-hidden="true">
                         {(productCategoryAppearance[category] ?? productCategoryAppearance.Wszystkie).emoji}
@@ -169,11 +182,10 @@ export function ProductEditDialog({
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="product-date">{t("date")}</Label>
-            <DatePicker id="product-date" value={estimatedUseBy} onValueChange={setEstimatedUseBy} />
+            <Label htmlFor="product-date" className={invalidDate ? "text-destructive" : undefined}>{t("date")}</Label>
+            <DatePicker id="product-date" value={estimatedUseBy} onValueChange={setEstimatedUseBy} invalid={invalidDate} />
           </div>
 
-          {error ? <p role="alert" className="text-sm font-medium text-destructive">{error}</p> : null}
         </form>
 
         <DialogFooter>

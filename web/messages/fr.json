@@ -642,7 +642,7 @@
       "custom": "Les miens",
       "history": "Historique"
     },
-    "historyRetention": "Les recettes générées sans cœur sont supprimées après 7 jours. Les favoris restent.",
+    "historyRetention": "Les recettes générées qui ne sont pas ajoutées aux favoris sont supprimées après 7 jours.",
     "emptyFavorites": {
       "title": "No favourites",
       "description": "Use the heart to save recipes you want to return to."

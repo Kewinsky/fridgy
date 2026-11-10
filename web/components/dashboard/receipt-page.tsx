@@ -59,6 +59,11 @@ function defaultUseBy() {
   return format(addDays(new Date(), 7), "yyyy-MM-dd");
 }
 
+function validQuantity(value: string) {
+  const quantity = Number(value.replace(",", "."));
+  return Number.isFinite(quantity) && quantity > 0;
+}
+
 const locations: StorageLocation[] = ["Lodówka", "Zamrażarka", "Spiżarnia"];
 
 export function ReceiptPage() {
@@ -71,6 +76,7 @@ export function ReceiptPage() {
   const [items, setItems] = useState<ReceiptItem[]>([]);
   const [fileName, setFileName] = useState("");
   const [fileError, setFileError] = useState("");
+  const [validationAttempted, setValidationAttempted] = useState(false);
   const requestId = useRef(0);
   const scanAbort = useRef<AbortController | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -89,6 +95,7 @@ export function ReceiptPage() {
       return;
     }
     setMethod("receipt");
+    setValidationAttempted(false);
     setFileName(file.name);
     setStep("analyzing");
     const currentRequest = ++requestId.current;
@@ -147,27 +154,15 @@ export function ReceiptPage() {
 
   function confirmItems() {
     if (isPending) return;
-    if (
-      !items.length ||
-      items.some(
-        (item) =>
-          !item.name.trim() ||
-          !item.quantity.trim() ||
-          !item.unit.trim() ||
-          !item.estimatedUseBy,
-      )
-    ) {
-      toast.error(t("toasts.incomplete"));
-      return;
-    }
-    if (
-      items.some(
-        (item) =>
-          !Number.isFinite(Number(item.quantity.replace(",", "."))) ||
-          Number(item.quantity.replace(",", ".")) <= 0,
-      )
-    ) {
-      toast.error(t("toasts.invalidQuantity"));
+    const firstInvalid = items.flatMap((item) => [
+      !item.name.trim() && `receipt-name-${item.id}`,
+      !validQuantity(item.quantity) && `receipt-quantity-${item.id}`,
+      !item.unit.trim() && `receipt-unit-${item.id}`,
+      !item.estimatedUseBy && `receipt-date-${item.id}`,
+    ]).find(Boolean);
+    if (firstInvalid) {
+      setValidationAttempted(true);
+      document.getElementById(firstInvalid)?.focus();
       return;
     }
     startTransition(async () => {
@@ -306,13 +301,15 @@ export function ReceiptPage() {
             >
               <div className="flex items-end gap-2">
                 <div className="grid min-w-0 flex-1 gap-2">
-                  <Label htmlFor={`receipt-name-${item.id}`}>{t("fields.product")}</Label>
+                  <Label htmlFor={`receipt-name-${item.id}`} className={validationAttempted && !item.name.trim() ? "text-destructive" : undefined}>{t("fields.product")}</Label>
                   <Input
                     id={`receipt-name-${item.id}`}
+                    required
                     value={item.name}
                     onChange={(event) => updateItem(item.id, { name: event.target.value })}
                     placeholder={t("fields.productPlaceholder")}
                     className="h-11"
+                    aria-invalid={validationAttempted && !item.name.trim()}
                   />
                 </div>
                 <Button
@@ -327,13 +324,15 @@ export function ReceiptPage() {
               </div>
               <div className="flex items-end gap-2">
                 <div className="grid min-w-0 flex-1 gap-2">
-                  <Label htmlFor={`receipt-quantity-${item.id}`}>{t("fields.quantity")}</Label>
+                  <Label htmlFor={`receipt-quantity-${item.id}`} className={validationAttempted && !validQuantity(item.quantity) ? "text-destructive" : undefined}>{t("fields.quantity")}</Label>
                   <Input
                     id={`receipt-quantity-${item.id}`}
+                    required
                     value={item.quantity}
                     onChange={(event) => updateItem(item.id, { quantity: event.target.value })}
                     inputMode="decimal"
                     className="h-11"
+                    aria-invalid={validationAttempted && !validQuantity(item.quantity)}
                   />
                 </div>
                 <Label htmlFor={`receipt-unit-${item.id}`} className="sr-only">{t("fields.unit")}</Label>
@@ -342,6 +341,7 @@ export function ReceiptPage() {
                   value={item.unit}
                   onValueChange={(unit) => updateItem(item.id, { unit })}
                   compact
+                  invalid={validationAttempted && !item.unit.trim()}
                 />
               </div>
               <div className="grid gap-2">
@@ -413,12 +413,13 @@ export function ReceiptPage() {
                   </DropdownMenu>
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor={`receipt-date-${item.id}`}>
+                  <Label htmlFor={`receipt-date-${item.id}`} className={validationAttempted && !item.estimatedUseBy ? "text-destructive" : undefined}>
                     {method === "receipt" ? t("review.estimatedDate") : inventoryT("editDialog.date")}
                   </Label>
                   <DatePicker
                     id={`receipt-date-${item.id}`}
                     value={item.estimatedUseBy}
+                    invalid={validationAttempted && !item.estimatedUseBy}
                     onValueChange={(estimatedUseBy) =>
                       updateItem(item.id, { estimatedUseBy })
                     }
@@ -544,6 +545,7 @@ export function ReceiptPage() {
         className="mt-4 h-11 w-full"
         onClick={() => {
           setMethod("manual");
+          setValidationAttempted(false);
           setItems([
             {
               id: crypto.randomUUID(),

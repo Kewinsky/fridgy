@@ -642,7 +642,7 @@
       "custom": "Mine",
       "history": "History"
     },
-    "historyRetention": "Generated recipes without a heart are removed after 7 days. Favourites stay.",
+    "historyRetention": "Generated recipes that are not added to favourites are removed after 7 days.",
     "emptyFavorites": {
       "title": "No favourites",
       "description": "Use the heart to save recipes you want to return to."

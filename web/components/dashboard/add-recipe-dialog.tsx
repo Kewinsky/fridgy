@@ -75,6 +75,16 @@ type RecipeFormState = {
   steps: string;
 };
 
+function invalidRecipeFields(form: RecipeFormState): Array<keyof RecipeFormState> {
+  const invalid: Array<keyof RecipeFormState> = [];
+  if (!form.title.trim()) invalid.push("title");
+  if (!Number.isInteger(Number(form.time)) || Number(form.time) < 1 || Number(form.time) > 480) invalid.push("time");
+  if (!Number.isInteger(Number(form.servings)) || Number(form.servings) < 1 || Number(form.servings) > 20) invalid.push("servings");
+  if (!form.ingredients.trim() || form.ingredients.split("\n").some((line) => line.trim() && !line.split("|")[0].trim())) invalid.push("ingredients");
+  if (!form.steps.trim()) invalid.push("steps");
+  return invalid;
+}
+
 function getInitialForm(recipe?: CustomRecipe): RecipeFormState {
   return {
     title: recipe?.title ?? "",
@@ -106,6 +116,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState("manual");
   const [imported, setImported] = useState(false);
+  const [validationAttempted, setValidationAttempted] = useState(false);
   const [form, setForm] = useState(() => getInitialForm(recipe));
   const [error, setError] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -114,6 +125,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const [removeImage, setRemoveImage] = useState(false);
   const [imageError, setImageError] = useState("");
   const [checkingImage, setCheckingImage] = useState(false);
+  const invalidFields = new Set(validationAttempted ? invalidRecipeFields(form) : []);
   const { saveCustomRecipe, updateCustomRecipe } = useRecipeLibraryActions();
 
   useEffect(() => {
@@ -132,6 +144,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
       setError("");
       setTab("manual");
       setImported(false);
+      setValidationAttempted(false);
     }
     setImageFile(null);
     setPreviewUrl(null);
@@ -163,26 +176,11 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (isPending || checkingImage || imageError) return;
-    if (
-      !form.title.trim() ||
-      !form.ingredients.trim() ||
-      !form.steps.trim() ||
-      form.ingredients
-        .split("\n")
-        .some((line) => line.trim() && !line.split("|")[0].trim())
-    ) {
-      setError(t("errors.required"));
-      return;
-    }
-    if (
-      !Number.isInteger(Number(form.time)) ||
-      Number(form.time) < 1 ||
-      Number(form.time) > 480 ||
-      !Number.isInteger(Number(form.servings)) ||
-      Number(form.servings) < 1 ||
-      Number(form.servings) > 20
-    ) {
-      setError(t("errors.timeAndServings"));
+    const invalid = invalidRecipeFields(form);
+    if (invalid.length) {
+      setValidationAttempted(true);
+      setError("");
+      document.getElementById(`${fieldId}-${invalid[0]}`)?.focus();
       return;
     }
 
@@ -277,6 +275,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
             fieldId={fieldId}
             form={form}
             error={error}
+            invalidFields={invalidFields}
             imported={imported}
             saving={isPending}
             imageSrc={
@@ -312,6 +311,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
                 fieldId={fieldId}
                 form={form}
                 error={error}
+                invalidFields={invalidFields}
                 imported={imported}
                 saving={isPending}
                 imageSrc={previewUrl}
@@ -353,6 +353,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
                     steps: draft.steps.join("\n"),
                   });
                   setError("");
+                  setValidationAttempted(false);
                   setImageFile(null);
                   setPreviewUrl(null);
                   setRemoveImage(false);
@@ -373,6 +374,7 @@ function ManualRecipeForm({
   fieldId,
   form,
   error,
+  invalidFields,
   imported,
   saving,
   imageSrc,
@@ -388,6 +390,7 @@ function ManualRecipeForm({
   fieldId: string;
   form: RecipeFormState;
   error: string;
+  invalidFields: ReadonlySet<keyof RecipeFormState>;
   imported: boolean;
   saving: boolean;
   imageSrc: string | null;
@@ -407,7 +410,7 @@ function ManualRecipeForm({
   if (saving) saveLabel = editing ? common("saving") : common("adding");
 
   return (
-    <form onSubmit={submit} className="grid gap-4">
+    <form onSubmit={submit} className="grid gap-4" noValidate>
       {imported ? (
         <p
           role="status"
@@ -499,10 +502,13 @@ function ManualRecipeForm({
           label={t("name")}
           htmlFor={`${fieldId}-title`}
           className="sm:col-span-2"
+          invalid={invalidFields.has("title")}
         >
           <Input
             id={`${fieldId}-title`}
             className="h-11"
+            required
+            aria-invalid={invalidFields.has("title")}
             value={form.title}
             onChange={(event) => update("title", event.target.value)}
           />
@@ -566,24 +572,28 @@ function ManualRecipeForm({
           </DropdownMenu>
         </Field>
         <div className="grid grid-cols-2 gap-3 sm:col-span-2">
-          <Field label={t("time")} htmlFor={`${fieldId}-time`}>
+          <Field label={t("time")} htmlFor={`${fieldId}-time`} invalid={invalidFields.has("time")}>
             <Input
               id={`${fieldId}-time`}
               type="number"
               min="1"
               max="480"
+              required
               className="h-11"
+              aria-invalid={invalidFields.has("time")}
               value={form.time}
               onChange={(event) => update("time", event.target.value)}
             />
           </Field>
-          <Field label={t("servings")} htmlFor={`${fieldId}-servings`}>
+          <Field label={t("servings")} htmlFor={`${fieldId}-servings`} invalid={invalidFields.has("servings")}>
             <Input
               id={`${fieldId}-servings`}
               type="number"
               min="1"
               max="20"
+              required
               className="h-11"
+              aria-invalid={invalidFields.has("servings")}
               value={form.servings}
               onChange={(event) => update("servings", event.target.value)}
             />
@@ -593,9 +603,12 @@ function ManualRecipeForm({
           label={t("ingredients")}
           htmlFor={`${fieldId}-ingredients`}
           className="sm:col-span-2"
+          invalid={invalidFields.has("ingredients")}
         >
           <Textarea
             id={`${fieldId}-ingredients`}
+            required
+            aria-invalid={invalidFields.has("ingredients")}
             placeholder={t("ingredientsPlaceholder")}
             value={form.ingredients}
             onChange={(event) => update("ingredients", event.target.value)}
@@ -605,9 +618,12 @@ function ManualRecipeForm({
           label={t("preparation")}
           htmlFor={`${fieldId}-steps`}
           className="sm:col-span-2"
+          invalid={invalidFields.has("steps")}
         >
           <Textarea
             id={`${fieldId}-steps`}
+            required
+            aria-invalid={invalidFields.has("steps")}
             placeholder={t("stepsPlaceholder")}
             value={form.steps}
             onChange={(event) => update("steps", event.target.value)}
@@ -654,16 +670,39 @@ function LinkRecipeForm({
   const fieldId = useId();
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
+  const [invalidUrl, setInvalidUrl] = useState(false);
   const [isPending, startTransition] = useTransition();
+
+  function showInvalidUrl() {
+    setInvalidUrl(true);
+  }
+
+  useEffect(() => {
+    if (invalidUrl && !isPending) document.getElementById(`${fieldId}-url`)?.focus();
+  }, [fieldId, invalidUrl, isPending]);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    let parsedUrl: URL;
+    try {
+      parsedUrl = new URL(url.trim());
+    } catch {
+      showInvalidUrl();
+      return;
+    }
+    if (parsedUrl.protocol !== "https:") {
+      showInvalidUrl();
+      return;
+    }
+    setInvalidUrl(false);
     startTransition(async () => {
       try {
         const result = await importRecipeFromUrl(url.trim(), locale);
-        if ("error" in result) setError(t(`link.errors.${result.error}`));
-        else onImported(result.draft);
+        if ("error" in result) {
+          if (result.error === "invalidUrl") showInvalidUrl();
+          else setError(t(`link.errors.${result.error}`));
+        } else onImported(result.draft);
       } catch {
         setError(t("link.errors.serviceUnavailable"));
       }
@@ -693,7 +732,7 @@ function LinkRecipeForm({
   }
 
   return (
-    <form onSubmit={submit} className="grid gap-5">
+    <form onSubmit={submit} className="grid gap-5" noValidate>
       <div className="rounded-xl border border-border bg-muted/30 p-5">
         <h3 className="text-base font-bold">{t("link.title")}</h3>
         <p className="mt-1 text-sm leading-6 text-muted-foreground">
@@ -724,14 +763,16 @@ function LinkRecipeForm({
           )}
         </div>
       </div>
-      <Field label={t("link.label")} htmlFor={`${fieldId}-url`}>
+      <Field label={t("link.label")} htmlFor={`${fieldId}-url`} invalid={invalidUrl}>
         <Input
           id={`${fieldId}-url`}
           type="url"
           className="h-11"
+          required
+          aria-invalid={invalidUrl}
           placeholder={t("link.placeholder")}
           value={url}
-          onChange={(event) => setUrl(event.target.value)}
+          onChange={(event) => { setUrl(event.target.value); setInvalidUrl(false); }}
           disabled={isPending}
           autoFocus
         />
@@ -844,16 +885,18 @@ function Field({
   label,
   htmlFor,
   className,
+  invalid = false,
   children,
 }: {
   label: string;
   htmlFor: string;
   className?: string;
+  invalid?: boolean;
   children: React.ReactNode;
 }) {
   return (
     <div className={className}>
-      <Label htmlFor={htmlFor} className="mb-2">
+      <Label htmlFor={htmlFor} className={invalid ? "mb-2 text-destructive" : "mb-2"}>
         {label}
       </Label>
       {children}

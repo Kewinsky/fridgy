@@ -642,7 +642,7 @@
       "custom": "Míos",
       "history": "Historial"
     },
-    "historyRetention": "Las recetas generadas sin corazón se eliminan tras 7 días. Los favoritos permanecen.",
+    "historyRetention": "Las recetas generadas que no se añaden a favoritos se eliminan tras 7 días.",
     "emptyFavorites": {
       "title": "No favourites",
       "description": "Use the heart to save recipes you want to return to."
