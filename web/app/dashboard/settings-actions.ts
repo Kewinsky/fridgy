@@ -10,6 +10,7 @@ import { PROFILE_IMAGE_BUCKET } from "@/lib/profile-image";
 import { RECIPE_IMAGE_BUCKET } from "@/lib/recipe-image";
 import { recipeAllergens } from "@/lib/demo-recipes";
 import { shouldRelocateRecipeImage } from "@/lib/account-deletion";
+import { inventoryViews } from "@/lib/inventory-view";
 
 const profileSettings = z.object({
   notification_days: z.array(z.union([z.literal(0), z.literal(1), z.literal(3)])).max(3),
@@ -19,6 +20,7 @@ const profileSettings = z.object({
   deduction_mode: z.enum(["always", "never", "ask"]),
   receipt_mode: z.enum(["automatic", "review"]),
   date_format: z.enum(["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"]),
+  inventory_view: z.enum(inventoryViews),
   preferred_cuisines: z.array(z.string().max(50)).max(20),
 });
 

@@ -11,6 +11,7 @@ import { PreferenceCard, SettingsDropdown } from "@/components/dashboard/prefere
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { inventoryViews } from "@/lib/inventory-view";
 import {
   Dialog,
   DialogClose,
@@ -26,7 +27,7 @@ export function AdvancedSettings({ version, initialSettings, isHouseholdOwner }:
   const t = useTranslations("Settings.advanced");
   const common = useTranslations("Common");
   const router = useRouter();
-  const { setDateFormat } = useDashboardData();
+  const { setDateFormat, setInventoryView } = useDashboardData();
   const [settings, setSettings] = useState(initialSettings);
 
   async function save<K extends keyof ProfileSettings>(key: K, value: ProfileSettings[K]) {
@@ -37,6 +38,7 @@ export function AdvancedSettings({ version, initialSettings, isHouseholdOwner }:
         setDateFormat(value as ProfileSettings["date_format"]);
         router.refresh();
       }
+      if (key === "inventory_view") setInventoryView(value as ProfileSettings["inventory_view"]);
       toast.success(common("saved"));
     } catch { toast.error(common("saveFailed")); }
   }
@@ -49,6 +51,15 @@ export function AdvancedSettings({ version, initialSettings, isHouseholdOwner }:
           value={settings.date_format}
           onValueChange={(value) => void save("date_format", value as ProfileSettings["date_format"])}
           options={["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"].map((value) => ({ value, label: value }))}
+        />
+      </PreferenceCard>
+
+      <PreferenceCard title={t("inventoryView.title")} description={t("inventoryView.description")}>
+        <SettingsDropdown
+          ariaLabel={t("inventoryView.title")}
+          value={settings.inventory_view}
+          onValueChange={(value) => void save("inventory_view", value as ProfileSettings["inventory_view"])}
+          options={inventoryViews.map((value) => ({ value, label: t(`inventoryView.options.${value}`) }))}
         />
       </PreferenceCard>
 

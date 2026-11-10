@@ -270,6 +270,11 @@
       }
     },
     "advanced": {
+      "inventoryView": {
+        "title": "Wygląd listy zapasów",
+        "description": "Wybierz, ile informacji pokazujemy przy każdym produkcie.",
+        "options": { "readable": "Czytelny", "compact": "Kompaktowy", "detailed": "Szczegółowy" }
+      },
       "regional": {
         "title": "Format daty",
         "description": "Wybierz sposób wyświetlania terminów produktów i dat gotowania.",

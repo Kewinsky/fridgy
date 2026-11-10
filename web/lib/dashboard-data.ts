@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 
 import type { DemoProduct } from "@/lib/demo-data";
 import type { DateFormat } from "@/lib/date-format";
+import type { InventoryView } from "@/lib/inventory-view";
 import type { RecipeLibrary, StoredRecipe } from "@/lib/recipe-library";
 import { readStoredRecipes } from "@/lib/recipe-store";
 import type { ShoppingItem } from "@/lib/shopping-list";
@@ -21,6 +22,7 @@ export type DashboardData = {
   allergies: string;
   excludedIngredients: string;
   dateFormat: DateFormat;
+  inventoryView: InventoryView;
   products: DemoProduct[];
   shoppingItems: ShoppingItem[];
   recipeLibrary: RecipeLibrary;
@@ -98,7 +100,7 @@ export function productToRow(product: DemoProduct, householdId: string) {
 
 export async function loadDashboardData(supabase: SupabaseClient, userId: string): Promise<DashboardData> {
   const { data: profile, error: profileError } = await supabase
-    .from("profiles").select("household_id,username,avatar_path,deduction_mode,diet,allergies,excluded_ingredients,date_format").eq("user_id", userId).single();
+    .from("profiles").select("household_id,username,avatar_path,deduction_mode,diet,allergies,excluded_ingredients,date_format,inventory_view").eq("user_id", userId).single();
   if (profileError || !profile) throw new Error("Profile is missing. Apply the Supabase migration.");
 
   const householdId = profile.household_id as string;
@@ -123,6 +125,7 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
     allergies: String(profile.allergies ?? ""),
     excludedIngredients: String(profile.excluded_ingredients ?? ""),
     dateFormat: profile.date_format as DateFormat,
+    inventoryView: profile.inventory_view as InventoryView,
     products: (products.data ?? []).map(productFromRow),
     shoppingItems: (shopping.data ?? []).map((item) => ({ id: item.id, name: item.name, done: item.done, isDemo: item.is_demo === true,
       ...(item.seed_key ? { seedKey: item.seed_key } : {}),

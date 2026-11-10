@@ -30,7 +30,7 @@ const statuses = {
   },
 } as const;
 
-export function FreshnessLabel({ date }: { date: string }) {
+export function FreshnessLabel({ date, showDate = true }: { date: string; showDate?: boolean }) {
   const t = useTranslations("Inventory.freshness");
   const { dateFormat } = useDashboardData();
   const status = statuses[getFreshnessStatus(date)];
@@ -44,9 +44,9 @@ export function FreshnessLabel({ date }: { date: string }) {
         <span aria-hidden="true">{status.emoji}</span>
         {t(status.labelKey)}
       </Badge>
-      <span className="text-[11px] text-muted-foreground">
+      {showDate ? <span className="text-[11px] text-muted-foreground">
         {t("estimatedDate", { date: formatUserDate(date, dateFormat) })}
-      </span>
+      </span> : null}
     </span>
   );
 }

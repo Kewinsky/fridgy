@@ -270,6 +270,11 @@
       }
     },
     "advanced": {
+      "inventoryView": {
+        "title": "Vista de la lista de productos",
+        "description": "Elige cuánta información se muestra para cada producto.",
+        "options": { "readable": "Claro", "compact": "Compacto", "detailed": "Detallado" }
+      },
       "regional": {
         "title": "Formato de fecha",
         "description": "Elige cómo se muestran las fechas de los productos y de las preparaciones.",

@@ -23,6 +23,7 @@ type DashboardStore = DashboardData & {
   setDeductionMode: (mode: DashboardData["deductionMode"]) => void;
   setDietPreferences: (preferences: Pick<DashboardData, "diet" | "allergies" | "excludedIngredients">) => void;
   setDateFormat: (format: DashboardData["dateFormat"]) => void;
+  setInventoryView: (view: DashboardData["inventoryView"]) => void;
 };
 
 const DashboardContext = createContext<DashboardStore | null>(null);
@@ -35,6 +36,7 @@ export function DashboardDataProvider({ initialData, isHouseholdOwner, children 
   const [deductionMode, setDeductionMode] = useState(initialData.deductionMode);
   const [dietPreferences, setDietPreferences] = useState({ diet: initialData.diet, allergies: initialData.allergies, excludedIngredients: initialData.excludedIngredients });
   const [dateFormat, setDateFormat] = useState(initialData.dateFormat);
+  const [inventoryView, setInventoryView] = useState(initialData.inventoryView);
   const favoriteQueue = useRef<Promise<void>>(Promise.resolve());
 
   useEffect(() => {
@@ -52,6 +54,7 @@ export function DashboardDataProvider({ initialData, isHouseholdOwner, children 
         setDeductionMode(data.deductionMode);
         setDietPreferences({ diet: data.diet, allergies: data.allergies, excludedIngredients: data.excludedIngredients });
         setDateFormat(data.dateFormat);
+        setInventoryView(data.inventoryView);
       }).catch(() => {});
     }
     window.addEventListener("focus", refreshOnFocus);
@@ -133,11 +136,11 @@ export function DashboardDataProvider({ initialData, isHouseholdOwner, children 
 
   return (
     <DashboardContext.Provider value={{
-      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, recipes, deductionMode, dateFormat, isHouseholdOwner,
+      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, recipes, deductionMode, dateFormat, inventoryView, isHouseholdOwner,
       updateInventory, refreshInventory, updateShoppingItems, toggleFavorite,
       saveCustomRecipe: saveCustom, updateCustomRecipe: updateCustom, deleteCustomRecipe: deleteCustom,
       addRecipes: (added) => setRecipes((current) => [...added, ...current]),
-      finishCooking, setDeductionMode, setDietPreferences, setDateFormat,
+      finishCooking, setDeductionMode, setDietPreferences, setDateFormat, setInventoryView,
     }}>
       {children}
     </DashboardContext.Provider>

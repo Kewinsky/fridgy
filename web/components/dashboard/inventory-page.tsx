@@ -28,6 +28,7 @@ import {
   type ProductCategory,
 } from "@/components/dashboard/product-category-options";
 import { ProductEditDialog } from "@/components/dashboard/product-edit-dialog";
+import { FreshnessLabel } from "@/components/dashboard/freshness-label";
 import { ProductRowDetails } from "@/components/dashboard/product-row-details";
 import {
   StorageLocationIcon,
@@ -69,7 +70,7 @@ export function InventoryPage({ initialTab = "active" }: { initialTab?: "active"
   const dashboardT = useTranslations("Dashboard");
   const common = useTranslations("Common");
   const locale = useLocale() as Locale;
-  const { products, updateInventory, updateShoppingItems } = useDashboardData();
+  const { products, updateInventory, updateShoppingItems, inventoryView } = useDashboardData();
   const [tab, setTab] = useState(initialTab);
   const [query, setQuery] = useState("");
   const [selectedLocations, setSelectedLocations] = useState<StorageLocation[]>([]);
@@ -79,6 +80,7 @@ export function InventoryPage({ initialTab = "active" }: { initialTab?: "active"
   const [pageSize, setPageSize] = useState(10);
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
+  const [expandedProductId, setExpandedProductId] = useState<string | null>(null);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [pending, setPending] = useState(false);
   const [tableLoading, setTableLoading] = useState(process.env.NODE_ENV === "development");
@@ -459,18 +461,36 @@ export function InventoryPage({ initialTab = "active" }: { initialTab?: "active"
                   />
                   <span className="sr-only">{t("selectProduct", { name: product.name })}</span>
                 </span>
-                <ProductRowDetails product={product} />
+                <ProductRowDetails product={product} view={inventoryView} />
               </label>
             ) : (
-              <Button
-                key={product.id}
-                type="button"
-                variant="ghost"
-                className="h-auto w-full justify-start gap-3 rounded-none border-x-0 border-t-0 border-b border-border py-3.5 pr-0 pl-2 text-left whitespace-normal last:border-0 hover:bg-muted sm:gap-4"
-                onClick={() => setProductToEdit(localizeDemoProduct(product, locale))}
-              >
-                <ProductRowDetails product={product} />
-              </Button>
+              <div key={product.id} className="border-b border-border last:border-0">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className={cn("h-auto w-full justify-start gap-3 rounded-none py-3.5 pr-0 pl-2 text-left whitespace-normal hover:bg-muted sm:gap-4", inventoryView === "compact" && "py-2.5")}
+                  aria-expanded={inventoryView === "compact" ? expandedProductId === product.id : undefined}
+                  aria-controls={inventoryView === "compact" && expandedProductId === product.id ? `product-details-${product.id}` : undefined}
+                  onClick={() => {
+                    if (inventoryView === "compact") setExpandedProductId((current) => current === product.id ? null : product.id);
+                    else setProductToEdit(localizeDemoProduct(product, locale));
+                  }}
+                >
+                  <ProductRowDetails product={product} view={inventoryView} />
+                  {inventoryView === "compact" ? <ChevronDownIcon className={cn("size-4 shrink-0 text-muted-foreground transition-transform", expandedProductId === product.id && "rotate-180")} aria-hidden="true" /> : null}
+                </Button>
+                {inventoryView === "compact" && expandedProductId === product.id ? (
+                  <div id={`product-details-${product.id}`} className="flex flex-wrap items-center justify-between gap-3 pb-3 pl-2 sm:pl-5">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
+                      <span>{t(`locations.${storageLocationMessageKeys[product.storageLocation]}`)}</span>
+                      <FreshnessLabel date={product.estimatedUseBy} />
+                    </div>
+                    <Button type="button" variant="outline" size="sm" onClick={() => setProductToEdit(localizeDemoProduct(product, locale))}>
+                      <PencilIcon aria-hidden="true" /> {t("edit")}
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
             ),
           )
         ) : (

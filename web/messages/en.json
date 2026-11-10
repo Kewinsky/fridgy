@@ -270,6 +270,11 @@
       }
     },
     "advanced": {
+      "inventoryView": {
+        "title": "Inventory list layout",
+        "description": "Choose how much information appears for each product.",
+        "options": { "readable": "Readable", "compact": "Compact", "detailed": "Detailed" }
+      },
       "regional": {
         "title": "Date format",
         "description": "Choose how product dates and cooking dates are displayed.",

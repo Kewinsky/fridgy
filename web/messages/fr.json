@@ -270,6 +270,11 @@
       }
     },
     "advanced": {
+      "inventoryView": {
+        "title": "Affichage des stocks",
+        "description": "Choisissez les informations affichées pour chaque produit.",
+        "options": { "readable": "Lisible", "compact": "Vue condensée", "detailed": "Détaillé" }
+      },
       "regional": {
         "title": "Format de date",
         "description": "Choisissez comment afficher les dates des produits et des préparations.",

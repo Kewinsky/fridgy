@@ -270,6 +270,11 @@
       }
     },
     "advanced": {
+      "inventoryView": {
+        "title": "Ansicht der Vorratsliste",
+        "description": "Wähle, wie viele Informationen zu jedem Produkt angezeigt werden.",
+        "options": { "readable": "Übersichtlich", "compact": "Kompakt", "detailed": "Detailliert" }
+      },
       "regional": {
         "title": "Datumsformat",
         "description": "Wähle, wie Produktdaten und Kochdaten angezeigt werden.",
