@@ -54,10 +54,6 @@ export function MeasureDictionary() {
         </div>
       </section>
       <p className="text-xs leading-5 text-muted-foreground">{t("note")}</p>
-      <p className="text-xs text-muted-foreground">
-        {t("sources")}: <a className="underline hover:text-foreground" href="https://diety.nfz.gov.pl/images/ebooki/ebook-kuchenne-inspiracje-lato-nfz-druk.pdf" target="_blank" rel="noopener noreferrer">NFZ</a>{" · "}
-        <a className="underline hover:text-foreground" href="https://www.gum.gov.pl/ftp/jpg/Biuletyn/biuletyn_3-2015.pdf" target="_blank" rel="noopener noreferrer">GUM</a>
-      </p>
     </div>
   );
 }

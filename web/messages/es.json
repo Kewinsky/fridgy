@@ -691,7 +691,6 @@
     "weightsTitle": "¿Cuánto pesa una medida?",
     "weightsDescription": "Valores aproximados para medidas rasas.",
     "note": "El mismo volumen pesa distinto según el ingrediente. Aquí una taza equivale a 240 ml y un vaso a 250 ml. Los recipientes comunes pueden variar; usa una báscula si necesitas precisión.",
-    "sources": "Fuentes",
     "teaspoon": "Cucharadita",
     "tablespoon": "Cucharada",
     "cup": "Taza",
@@ -775,7 +774,6 @@
   },
   "RecipeForm": {
     "image": {
-      "label": "Foto de la receta",
       "title": "Añade una foto de tu plato",
       "description": "Arrastra una foto aquí o elígela desde tu dispositivo.",
       "choose": "Añadir foto",

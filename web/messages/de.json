@@ -691,7 +691,6 @@
     "weightsTitle": "Wie viel wiegt eine Portion?",
     "weightsDescription": "Ungefähre Werte für gestrichene Messlöffel.",
     "note": "Das gleiche Volumen wiegt je nach Zutat unterschiedlich viel. Eine Tasse steht hier für 240 ml, ein Glas für 250 ml. Normales Geschirr kann abweichen; bei Bedarf eine Küchenwaage verwenden.",
-    "sources": "Quellen",
     "teaspoon": "Teelöffel",
     "tablespoon": "Esslöffel",
     "cup": "Tasse",
@@ -775,7 +774,6 @@
   },
   "RecipeForm": {
     "image": {
-      "label": "Rezeptfoto",
       "title": "Foto deines Gerichts hinzufügen",
       "description": "Ziehe ein Foto hierher oder wähle es auf deinem Gerät aus.",
       "choose": "Foto hinzufügen",

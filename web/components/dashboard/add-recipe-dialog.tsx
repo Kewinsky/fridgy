@@ -426,7 +426,6 @@ function ManualRecipeForm({
         </p>
       ) : null}
       <div className="grid gap-2">
-        <Label htmlFor={`${fieldId}-image`}>{t("image.label")}</Label>
         <input
           ref={imageInputRef}
           id={`${fieldId}-image`}

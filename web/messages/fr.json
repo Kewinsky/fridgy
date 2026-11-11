@@ -691,7 +691,6 @@
     "weightsTitle": "Quel est le poids d'une mesure ?",
     "weightsDescription": "Valeurs approximatives pour des mesures rases.",
     "note": "Un même volume n'a pas le même poids selon l'ingrédient. Ici, une tasse correspond à 240 ml et un verre à 250 ml. Les récipients ordinaires varient ; utilisez une balance pour plus de précision.",
-    "sources": "Références",
     "teaspoon": "Cuillère à café",
     "tablespoon": "Cuillère à soupe",
     "cup": "Tasse",
@@ -775,7 +774,6 @@
   },
   "RecipeForm": {
     "image": {
-      "label": "Photo de la recette",
       "title": "Ajoutez une photo de votre plat",
       "description": "Déposez une photo ici ou choisissez-la sur votre appareil.",
       "choose": "Ajouter une photo",

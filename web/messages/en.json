@@ -691,7 +691,6 @@
     "weightsTitle": "How much does one measure weigh?",
     "weightsDescription": "Approximate values for level measures.",
     "note": "The same volume weighs differently depending on the ingredient. Cup means a 240 ml measure here, and glass means 250 ml. Everyday cups and glasses may vary; use a kitchen scale when accuracy matters.",
-    "sources": "Sources",
     "teaspoon": "Teaspoon",
     "tablespoon": "Tablespoon",
     "cup": "Cup",
@@ -775,7 +774,6 @@
   },
   "RecipeForm": {
     "image": {
-      "label": "Recipe photo",
       "title": "Add a photo of your dish",
       "description": "Drop a photo here or choose one from your device.",
       "choose": "Add photo",

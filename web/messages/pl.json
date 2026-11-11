@@ -691,7 +691,6 @@
     "weightsTitle": "Ile waży jedna miara?",
     "weightsDescription": "Wartości orientacyjne dla płaskich miarek.",
     "note": "Ta sama miara ma różną masę zależnie od składnika. Kubek oznacza tu miarkę 240 ml, a szklanka 250 ml. Zwykłe naczynia mogą mieć inną pojemność; gdy liczy się dokładność, użyj wagi kuchennej.",
-    "sources": "Źródła",
     "teaspoon": "Łyżeczka",
     "tablespoon": "Łyżka",
     "cup": "Kubek",
@@ -775,7 +774,6 @@
   },
   "RecipeForm": {
     "image": {
-      "label": "Zdjęcie przepisu",
       "title": "Dodaj zdjęcie dania",
       "description": "Przeciągnij zdjęcie tutaj albo wybierz je z urządzenia.",
       "choose": "Dodaj zdjęcie",
