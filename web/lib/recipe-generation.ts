@@ -120,6 +120,7 @@ export async function requestModelRecipes(
         "Each ingredient name must be only the food name. Never append shopping or availability labels such as 'do kupienia', and never use Markdown in ingredient names. The app determines what is missing.",
         "Estimate calories, protein, carbs and fat per serving from the listed quantities. These are estimates, not verified measurements.",
         "Write a short, warm message to the user in the requested language, at most two sentences and 350 characters. Mention relevant limits honestly and suggest allowing shopping when stock is too restrictive. Do not mention an exact recipe count or assert exact missing items.",
+        "Never use the Unicode em dash (U+2014) in recipe text or the user message. Use the en dash (U+2013) wherever a dash is needed.",
         "Return cuisine values exactly as supplied in the input cuisines list when it is not empty. Write all recipe text in the requested language.",
       ].join(" "),
       input: JSON.stringify(context),
