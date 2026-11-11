@@ -7,6 +7,7 @@ import { AdvancedSettings } from "@/components/dashboard/advanced-settings";
 import { PreferenceSettings } from "@/components/dashboard/preference-settings";
 import { SettingsTabs } from "@/components/dashboard/settings-tabs";
 import { ThemeSettings } from "@/components/dashboard/theme-settings";
+import { ColorSettings } from "@/components/dashboard/color-settings";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import packageJson from "@/package.json";
 import { createClient } from "@/lib/supabase/server";
@@ -74,6 +75,13 @@ export default async function SettingsPage() {
               <div className="min-w-0">
                 <ThemeSettings />
               </div>
+            </section>
+            <section className="app-card grid items-center gap-5 p-5 md:grid-cols-2">
+              <div className="min-w-0">
+                <h2 className="text-sm font-medium">{t("palette.title")}</h2>
+                <p className="mt-1 text-xs leading-5 text-muted-foreground">{t("palette.description")}</p>
+              </div>
+              <ColorSettings />
             </section>
             <AdvancedSettings version={packageJson.version} initialSettings={settings} isHouseholdOwner={household.owner_id === auth.user.id} />
           </div>

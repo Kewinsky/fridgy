@@ -21,6 +21,7 @@ import {
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/dashboard/page-header";
+import { BrandIcon } from "@/components/brand-icon";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import {
   productCategories,
@@ -733,9 +734,9 @@ export function InventoryPage({
               )
             ) : (
               <div className="py-16 text-center">
-                <SearchIcon
-                  className="mx-auto text-muted-foreground"
-                  aria-hidden="true"
+                <BrandIcon
+                  name={query || selectedLocations.length || selectedCategories.length || selectedFreshness.length ? "search" : "no_results"}
+                  className="mx-auto size-20"
                 />
                 <p className="mt-3 font-bold">
                   {tab === "consumed"

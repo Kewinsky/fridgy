@@ -105,8 +105,13 @@
     "description": "Preferencias básicas del hogar y de la apariencia de la aplicación.",
     "language": "Idioma de la aplicación",
     "languageDescription": "Elige el idioma de la interfaz de Fridgy.",
-    "theme": "Tema de color",
+    "theme": "Modo de apariencia",
     "themeDescription": "Elige una apariencia clara, oscura o automática.",
+    "palette": {
+      "title": "Paleta de colores",
+      "description": "Elige los colores de la aplicación. Este ajuste se guarda en este navegador.",
+      "options": { "blue": "Azul", "green": "Verde", "violet": "Violeta" }
+    },
     "householdUi": {
       "title": "Tu hogar",
       "description": "Consulta tu rol y permisos en el hogar actual.",
@@ -834,6 +839,7 @@
     "add": "Añadir",
     "removeItem": "Eliminar {name}",
     "empty": "La lista está vacía",
+    "allDone": "¡Ya está todo comprado!",
     "cancel": "Cancelar",
     "listTitle": "Lista de compras – Fridgy",
     "clearDialog": {
@@ -917,6 +923,19 @@
       "selectFile": "Elegir foto",
       "notice": "La foto se enviará para análisis con IA. Los productos solo se añadirán tras tu confirmación."
     }
+  },
+  "Technical": {
+    "offline": {
+      "label": "Sin conexión",
+      "title": "No tienes conexión",
+      "description": "Comprueba tu conexión a Internet y vuelve a intentarlo cuando se restablezca."
+    },
+    "maintenance": {
+      "label": "Mantenimiento",
+      "title": "Fridgy volverá pronto",
+      "description": "Estamos trabajando en la aplicación. Vuelve a intentarlo en unos momentos."
+    },
+    "retry": "Volver a intentar"
   },
   "Errors": {
     "notFound": {

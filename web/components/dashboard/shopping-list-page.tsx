@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { CheckIcon, CopyIcon, PlusIcon, ShoppingBasketIcon, Trash2Icon } from "lucide-react";
+import { CheckIcon, CopyIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { PageHeader } from "@/components/dashboard/page-header";
+import { BrandIcon } from "@/components/brand-icon";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { localizeStarterShoppingItem } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
@@ -128,7 +129,13 @@ export function ShoppingListPage() {
           ))}
         </div>
         {!items.length ? (
-          <div className="py-12 text-center"><ShoppingBasketIcon className="mx-auto text-muted-foreground" aria-hidden="true" /><p className="mt-3 font-bold">{t("empty")}</p></div>
+          <div className="py-12 text-center"><BrandIcon name="shopping" className="mx-auto size-20" /><p className="mt-3 font-bold">{t("empty")}</p></div>
+        ) : null}
+        {items.length > 0 && items.every((item) => item.done) ? (
+          <div className="py-8 text-center" role="status">
+            <BrandIcon name="celebrate" className="mx-auto size-20" />
+            <p className="mt-3 font-bold">{t("allDone")}</p>
+          </div>
         ) : null}
       </section>
 

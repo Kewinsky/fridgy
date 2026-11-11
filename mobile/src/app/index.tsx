@@ -1,11 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.content}>
-        <Text style={styles.eyebrow}>Fridgy</Text>
+        <View style={styles.brand}>
+          <Image source={require('../../assets/logo.png')} style={styles.logo} accessible={false} />
+          <Text style={styles.brandName}>Fridgy</Text>
+        </View>
         <Text accessibilityRole="header" style={styles.title}>
           Ready for development.
         </Text>
@@ -19,7 +22,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   safeArea: {
-    backgroundColor: '#f7f7f5',
+    backgroundColor: '#eaf4fc',
     flex: 1,
   },
   content: {
@@ -30,23 +33,32 @@ const styles = StyleSheet.create({
     padding: 32,
     width: '100%',
   },
-  eyebrow: {
-    color: '#666660',
-    fontSize: 14,
-    fontWeight: '700',
-    letterSpacing: 1.2,
+  brand: {
+    alignItems: 'center',
+    flexDirection: 'row',
     marginBottom: 12,
-    textTransform: 'uppercase',
+  },
+  logo: {
+    width: 88,
+    height: 88,
+    resizeMode: 'contain',
+  },
+  brandName: {
+    color: '#0b1b2b',
+    fontFamily: Platform.select({ ios: 'Arial Rounded MT Bold', android: 'sans-serif-rounded' }),
+    fontSize: 32,
+    fontWeight: '800',
+    letterSpacing: -1.5,
   },
   title: {
-    color: '#171717',
+    color: '#0b1b2b',
     fontSize: 44,
     fontWeight: '700',
     letterSpacing: -1.5,
     lineHeight: 48,
   },
   summary: {
-    color: '#666660',
+    color: '#4f6071',
     fontSize: 18,
     lineHeight: 28,
     marginTop: 24,

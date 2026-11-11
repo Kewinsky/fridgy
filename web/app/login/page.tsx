@@ -4,12 +4,12 @@ import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import {
   ArrowLeftIcon,
-  LeafIcon,
   ScanLineIcon,
   SparklesIcon,
 } from "lucide-react";
 
 import { LoginForm } from "@/components/auth/login-form";
+import { BrandIcon, BrandWordmark } from "@/components/brand-icon";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { createClient } from "@/lib/supabase/server";
 import { safeAuthPath } from "@/lib/auth-next";
@@ -42,12 +42,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
         <div className="strong-grid absolute inset-0" />
         <Link
           href="/"
-          className="relative flex items-center gap-2.5 font-extrabold"
+          className="relative flex items-center gap-1"
         >
-          <span className="flex size-9 items-center justify-center rounded-lg bg-surface-strong-foreground text-surface-strong">
-            <LeafIcon className="size-5" aria-hidden="true" />
-          </span>
-          <span className="text-xl">Fridgy</span>
+          <BrandIcon name="logo" className="size-12" />
+          <BrandWordmark className="text-[1.65rem]" />
         </Link>
 
         <div className="relative my-auto max-w-lg py-12">

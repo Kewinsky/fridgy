@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { ArrowLeftIcon, ClockIcon, UsersIcon } from "lucide-react";
 
 import { FinishCookingDialog } from "@/components/dashboard/finish-cooking-dialog";
+import { BrandIcon } from "@/components/brand-icon";
 import {
   cuisineMessageKeys,
   isCuisine,
@@ -38,6 +39,7 @@ export function CookingModePage({ slug }: { slug: string }) {
   if (!recipe) {
     return (
       <div className="mx-auto max-w-xl py-20 text-center">
+        <BrandIcon name="no_results" className="mx-auto mb-4 size-20" />
         <h1 className="text-2xl font-extrabold">{t("notFound")}</h1>
         <Button
           className="mt-5 h-11"

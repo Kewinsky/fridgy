@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeftIcon, CheckIcon, ChefHatIcon, HomeIcon, LeafIcon, ReceiptTextIcon, UsersIcon } from "lucide-react";
+import { ArrowLeftIcon, CheckIcon, ChefHatIcon, HomeIcon, ReceiptTextIcon, UsersIcon } from "lucide-react";
+import { BrandIcon } from "@/components/brand-icon";
 import { useTranslations } from "next-intl";
 
 import { DashboardShell } from "@/components/dashboard/dashboard-shell";
@@ -68,9 +69,7 @@ export function HouseholdOnboarding() {
       <Dialog open onOpenChange={() => {}}>
         <DialogContent showCloseButton={false} className="gap-6 p-6 sm:max-w-md sm:p-8">
           <DialogHeader className="items-center text-center">
-            <span className="mb-2 flex size-14 items-center justify-center rounded-2xl bg-primary/15 text-primary ring-1 ring-primary/20">
-              <LeafIcon className="size-7" aria-hidden="true" />
-            </span>
+            <BrandIcon name="welcome_onboarding" className="mb-2 size-20" />
             <DialogTitle className="text-2xl font-extrabold tracking-tight">{modalTitle}</DialogTitle>
             <DialogDescription className="text-base leading-6">{modalDescription}</DialogDescription>
           </DialogHeader>

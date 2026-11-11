@@ -23,15 +23,28 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
   const [step, setStep] = useState<"email" | "code">("email");
   const [error, setError] = useState(initialError ?? "");
   const [pending, setPending] = useState(false);
+  const [emailValidationAttempted, setEmailValidationAttempted] = useState(false);
+  const [emailValid, setEmailValid] = useState(false);
+  const [codeValidationAttempted, setCodeValidationAttempted] = useState(false);
+  const invalidEmail = emailValidationAttempted && !emailValid;
+  const invalidCode = codeValidationAttempted && (code.length !== 6 || Boolean(error));
 
   async function sendCode(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const emailInput = event.currentTarget.elements.namedItem("email") as HTMLInputElement;
+    const emailIsValid = emailInput.checkValidity();
+    setEmailValidationAttempted(true);
+    setEmailValid(emailIsValid);
+    if (!emailIsValid) {
+      emailInput.focus();
+      return;
+    }
     setPending(true);
     setError("");
 
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithOtp({
-      email,
+      email: email.trim(),
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextPath)}`,
         shouldCreateUser: true,
@@ -45,11 +58,17 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
       return;
     }
 
+    setEmail(email.trim());
     setStep("code");
   }
 
   async function verifyCode(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setCodeValidationAttempted(true);
+    if (code.length !== 6) {
+      (event.currentTarget.elements.namedItem("code") as HTMLInputElement).focus();
+      return;
+    }
     setPending(true);
     setError("");
 
@@ -90,7 +109,7 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
 
   if (step === "code") {
     return (
-      <form onSubmit={verifyCode} className="space-y-5">
+      <form onSubmit={verifyCode} className="space-y-5" noValidate>
         <Button
           type="button"
           variant="ghost"
@@ -99,6 +118,7 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
             setStep("email");
             setCode("");
             setError("");
+            setCodeValidationAttempted(false);
           }}
         >
           <ArrowLeftIcon className="size-4" aria-hidden="true" />
@@ -115,7 +135,7 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="code">{t("loginCode")}</Label>
+          <Label htmlFor="code" className={invalidCode ? "text-destructive" : undefined}>{t("loginCode")}</Label>
           <Input
             id="code"
             name="code"
@@ -125,18 +145,21 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
             pattern="[0-9]{6}"
             maxLength={6}
             required
+            aria-invalid={invalidCode}
+            aria-describedby={error ? "code-error" : undefined}
             autoFocus
             value={code}
-            onChange={(event) =>
-              setCode(event.target.value.replace(/\D/g, "").slice(0, 6))
-            }
+            onChange={(event) => {
+              setCode(event.target.value.replace(/\D/g, "").slice(0, 6));
+              setError("");
+            }}
             className="h-12 text-center text-xl font-bold tracking-[0.35em]"
             placeholder="000000"
           />
         </div>
 
         {error ? (
-          <p role="alert" className="text-sm font-medium text-destructive">
+          <p id="code-error" role="alert" className="text-sm font-medium text-destructive">
             {error}
           </p>
         ) : null}
@@ -144,7 +167,7 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
         <Button
           type="submit"
           className="h-12 w-full text-base"
-          disabled={pending || code.length !== 6}
+          disabled={pending}
         >
           {pending ? (
             <LoaderCircleIcon className="animate-spin" aria-hidden="true" />
@@ -164,9 +187,9 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
         </p>
       </div>
 
-      <form onSubmit={sendCode} className="mt-7 space-y-5">
+      <form onSubmit={sendCode} className="mt-7 space-y-5" noValidate>
         <div className="space-y-2">
-          <Label htmlFor="email">{t("email")}</Label>
+          <Label htmlFor="email" className={invalidEmail ? "text-destructive" : undefined}>{t("email")}</Label>
           <div className="relative">
             <MailIcon
               className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground"
@@ -178,8 +201,14 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
               type="email"
               autoComplete="email"
               required
+              aria-invalid={invalidEmail}
+              aria-describedby={error ? "email-error" : undefined}
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => {
+                setEmail(event.target.value);
+                setEmailValid(event.currentTarget.checkValidity());
+                setError("");
+              }}
               className="h-12 pl-10 text-base"
               placeholder="ty@example.com"
             />
@@ -187,7 +216,7 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
         </div>
 
         {error ? (
-          <p role="alert" className="text-sm font-medium text-destructive">
+          <p id="email-error" role="alert" className="text-sm font-medium text-destructive">
             {error}
           </p>
         ) : null}

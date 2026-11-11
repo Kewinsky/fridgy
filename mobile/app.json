@@ -5,8 +5,15 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "fridgy",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
-    "backgroundColor": "#F7F7F5",
+    "backgroundColor": "#EAF4FC",
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#EAF4FC"
+      }
+    },
     "web": {
       "output": "static"
     },
@@ -16,7 +23,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#F7F7F5"
+          "image": "./assets/logo.png",
+          "imageWidth": 180,
+          "backgroundColor": "#EAF4FC"
         }
       ],
       "expo-sqlite"

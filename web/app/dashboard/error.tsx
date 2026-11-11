@@ -1,10 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import { AlertTriangleIcon, HomeIcon, RefreshCwIcon } from "lucide-react";
+import { HomeIcon, RefreshCwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
+import { BrandIcon } from "@/components/brand-icon";
 
 export default function DashboardError({
   error,
@@ -16,9 +17,7 @@ export default function DashboardError({
   const t = useTranslations("Errors.dashboard");
   return (
     <section className="app-card mx-auto max-w-xl p-6 text-center sm:p-8">
-      <span className="mx-auto flex size-14 items-center justify-center rounded-xl bg-destructive/10 text-destructive">
-        <AlertTriangleIcon className="size-7" aria-hidden="true" />
-      </span>
+      <BrandIcon name="error" className="mx-auto size-24" />
       <p className="mt-6 text-sm font-bold uppercase tracking-wider text-destructive">{t("label")}</p>
       <h1 className="mt-2 text-2xl font-extrabold sm:text-3xl">{t("title")}</h1>
       <p className="mt-3 text-sm leading-6 text-muted-foreground">

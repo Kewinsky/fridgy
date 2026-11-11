@@ -105,8 +105,13 @@
     "description": "Basic preferences for your household and the app appearance.",
     "language": "App language",
     "languageDescription": "Choose the language of the Fridgy interface.",
-    "theme": "Colour theme",
+    "theme": "Appearance mode",
     "themeDescription": "Choose a light, dark or automatic app appearance.",
+    "palette": {
+      "title": "Colour palette",
+      "description": "Choose the app colours. This setting is saved in this browser.",
+      "options": { "blue": "Blue", "green": "Green", "violet": "Violet" }
+    },
     "householdUi": {
       "title": "Your household",
       "description": "See your role and permissions in the current household.",
@@ -834,6 +839,7 @@
     "add": "Add",
     "removeItem": "Remove {name}",
     "empty": "The list is empty",
+    "allDone": "Everything is bought!",
     "cancel": "Cancel",
     "listTitle": "Shopping list – Fridgy",
     "clearDialog": {
@@ -917,6 +923,19 @@
       "selectFile": "Select photo",
       "notice": "The photo will be sent for AI analysis. Products are added only after you confirm them."
     }
+  },
+  "Technical": {
+    "offline": {
+      "label": "No connection",
+      "title": "You are offline",
+      "description": "Check your internet connection. Try again when it is back."
+    },
+    "maintenance": {
+      "label": "Maintenance",
+      "title": "Fridgy will be back soon",
+      "description": "We are working on the app. Please try again in a little while."
+    },
+    "retry": "Try again"
   },
   "Errors": {
     "notFound": {

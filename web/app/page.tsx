@@ -4,14 +4,12 @@ import { getTranslations } from "next-intl/server";
 import {
   ArrowRightIcon,
   CameraIcon,
-  ChefHatIcon,
-  LeafIcon,
   PackageCheckIcon,
-  ReceiptTextIcon,
   SparklesIcon,
 } from "lucide-react";
 
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { BrandIcon, BrandWordmark } from "@/components/brand-icon";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -24,17 +22,17 @@ export default async function HomePage() {
   const t = await getTranslations("Landing");
   const benefits = [
     {
-      icon: ReceiptTextIcon,
+      icon: "shopping" as const,
       title: t("benefitReceiptTitle"),
       description: t("benefitReceiptDescription"),
     },
     {
-      icon: LeafIcon,
+      icon: "expiring_soon" as const,
       title: t("benefitDatesTitle"),
       description: t("benefitDatesDescription"),
     },
     {
-      icon: ChefHatIcon,
+      icon: "cooking_recipe" as const,
       title: t("benefitCookingTitle"),
       description: t("benefitCookingDescription"),
     },
@@ -43,11 +41,9 @@ export default async function HomePage() {
   return (
     <main className="min-h-dvh overflow-hidden">
       <header className="mx-auto flex h-20 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-10">
-        <Link href="/" className="flex items-center gap-2.5 font-extrabold">
-          <span className="flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <LeafIcon className="size-5" aria-hidden="true" />
-          </span>
-          <span className="text-xl">Fridgy</span>
+        <Link href="/" className="flex items-center gap-1">
+          <BrandIcon name="logo" className="size-12" />
+          <BrandWordmark className="text-[1.65rem]" />
         </Link>
         <div className="flex items-center gap-2">
           <Link
@@ -162,12 +158,10 @@ export default async function HomePage() {
             </h2>
           </div>
           <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {benefits.map(({ icon: Icon, title, description }, index) => (
+            {benefits.map(({ icon, title, description }, index) => (
               <article key={title} className="app-card p-6">
                 <div className="flex items-center justify-between">
-                  <span className="flex size-11 items-center justify-center rounded-xl bg-secondary text-primary">
-                    <Icon className="size-5" aria-hidden="true" />
-                  </span>
+                  <BrandIcon name={icon} className="size-14" />
                   <span className="text-sm font-extrabold text-muted-foreground">
                     0{index + 1}
                   </span>
@@ -184,10 +178,7 @@ export default async function HomePage() {
 
       <section className="mx-auto max-w-7xl px-5 py-20 sm:px-8 lg:px-10 lg:py-24">
         <div className="rounded-2xl bg-surface-strong px-6 py-12 text-center text-surface-strong-foreground sm:px-10 sm:py-16">
-          <LeafIcon
-            className="mx-auto size-8 text-surface-strong-accent"
-            aria-hidden="true"
-          />
+          <BrandIcon name="cooking_recipe" className="mx-auto size-24" />
           <h2 className="mx-auto mt-5 max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl">
             {t("ctaTitle")}
           </h2>
@@ -209,7 +200,10 @@ export default async function HomePage() {
 
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-5 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
-          <p className="font-bold text-foreground">Fridgy</p>
+          <div className="flex items-center gap-1">
+            <BrandIcon name="logo" className="size-11" />
+            <BrandWordmark className="text-xl text-foreground" />
+          </div>
           <p>{t("footer")}</p>
         </div>
       </footer>

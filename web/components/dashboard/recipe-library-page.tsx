@@ -10,6 +10,7 @@ import {
 import { useTranslations } from "next-intl";
 
 import { AddRecipeDialog } from "@/components/dashboard/add-recipe-dialog";
+import { BrandIcon } from "@/components/brand-icon";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
@@ -88,13 +89,13 @@ export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
 
   if (tab === "favorites") {
     recipes = allRecipes.filter((recipe) => library.favoriteSlugs.includes(recipe.slug));
-    emptyState = <EmptyState icon={HeartIcon} title={t("emptyFavorites.title")} description={t("emptyFavorites.description")} />;
+    emptyState = <EmptyState icon="empty_state" title={t("emptyFavorites.title")} description={t("emptyFavorites.description")} />;
   } else if (tab === "custom") {
     recipes = savedRecipes.filter((recipe) => recipe.source === "custom");
-    emptyState = <EmptyState icon={BookOpenIcon} title={t("emptyCustom.title")} description={t("emptyCustom.description")} actionNode={isHouseholdOwner ? <AddRecipeDialog /> : undefined} />;
+    emptyState = <EmptyState icon="empty_state" title={t("emptyCustom.title")} description={t("emptyCustom.description")} actionNode={isHouseholdOwner ? <AddRecipeDialog /> : undefined} />;
   } else {
     recipes = getHistoryRecipes(savedRecipes, [], library.history);
-    emptyState = <EmptyState icon={HistoryIcon} title={t("emptyHistory.title")} description={t("emptyHistory.description")} href="/dashboard/co-ugotowac" action={t("emptyHistory.action")} />;
+    emptyState = <EmptyState icon="cooking_recipe" title={t("emptyHistory.title")} description={t("emptyHistory.description")} href="/dashboard/co-ugotowac" action={t("emptyHistory.action")} />;
   }
 
   if (!recipes.length) return emptyState;
@@ -115,14 +116,14 @@ export function RecipeLibraryCards({ tab }: { tab: RecipeLibraryTab }) {
 }
 
 function EmptyState({
-  icon: Icon,
+  icon,
   title,
   description,
   href,
   action,
   actionNode,
 }: {
-  icon: typeof HistoryIcon;
+  icon: "empty_state" | "cooking_recipe";
   title: string;
   description: string;
   href?: string;
@@ -131,9 +132,7 @@ function EmptyState({
 }) {
   return (
     <section className="app-card px-5 py-12 text-center">
-      <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-secondary text-primary">
-        <Icon aria-hidden="true" />
-      </span>
+      <BrandIcon name={icon} className="mx-auto size-20" />
       <h2 className="mt-4 text-lg font-extrabold">{title}</h2>
       <p className="mx-auto mt-1 max-w-md text-sm leading-6 text-muted-foreground">
         {description}

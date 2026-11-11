@@ -723,10 +723,7 @@ function LinkRecipeForm({
         aria-live="polite"
       >
         <span className="relative flex size-20 items-center justify-center rounded-full bg-secondary text-primary">
-          <span
-            className="absolute inset-2 rounded-full border-2 border-primary/20 border-t-primary motion-safe:animate-spin"
-            aria-hidden="true"
-          />
+          <span className="absolute inset-2 rounded-full border-2 border-primary/20 border-t-primary motion-safe:animate-spin" aria-hidden="true" />
           <LinkIcon className="size-8" aria-hidden="true" />
         </span>
         <p className="mt-5 text-lg font-bold">{t("link.analysisTitle")}</p>

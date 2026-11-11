@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { ConsumedProductsCard } from "@/components/dashboard/consumed-products-card";
+import { BrandIcon } from "@/components/brand-icon";
 import { ProductRowDetails } from "@/components/dashboard/product-row-details";
 import { OnboardingSteps } from "@/components/dashboard/household-onboarding";
 import { Button } from "@/components/ui/button";
@@ -120,8 +121,13 @@ async function DailyIdeaCard({ dashboard, locale }: { dashboard: DashboardData; 
 
   return (
     <section className="flex min-h-64 min-w-0 flex-col rounded-2xl border border-surface-strong-foreground/15 bg-surface-strong-foreground/10 p-5 sm:p-6">
-      <p className="text-xs font-bold uppercase tracking-[0.14em] text-surface-strong-accent">{t("dailyEyebrow")}</p>
-      <h2 className="mt-1 text-xl font-extrabold">{t("dailyTitle")}</h2>
+      <div className="flex items-center gap-3">
+        <div className="min-w-0">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-surface-strong-accent">{t("dailyEyebrow")}</p>
+          <h2 className="mt-1 text-xl font-extrabold">{t("dailyTitle")}</h2>
+        </div>
+        {idea.status === "ready" ? <BrandIcon name="cooking_recipe" className="size-14" /> : null}
+      </div>
       {idea.status === "ready" ? (
         <>
           <h3 className="mt-4 text-lg font-bold">{idea.recipe.title}</h3>

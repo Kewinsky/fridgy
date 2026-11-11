@@ -105,8 +105,13 @@
     "description": "Préférences de base du foyer et apparence de l'application.",
     "language": "Langue de l'application",
     "languageDescription": "Choisissez la langue de l'interface Fridgy.",
-    "theme": "Thème de couleur",
+    "theme": "Mode d'affichage",
     "themeDescription": "Choisissez une apparence claire, sombre ou automatique.",
+    "palette": {
+      "title": "Palette de couleurs",
+      "description": "Choisissez les couleurs de l'application. Ce réglage est enregistré dans ce navigateur.",
+      "options": { "blue": "Bleu", "green": "Vert", "violet": "Mauve" }
+    },
     "householdUi": {
       "title": "Votre foyer",
       "description": "Consultez votre rôle et vos droits dans le foyer actuel.",
@@ -834,6 +839,7 @@
     "add": "Ajouter",
     "removeItem": "Supprimer {name}",
     "empty": "La liste est vide",
+    "allDone": "Tout est acheté !",
     "cancel": "Annuler",
     "listTitle": "Liste de courses – Fridgy",
     "clearDialog": {
@@ -917,6 +923,19 @@
       "selectFile": "Choisir une photo",
       "notice": "La photo sera envoyée pour analyse par l'IA. Les produits ne seront ajoutés qu'après votre confirmation."
     }
+  },
+  "Technical": {
+    "offline": {
+      "label": "Aucune connexion",
+      "title": "Vous êtes hors ligne",
+      "description": "Vérifiez votre connexion Internet, puis réessayez lorsqu'elle sera rétablie."
+    },
+    "maintenance": {
+      "label": "Travaux de maintenance",
+      "title": "Fridgy revient bientôt",
+      "description": "Nous travaillons sur l'application. Réessayez dans quelques instants."
+    },
+    "retry": "Réessayer"
   },
   "Errors": {
     "notFound": {

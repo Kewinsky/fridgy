@@ -8,7 +8,6 @@ import {
   ChevronDownIcon,
   FileImageIcon,
   InfoIcon,
-  LeafIcon,
   PackagePlusIcon,
   PlusIcon,
   Trash2Icon,
@@ -18,6 +17,7 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
 import { PageHeader } from "@/components/dashboard/page-header";
+import { BrandIcon } from "@/components/brand-icon";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import {
   productCategories,
@@ -196,12 +196,7 @@ export function ReceiptPage() {
       <div className="flex min-h-[calc(100dvh-13rem)] items-center justify-center py-8 lg:min-h-[calc(100dvh-5.25rem)]">
         <section className="app-card w-full max-w-xl px-6 py-10 text-center sm:p-12">
           <div className="mx-auto flex max-w-md flex-col items-center">
-            <span className="relative flex size-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-              <LeafIcon className="size-8" aria-hidden="true" />
-              <span className="absolute -right-2 -bottom-2 flex size-8 items-center justify-center rounded-full bg-fresh-soft text-fresh ring-4 ring-card">
-                <CheckIcon className="size-5" aria-hidden="true" />
-              </span>
-            </span>
+            <BrandIcon name="success" className="size-24" />
             <h1 className="mt-8 text-3xl font-extrabold tracking-tight sm:text-4xl">{t("success.title")}</h1>
             <p className="mt-3 text-base leading-6 text-muted-foreground" role="status">{t("success.description", { count: items.length })}</p>
             <div className="mt-8 flex w-full flex-col gap-3 sm:flex-row">

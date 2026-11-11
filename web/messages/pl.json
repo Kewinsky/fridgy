@@ -105,8 +105,13 @@
     "description": "Podstawowe preferencje gospodarstwa domowego i wyglądu aplikacji.",
     "language": "Język aplikacji",
     "languageDescription": "Wybierz język interfejsu Fridgy.",
-    "theme": "Motyw kolorystyczny",
+    "theme": "Tryb wyglądu",
     "themeDescription": "Wybierz jasny, ciemny lub automatyczny wygląd aplikacji.",
+    "palette": {
+      "title": "Paleta kolorów",
+      "description": "Wybierz kolor aplikacji. Ustawienie zapisuje się w tej przeglądarce.",
+      "options": { "blue": "Błękit", "green": "Zieleń", "violet": "Fiolet" }
+    },
     "householdUi": {
       "title": "Twoje domostwo",
       "description": "Sprawdź swoją rolę i uprawnienia w bieżącym domostwie.",
@@ -834,6 +839,7 @@
     "add": "Dodaj",
     "removeItem": "Usuń {name}",
     "empty": "Lista jest pusta",
+    "allDone": "Wszystko kupione!",
     "cancel": "Anuluj",
     "listTitle": "Lista zakupów – Fridgy",
     "clearDialog": {
@@ -917,6 +923,19 @@
       "selectFile": "Wybierz zdjęcie",
       "notice": "Zdjęcie zostanie przesłane do analizy AI. Produkty dodamy dopiero po Twoim zatwierdzeniu."
     }
+  },
+  "Technical": {
+    "offline": {
+      "label": "Brak połączenia",
+      "title": "Jesteś offline",
+      "description": "Sprawdź połączenie z internetem. Gdy wróci, spróbuj ponownie."
+    },
+    "maintenance": {
+      "label": "Przerwa techniczna",
+      "title": "Fridgy wróci za chwilę",
+      "description": "Pracujemy nad aplikacją. Spróbuj ponownie za chwilę."
+    },
+    "retry": "Spróbuj ponownie"
   },
   "Errors": {
     "notFound": {

@@ -6,6 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { BookOpenCheckIcon, CheckIcon, ChefHatIcon, ChevronDownIcon, RefreshCwIcon, SparklesIcon } from "lucide-react";
 
 import { generateRecipes } from "@/app/dashboard/data-actions";
+import { BrandIcon } from "@/components/brand-icon";
 import { PageHeader } from "@/components/dashboard/page-header";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { RecipeCardSkeleton } from "@/components/dashboard/recipe-card-skeleton";
@@ -122,7 +123,7 @@ export function CookingPage() {
               <p className="pt-1 text-sm leading-6">{aiMessage}</p>
             </section>
           ) : null}
-          {error ? <p role="alert" className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm font-semibold text-destructive">{t(`errors.${error}`)}</p> : null}
+          {error ? <div role="alert" className="mb-4 flex items-center gap-3 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm font-semibold text-destructive"><BrandIcon name="warning" className="size-14" /><p>{t(`errors.${error}`)}</p></div> : null}
           {partial ? <p role="status" className="mb-4 rounded-lg border border-border bg-muted p-4 text-sm">{t("partialNoShopping")}</p> : null}
           {recipes.length || loadingPhase ? (
             <div className="grid gap-4 lg:grid-cols-3">
@@ -139,6 +140,7 @@ export function CookingPage() {
             </div>
           ) : !error ? (
             <section className="app-card p-8 text-center">
+              <BrandIcon name="cooking_recipe" className="mx-auto mb-4 size-20" />
               <h2 className="text-lg font-extrabold">{t("empty.title")}</h2>
               <p className="mt-2 text-sm text-muted-foreground">
                 {t("empty.description")}
