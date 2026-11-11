@@ -1,4 +1,59 @@
 {
+  "Subscription": {
+    "aiUnlimited": "Unlimited AI uses",
+    "monthlyReset": "Monthly limits reset on {date, date, medium}.",
+    "createAccount": "Create an account",
+    "eyebrow": "Fridgy plans",
+    "title": "Free and Premium",
+    "description": "Choose how to use Fridgy. One plan covers the whole household.",
+    "free": "Free",
+    "premium": "Premium",
+    "freeDescription": "Unlimited basic inventory and shopping lists.",
+    "perMonth": "/ month",
+    "perYear": "/ year",
+    "trialDescription": "Try Premium free for {count} days. We will not charge you after the trial until payments are available.",
+    "activeUntil": "Premium active until {date, date, medium}",
+    "trialUsed": "This household has already used its trial.",
+    "startTrial": "Start {count}-day free trial",
+    "trialUnavailable": "The free trial is no longer available.",
+    "trialStarted": "Your Premium trial has started.",
+    "changeFailed": "Could not change the plan. Please try again.",
+    "paymentsComingSoon": "Stripe payments are coming soon. Prices are shown for information only.",
+    "compare": "Compare plans",
+    "feature": "Feature",
+    "unlimited": "Unlimited",
+    "none": "None",
+    "totalCount": "{count} total",
+    "monthlyCount": "{count} / month",
+    "dailyCount": "{count} per day",
+    "features": {
+      "inventory": "Inventory, manual entry and shopping lists",
+      "recipes": "Saved personal recipes",
+      "ai": "AI generation and import",
+      "receipts": "Receipt scans",
+      "daily": "Daily meal idea",
+      "members": "Household members"
+    },
+    "usageTitle": "Your plan and remaining uses",
+    "freeStatus": "You are on the Free plan.",
+    "premiumStatus": "You have Premium.",
+    "aiRemaining": "AI uses left: {count}",
+    "scanRemaining": "Receipt scans left this month: {count}",
+    "enableTest": "Enable test Premium",
+    "disableTest": "Disable test Premium",
+    "testChanged": "Test Premium status updated.",
+    "limitTitle": "Plan limit reached",
+    "close": "Close",
+    "seePlans": "View plans",
+    "limits": {
+      "ai": "You have used your available AI generation and imports. Premium uses reset each month.",
+      "receipt": "You have used this month's receipt scans. You can still add products manually.",
+      "recipes": "Free includes {count} saved personal recipes. Delete one or choose Premium.",
+      "members": "This plan cannot add another household member. View Premium to raise the limit."
+    },
+    "remainingTotal": "{count} of {total} total uses left",
+    "remainingMonthly": "{count} of {total} uses left this month"
+  },
   "Common": {
     "changeLanguage": "Change language",
     "saving": "Saving…",
@@ -19,6 +74,7 @@
     "description": "Manage your food at home and waste less."
   },
   "Landing": {
+    "pricing": "Pricing",
     "metaTitle": "Manage your food and waste less",
     "metaDescription": "Turn receipts into an organised inventory and use food on time.",
     "login": "Sign in",
@@ -48,6 +104,7 @@
     "footer": "Manage your food at home and waste less."
   },
   "Navigation": {
+    "premium": "Premium",
     "overview": "Overview",
     "overviewShort": "Home",
     "inventory": "My inventory",
@@ -345,6 +402,7 @@
     }
   },
   "Dashboard": {
+    "seePremium": "View Premium",
     "metaTitle": "Overview",
     "metaDescription": "Overview of your home inventory and key tasks.",
     "eyebrow": "Good to see you",
@@ -390,6 +448,7 @@
     "dailyTitle": "Today's idea",
     "dailyLoading": "Preparing today's idea…",
     "dailyStatus": {
+      "premium": "Daily meal ideas are available with Premium.",
       "pending": "Your idea is being prepared. Refresh the page in a moment.",
       "failed": "We could not prepare a good idea today. You can choose your own answers in What should I cook?",
       "unavailable": "Today's idea is temporarily unavailable.",

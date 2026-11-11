@@ -7,9 +7,10 @@ import { generationInputSchema, requestDailyRecipe } from "@/lib/recipe-generati
 import type { StoredRecipe } from "@/lib/recipe-library";
 import type { Locale } from "@/i18n/config";
 
-type DailyIdea = { status: "ready"; recipe: StoredRecipe } | { status: "pending" | "failed" | "unavailable" | "empty" };
+type DailyIdea = { status: "ready"; recipe: StoredRecipe } | { status: "pending" | "failed" | "unavailable" | "empty" | "premium" };
 
 export async function getDailyIdea(dashboard: DashboardData, locale: Locale): Promise<DailyIdea> {
+  if (dashboard.subscription.limits.daily_ideas_per_day < 1) return { status: "premium" };
   const supabase = await createClient();
   // shortcut: daily ideas use Warsaw time until user time zones are stored.
   const date = new Date().toLocaleDateString("sv-SE", { timeZone: "Europe/Warsaw" });

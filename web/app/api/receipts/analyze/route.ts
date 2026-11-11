@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { requestReceiptItems } from "@/lib/receipt-analysis";
 import { validateReceiptImage } from "@/lib/receipt-image";
+import { finishUsage, reserveUsage } from "@/lib/subscription-usage";
 
 const contentTypes: Record<string, "image/jpeg" | "image/png" | "image/webp"> = {
   jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", webp: "image/webp",
@@ -31,11 +32,22 @@ export async function POST(request: Request) {
   const mime = contentTypes[file.name.split(".").pop()?.toLowerCase() ?? ""];
   if (!mime) return Response.json({ error: "invalidFile" }, { status: 400 });
 
+  const { data: profile, error: profileError } = await supabase.from("profiles")
+    .select("household_id").eq("user_id", user.id).single();
+  if (profileError || !profile?.household_id) return Response.json({ error: "unavailable" }, { status: 503 });
+  const reservation = await reserveUsage(supabase, profile.household_id, "receipt");
+  if (!reservation) return Response.json({ error: "limitReached" }, { status: 429 });
+
   try {
     const items = await requestReceiptItems(key, Buffer.from(await file.arrayBuffer()), mime);
-    if (!items.length) return Response.json({ error: "noProducts" }, { status: 422 });
+    if (!items.length || request.signal.aborted) {
+      await finishUsage(supabase, reservation, false);
+      return Response.json({ error: "noProducts" }, { status: 422 });
+    }
+    await finishUsage(supabase, reservation, true);
     return Response.json({ items });
   } catch (error) {
+    await finishUsage(supabase, reservation, false).catch(() => {});
     console.error("Receipt analysis failed", error instanceof Error ? error.name : "unknown");
     return Response.json({ error: "analysisFailed" }, { status: 502 });
   }

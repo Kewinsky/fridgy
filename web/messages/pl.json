@@ -1,4 +1,59 @@
 {
+  "Subscription": {
+    "aiUnlimited": "Użycia AI bez limitu",
+    "monthlyReset": "Limity miesięczne odnowią się {date, date, medium}.",
+    "createAccount": "Utwórz konto",
+    "eyebrow": "Plany Fridgy",
+    "title": "Free i Premium",
+    "description": "Wybierz sposób korzystania z Fridgy. Jeden plan obejmuje całe domostwo.",
+    "free": "Free",
+    "premium": "Premium",
+    "freeDescription": "Podstawowe zapasy i lista zakupów bez limitu.",
+    "perMonth": "/ mies.",
+    "perYear": "/ rok",
+    "trialDescription": "{count} dni Premium za darmo. Po okresie próbnym nie pobierzemy opłaty, dopóki płatności nie będą dostępne.",
+    "activeUntil": "Premium aktywne do {date, date, medium}",
+    "trialUsed": "Okres próbny został już wykorzystany.",
+    "startTrial": "Rozpocznij {count}-dniowy okres próbny",
+    "trialUnavailable": "Okres próbny nie jest już dostępny.",
+    "trialStarted": "Okres próbny Premium został włączony.",
+    "changeFailed": "Nie udało się zmienić planu. Spróbuj ponownie.",
+    "paymentsComingSoon": "Płatności przez Stripe będą dostępne wkrótce. Ceny są na razie informacyjne.",
+    "compare": "Porównanie planów",
+    "feature": "Funkcja",
+    "unlimited": "Bez limitu",
+    "none": "Brak",
+    "totalCount": "{count} łącznie",
+    "monthlyCount": "{count} / mies.",
+    "dailyCount": "{count} dziennie",
+    "features": {
+      "inventory": "Zapasy, ręczne dodawanie i lista zakupów",
+      "recipes": "Zapisane własne przepisy",
+      "ai": "Generowanie i import przez AI",
+      "receipts": "Skany paragonów",
+      "daily": "Pomysł na danie dnia",
+      "members": "Domownicy"
+    },
+    "usageTitle": "Twój plan i pozostałe użycia",
+    "freeStatus": "Korzystasz z planu Free.",
+    "premiumStatus": "Korzystasz z Premium.",
+    "aiRemaining": "Pozostałe użycia AI: {count}",
+    "scanRemaining": "Pozostałe skany w tym miesiącu: {count}",
+    "enableTest": "Włącz testowe Premium",
+    "disableTest": "Wyłącz testowe Premium",
+    "testChanged": "Zmieniono testowy status Premium.",
+    "limitTitle": "Osiągnięto limit planu",
+    "close": "Zamknij",
+    "seePlans": "Zobacz plany",
+    "limits": {
+      "ai": "Wykorzystano dostępne generowania i importy AI. W Premium limit odnawia się co miesiąc.",
+      "receipt": "Wykorzystano skany paragonów na ten miesiąc. Produkty nadal możesz dodawać ręcznie.",
+      "recipes": "W planie Free możesz zapisać {count} własnych przepisów. Możesz usunąć jeden z nich lub wybrać Premium.",
+      "members": "W tym planie nie można dodać kolejnego domownika. Zobacz Premium, aby zwiększyć limit."
+    },
+    "remainingTotal": "Pozostało {count} z {total} użyć łącznie",
+    "remainingMonthly": "Pozostało {count} z {total} użyć w tym miesiącu"
+  },
   "Common": {
     "changeLanguage": "Zmień język",
     "saving": "Zapisywanie…",
@@ -19,6 +74,7 @@
     "description": "Domowe zapasy bez marnowania."
   },
   "Landing": {
+    "pricing": "Cennik",
     "metaTitle": "Domowe zapasy bez marnowania",
     "metaDescription": "Zamieniaj paragony w uporządkowane zapasy i wykorzystuj jedzenie na czas.",
     "login": "Zaloguj się",
@@ -48,6 +104,7 @@
     "footer": "Domowe zapasy bez marnowania."
   },
   "Navigation": {
+    "premium": "Premium",
     "overview": "Przegląd",
     "overviewShort": "Start",
     "inventory": "Moje zapasy",
@@ -345,6 +402,7 @@
     }
   },
   "Dashboard": {
+    "seePremium": "Zobacz Premium",
     "metaTitle": "Przegląd",
     "metaDescription": "Przegląd domowych zapasów i najważniejszych zadań.",
     "eyebrow": "Dzień dobry",
@@ -390,6 +448,7 @@
     "dailyTitle": "Pomysł na dziś",
     "dailyLoading": "Przygotowujemy pomysł na dziś…",
     "dailyStatus": {
+      "premium": "Codzienny pomysł na danie jest dostępny w Premium.",
       "pending": "Pomysł jest przygotowywany. Odśwież stronę za chwilę.",
       "failed": "Dziś nie udało się przygotować sensownej propozycji. Możesz samodzielnie wybrać odpowiedzi w „Co ugotować?”.",
       "unavailable": "Dzisiejszy pomysł jest chwilowo niedostępny.",

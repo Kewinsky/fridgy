@@ -64,6 +64,7 @@ import {
   uploadRecipeImage,
 } from "@/lib/recipe-image-storage";
 import { importRecipeFromUrl } from "@/app/dashboard/data-actions";
+import { PlanLimitDialog, RemainingUses } from "@/components/dashboard/plan-limit-dialog";
 import type { ImportedRecipeDraft } from "@/lib/recipe-import";
 
 type RecipeFormState = {
@@ -115,6 +116,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const editing = Boolean(recipe);
   const fieldId = useId();
   const [open, setOpen] = useState(false);
+  const [limitOpen, setLimitOpen] = useState(false);
   const [tab, setTab] = useState("manual");
   const [imported, setImported] = useState(false);
   const [validationAttempted, setValidationAttempted] = useState(false);
@@ -128,7 +130,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   const [checkingImage, setCheckingImage] = useState(false);
   const invalidFields = new Set(validationAttempted ? invalidRecipeFields(form) : []);
   const { saveCustomRecipe, updateCustomRecipe } = useRecipeLibraryActions();
-  const { userId } = useDashboardData();
+  const { userId, subscription } = useDashboardData();
 
   useEffect(() => {
     return () => {
@@ -228,9 +230,13 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
         if (recipe?.imagePath && recipe.imagePath !== imagePath) {
           void deleteRecipeImage(recipe.imagePath).catch(() => {});
         }
-      } catch {
+      } catch (saveError) {
         if (uploadedImagePath)
           void deleteRecipeImage(uploadedImagePath).catch(() => {});
+        if (String(saveError).includes("PLAN_LIMIT_CUSTOM_RECIPES")) {
+          setLimitOpen(true);
+          return;
+        }
         setError(common("saveFailed"));
         return;
       }
@@ -240,10 +246,19 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
   }
 
   return (
+    <>
+    <PlanLimitDialog kind="recipes" open={limitOpen} onOpenChange={setLimitOpen} />
     <Dialog
       open={open}
       onOpenChange={(nextOpen) => {
-        if (!isPending) changeOpen(nextOpen);
+        if (isPending) return;
+        if (nextOpen && !editing && subscription.plan === "free"
+          && subscription.limits.saved_custom_recipes !== null
+          && subscription.customRecipes >= subscription.limits.saved_custom_recipes) {
+          setLimitOpen(true);
+          return;
+        }
+        changeOpen(nextOpen);
       }}
     >
       <DialogTrigger
@@ -372,6 +387,7 @@ function RecipeFormDialog({ recipe }: { recipe?: CustomRecipe }) {
         )}
       </DialogContent>
     </Dialog>
+    </>
   );
 }
 
@@ -677,6 +693,8 @@ function LinkRecipeForm({
   const [error, setError] = useState("");
   const [invalidUrl, setInvalidUrl] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [limitOpen, setLimitOpen] = useState(false);
+  const { subscription, refreshSubscription } = useDashboardData();
 
   function showInvalidUrl() {
     setInvalidUrl(true);
@@ -689,6 +707,8 @@ function LinkRecipeForm({
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
+    const aiLimit = subscription.plan === "free" ? subscription.limits.ai_uses_lifetime : subscription.limits.ai_uses_monthly;
+    if (aiLimit !== null && subscription.aiUsed >= aiLimit) { setLimitOpen(true); return; }
     let parsedUrl: URL;
     try {
       parsedUrl = new URL(url.trim());
@@ -705,9 +725,13 @@ function LinkRecipeForm({
       try {
         const result = await importRecipeFromUrl(url.trim(), locale);
         if ("error" in result) {
+          if (result.error === "limitReached") { setLimitOpen(true); void refreshSubscription().catch(() => {}); return; }
           if (result.error === "invalidUrl") showInvalidUrl();
           else setError(t(`link.errors.${result.error}`));
-        } else onImported(result.draft);
+        } else {
+          void refreshSubscription().catch(() => {});
+          onImported(result.draft);
+        }
       } catch {
         setError(t("link.errors.serviceUnavailable"));
       }
@@ -734,6 +758,8 @@ function LinkRecipeForm({
   }
 
   return (
+    <>
+    <PlanLimitDialog kind="ai" open={limitOpen} onOpenChange={setLimitOpen} />
     <form onSubmit={submit} className="grid gap-5" noValidate>
       <div className="rounded-xl border border-border bg-muted/30 p-5">
         <h3 className="text-base font-bold">{t("link.title")}</h3>
@@ -785,6 +811,7 @@ function LinkRecipeForm({
         </p>
       ) : null}
       <DialogFooter>
+        <RemainingUses kind="ai" />
         <Button
           type="button"
           variant="outline"
@@ -805,6 +832,7 @@ function LinkRecipeForm({
         </Button>
       </DialogFooter>
     </form>
+    </>
   );
 }
 

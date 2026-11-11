@@ -26,12 +26,14 @@ Set the following in `.env.local` and in the Vercel project's environment variab
 | --- | --- | --- |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Project Settings → API | Supabase client |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase → Project Settings → API | Supabase client |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API | Server-only account deletion |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Project Settings → API | Server-only account deletion and local test Premium |
 | `OPENAI_API_KEY` | OpenAI Platform → API keys | Server-only recipe generation and receipt scanning |
 
 Never prefix the service role key with `NEXT_PUBLIC_` or expose it in browser code.
 Keep `OPENAI_API_KEY` server-only as well. Apply the migrations in `supabase/migrations/` in filename order. `202611090004_households_and_demo_data.sql` adds household switching, recipes shared with household members and removable sample data.
 `202611100001_daily_recipe_ideas.sql` adds the daily dashboard recipe cache. It allows one AI attempt per user, active household and Warsaw calendar day; failed attempts are not retried that day.
+
+`202611110003_subscriptions.sql` adds Free and Premium. Edit the two rows in Supabase's `subscription_plans` table to change prices, trial length, or limits; prices are stored in grosz. The database applies these values to usage checks and the app reads them for the pricing page. Free keeps existing recipes and members if they exceed a new limit, but blocks further additions. Free AI uses and the trial are tracked per account so creating a new household cannot reset them; Premium monthly uses are shared by the household. AI and receipt quotas count only successful results. Monthly quotas reset on the first day of each UTC month. Stripe checkout and webhooks are not connected yet. In local development, the household owner can turn test Premium on or off on the Premium page; this requires `SUPABASE_SERVICE_ROLE_KEY` and is disabled in production builds.
 
 Run [`../supabase/migrations/202610140001_initial_schema.sql`](../supabase/migrations/202610140001_initial_schema.sql) in the Supabase SQL Editor before opening the dashboard. It creates the tables, RLS policies, receipt and cooking transactions, and a trigger that creates the first household for every new user. After migration `202611090004`, new accounts receive five sample products, three shopping items and three sample recipes. When adding another household, the user chooses whether to add sample products and shopping items; the default is an empty start. Migration `004` also adds sample recipes for existing users. Keep migrations in source control; do not run them twice manually.
 

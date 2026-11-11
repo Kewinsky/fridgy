@@ -1,4 +1,59 @@
 {
+  "Subscription": {
+    "aiUnlimited": "Utilisations IA illimitées",
+    "monthlyReset": "Les limites mensuelles se renouvellent le {date, date, medium}.",
+    "createAccount": "Créer un compte",
+    "eyebrow": "Offres Fridgy",
+    "title": "Free et Premium",
+    "description": "Une offre couvre tout le foyer.",
+    "free": "Gratuit",
+    "premium": "Offre Premium",
+    "freeDescription": "Stocks et listes de courses sans limite.",
+    "perMonth": "/ mois",
+    "perYear": "/ an",
+    "trialDescription": "Essayez Premium gratuitement pendant {count} jours. Aucun paiement ne sera prélevé tant que les paiements ne sont pas disponibles.",
+    "activeUntil": "Premium actif jusqu'au {date, date, medium}",
+    "trialUsed": "Ce foyer a déjà utilisé son essai.",
+    "startTrial": "Commencer l'essai de {count} jours",
+    "trialUnavailable": "L'essai gratuit n'est plus disponible.",
+    "trialStarted": "Votre essai Premium a commencé.",
+    "changeFailed": "Impossible de modifier l'offre.",
+    "paymentsComingSoon": "Les paiements Stripe arrivent bientôt. Les prix sont donnés à titre indicatif.",
+    "compare": "Comparer les offres",
+    "feature": "Fonction",
+    "unlimited": "Sans limite",
+    "none": "Aucun",
+    "totalCount": "{count} au total",
+    "monthlyCount": "{count} / mois",
+    "dailyCount": "{count} par jour",
+    "features": {
+      "inventory": "Stocks, ajout manuel et liste de courses",
+      "recipes": "Recettes personnelles enregistrées",
+      "ai": "Création et import par IA",
+      "receipts": "Scans de tickets",
+      "daily": "Idée de repas quotidienne",
+      "members": "Membres du foyer"
+    },
+    "usageTitle": "Votre offre et vos utilisations restantes",
+    "freeStatus": "Vous utilisez Free.",
+    "premiumStatus": "Vous utilisez Premium.",
+    "aiRemaining": "Utilisations IA restantes : {count}",
+    "scanRemaining": "Scans restants ce mois : {count}",
+    "enableTest": "Activer Premium de test",
+    "disableTest": "Désactiver Premium de test",
+    "testChanged": "Premium de test a été modifié.",
+    "limitTitle": "Limite atteinte",
+    "close": "Fermer",
+    "seePlans": "Voir les offres",
+    "limits": {
+      "ai": "Vos créations et imports IA sont épuisés. Le quota Premium se renouvelle chaque mois.",
+      "receipt": "Vos scans du mois sont épuisés. Vous pouvez toujours ajouter des produits manuellement.",
+      "recipes": "Free permet d'enregistrer {count} recettes personnelles. Supprimez-en une ou choisissez Premium.",
+      "members": "Cette offre ne permet pas d'ajouter un membre. Découvrez Premium."
+    },
+    "remainingTotal": "Il reste {count} utilisations sur {total} au total",
+    "remainingMonthly": "Il reste {count} utilisations sur {total} ce mois"
+  },
   "Common": {
     "changeLanguage": "Changer de langue",
     "saving": "Enregistrement…",
@@ -19,6 +74,7 @@
     "description": "Gérez vos aliments à la maison et gaspillez moins."
   },
   "Landing": {
+    "pricing": "Tarifs",
     "metaTitle": "Gérez vos aliments et gaspillez moins",
     "metaDescription": "Transformez vos tickets en inventaire organisé et utilisez les aliments à temps.",
     "login": "Se connecter",
@@ -48,6 +104,7 @@
     "footer": "Gérez vos aliments à la maison et gaspillez moins."
   },
   "Navigation": {
+    "premium": "Offre Premium",
     "overview": "Vue d'ensemble",
     "overviewShort": "Accueil",
     "inventory": "Mes réserves",
@@ -345,6 +402,7 @@
     }
   },
   "Dashboard": {
+    "seePremium": "Voir Premium",
     "metaTitle": "Aperçu",
     "metaDescription": "Aperçu de vos provisions et des tâches importantes.",
     "eyebrow": "Bonjour",
@@ -390,6 +448,7 @@
     "dailyTitle": "Idée du jour",
     "dailyLoading": "Préparation de l'idée du jour…",
     "dailyStatus": {
+      "premium": "Les idées de repas quotidiennes sont disponibles avec Premium.",
       "pending": "Votre idée est en cours de préparation. Actualisez la page dans un instant.",
       "failed": "Nous n'avons pas trouvé de bonne idée aujourd'hui. Vous pouvez choisir vos critères dans Que cuisiner ?",
       "unavailable": "L'idée du jour est temporairement indisponible.",

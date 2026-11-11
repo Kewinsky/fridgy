@@ -139,6 +139,7 @@ async function DailyIdeaCard({ dashboard, locale }: { dashboard: DashboardData; 
         <>
           <p className="mt-4 text-sm leading-6 text-surface-strong-foreground/80">{t(`dailyStatus.${idea.status}`)}</p>
           {idea.status === "empty" ? <Link href="/dashboard/dodaj-produkty" className="mt-4 inline-flex min-h-11 items-center gap-2 self-start text-sm font-semibold text-surface-strong-accent hover:underline focus-visible:outline-2 focus-visible:outline-ring">{t("addReceipt")} <ArrowRightIcon className="size-4" aria-hidden="true" /></Link> : null}
+          {idea.status === "premium" ? <Link href="/dashboard/premium" className="mt-4 inline-flex min-h-11 items-center gap-2 self-start text-sm font-semibold text-surface-strong-accent hover:underline focus-visible:outline-2 focus-visible:outline-ring">{t("seePremium")} <ArrowRightIcon className="size-4" aria-hidden="true" /></Link> : null}
         </>
       )}
     </section>

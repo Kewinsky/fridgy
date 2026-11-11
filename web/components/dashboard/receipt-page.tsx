@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { StorageLocation } from "@/lib/demo-data";
 import { validateReceiptImage } from "@/lib/receipt-image";
+import { PlanLimitDialog, RemainingUses } from "@/components/dashboard/plan-limit-dialog";
 
 type Step = "choose" | "analyzing" | "review" | "success";
 type Method = "receipt" | "manual";
@@ -79,14 +80,16 @@ export function ReceiptPage() {
   const [items, setItems] = useState<ReceiptItem[]>([]);
   const [fileName, setFileName] = useState("");
   const [fileError, setFileError] = useState("");
+  const [limitOpen, setLimitOpen] = useState(false);
   const [validationAttempted, setValidationAttempted] = useState(false);
   const requestId = useRef(0);
   const scanAbort = useRef<AbortController | null>(null);
   const [isPending, startTransition] = useTransition();
-  const { refreshInventory, householdId, dateFormat } = useDashboardData();
+  const { refreshInventory, refreshSubscription, householdId, dateFormat, subscription } = useDashboardData();
 
   async function handleReceiptFile(file: File | undefined) {
     if (!file) return;
+    if (subscription.scansUsed >= subscription.limits.receipt_scans_monthly) { setLimitOpen(true); return; }
     setFileError("");
     const error = file.size > MAX_SCAN_MB * 1024 * 1024 ? "fileTooLarge" : await validateReceiptImage(file);
     if (error || !/\.(jpe?g|png|webp)$/i.test(file.name)) {
@@ -112,6 +115,7 @@ export function ReceiptPage() {
       const result = await response.json() as { error?: string; items?: Array<Omit<ReceiptItem, "id" | "estimatedUseBy" | "quantity"> & { quantity: number; estimatedDays: number }> };
       if (currentRequest !== requestId.current) return;
       if (!response.ok || !result.items?.length) {
+        if (result.error === "limitReached") { setLimitOpen(true); setStep("choose"); void refreshSubscription().catch(() => {}); return; }
         const knownErrors = ["emptyFile", "fileTooLarge", "invalidFile", "noProducts", "unavailable"];
         const reason = knownErrors.find((error) => error === result.error) ?? "analysisFailed";
         setFileError(reason === "fileTooLarge" ? t("toasts.fileTooLarge", { maxMb: MAX_SCAN_MB }) : t(`toasts.${reason}`));
@@ -127,6 +131,7 @@ export function ReceiptPage() {
         estimatedUseBy: format(addDays(new Date(), estimatedDays), "yyyy-MM-dd"),
       })));
       setStep("review");
+      void refreshSubscription().catch(() => {});
     } catch {
       if (currentRequest !== requestId.current) return;
       setFileError(t("toasts.analysisFailed"));
@@ -462,6 +467,7 @@ export function ReceiptPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
+      <PlanLimitDialog kind="receipt" open={limitOpen} onOpenChange={setLimitOpen} />
       <PageHeader
         eyebrow={t("manual.eyebrow")}
         title={t("manual.title")}
@@ -504,6 +510,7 @@ export function ReceiptPage() {
           >
             <UploadIcon aria-hidden="true" /> {t("upload.selectFile")}
           </Button>
+          <div className="mt-3"><RemainingUses kind="receipt" /></div>
           <p className="mt-3 text-xs text-muted-foreground">
             {t("upload.formats", { maxMb: MAX_SCAN_MB })}
           </p>

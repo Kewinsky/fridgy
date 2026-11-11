@@ -14,6 +14,7 @@ import type { Recipe } from "@/lib/demo-recipes";
 import { loadDashboardData } from "@/lib/dashboard-data";
 import { productCategories } from "@/components/dashboard/product-category-options";
 import { extractRecipeDraft, fetchPublicDescription, importLocaleSchema, parseImportUrl, type ImportRecipeResult } from "@/lib/recipe-import";
+import { finishUsage, reserveUsage } from "@/lib/subscription-usage";
 
 const productSchema = z.object({
   id: z.uuid(),
@@ -110,12 +111,13 @@ export async function saveCustomRecipe(recipe: CustomRecipe, expectedHouseholdId
   const valid = validateCustomRecipe(recipe);
   const { supabase, userId, householdId } = await authorizedClient(expectedHouseholdId);
   const { error } = await supabase.from("recipes").insert({ user_id: userId, household_id: householdId, slug: valid.slug, source: "custom", recipe: valid, created_at: valid.createdAt });
+  if (error?.message.includes("PLAN_LIMIT_CUSTOM_RECIPES")) return { error: "limitReached" as const };
   if (error) throw new Error(error.message);
   return { ...valid, createdBy: userId, isFavorite: false };
 }
 
 export async function importRecipeFromUrl(value: string, locale: string): Promise<ImportRecipeResult> {
-  await authorizedClient();
+  const { supabase, householdId } = await authorizedClient();
   const url = parseImportUrl(value);
   if (!url) return { error: "invalidUrl" };
   if (!importLocaleSchema.safeParse(locale).success) return { error: "unsupported" };
@@ -128,9 +130,14 @@ export async function importRecipeFromUrl(value: string, locale: string): Promis
     return { error: "unavailable" };
   }
   if (!description) return { error: "unavailable" };
+  const reservation = await reserveUsage(supabase, householdId, "ai");
+  if (!reservation) return { error: "limitReached" };
   try {
-    return await extractRecipeDraft(key, description, locale);
+    const result = await extractRecipeDraft(key, description, locale);
+    await finishUsage(supabase, reservation, "draft" in result);
+    return result;
   } catch {
+    await finishUsage(supabase, reservation, false).catch(() => {});
     return { error: "serviceUnavailable" };
   }
 }
@@ -165,20 +172,30 @@ export async function generateRecipes(input: GenerationInput, expectedHouseholdI
   if (validInput.shopping === "none" && !dashboard.products.some((product) => product.status === "active" && product.quantity > 0)) {
     return { error: "emptyInventory" as const };
   }
+  const reservation = await reserveUsage(supabase, householdId, "ai");
+  if (!reservation) return { error: "limitReached" as const };
   let batch;
   try {
     batch = await collectGeneratedRecipes(key, validInput, dashboard.products, dashboard, dashboard.recipes);
   } catch {
+    await finishUsage(supabase, reservation, false).catch(() => {});
     return { error: "unavailable" as const };
   }
-  if (!batch.recipes.length) return { error: "noMatches" as const };
-  if (batch.recipes.length < 3 && validInput.shopping !== "none") return { error: "notEnoughSuggestions" as const };
-  const recipes = batch.recipes.map((recipe) => prepareGeneratedRecipe(recipe, crypto.randomUUID()));
-  const { error } = await supabase.from("recipes").insert(recipes.map((recipe) => ({
-    user_id: userId, household_id: householdId, slug: recipe.slug, source: "ai", recipe, created_at: recipe.createdAt,
-  })));
-  if (error) throw new Error(error.message);
-  return { recipes, partial: recipes.length < 3, message: batch.message };
+  if (!batch.recipes.length || (batch.recipes.length < 3 && validInput.shopping !== "none")) {
+    await finishUsage(supabase, reservation, false);
+    return { error: batch.recipes.length ? "notEnoughSuggestions" as const : "noMatches" as const };
+  }
+  try {
+    const recipes = batch.recipes.map((recipe) => prepareGeneratedRecipe(recipe, crypto.randomUUID()));
+    const { error } = await supabase.rpc("complete_fridgy_generation", {
+      reservation_id: reservation, target_household: householdId, recipes_payload: recipes,
+    });
+    if (error) throw new Error(error.message);
+    return { recipes, partial: recipes.length < 3, message: batch.message };
+  } catch (error) {
+    await finishUsage(supabase, reservation, false).catch(() => {});
+    throw error;
+  }
 }
 
 export async function saveManualReceipt(items: Array<{

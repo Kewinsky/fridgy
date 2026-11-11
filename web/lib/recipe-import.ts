@@ -25,7 +25,7 @@ const draftSchema = z.object({
 
 export type ImportedRecipeDraft = Omit<z.infer<typeof draftSchema>, "hasRecipe">;
 export type ImportRecipeResult =
-  | { error: "invalidUrl" | "unsupported" | "unavailable" | "noRecipe" | "serviceUnavailable" }
+  | { error: "invalidUrl" | "unsupported" | "unavailable" | "noRecipe" | "serviceUnavailable" | "limitReached" }
   | { draft: ImportedRecipeDraft };
 
 export function parseImportUrl(value: string): URL | null {

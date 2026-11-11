@@ -137,7 +137,9 @@ export async function decideHouseholdJoin(requestId: string, approve: boolean) {
   const { error } = await supabase.rpc("decide_fridgy_household_join", {
     join_request: z.uuid().parse(requestId), approve: z.boolean().parse(approve),
   });
+  if (error?.message.includes("PLAN_LIMIT_MEMBERS")) return "limitReached" as const;
   if (error) throw new Error(error.message);
+  return "ok" as const;
 }
 
 export type HouseholdMember = { user_id: string; username: string; email: string; is_owner: boolean };

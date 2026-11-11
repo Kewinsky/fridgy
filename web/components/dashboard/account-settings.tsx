@@ -53,6 +53,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getProfileImageSrc, MAX_PROFILE_IMAGE_MB } from "@/lib/profile-image";
 import { removeProfileImage, saveProfileImage } from "@/lib/profile-image-storage";
 import { createClient } from "@/lib/supabase/client";
+import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
+import { PlanLimitDialog } from "@/components/dashboard/plan-limit-dialog";
 
 export function AccountSettings({
   email,
@@ -93,6 +95,8 @@ export function AccountSettings({
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const [joinCode, setJoinCode] = useState(initialJoinCode);
   const [joinRequests, setJoinRequests] = useState(initialJoinRequests);
+  const [memberLimitOpen, setMemberLimitOpen] = useState(false);
+  const { subscription, refreshSubscription } = useDashboardData();
   const [joinBusy, setJoinBusy] = useState(false);
   const [rotateOpen, setRotateOpen] = useState(false);
   const [peopleOpen, setPeopleOpen] = useState(false);
@@ -188,11 +192,17 @@ export function AccountSettings({
 
   async function decideRequest(requestId: string, approve: boolean) {
     if (joinBusy) return;
+    if (approve && subscription.members >= subscription.limits.household_members) {
+      setMemberLimitOpen(true);
+      return;
+    }
     setJoinBusy(true);
     try {
-      await decideHouseholdJoin(requestId, approve);
+      const result = await decideHouseholdJoin(requestId, approve);
+      if (result === "limitReached") { setMemberLimitOpen(true); return; }
       setJoinRequests((current) => current.filter((request) => request.id !== requestId));
       if (approve) setCurrentMembers(await listHouseholdMembers(householdId));
+      if (approve) void refreshSubscription().catch(() => {});
       router.refresh();
       toast.success(t(approve ? "invite.approved" : "invite.denied"));
     } catch {
@@ -236,6 +246,8 @@ export function AccountSettings({
   }
 
   return (
+    <>
+    <PlanLimitDialog kind="members" open={memberLimitOpen} onOpenChange={setMemberLimitOpen} />
     <div className="space-y-8">
       <section aria-labelledby="household-settings-heading">
         <h2 id="household-settings-heading" className="text-lg font-bold">
@@ -515,6 +527,7 @@ export function AccountSettings({
         </div>
       </section>
     </div>
+    </>
   );
 }
 

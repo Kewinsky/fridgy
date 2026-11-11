@@ -11,6 +11,7 @@ import { PageHeader } from "@/components/dashboard/page-header";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { RecipeCardSkeleton } from "@/components/dashboard/recipe-card-skeleton";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
+import { PlanLimitDialog, RemainingUses } from "@/components/dashboard/plan-limit-dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import type { StoredRecipe } from "@/lib/recipe-library";
@@ -29,7 +30,7 @@ export function CookingPage() {
   const recipeT = useTranslations("Recipe.cuisineOptions");
   const freshnessT = useTranslations("Inventory.freshness");
   const locale = useLocale() as Locale;
-  const { addRecipes, householdId, products } = useDashboardData();
+  const { addRecipes, householdId, products, subscription, refreshSubscription } = useDashboardData();
   const [meal, setMeal] = useState<(typeof meals)[number]>("lunch");
   const [time, setTime] = useState<(typeof times)[number]>("30");
   const [servings, setServings] = useState(2);
@@ -41,6 +42,7 @@ export function CookingPage() {
   const [showRecipes, setShowRecipes] = useState(false);
   const [recipes, setRecipes] = useState<StoredRecipe[]>([]);
   const [error, setError] = useState<"unavailable" | "emptyInventory" | "noMatches" | "notEnoughSuggestions" | "priorityUnavailable" | "failed" | null>(null);
+  const [limitOpen, setLimitOpen] = useState(false);
   const [partial, setPartial] = useState(false);
   const [aiMessage, setAiMessage] = useState<string | null>(null);
   const [loadingPhase, setLoadingPhase] = useState<"initial" | "more" | null>(null);
@@ -51,6 +53,8 @@ export function CookingPage() {
 
   async function requestSuggestions(more: boolean) {
     if (pending.current) return;
+    const quota = subscription.plan === "free" ? subscription.limits.ai_uses_lifetime : subscription.limits.ai_uses_monthly;
+    if (quota !== null && subscription.aiUsed >= quota) { setLimitOpen(true); return; }
     pending.current = true;
     setShowRecipes(true);
     setLoadingPhase(more ? "more" : "initial");
@@ -62,7 +66,11 @@ export function CookingPage() {
         meal, servings, time, shopping, cuisines: selectedCuisines, savedRecipes, priorityProductIds, notes, locale,
         excludeTitles: more ? recipes.slice(-100).map((recipe) => recipe.title) : [],
       }, householdId);
-      if (result.error) {
+      if (result.error === "limitReached") {
+        setLimitOpen(true);
+        void refreshSubscription().catch(() => {});
+        if (!more) setShowRecipes(false);
+      } else if (result.error) {
         setError(result.error);
       } else if (result.recipes) {
         setRecipes((current) => more ? [...current, ...result.recipes] : result.recipes);
@@ -90,6 +98,7 @@ export function CookingPage() {
 
   return (
     <>
+      <PlanLimitDialog kind="ai" open={limitOpen} onOpenChange={setLimitOpen} />
       <PageHeader
         eyebrow={t("eyebrow")}
         title={t("title")}
@@ -162,6 +171,7 @@ export function CookingPage() {
               >
                 <SparklesIcon aria-hidden="true" /> {t("more.button")}
               </Button>
+              <RemainingUses kind="ai" />
             </section>
           ) : null}
         </>
@@ -269,7 +279,7 @@ export function CookingPage() {
             </div>
           </details>
           <div className="sticky bottom-20 z-10 mt-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/95 p-4 backdrop-blur lg:bottom-4">
-            <p className="text-sm text-muted-foreground">{t("generationNotice")}</p>
+            <div><p className="text-sm text-muted-foreground">{t("generationNotice")}</p><RemainingUses kind="ai" /></div>
             <Button className="h-11" onClick={() => void requestSuggestions(false)}><ChefHatIcon aria-hidden="true" /> {t("showSuggestions")}</Button>
           </div>
         </>

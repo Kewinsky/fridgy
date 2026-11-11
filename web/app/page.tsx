@@ -46,6 +46,7 @@ export default async function HomePage() {
           <BrandWordmark className="text-[1.65rem]" />
         </Link>
         <div className="flex items-center gap-2">
+          <Link href="/cennik" className={cn(buttonVariants({ variant: "ghost" }), "h-11 px-3 sm:px-4")}>{t("pricing")}</Link>
           <Link
             href="/login"
             className={cn(

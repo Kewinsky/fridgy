@@ -11,6 +11,8 @@ import type { RecipeLibrary, StoredRecipe } from "@/lib/recipe-library";
 import { readStoredRecipes } from "@/lib/recipe-store";
 import type { ShoppingItem } from "@/lib/shopping-list";
 import { createClient } from "@/lib/supabase/server";
+import { getSubscriptionState } from "@/lib/subscription-usage";
+import type { SubscriptionState } from "@/lib/subscription-plans";
 
 export type DashboardData = {
   userId: string;
@@ -27,6 +29,7 @@ export type DashboardData = {
   shoppingItems: ShoppingItem[];
   recipeLibrary: RecipeLibrary;
   recipes: StoredRecipe[];
+  subscription: SubscriptionState;
 };
 
 export type HouseholdOption = { id: string; name: string; isOwner: boolean };
@@ -106,12 +109,13 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
   const householdId = profile.household_id as string;
   const { error: pruneError } = await supabase.rpc("prune_fridgy_recipe_history");
   if (pruneError && pruneError.code !== "PGRST202") throw new Error(pruneError.message);
-  const [products, shopping, history, recipes] = await Promise.all([
+  const [products, shopping, history, recipes, subscription] = await Promise.all([
     supabase.from("products").select("*").eq("household_id", householdId).order("created_at"),
     supabase.from("shopping_items").select("*").eq("household_id", householdId).order("created_at"),
     supabase.from("cooking_history").select("id,recipe_slug,recipe_title,cuisine,cooked_at")
       .eq("household_id", householdId).order("cooked_at", { ascending: false }),
     readStoredRecipes(supabase, householdId),
+    getSubscriptionState(supabase, householdId),
   ]);
   if (products.error || shopping.error || history.error) throw new Error("Could not load dashboard data.");
 
@@ -139,5 +143,6 @@ export async function loadDashboardData(supabase: SupabaseClient, userId: string
       })),
     },
     recipes,
+    subscription,
   };
 }

@@ -9,6 +9,7 @@ import {
   ChefHatIcon,
   BookOpenCheckIcon,
   ChevronDownIcon,
+  CrownIcon,
   CirclePlusIcon,
   HomeIcon,
   ListChecksIcon,
@@ -330,6 +331,9 @@ function ProfileMenu({
         ) : null}
         <DropdownMenuItem render={<Link href="/dashboard/ustawienia" />}>
           <SettingsIcon aria-hidden="true" /> {t("settings")}
+        </DropdownMenuItem>
+        <DropdownMenuItem render={<Link href="/dashboard/premium" />}>
+          <CrownIcon aria-hidden="true" /> {t("premium")}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <form action={signOut}>

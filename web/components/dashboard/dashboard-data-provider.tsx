@@ -8,6 +8,7 @@ import type { DashboardData } from "@/lib/dashboard-data";
 import type { DemoProduct } from "@/lib/demo-data";
 import type { CustomRecipe, StoredRecipe } from "@/lib/recipe-library";
 import type { ShoppingItem } from "@/lib/shopping-list";
+import { readSubscriptionState } from "@/app/dashboard/subscription-actions";
 
 type DashboardStore = DashboardData & {
   isHouseholdOwner: boolean;
@@ -19,6 +20,7 @@ type DashboardStore = DashboardData & {
   updateCustomRecipe: (recipe: CustomRecipe) => Promise<void>;
   deleteCustomRecipe: (slug: string) => Promise<void>;
   addRecipes: (recipes: StoredRecipe[]) => void;
+  refreshSubscription: () => Promise<void>;
   finishCooking: (recipe: Pick<Recipe, "slug" | "title" | "cuisine">, deductions: Array<{ productId: string; amount: number }>) => Promise<void>;
   setDeductionMode: (mode: DashboardData["deductionMode"]) => void;
   setDietPreferences: (preferences: Pick<DashboardData, "diet" | "allergies" | "excludedIngredients">) => void;
@@ -33,6 +35,7 @@ export function DashboardDataProvider({ initialData, isHouseholdOwner, children 
   const [shoppingItems, setShoppingItems] = useState(initialData.shoppingItems);
   const [recipeLibrary, setRecipeLibrary] = useState(initialData.recipeLibrary);
   const [recipes, setRecipes] = useState(initialData.recipes);
+  const [subscription, setSubscription] = useState(initialData.subscription);
   const [deductionMode, setDeductionMode] = useState(initialData.deductionMode);
   const [dietPreferences, setDietPreferences] = useState({ diet: initialData.diet, allergies: initialData.allergies, excludedIngredients: initialData.excludedIngredients });
   const [dateFormat, setDateFormat] = useState(initialData.dateFormat);
@@ -51,6 +54,7 @@ export function DashboardDataProvider({ initialData, isHouseholdOwner, children 
         setShoppingItems(data.shoppingItems);
         setRecipeLibrary(data.recipeLibrary);
         setRecipes(data.recipes);
+        setSubscription(data.subscription);
         setDeductionMode(data.deductionMode);
         setDietPreferences({ diet: data.diet, allergies: data.allergies, excludedIngredients: data.excludedIngredients });
         setDateFormat(data.dateFormat);
@@ -110,7 +114,9 @@ export function DashboardDataProvider({ initialData, isHouseholdOwner, children 
 
   async function saveCustom(recipe: CustomRecipe) {
     const saved = await saveCustomRecipe(recipe, initialData.householdId);
+    if ("error" in saved) throw new Error("PLAN_LIMIT_CUSTOM_RECIPES");
     setRecipes((current) => [saved, ...current]);
+    void refreshSubscription().catch(() => {});
   }
 
   async function updateCustom(recipe: CustomRecipe) {
@@ -125,6 +131,11 @@ export function DashboardDataProvider({ initialData, isHouseholdOwner, children 
       favoriteSlugs: current.favoriteSlugs.filter((item) => item !== slug),
       history: current.history.filter((item) => item.recipeSlug !== slug),
     }));
+    void refreshSubscription().catch(() => {});
+  }
+
+  async function refreshSubscription() {
+    setSubscription(await readSubscriptionState(initialData.householdId));
   }
 
   async function finishCooking(recipe: Pick<Recipe, "slug" | "title" | "cuisine">, deductions: Array<{ productId: string; amount: number }>) {
@@ -136,10 +147,11 @@ export function DashboardDataProvider({ initialData, isHouseholdOwner, children 
 
   return (
     <DashboardContext.Provider value={{
-      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, recipes, deductionMode, dateFormat, inventoryView, isHouseholdOwner,
+      ...initialData, ...dietPreferences, products, shoppingItems, recipeLibrary, recipes, subscription, deductionMode, dateFormat, inventoryView, isHouseholdOwner,
       updateInventory, refreshInventory, updateShoppingItems, toggleFavorite,
       saveCustomRecipe: saveCustom, updateCustomRecipe: updateCustom, deleteCustomRecipe: deleteCustom,
-      addRecipes: (added) => setRecipes((current) => [...added, ...current]),
+      addRecipes: (added) => { setRecipes((current) => [...added, ...current]); void refreshSubscription().catch(() => {}); },
+      refreshSubscription,
       finishCooking, setDeductionMode, setDietPreferences, setDateFormat, setInventoryView,
     }}>
       {children}

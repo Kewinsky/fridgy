@@ -1,4 +1,59 @@
 {
+  "Subscription": {
+    "aiUnlimited": "Usos de IA ilimitados",
+    "monthlyReset": "Los límites mensuales se renuevan el {date, date, medium}.",
+    "createAccount": "Crear una cuenta",
+    "eyebrow": "Planes de Fridgy",
+    "title": "Free y Premium",
+    "description": "Un plan cubre a todo el hogar.",
+    "free": "Gratis",
+    "premium": "Plan Premium",
+    "freeDescription": "Inventario y listas de compra sin límite.",
+    "perMonth": "/ mes",
+    "perYear": "/ año",
+    "trialDescription": "Prueba Premium gratis durante {count} días. No cobraremos nada después hasta que los pagos estén disponibles.",
+    "activeUntil": "Premium activo hasta el {date, date, medium}",
+    "trialUsed": "Este hogar ya usó la prueba.",
+    "startTrial": "Iniciar prueba gratis de {count} días",
+    "trialUnavailable": "La prueba gratis ya no está disponible.",
+    "trialStarted": "Tu prueba Premium ha comenzado.",
+    "changeFailed": "No se pudo cambiar el plan.",
+    "paymentsComingSoon": "Los pagos con Stripe estarán disponibles pronto. Los precios son informativos.",
+    "compare": "Comparar planes",
+    "feature": "Función",
+    "unlimited": "Sin límite",
+    "none": "Ninguno",
+    "totalCount": "{count} en total",
+    "monthlyCount": "{count} / mes",
+    "dailyCount": "{count} al día",
+    "features": {
+      "inventory": "Inventario, entrada manual y lista de compra",
+      "recipes": "Recetas propias guardadas",
+      "ai": "Generación e importación con IA",
+      "receipts": "Escaneos de recibos",
+      "daily": "Idea diaria de comida",
+      "members": "Miembros del hogar"
+    },
+    "usageTitle": "Tu plan y usos restantes",
+    "freeStatus": "Usas el plan Free.",
+    "premiumStatus": "Usas Premium.",
+    "aiRemaining": "Usos de IA restantes: {count}",
+    "scanRemaining": "Escaneos restantes este mes: {count}",
+    "enableTest": "Activar Premium de prueba",
+    "disableTest": "Desactivar Premium de prueba",
+    "testChanged": "Se cambió el Premium de prueba.",
+    "limitTitle": "Límite del plan alcanzado",
+    "close": "Cerrar",
+    "seePlans": "Ver planes",
+    "limits": {
+      "ai": "Agotaste tus generaciones e importaciones con IA. El límite Premium se renueva cada mes.",
+      "receipt": "Agotaste los escaneos de este mes. Aún puedes añadir productos manualmente.",
+      "recipes": "Free permite guardar {count} recetas propias. Elimina una o elige Premium.",
+      "members": "Este plan no permite añadir otro miembro. Consulta Premium."
+    },
+    "remainingTotal": "Quedan {count} de {total} usos en total",
+    "remainingMonthly": "Quedan {count} de {total} usos este mes"
+  },
   "Common": {
     "changeLanguage": "Cambiar idioma",
     "saving": "Guardando…",
@@ -19,6 +74,7 @@
     "description": "Gestiona tus alimentos en casa y desperdicia menos."
   },
   "Landing": {
+    "pricing": "Precios",
     "metaTitle": "Gestiona tus alimentos y desperdicia menos",
     "metaDescription": "Convierte los recibos en un inventario ordenado y usa los alimentos a tiempo.",
     "login": "Iniciar sesión",
@@ -48,6 +104,7 @@
     "footer": "Gestiona tus alimentos en casa y desperdicia menos."
   },
   "Navigation": {
+    "premium": "Plan Premium",
     "overview": "Resumen",
     "overviewShort": "Inicio",
     "inventory": "Mis alimentos",
@@ -345,6 +402,7 @@
     }
   },
   "Dashboard": {
+    "seePremium": "Ver Premium",
     "metaTitle": "Resumen",
     "metaDescription": "Resumen de tus provisiones y tareas importantes.",
     "eyebrow": "Buenos días",
@@ -390,6 +448,7 @@
     "dailyTitle": "Idea para hoy",
     "dailyLoading": "Preparando la idea de hoy…",
     "dailyStatus": {
+      "premium": "Las ideas diarias de comida están disponibles con Premium.",
       "pending": "Tu idea se está preparando. Actualiza la página en un momento.",
       "failed": "Hoy no encontramos una buena idea. Puedes elegir tus preferencias en ¿Qué cocino?",
       "unavailable": "La idea de hoy no está disponible por el momento.",

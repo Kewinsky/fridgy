@@ -1,4 +1,59 @@
 {
+  "Subscription": {
+    "aiUnlimited": "KI-Nutzungen ohne Limit",
+    "monthlyReset": "Monatliche Limits erneuern sich am {date, date, medium}.",
+    "createAccount": "Konto erstellen",
+    "eyebrow": "Fridgy-Tarife",
+    "title": "Free und Premium",
+    "description": "Ein Tarif gilt für den ganzen Haushalt.",
+    "free": "Kostenlos",
+    "premium": "Premium-Tarif",
+    "freeDescription": "Vorräte und Einkaufslisten ohne Limit.",
+    "perMonth": "/ Monat",
+    "perYear": "/ Jahr",
+    "trialDescription": "Teste Premium {count} Tage kostenlos. Bis Zahlungen verfügbar sind, entstehen danach keine Kosten.",
+    "activeUntil": "Premium aktiv bis {date, date, medium}",
+    "trialUsed": "Der Testzeitraum wurde bereits genutzt.",
+    "startTrial": "{count} Tage kostenlos testen",
+    "trialUnavailable": "Der Testzeitraum ist nicht mehr verfügbar.",
+    "trialStarted": "Der Premium-Testzeitraum hat begonnen.",
+    "changeFailed": "Der Tarif konnte nicht geändert werden.",
+    "paymentsComingSoon": "Stripe-Zahlungen folgen bald. Die Preise dienen derzeit nur zur Information.",
+    "compare": "Tarife vergleichen",
+    "feature": "Funktion",
+    "unlimited": "Ohne Limit",
+    "none": "Keine",
+    "totalCount": "{count} insgesamt",
+    "monthlyCount": "{count} / Monat",
+    "dailyCount": "{count} pro Tag",
+    "features": {
+      "inventory": "Vorräte, manuelle Eingabe und Einkaufsliste",
+      "recipes": "Gespeicherte eigene Rezepte",
+      "ai": "KI-Erstellung und Import",
+      "receipts": "Kassenbon-Scans",
+      "daily": "Tägliche Essensidee",
+      "members": "Haushaltsmitglieder"
+    },
+    "usageTitle": "Dein Tarif und verbleibende Nutzungen",
+    "freeStatus": "Du nutzt Free.",
+    "premiumStatus": "Du nutzt Premium.",
+    "aiRemaining": "Verbleibende KI-Nutzungen: {count}",
+    "scanRemaining": "Verbleibende Scans diesen Monat: {count}",
+    "enableTest": "Test-Premium aktivieren",
+    "disableTest": "Test-Premium deaktivieren",
+    "testChanged": "Test-Premium wurde geändert.",
+    "limitTitle": "Tariflimit erreicht",
+    "close": "Schließen",
+    "seePlans": "Tarife ansehen",
+    "limits": {
+      "ai": "Deine KI-Nutzungen sind aufgebraucht. Bei Premium erneuert sich das Limit monatlich.",
+      "receipt": "Deine Scans sind für diesen Monat aufgebraucht. Produkte kannst du weiterhin manuell eintragen.",
+      "recipes": "Free erlaubt {count} eigene Rezepte. Lösche eines oder wähle Premium.",
+      "members": "Dieser Tarif erlaubt kein weiteres Haushaltsmitglied. Sieh dir Premium an."
+    },
+    "remainingTotal": "Noch {count} von {total} Nutzungen insgesamt",
+    "remainingMonthly": "Noch {count} von {total} Nutzungen diesen Monat"
+  },
   "Common": {
     "changeLanguage": "Sprache ändern",
     "saving": "Wird gespeichert…",
@@ -19,6 +74,7 @@
     "description": "Lebensmittel zu Hause verwalten und weniger verschwenden."
   },
   "Landing": {
+    "pricing": "Preise",
     "metaTitle": "Lebensmittel verwalten und weniger verschwenden",
     "metaDescription": "Verwandle Kassenbons in einen geordneten Vorrat und verbrauche Lebensmittel rechtzeitig.",
     "login": "Anmelden",
@@ -48,6 +104,7 @@
     "footer": "Lebensmittel zu Hause verwalten und weniger verschwenden."
   },
   "Navigation": {
+    "premium": "Premium-Tarif",
     "overview": "Übersicht",
     "overviewShort": "Start",
     "inventory": "Meine Vorräte",
@@ -345,6 +402,7 @@
     }
   },
   "Dashboard": {
+    "seePremium": "Premium ansehen",
     "metaTitle": "Übersicht",
     "metaDescription": "Übersicht über deine Vorräte und wichtigsten Aufgaben.",
     "eyebrow": "Guten Tag",
@@ -390,6 +448,7 @@
     "dailyTitle": "Idee für heute",
     "dailyLoading": "Die Idee für heute wird vorbereitet…",
     "dailyStatus": {
+      "premium": "Tägliche Essensideen gibt es mit Premium.",
       "pending": "Deine Idee wird vorbereitet. Lade die Seite gleich neu.",
       "failed": "Heute konnten wir keine gute Idee vorbereiten. Du kannst deine Wünsche unter Was soll ich kochen? selbst angeben.",
       "unavailable": "Die heutige Idee ist vorübergehend nicht verfügbar.",
