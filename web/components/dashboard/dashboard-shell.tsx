@@ -15,6 +15,7 @@ import {
   LogOutIcon,
   PackagePlusIcon,
   SettingsIcon,
+  ScaleIcon,
   ShoppingBasketIcon,
 } from "lucide-react";
 
@@ -65,6 +66,12 @@ const navigation = [
     labelKey: "shopping",
     shortLabelKey: "shoppingShort",
     icon: ListChecksIcon,
+  },
+  {
+    href: "/dashboard/slownik",
+    labelKey: "dictionary",
+    shortLabelKey: "dictionaryShort",
+    icon: ScaleIcon,
   },
 ] as const;
 
@@ -316,6 +323,11 @@ function ProfileMenu({
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        {mobile ? (
+          <DropdownMenuItem render={<Link href="/dashboard/slownik" />}>
+            <ScaleIcon aria-hidden="true" /> {t("dictionary")}
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuItem render={<Link href="/dashboard/ustawienia" />}>
           <SettingsIcon aria-hidden="true" /> {t("settings")}
         </DropdownMenuItem>

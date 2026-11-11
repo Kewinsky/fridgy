@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
-import { ArrowLeftIcon, ClockIcon, UsersIcon } from "lucide-react";
+import { ArrowLeftIcon, ClockIcon, ScaleIcon, UsersIcon } from "lucide-react";
 
 import { FinishCookingDialog } from "@/components/dashboard/finish-cooking-dialog";
+import { MeasureDictionary } from "@/components/dashboard/measure-dictionary";
 import { BrandIcon } from "@/components/brand-icon";
 import {
   cuisineMessageKeys,
@@ -15,6 +16,7 @@ import { useDashboardData } from "@/components/dashboard/dashboard-data-provider
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { demoRecipes } from "@/lib/demo-recipes";
 import { localizeDemoRecipe } from "@/lib/demo-localization";
 import type { Locale } from "@/i18n/config";
@@ -23,6 +25,7 @@ import { cn } from "@/lib/utils";
 export function CookingModePage({ slug }: { slug: string }) {
   const t = useTranslations("CookingMode");
   const recipeT = useTranslations("Recipe");
+  const dictionaryT = useTranslations("MeasureDictionary");
   const locale = useLocale() as Locale;
   const router = useRouter();
   const { recipes } = useDashboardData();
@@ -70,12 +73,26 @@ export function CookingModePage({ slug }: { slug: string }) {
         >
           <ArrowLeftIcon aria-hidden="true" /> {t("exit")}
         </Button>
-        <p className="text-sm font-semibold text-muted-foreground">
-          {t("progress", {
-            completed: completedSteps.size,
-            total: recipe.steps.length,
-          })}
-        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <Dialog>
+            <DialogTrigger render={<Button variant="outline" className="h-11" />}>
+              <ScaleIcon aria-hidden="true" /> {dictionaryT("title")}
+            </DialogTrigger>
+            <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-2xl">
+              <DialogHeader>
+                <DialogTitle className="text-xl font-extrabold">{dictionaryT("title")}</DialogTitle>
+                <DialogDescription>{dictionaryT("description")}</DialogDescription>
+              </DialogHeader>
+              <MeasureDictionary />
+            </DialogContent>
+          </Dialog>
+          <p className="text-sm font-semibold text-muted-foreground">
+            {t("progress", {
+              completed: completedSteps.size,
+              total: recipe.steps.length,
+            })}
+          </p>
+        </div>
       </header>
 
       <main>
