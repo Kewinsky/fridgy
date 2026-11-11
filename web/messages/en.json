@@ -745,6 +745,9 @@
     "favoriteRecipes": "favourite recipes",
     "favoriteCuisine": "top cuisine",
     "noData": "No data",
+    "search": "Search recipes",
+    "searchPlaceholder": "Search recipes or ingredients...",
+    "noSearchResults": { "title": "No matching recipes", "description": "Try another dish or ingredient name." },
     "tabs": {
       "favorites": "Favourites",
       "custom": "Mine",

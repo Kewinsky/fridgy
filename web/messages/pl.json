@@ -745,6 +745,9 @@
     "favoriteRecipes": "ulubionych przepisów",
     "favoriteCuisine": "najczęstsza kuchnia",
     "noData": "Brak danych",
+    "search": "Szukaj przepisu",
+    "searchPlaceholder": "Szukaj przepisu lub składnika...",
+    "noSearchResults": { "title": "Nie znaleziono przepisów", "description": "Spróbuj wpisać inną nazwę dania lub składnika." },
     "tabs": {
       "favorites": "Ulubione",
       "custom": "Moje",

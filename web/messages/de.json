@@ -745,6 +745,9 @@
     "favoriteRecipes": "Lieblingsrezepte",
     "favoriteCuisine": "Beliebteste Küche",
     "noData": "Keine Daten",
+    "search": "Rezepte suchen",
+    "searchPlaceholder": "Rezept oder Zutat suchen...",
+    "noSearchResults": { "title": "Keine passenden Rezepte", "description": "Versuche einen anderen Gerichtsnamen oder eine andere Zutat." },
     "tabs": {
       "favorites": "Favoriten",
       "custom": "Eigene",
