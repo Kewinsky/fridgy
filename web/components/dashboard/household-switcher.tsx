@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRightIcon, CheckIcon, ChevronDownIcon, HomeIcon, LoaderCircleIcon, PlusIcon, Settings2Icon, SparklesIcon } from "lucide-react";
+import { CheckIcon, ChevronDownIcon, HomeIcon, LoaderCircleIcon, PlusIcon, Settings2Icon, SparklesIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { SparklesText } from "@/components/ui/sparkles-text";
 import { JoinHouseholdForm } from "@/components/dashboard/join-household-form";
 import type { HouseholdOption } from "@/lib/dashboard-data";
 
@@ -183,9 +184,8 @@ export function HouseholdCreationForm({ onCreated, onLoadingChange, onboarding =
         </button>
       </div>
       {onboarding ? (
-        <Button type="submit" className="h-12 w-full text-base font-bold" disabled={pending || !name.trim()}>
-          {pending ? common("saving") : onboardingT("startButton")}
-          {!pending ? <ArrowRightIcon aria-hidden="true" /> : null}
+        <Button type="submit" className="h-12 w-full text-base" disabled={pending || !name.trim()}>
+          {pending ? common("saving") : <SparklesText sparklesCount={5} colors={{ first: "#ffffff", second: "#285b3e" }} className="text-base">{onboardingT("startButton")}</SparklesText>}
         </Button>
       ) : (
         <DialogFooter>

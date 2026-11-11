@@ -370,7 +370,7 @@ export function AccountSettings({
                         </ul>
                       </TabsContent>
                       <TabsContent value="requests" className="max-h-[60dvh] overflow-y-auto pt-2">
-                        <div className="flex justify-end">
+                        <div className="mb-3 flex justify-end">
                           <Button type="button" variant="ghost" className="h-11" disabled={joinBusy} onClick={() => void refreshPeople()}>
                             <RefreshCwIcon aria-hidden="true" />{t("invite.refresh")}
                           </Button>

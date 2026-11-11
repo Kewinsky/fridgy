@@ -344,14 +344,16 @@
     "description": "Prüfe deine Vorräte und plane die nächste Mahlzeit.",
     "onboarding": {
       "welcomeTitle": "Lass uns kochen",
-      "welcomeDescription": "Erstelle einen Haushalt, füge Produkte von einem Kassenbon hinzu und finde eine Idee für dein erstes Essen.",
+      "welcomeDescription": "Erstelle einen Haushalt oder tritt einem bei, füge Produkte hinzu und finde eine Idee für dein erstes Essen.",
       "modalTitle": "Willkommen bei Fridgy!",
       "modalDescription": "Wie möchtest du deinen Haushalt nennen?",
+      "householdChoice": "Wähle deinen Einstieg",
       "previewHousehold": "Dein Zuhause",
       "startButton": "Los geht's!",
+      "backHome": "Zurück zur Startseite",
       "stepsEyebrow": "Erste Schritte",
       "stepsTitle": "Richte deine Küche ein",
-      "stepHousehold": "Haushalt erstellen",
+      "stepHousehold": "Haushalt erstellen oder beitreten",
       "stepReceipt": "Kassenbon hinzufügen",
       "stepCook": "Mit vorhandenen Produkten kochen",
       "done": "Erledigt"

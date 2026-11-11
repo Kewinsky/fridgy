@@ -344,14 +344,16 @@
     "description": "Check your inventory and plan your next meal.",
     "onboarding": {
       "welcomeTitle": "Let's start cooking",
-      "welcomeDescription": "Create a household, add products from a receipt, and find an idea for your first meal.",
+      "welcomeDescription": "Create a household or join one, add products, and find an idea for your first meal.",
       "modalTitle": "Welcome to Fridgy!",
       "modalDescription": "What would you like to call your household?",
+      "householdChoice": "Choose how to get started",
       "previewHousehold": "Your home",
       "startButton": "Let's go!",
+      "backHome": "Back to home page",
       "stepsEyebrow": "First steps",
       "stepsTitle": "Set up your kitchen",
-      "stepHousehold": "Create a household",
+      "stepHousehold": "Create or join a household",
       "stepReceipt": "Add a receipt",
       "stepCook": "Cook with available products",
       "done": "Done"

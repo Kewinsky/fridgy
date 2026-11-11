@@ -344,14 +344,16 @@
     "description": "Sprawdź zapasy i zaplanuj kolejny posiłek.",
     "onboarding": {
       "welcomeTitle": "Zacznijmy gotować",
-      "welcomeDescription": "Utwórz domostwo, dodaj produkty z paragonu i znajdź pomysł na pierwszy posiłek.",
+      "welcomeDescription": "Utwórz domostwo lub dołącz do istniejącego, dodaj produkty i znajdź pomysł na pierwszy posiłek.",
       "modalTitle": "Witaj we Fridgy!",
       "modalDescription": "Jak chcesz nazwać swoje domostwo?",
+      "householdChoice": "Wybierz, jak zacząć",
       "previewHousehold": "Twój dom",
       "startButton": "Zaczynamy!",
+      "backHome": "Wróć na stronę główną",
       "stepsEyebrow": "Pierwsze kroki",
       "stepsTitle": "Przygotuj swoją kuchnię",
-      "stepHousehold": "Utwórz domostwo",
+      "stepHousehold": "Utwórz lub dołącz do domostwa",
       "stepReceipt": "Dodaj paragon",
       "stepCook": "Ugotuj coś z dostępnych produktów",
       "done": "Gotowe"

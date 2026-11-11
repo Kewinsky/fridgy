@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ChefHatIcon, HeartIcon } from "lucide-react";
+import { ChefHatIcon, HeartIcon, LoaderCircleIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,19 @@ export function FavoriteRecipeButton({ slug, compact = false }: { slug: string; 
   const library = useRecipeLibrary();
   const { changeFavorite } = useRecipeLibraryActions();
   const favorite = library.favoriteSlugs.includes(slug);
+  const [pending, setPending] = useState(false);
+
+  async function toggleFavorite() {
+    if (pending) return;
+    setPending(true);
+    try {
+      await changeFavorite(slug);
+    } catch {
+      toast.error(common("saveFailed"));
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <Button
@@ -40,9 +54,11 @@ export function FavoriteRecipeButton({ slug, compact = false }: { slug: string; 
       className={compact ? "size-11" : "h-11"}
       aria-label={favorite ? t("removeFavorite") : t("addFavorite")}
       aria-pressed={favorite}
-      onClick={() => void changeFavorite(slug).catch(() => toast.error(common("saveFailed")))}
+      aria-busy={pending}
+      disabled={pending}
+      onClick={() => void toggleFavorite()}
     >
-      <HeartIcon className={cn(favorite && "fill-current")} aria-hidden="true" />
+      {pending ? <LoaderCircleIcon className="animate-spin motion-reduce:animate-none" aria-hidden="true" /> : <HeartIcon className={cn(favorite && "fill-current")} aria-hidden="true" />}
       {compact ? null : favorite ? t("favorite") : t("addFavorite")}
     </Button>
   );

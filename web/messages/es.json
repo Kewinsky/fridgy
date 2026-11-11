@@ -344,14 +344,16 @@
     "description": "Revisa tus provisiones y planifica la próxima comida.",
     "onboarding": {
       "welcomeTitle": "Empecemos a cocinar",
-      "welcomeDescription": "Crea un hogar, añade productos de un recibo y encuentra una idea para tu primera comida.",
+      "welcomeDescription": "Crea un hogar o únete a uno, añade productos y encuentra una idea para tu primera comida.",
       "modalTitle": "¡Bienvenido a Fridgy!",
       "modalDescription": "¿Cómo quieres llamar a tu hogar?",
+      "householdChoice": "Elige cómo empezar",
       "previewHousehold": "Tu hogar",
       "startButton": "¡Empecemos!",
+      "backHome": "Volver a la página de inicio",
       "stepsEyebrow": "Primeros pasos",
       "stepsTitle": "Prepara tu cocina",
-      "stepHousehold": "Crear un hogar",
+      "stepHousehold": "Crear un hogar o unirse a uno",
       "stepReceipt": "Añadir un recibo",
       "stepCook": "Cocinar con productos disponibles",
       "done": "Hecho"

@@ -344,14 +344,16 @@
     "description": "Consultez vos provisions et planifiez votre prochain repas.",
     "onboarding": {
       "welcomeTitle": "Commençons à cuisiner",
-      "welcomeDescription": "Créez un foyer, ajoutez des produits depuis un ticket et trouvez une idée pour votre premier repas.",
+      "welcomeDescription": "Créez un foyer ou rejoignez-en un, ajoutez des produits et trouvez une idée pour votre premier repas.",
       "modalTitle": "Bienvenue sur Fridgy !",
       "modalDescription": "Comment souhaitez-vous appeler votre foyer ?",
+      "householdChoice": "Choisissez comment commencer",
       "previewHousehold": "Votre foyer",
       "startButton": "C'est parti !",
+      "backHome": "Retour à l'accueil",
       "stepsEyebrow": "Premières étapes",
       "stepsTitle": "Préparez votre cuisine",
-      "stepHousehold": "Créer un foyer",
+      "stepHousehold": "Créer ou rejoindre un foyer",
       "stepReceipt": "Ajouter un ticket",
       "stepCook": "Cuisiner avec les produits disponibles",
       "done": "Terminé"
