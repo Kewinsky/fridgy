@@ -15,6 +15,7 @@ import {
   RefreshCwIcon,
   UsersRoundIcon,
   CircleAlertIcon,
+  EllipsisIcon,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import {
@@ -45,6 +46,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -323,47 +325,40 @@ export function AccountSettings({
                     {t("members.manage")}
                     {joinRequests.length ? <Badge variant="secondary" className="bg-amber-500/15 text-amber-700 dark:text-amber-300">{joinRequests.length}<span className="sr-only">{t("invite.pendingTitle")}</span></Badge> : null}
                   </DialogTrigger>
-                  <DialogContent className="max-h-[calc(100dvh-2rem)] sm:max-w-xl">
+                  <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl">
                     <DialogHeader className="pr-10">
                       <DialogTitle>{t("members.title")}</DialogTitle>
                       <DialogDescription>{t("members.description")}</DialogDescription>
                     </DialogHeader>
                     <Tabs defaultValue="members" className="min-h-0">
-                      <TabsList className="h-11! w-full">
-                        <TabsTrigger value="members" className="h-9 px-3">{t("members.title")} <span className="tabular-nums">{currentMembers.length}</span></TabsTrigger>
-                        <TabsTrigger value="requests" className="h-9 px-3">{t("invite.pendingTitle")} <span className="tabular-nums">{joinRequests.length}</span></TabsTrigger>
+                      <TabsList className="h-auto! min-h-11 w-full items-stretch">
+                        <TabsTrigger value="members" className="h-auto! min-h-10 min-w-0 whitespace-normal px-2 py-2 text-center leading-tight sm:whitespace-nowrap sm:px-3">{t("members.title")} <span className="tabular-nums">{currentMembers.length}</span></TabsTrigger>
+                        <TabsTrigger value="requests" className="h-auto! min-h-10 min-w-0 whitespace-normal px-2 py-2 text-center leading-tight sm:whitespace-nowrap sm:px-3">{t("invite.pendingTitle")} <span className="tabular-nums">{joinRequests.length}</span></TabsTrigger>
                       </TabsList>
                       <TabsContent value="members" className="max-h-[60dvh] overflow-y-auto pt-2">
                         <ul className="divide-y divide-border">
                           {currentMembers.map((member) => (
-                            <li key={member.user_id} className="flex min-w-0 flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
+                            <li key={member.user_id} className="flex min-w-0 items-center gap-3 py-3 first:pt-0 last:pb-0">
                               <div className="min-w-0 flex-1">
                                 <p className="flex min-w-0 items-center gap-2 text-sm font-medium">
-                                  <span className="truncate">{member.username}</span>
+                                  <span className="min-w-0 break-words sm:truncate">{member.username}</span>
                                   {member.is_owner ? <Badge variant="secondary">{householdT("owner")}</Badge> : null}
                                 </p>
-                                <p className="truncate text-xs text-muted-foreground">{member.email}</p>
+                                <p className="break-all text-xs text-muted-foreground sm:truncate">{member.email}</p>
                               </div>
                               {!member.is_owner ? (
-                                <div className="flex flex-wrap gap-2">
-                                  <MemberActionDialog
-                                    kind="transfer"
-                                    member={member}
-                                    onConfirm={async () => {
-                                      await transferHouseholdOwnership(householdId, member.user_id);
-                                      router.refresh();
-                                    }}
-                                  />
-                                  <MemberActionDialog
-                                    kind="remove"
-                                    member={member}
-                                    onConfirm={async () => {
-                                      await removeHouseholdMember(householdId, member.user_id);
-                                      setCurrentMembers((previous) => previous.filter((item) => item.user_id !== member.user_id));
-                                      router.refresh();
-                                    }}
-                                  />
-                                </div>
+                                <MemberActionMenu
+                                  member={member}
+                                  onTransfer={async () => {
+                                    await transferHouseholdOwnership(householdId, member.user_id);
+                                    router.refresh();
+                                  }}
+                                  onRemove={async () => {
+                                    await removeHouseholdMember(householdId, member.user_id);
+                                    setCurrentMembers((previous) => previous.filter((item) => item.user_id !== member.user_id));
+                                    router.refresh();
+                                  }}
+                                />
                               ) : null}
                             </li>
                           ))}
@@ -378,13 +373,15 @@ export function AccountSettings({
                         {joinRequests.length ? (
                           <ul className="divide-y divide-border">
                             {joinRequests.map((request) => (
-                              <li key={request.id} className="flex flex-wrap items-center gap-3 py-3 first:pt-0 last:pb-0">
-                                <div className="min-w-0 flex-1">
-                                  <p className="truncate text-sm font-medium">{request.username}</p>
-                                  <p className="truncate text-xs text-muted-foreground">{request.email}</p>
+                              <li key={request.id} className="flex min-w-0 flex-col gap-3 py-3 first:pt-0 last:pb-0 sm:flex-row sm:items-center">
+                                <div className="min-w-0 w-full sm:flex-1">
+                                  <p className="break-words text-sm font-medium sm:truncate">{request.username}</p>
+                                  <p className="break-all text-xs text-muted-foreground sm:truncate">{request.email}</p>
                                 </div>
-                                <Button type="button" className="h-11" disabled={joinBusy} onClick={() => void decideRequest(request.id, true)}>{t("invite.approve")}</Button>
-                                <Button type="button" variant="outline" className="h-11" disabled={joinBusy} onClick={() => void decideRequest(request.id, false)}>{t("invite.deny")}</Button>
+                                <div className="flex w-full gap-2 sm:w-auto">
+                                  <Button type="button" className="h-11 flex-1 sm:flex-none" disabled={joinBusy} onClick={() => void decideRequest(request.id, true)}>{t("invite.approve")}</Button>
+                                  <Button type="button" variant="outline" className="h-11 flex-1 sm:flex-none" disabled={joinBusy} onClick={() => void decideRequest(request.id, false)}>{t("invite.deny")}</Button>
+                                </div>
                               </li>
                             ))}
                           </ul>
@@ -521,25 +518,27 @@ export function AccountSettings({
   );
 }
 
-function MemberActionDialog({
-  kind,
+function MemberActionMenu({
   member,
-  onConfirm,
+  onTransfer,
+  onRemove,
 }: {
-  kind: "transfer" | "remove";
   member: HouseholdMember;
-  onConfirm: () => Promise<void>;
+  onTransfer: () => Promise<void>;
+  onRemove: () => Promise<void>;
 }) {
   const t = useTranslations("Settings.account.members");
   const common = useTranslations("Common");
   const [open, setOpen] = useState(false);
+  const [kind, setKind] = useState<"transfer" | "remove" | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function confirm() {
-    if (busy) return;
+    if (busy || !kind) return;
     setBusy(true);
     try {
-      await onConfirm();
+      if (kind === "transfer") await onTransfer();
+      else await onRemove();
       setOpen(false);
       toast.success(t(`${kind}.success`));
     } catch {
@@ -550,24 +549,33 @@ function MemberActionDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger render={<Button type="button" variant="outline" className="h-11" />}>
-        {kind === "transfer" ? <CrownIcon aria-hidden="true" /> : <Trash2Icon aria-hidden="true" />}
-        {t(`${kind}.action`)}
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{t(`${kind}.title`)}</DialogTitle>
-          <DialogDescription>{t(`${kind}.description`, { name: member.username })}</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button type="button" variant="outline" className="h-11" disabled={busy} onClick={() => setOpen(false)}>{t("cancel")}</Button>
-          <Button type="button" variant={kind === "remove" ? "destructive" : "default"} className="h-11" disabled={busy} onClick={() => void confirm()}>
-            {t(`${kind}.action`)}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger render={<Button type="button" variant="ghost" size="icon-lg" className="size-11 shrink-0" aria-label={t("actions", { name: member.username })} />}>
+          <EllipsisIcon aria-hidden="true" />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="min-w-48">
+          <DropdownMenuItem onClick={() => { setKind("transfer"); setOpen(true); }}><CrownIcon aria-hidden="true" /> {t("transfer.action")}</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem variant="destructive" onClick={() => { setKind("remove"); setOpen(true); }}><Trash2Icon aria-hidden="true" /> {t("remove.action")}</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <Dialog open={open} onOpenChange={(nextOpen) => {
+        if (busy) return;
+        setOpen(nextOpen);
+      }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{kind ? t(`${kind}.title`) : member.username}</DialogTitle>
+            <DialogDescription>{kind ? t(`${kind}.description`, { name: member.username }) : null}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button type="button" variant="outline" className="h-11" disabled={busy} onClick={() => setOpen(false)}>{t("cancel")}</Button>
+            <Button type="button" variant={kind === "remove" ? "destructive" : "default"} className="h-11" disabled={busy || !kind} onClick={() => void confirm()}>{kind ? t(`${kind}.action`) : null}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
 

@@ -230,6 +230,7 @@
         "manage": "Mitglieder anzeigen",
         "preview": "Vorschau 10 + 10",
         "description": "Nur der Eigentümer kann Mitglieder entfernen oder die Eigentümerschaft übertragen.",
+        "actions": "Aktionen für {name}",
         "cancel": "Abbrechen",
         "transfer": {
           "action": "Eigentum übertragen",

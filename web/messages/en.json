@@ -230,6 +230,7 @@
         "manage": "View members",
         "preview": "Preview 10 + 10",
         "description": "Only the owner can remove members or transfer ownership.",
+        "actions": "Actions for {name}",
         "cancel": "Cancel",
         "transfer": {
           "action": "Transfer ownership",

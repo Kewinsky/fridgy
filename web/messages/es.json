@@ -230,6 +230,7 @@
         "manage": "Ver miembros",
         "preview": "Vista previa 10 + 10",
         "description": "Solo el propietario puede eliminar miembros o transferir la propiedad.",
+        "actions": "Acciones para {name}",
         "cancel": "Cancelar",
         "transfer": {
           "action": "Transferir propiedad",

@@ -189,7 +189,7 @@ export function HouseholdCreationForm({ onCreated, onLoadingChange, onboarding =
         </Button>
       ) : (
         <DialogFooter>
-          <Button type="submit" disabled={pending || !name.trim()}>{t("createHousehold")}</Button>
+          <Button type="submit" className="h-11" disabled={pending || !name.trim()}>{t("createHousehold")}</Button>
         </DialogFooter>
       )}
     </form>

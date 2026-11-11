@@ -230,6 +230,7 @@
         "manage": "Pokaż domowników",
         "preview": "Podgląd 10 + 10",
         "description": "Tylko właściciel może usuwać domowników i przekazać własność domu.",
+        "actions": "Akcje dla {name}",
         "cancel": "Anuluj",
         "transfer": {
           "action": "Przekaż własność",
