@@ -117,7 +117,12 @@ export function CookingPage() {
               <RefreshCwIcon aria-hidden="true" /> {t("changeAnswers")}
             </Button>
           </div>
-          {loadingPhase ? <p className="sr-only" role="status">{t("loadingSuggestions")}</p> : null}
+          {loadingPhase ? (
+            <div className="mb-4 text-sm text-muted-foreground" role="status">
+              <p className="font-semibold text-foreground">{t("loadingSuggestions")}</p>
+              <p>{t("generationWait")}</p>
+            </div>
+          ) : null}
           {aiMessage ? (
             <section className="app-card mb-4 flex items-start gap-3 p-5" aria-label={t("aiMessageLabel")}>
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-primary"><SparklesIcon className="size-5" aria-hidden="true" /></span>

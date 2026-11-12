@@ -534,6 +534,7 @@
     "aiMessageLabel": "Wiadomość od Fridgy",
     "showSuggestions": "Pokaż propozycje",
     "loadingSuggestions": "Generujemy przepisy...",
+    "generationWait": "Zaplanuj około 1–2 minut. Dopasowanie kolejnych propozycji może potrwać do 5 minut.",
     "partialNoShopping": "Z dostępnych zapasów udało się znaleźć mniej niż 3 przepisy. Pozostałe składniki możesz dokupić po zmianie odpowiedzi.",
     "errors": {
       "unavailable": "Usługa AI nie zrealizowała żądania. To nie wynika z Twoich odpowiedzi. Spróbuj ponownie później.",

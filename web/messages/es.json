@@ -534,6 +534,7 @@
     "aiMessageLabel": "Mensaje de Fridgy",
     "showSuggestions": "Mostrar propuestas",
     "loadingSuggestions": "Generando recetas...",
+    "generationWait": "Calcula entre 1 y 2 minutos. Buscar más ideas adecuadas puede tardar hasta 5 minutos.",
     "partialNoShopping": "Con tus existencias encontramos menos de 3 recetas. Permite comprar ingredientes para ver más opciones.",
     "errors": {
       "unavailable": "El servicio de IA no pudo completar la solicitud. No se debe a tus respuestas. Inténtalo más tarde.",

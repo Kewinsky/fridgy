@@ -134,7 +134,7 @@ export async function requestModelRecipes(
         },
       },
     }),
-    signal: AbortSignal.timeout(40000),
+    signal: AbortSignal.timeout(90000),
   });
   if (response.status === 429) throw new Error("AI_RATE_LIMIT");
   if (response.status === 401 || response.status === 403) throw new Error("AI_CONFIGURATION");
