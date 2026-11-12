@@ -5,7 +5,7 @@ import { HomeIcon, RefreshCwIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
-import { BrandIcon } from "@/components/brand-icon";
+import { StatusPage } from "@/components/status-page";
 
 export default function ErrorPage({
   error,
@@ -15,21 +15,10 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   const t = useTranslations("Errors.page");
-  return (
-    <main className="grid min-h-dvh place-items-center bg-background px-4 py-16 text-foreground">
-      <section className="app-card w-full max-w-lg p-6 text-center sm:p-8">
-        <BrandIcon name="error" className="mx-auto size-24" />
-        <p className="mt-6 text-sm font-bold uppercase tracking-wider text-destructive">{t("label")}</p>
-        <h1 className="mt-2 text-3xl font-extrabold">{t("title")}</h1>
-        <p className="mt-3 text-sm leading-6 text-muted-foreground">
-          {t("description")}
-        </p>
-        {error.digest ? <p className="mt-2 text-xs text-muted-foreground">{t("code", { code: error.digest })}</p> : null}
-        <div className="mt-7 flex flex-col justify-center gap-2 sm:flex-row">
-          <Button className="h-11" onClick={reset}><RefreshCwIcon aria-hidden="true" /> {t("retry")}</Button>
-          <Button nativeButton={false} render={<Link href="/" />} variant="outline" className="h-11"><HomeIcon aria-hidden="true" /> {t("home")}</Button>
-        </div>
-      </section>
-    </main>
-  );
+  return <StatusPage icon="error" tone="destructive" label={t("label")} title={t("title")} description={t("description")}
+    detail={error.digest ? t("code", { code: error.digest }) : undefined}
+    actions={<>
+      <Button className="h-11" onClick={reset}><RefreshCwIcon aria-hidden="true" /> {t("retry")}</Button>
+      <Button nativeButton={false} render={<Link href="/" />} variant="outline" className="h-11"><HomeIcon aria-hidden="true" /> {t("home")}</Button>
+    </>} />;
 }
