@@ -169,9 +169,12 @@ export async function generateRecipes(input: GenerationInput, expectedHouseholdI
   try {
     batch = await collectGeneratedRecipes(key, validInput, dashboard.products, dashboard, dashboard.recipes);
   } catch (error) {
+    console.error("Recipe generation failed", error);
+    if (error instanceof Error && error.message === "AI_QUOTA") return { error: "quota" as const };
     if (error instanceof Error && error.message === "AI_RATE_LIMIT") return { error: "rateLimited" as const };
     if (error instanceof Error && error.message === "AI_CONFIGURATION") return { error: "configuration" as const };
     if (error instanceof Error && error.message === "AI_INCOMPLETE") return { error: "incomplete" as const };
+    if (error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")) return { error: "timeout" as const };
     return { error: "unavailable" as const };
   }
   if (!batch.recipes.length) return { error: batch.shoppingBlocked ? "shoppingLimit" as const : "noMatches" as const, message: batch.message };
@@ -179,7 +182,10 @@ export async function generateRecipes(input: GenerationInput, expectedHouseholdI
   const { error } = await supabase.from("recipes").insert(recipes.map((recipe) => ({
     user_id: userId, household_id: householdId, slug: recipe.slug, source: "ai", recipe, created_at: recipe.createdAt,
   })));
-  if (error) throw new Error(error.message);
+  if (error) {
+    console.error("Recipe storage failed", { code: error.code, message: error.message, details: error.details, hint: error.hint });
+    return { error: "storage" as const };
+  }
   return { recipes, partial: recipes.length < 3, message: batch.message };
 }
 

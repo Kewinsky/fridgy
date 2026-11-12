@@ -536,16 +536,19 @@
     "loadingSuggestions": "Generating recipes...",
     "partialNoShopping": "We found fewer than 3 recipes using your current stock. Allow shopping to see more options.",
     "errors": {
-      "unavailable": "The AI service could not provide a recipe. Please try again.",
+      "unavailable": "The AI service could not complete the request. Your answers did not cause this. Please try again later.",
+      "quota": "The AI account has run out of available quota. This is a service issue, not a problem with your answers.",
       "rateLimited": "The AI service has reached its request limit. Wait a moment and try again.",
       "configuration": "The AI service is not set up correctly. Contact the app administrator.",
       "incomplete": "The AI service stopped before completing the recipes. Please try again.",
+      "timeout": "The AI service did not respond in time. Please try again shortly.",
       "emptyInventory": "You have no available stock. Add products or allow shopping to generate recipes.",
       "noMatches": "No recipe matched your choices. Read the explanation above and change your answers.",
       "shoppingLimit": "These recipes need products you do not have, and your shopping limit excludes them. Change the limit or add products to your stock.",
       "notEnoughSuggestions": "After checking the time, cuisine, allergies and available ingredients, we could not find 3 distinct recipes. Try more time, more cuisines or allow shopping.",
       "priorityUnavailable": "Some selected products are no longer available or their estimated use-by date has passed. Change your answers and select them again.",
-      "failed": "We could not save the recipes. Please try again."
+      "storage": "We could not save these suggestions. Please try again shortly.",
+      "failed": "We could not complete the request. Please try again shortly."
     },
     "questionProgress": "Question {number} of 4",
     "questions": {

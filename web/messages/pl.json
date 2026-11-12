@@ -536,16 +536,19 @@
     "loadingSuggestions": "Generujemy przepisy...",
     "partialNoShopping": "Z dostępnych zapasów udało się znaleźć mniej niż 3 przepisy. Pozostałe składniki możesz dokupić po zmianie odpowiedzi.",
     "errors": {
-      "unavailable": "Nie udało się uzyskać przepisu z usługi AI. Spróbuj ponownie.",
+      "unavailable": "Usługa AI nie zrealizowała żądania. To nie wynika z Twoich odpowiedzi. Spróbuj ponownie później.",
+      "quota": "Konto usługi AI wyczerpało dostępny limit. To problem konfiguracji usługi, nie Twoich odpowiedzi.",
       "rateLimited": "Usługa AI osiągnęła limit żądań. Poczekaj chwilę i spróbuj ponownie.",
       "configuration": "Usługa AI nie jest poprawnie skonfigurowana. Skontaktuj się z administratorem aplikacji.",
       "incomplete": "Usługa AI przerwała odpowiedź przed ukończeniem przepisów. Spróbuj ponownie.",
+      "timeout": "Usługa AI nie odpowiedziała na czas. Spróbuj ponownie za chwilę.",
       "emptyInventory": "Nie masz dostępnych zapasów. Dodaj produkty albo pozwól na zakupy, aby wygenerować przepisy.",
       "noMatches": "Nie znaleziono przepisu spełniającego wybrane warunki. Sprawdź wyjaśnienie powyżej i zmień odpowiedzi.",
       "shoppingLimit": "Do tych propozycji brakuje produktów w zapasach, a wybrany limit zakupów je wyklucza. Zmień limit lub uzupełnij zapasy.",
       "notEnoughSuggestions": "Po sprawdzeniu czasu, kuchni, alergii i dostępnych składników nie udało się zebrać 3 różnych przepisów. Możesz wydłużyć czas, wybrać więcej kuchni lub pozwolić na zakupy.",
       "priorityUnavailable": "Wybrane produkty nie są już dostępne albo minął ich szacowany termin. Zmień odpowiedzi i wybierz je ponownie.",
-      "failed": "Nie udało się zapisać przepisów. Spróbuj ponownie."
+      "storage": "Nie udało się zapisać propozycji. Spróbuj ponownie za chwilę.",
+      "failed": "Nie udało się zakończyć operacji. Spróbuj ponownie za chwilę."
     },
     "questionProgress": "Pytanie {number} z 4",
     "questions": {

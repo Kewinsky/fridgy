@@ -536,16 +536,19 @@
     "loadingSuggestions": "Generando recetas...",
     "partialNoShopping": "Con tus existencias encontramos menos de 3 recetas. Permite comprar ingredientes para ver más opciones.",
     "errors": {
-      "unavailable": "El servicio de IA no pudo ofrecer una receta. Inténtalo de nuevo.",
+      "unavailable": "El servicio de IA no pudo completar la solicitud. No se debe a tus respuestas. Inténtalo más tarde.",
+      "quota": "La cuenta del servicio de IA ha agotado su cuota. Es un problema del servicio, no de tus respuestas.",
       "rateLimited": "El servicio de IA ha alcanzado su límite de solicitudes. Espera un momento e inténtalo de nuevo.",
       "configuration": "El servicio de IA no está bien configurado. Contacta con la administración de la aplicación.",
       "incomplete": "El servicio de IA interrumpió la respuesta antes de terminar las recetas. Inténtalo de nuevo.",
+      "timeout": "El servicio de IA no respondió a tiempo. Vuelve a intentarlo en un momento.",
       "emptyInventory": "No tienes productos disponibles. Añade productos o permite hacer compras.",
       "noMatches": "Ninguna receta cumple tus requisitos. Lee la explicación anterior y cambia tus respuestas.",
       "shoppingLimit": "Estas recetas necesitan productos que no tienes y tu límite de compra las excluye. Cambia el límite o añade productos a tus existencias.",
       "notEnoughSuggestions": "Tras revisar el tiempo, la cocina, las alergias y las existencias, no encontramos 3 recetas diferentes. Prueba con más tiempo, más cocinas o permite hacer compras.",
       "priorityUnavailable": "Algunos productos seleccionados ya no están disponibles o ha pasado su fecha estimada. Cambia tus respuestas y selecciónalos de nuevo.",
-      "failed": "No pudimos guardar las recetas. Inténtalo de nuevo."
+      "storage": "No pudimos guardar estas sugerencias. Inténtalo de nuevo en un momento.",
+      "failed": "No se pudo completar la solicitud. Inténtalo de nuevo en un momento."
     },
     "questionProgress": "Pregunta {number} de 4",
     "questions": {

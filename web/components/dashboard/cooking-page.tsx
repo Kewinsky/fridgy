@@ -40,7 +40,7 @@ export function CookingPage() {
   const [notes, setNotes] = useState("");
   const [showRecipes, setShowRecipes] = useState(false);
   const [recipes, setRecipes] = useState<StoredRecipe[]>([]);
-  const [error, setError] = useState<"unavailable" | "rateLimited" | "configuration" | "incomplete" | "emptyInventory" | "noMatches" | "shoppingLimit" | "priorityUnavailable" | "failed" | null>(null);
+  const [error, setError] = useState<"unavailable" | "quota" | "rateLimited" | "configuration" | "incomplete" | "timeout" | "emptyInventory" | "noMatches" | "shoppingLimit" | "priorityUnavailable" | "storage" | "failed" | null>(null);
   const [partial, setPartial] = useState(false);
   const [aiMessage, setAiMessage] = useState<string | null>(null);
   const [loadingPhase, setLoadingPhase] = useState<"initial" | "more" | null>(null);
