@@ -71,37 +71,39 @@ export function ConsumedProductsCard() {
   }
 
   return (
-    <section className="app-card min-w-0 p-5 sm:p-6">
-      <p className="text-xs font-bold uppercase tracking-wider text-primary">{t("consumedEyebrow")}</p>
-      <h2 className="mt-1 text-xl font-extrabold">{t("consumedTitle")}</h2>
-      {consumed.length ? (
-        <ul className="mt-4 divide-y divide-border">
-          {consumed.map((product) => (
-            <li key={product.id}>
-              <label htmlFor={`replenish-${product.id}`} className="flex min-h-14 cursor-pointer items-center gap-3 py-2 text-sm font-semibold">
-                <Checkbox
-                  id={`replenish-${product.id}`}
-                  checked={selectedIds.has(product.id)}
-                  disabled={pending}
-                  onCheckedChange={(checked) => selectProduct(product.id, checked === true)}
-                />
-                <span className="min-w-0 break-words">{localizeDemoProduct(product, locale).name}</span>
-              </label>
-            </li>
-          ))}
-        </ul>
-      ) : <p className="mt-4 text-sm text-muted-foreground">{t("consumedEmpty")}</p>}
-      {consumed.length ? (
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Button type="button" className="min-h-11 flex-1" disabled={pending || !selectedNames.length} onClick={addSelected}>
-            <ShoppingCartPlusIcon aria-hidden="true" /> {t("addToShopping")}
-          </Button>
-          <Button type="button" variant="outline" className="min-h-11 flex-1" disabled={pending || !selectedNames.length} onClick={removeSelected}>
-            <Trash2Icon aria-hidden="true" /> {t("removeConsumed")}
-          </Button>
-        </div>
-      ) : null}
-      {consumed.length ? <Link href="/dashboard/zapasy?tab=consumed" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary hover:underline focus-visible:outline-2 focus-visible:outline-ring">{t("viewConsumed")} <ArrowRightIcon className="size-4" aria-hidden="true" /></Link> : null}
+    <section className="app-card min-w-0 overflow-hidden">
+      <div className="p-5 sm:p-6">
+        <p className="text-xs font-bold uppercase tracking-wider text-primary">{t("consumedEyebrow")}</p>
+        <h2 className="mt-1 text-xl font-extrabold">{t("consumedTitle")}</h2>
+        {consumed.length ? (
+          <ul className="mt-4 divide-y divide-border">
+            {consumed.map((product) => (
+              <li key={product.id}>
+                <label htmlFor={`replenish-${product.id}`} className="flex min-h-14 cursor-pointer items-center gap-3 py-2 text-sm font-semibold">
+                  <Checkbox
+                    id={`replenish-${product.id}`}
+                    checked={selectedIds.has(product.id)}
+                    disabled={pending}
+                    onCheckedChange={(checked) => selectProduct(product.id, checked === true)}
+                  />
+                  <span className="min-w-0 break-words">{localizeDemoProduct(product, locale).name}</span>
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : <p className="mt-4 text-sm text-muted-foreground">{t("consumedEmpty")}</p>}
+        {consumed.length ? (
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Button type="button" className="min-h-11 flex-1" disabled={pending || !selectedNames.length} onClick={addSelected}>
+              <ShoppingCartPlusIcon aria-hidden="true" /> {t("addToShopping")}
+            </Button>
+            <Button type="button" variant="outline" className="min-h-11 flex-1" disabled={pending || !selectedNames.length} onClick={removeSelected}>
+              <Trash2Icon aria-hidden="true" /> {t("removeConsumed")}
+            </Button>
+          </div>
+        ) : null}
+      </div>
+      {consumed.length ? <Link href="/dashboard/zapasy?tab=consumed" className="flex min-h-12 items-center gap-2 border-t border-border px-5 text-sm font-semibold text-primary transition-colors hover:bg-secondary/60 focus-visible:outline-2 focus-visible:outline-ring sm:px-6">{t("viewAll")} <ArrowRightIcon className="size-4" aria-hidden="true" /></Link> : null}
     </section>
   );
 }

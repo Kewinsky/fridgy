@@ -105,7 +105,7 @@ export default async function DashboardPage() {
             </ul>
           ) : <p className="px-5 py-5 text-sm text-muted-foreground sm:px-6">{t("expiringEmpty")}</p>}
           {overdueCount > 0 ? <p className="px-5 pb-3 text-sm text-destructive sm:px-6">{t("overdueNotice", { count: overdueCount })}</p> : null}
-          <Link href="/dashboard/zapasy" className="flex min-h-12 items-center justify-between gap-2 border-t border-border px-5 text-sm font-semibold text-primary transition-colors hover:bg-secondary/60 focus-visible:outline-2 focus-visible:outline-ring sm:px-6">{t("viewAll")} <ArrowRightIcon className="size-4" aria-hidden="true" /></Link>
+          <Link href="/dashboard/zapasy" className="flex min-h-12 items-center gap-2 border-t border-border px-5 text-sm font-semibold text-primary transition-colors hover:bg-secondary/60 focus-visible:outline-2 focus-visible:outline-ring sm:px-6">{t("viewAll")} <ArrowRightIcon className="size-4" aria-hidden="true" /></Link>
         </div>
 
         <ConsumedProductsCard />
