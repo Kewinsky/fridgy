@@ -104,6 +104,7 @@ test("dashboard does not use English fallbacks", () => {
 test("all translated screens avoid English fallbacks and keep interpolation variables", () => {
   const english = messageValues(JSON.parse(readFileSync(new URL("../messages/en.json", import.meta.url), "utf8")));
   const shared = new Set(["Recipe.minutes", "RecipeForm.link.placeholder", "Receipt.upload.formats",
+    "Marketing.contact", "PublicPages.contactEyebrow",
     ...["instagram", "facebook", "tiktok", "youtube"].map((source) => `RecipeForm.link.sources.${source}`)]);
   const sameByLanguage: Record<string, string[]> = {
     de: ["Settings.preferences.diet.options.vegan", "Theme.system", "Inventory.editDialog.name", "Recipe.diet.options.vegan"],

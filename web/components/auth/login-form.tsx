@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { ArrowLeftIcon, LoaderCircleIcon, MailIcon } from "lucide-react";
@@ -17,6 +18,7 @@ type LoginFormProps = {
 
 export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormProps) {
   const t = useTranslations("Login");
+  const marketing = useTranslations("Marketing");
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
@@ -250,7 +252,9 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
       </Button>
 
       <p className="mt-6 text-center text-xs leading-5 text-muted-foreground">
-        {t("terms")}
+        <Link href="/regulamin" className="underline underline-offset-2 hover:text-foreground">{marketing("terms")}</Link>
+        {" · "}
+        <Link href="/prywatnosc" className="underline underline-offset-2 hover:text-foreground">{marketing("privacy")}</Link>
       </p>
     </div>
   );

@@ -1,0 +1,302 @@
+.marketing {
+  background: #f6f5ee;
+  color: #203a2b;
+}
+
+.marketing-container {
+  width: min(100% - 2.5rem, 1260px);
+  margin-inline: auto;
+}
+
+.marketing-header {
+  position: relative;
+  z-index: 10;
+  border-bottom: 1px solid #e0e4d8;
+  background: rgb(246 245 238 / 93%);
+  backdrop-filter: blur(16px);
+}
+
+.marketing-display {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+}
+
+.marketing-display-accent {
+  color: #7b9b6c;
+  font-style: italic;
+}
+
+.marketing-eyebrow,
+.marketing-kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #547a57;
+  font-size: 0.73rem;
+  font-weight: 800;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.marketing-eyebrow-line {
+  display: inline-block;
+  width: 31px;
+  height: 1px;
+  background: currentColor;
+}
+
+.marketing-button {
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  border: 1px solid #28553c;
+  border-radius: 999px;
+  background: #28553c;
+  padding: 0 24px;
+  color: white;
+  font-size: 0.92rem;
+  font-weight: 700;
+  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
+}
+
+.marketing-button:hover {
+  background: #1c3e2b;
+  transform: translateY(-2px);
+}
+
+.marketing-button:focus-visible,
+.marketing-billing-option:focus-visible,
+.marketing a:focus-visible,
+.marketing summary:focus-visible {
+  outline: 3px solid #a6c684;
+  outline-offset: 3px;
+}
+
+.marketing-button-small {
+  min-height: 42px;
+  gap: 8px;
+  padding-inline: 18px;
+  font-size: 0.82rem;
+}
+
+.marketing-button-outline {
+  background: transparent;
+  color: #28553c;
+}
+
+.marketing-button-outline:hover {
+  background: #e7eddf;
+}
+
+.marketing-nav-link,
+.marketing-footer nav a {
+  transition: color 180ms ease;
+}
+
+.marketing-nav-link:hover,
+.marketing-footer nav a:hover {
+  color: #77965e;
+}
+
+.marketing-hero-media {
+  position: relative;
+  min-width: 0;
+  padding: 0 14px 25px 0;
+}
+
+.marketing-hero-image {
+  position: relative;
+  overflow: hidden;
+  min-height: 520px;
+  border-radius: 210px 210px 24px 24px;
+  background: #38452b;
+}
+
+.marketing-hero-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 34%, rgb(9 30 18 / 72%));
+}
+
+.marketing-float-card {
+  position: absolute;
+  right: -8px;
+  bottom: 88px;
+  display: flex;
+  min-width: 222px;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid #e4e9dc;
+  border-radius: 16px;
+  background: #fffef8;
+  padding: 12px 16px;
+  box-shadow: 0 18px 50px rgb(23 48 28 / 14%);
+}
+
+.marketing-media-index {
+  position: absolute;
+  right: 19px;
+  bottom: 1px;
+  color: #788877;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+.marketing-band {
+  border-block: 1px solid #d9e3d3;
+  background: #ebf0e5;
+}
+
+.marketing-step-card {
+  min-height: 320px;
+  border: 1px solid #dce3d6;
+  border-radius: 18px;
+  background: #fffef8;
+  padding: 28px;
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+
+.marketing-step-card:hover {
+  transform: translateY(-4px);
+  border-color: #a5bea0;
+  box-shadow: 0 20px 50px rgb(32 58 43 / 8%);
+}
+
+.marketing-step-icon {
+  display: flex;
+  width: 64px;
+  height: 64px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background: #e6eee0;
+  color: #315d3d;
+}
+
+.marketing-card-number {
+  font-family: Georgia, "Times New Roman", serif;
+  color: #b4c4b2;
+  font-size: 2.4rem;
+  line-height: 1;
+}
+
+.marketing-features {
+  background: #214432;
+  color: #f4f7ec;
+}
+
+.marketing-pricing-card {
+  border: 1px solid #dce3d6;
+  border-radius: 22px;
+  background: #fffef8;
+  padding: clamp(28px, 5vw, 48px);
+  box-shadow: 0 20px 50px rgb(32 58 43 / 5%);
+}
+
+.marketing-pricing-card-premium {
+  border-color: #214432;
+  background: #214432;
+  color: #fffef8;
+}
+
+.marketing-billing-option {
+  min-height: 42px;
+  border-radius: 999px;
+  padding: 0 19px;
+  color: #47654d;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.marketing-billing-option.is-active {
+  background: #fffef8;
+  color: #214432;
+  box-shadow: 0 2px 8px rgb(32 58 43 / 8%);
+}
+
+.marketing-cta {
+  position: relative;
+  overflow: hidden;
+  min-height: 430px;
+  border: 1px solid #d9e5cf;
+  border-radius: 28px;
+  background: #e8efdf;
+  padding: clamp(32px, 6vw, 76px);
+}
+
+.marketing-cta-art {
+  position: absolute;
+  right: -40px;
+  bottom: -140px;
+  display: flex;
+  width: 470px;
+  height: 470px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #bfd3b5;
+  border-radius: 50%;
+  box-shadow: 0 0 0 55px rgb(196 216 184 / 38%), 0 0 0 110px rgb(196 216 184 / 22%);
+  color: #b4caa5;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 21rem;
+  font-style: italic;
+  line-height: 1;
+}
+
+.marketing-footer {
+  border-top: 1px solid #d8ded2;
+  background: #f0f2e9;
+}
+
+.marketing-page {
+  width: min(100% - 2.5rem, 1000px);
+  margin-inline: auto;
+  padding-block: clamp(64px, 9vw, 116px);
+}
+
+.marketing-prose {
+  color: #536357;
+  font-size: 1.06rem;
+  line-height: 1.8;
+}
+
+.marketing-prose h2 {
+  margin-top: 2rem;
+  color: #203a2b;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.6rem;
+  line-height: 1.25;
+}
+
+.marketing-prose p {
+  margin-top: 0.8rem;
+}
+
+.marketing-info-card {
+  border: 1px solid #dce3d6;
+  border-radius: 20px;
+  background: #fffef8;
+  padding: clamp(24px, 4vw, 40px);
+}
+
+@media (max-width: 640px) {
+  .marketing-container { width: min(100% - 2rem, 1260px); }
+  .marketing-hero-image { min-height: 420px; border-radius: 160px 160px 20px 20px; }
+  .marketing-float-card { right: 0; bottom: 60px; min-width: 0; }
+  .marketing-cta-art { opacity: 0.25; right: -230px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marketing-button,
+  .marketing-billing-option,
+  .marketing-step-card,
+  .marketing-nav-link,
+  .marketing-footer nav a { transition: none; }
+  .marketing-button:hover,
+  .marketing-step-card:hover { transform: none; }
+}
