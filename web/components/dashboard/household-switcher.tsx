@@ -8,7 +8,7 @@ import { toast } from "sonner";
 
 import { createHousehold, switchHousehold } from "@/app/dashboard/settings-actions";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -188,9 +188,7 @@ export function HouseholdCreationForm({ onCreated, onLoadingChange, onboarding =
           {pending ? common("saving") : <SparklesText sparklesCount={5} colors={{ first: "#ffffff", second: "#285b3e" }} className="text-base">{onboardingT("startButton")}</SparklesText>}
         </Button>
       ) : (
-        <DialogFooter>
-          <Button type="submit" className="h-11" disabled={pending || !name.trim()}>{t("createHousehold")}</Button>
-        </DialogFooter>
+        <Button type="submit" className="h-11 w-full" disabled={pending || !name.trim()}>{t("createHousehold")}</Button>
       )}
     </form>
   );
