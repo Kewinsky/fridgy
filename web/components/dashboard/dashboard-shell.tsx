@@ -334,6 +334,7 @@ function ProfileMenu({
         <DropdownMenuSeparator />
         <form action={signOut}>
           <DropdownMenuItem
+            nativeButton
             render={<button type="submit" className="w-full" />}
           >
             <LogOutIcon aria-hidden="true" /> {t("signOut")}
