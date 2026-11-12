@@ -1,0 +1,86 @@
+.dashboard-shell {
+  background: var(--background);
+}
+
+.dashboard-sidebar {
+  background: var(--sidebar);
+}
+
+.dashboard-nav-link {
+  border-radius: 12px;
+}
+
+.dashboard-shell a:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.dashboard-mobile-nav {
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.dashboard-content {
+  animation: dashboard-enter 360ms ease-out both;
+}
+
+.dashboard-shell h1,
+.dashboard-shell h2.font-extrabold,
+.dashboard-shell h3.font-extrabold {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.dashboard-shell .app-card,
+.dashboard-shell [data-slot="card"] {
+  border-radius: 20px;
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+
+.dashboard-shell [data-slot="input"],
+.dashboard-shell [data-slot="textarea"],
+.dashboard-shell [data-slot="select-trigger"] {
+  border-radius: 12px;
+}
+
+.dashboard-hero {
+  border-radius: 28px;
+  box-shadow: 0 18px 42px color-mix(in srgb, var(--surface-strong) 20%, transparent);
+}
+
+.dashboard-hero-texture {
+  background:
+    radial-gradient(circle at 92% 12%, transparent 0 17%, color-mix(in srgb, var(--surface-strong-foreground) 9%, transparent) 17.1% 17.3%, transparent 17.4% 100%),
+    radial-gradient(circle at 92% 12%, transparent 0 27%, color-mix(in srgb, var(--surface-strong-foreground) 6%, transparent) 27.1% 27.3%, transparent 27.4% 100%);
+}
+
+[data-slot="dialog-content"],
+[data-slot="popover-content"],
+[data-slot="dropdown-menu-content"] {
+  border-radius: 18px;
+  box-shadow: 0 20px 50px color-mix(in srgb, var(--foreground) 12%, transparent);
+}
+
+[data-slot="dialog-title"] {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+}
+
+.dark .dashboard-shell .app-card,
+.dark .dashboard-shell [data-slot="card"],
+.dark [data-slot="dialog-content"],
+.dark [data-slot="popover-content"],
+.dark [data-slot="dropdown-menu-content"] {
+  box-shadow: 0 16px 42px rgb(0 0 0 / 18%);
+}
+
+@keyframes dashboard-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-content { animation: none; }
+}

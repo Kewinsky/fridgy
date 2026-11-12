@@ -28,7 +28,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang={locale} className="font-sans" suppressHydrationWarning>
       <body>
         <Script id="fridgy-palette" strategy="beforeInteractive">
-          {`try{const palette=localStorage.getItem("fridgy-palette");if(palette==="green"||palette==="violet")document.documentElement.dataset.palette=palette}catch{}`}
+          {`try{const palette=localStorage.getItem("fridgy-palette");if(palette==="blue"||palette==="green"||palette==="violet")document.documentElement.dataset.palette=palette}catch{}`}
         </Script>
         <NextIntlClientProvider>
           <ThemeProvider

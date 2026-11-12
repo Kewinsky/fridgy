@@ -57,10 +57,10 @@ export function HouseholdSwitcher({ currentId, households }: { currentId: string
             </DropdownMenuItem>
           ))}
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          <DropdownMenuItem className="rounded-full" onClick={() => setOpen(true)}>
             <PlusIcon aria-hidden="true" /> {t("addHousehold")}
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setJoinOpen(true)}>
+          <DropdownMenuItem className="rounded-full" onClick={() => setJoinOpen(true)}>
             <HomeIcon aria-hidden="true" /> {t("join.title")}
           </DropdownMenuItem>
         </DropdownMenuContent>

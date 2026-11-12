@@ -45,12 +45,12 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-5 pb-6">
-      <section className="relative isolate overflow-hidden rounded-2xl bg-surface-strong p-6 text-surface-strong-foreground sm:p-8 xl:p-10">
-          <div className="strong-grid pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" />
+      <section className="dashboard-hero relative isolate overflow-hidden bg-surface-strong p-6 text-surface-strong-foreground sm:p-8 xl:p-10">
+          <div className="dashboard-hero-texture pointer-events-none absolute inset-0" aria-hidden="true" />
           <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.8fr)] lg:items-center">
             <div className="max-w-xl">
               <p className="text-sm font-bold text-surface-strong-accent">{t("householdEyebrow")}</p>
-              <h1 className="mt-3 break-words text-3xl font-extrabold tracking-tight text-balance sm:text-4xl xl:text-5xl">{t("householdTitle", { name: householdName })}</h1>
+              <h1 className="marketing-display mt-3 break-words text-[clamp(2.7rem,4.5vw,5rem)] leading-[1.03] tracking-[-0.06em] text-balance">{t("householdTitle", { name: householdName })}</h1>
               <p className="mt-4 max-w-md leading-7 text-surface-strong-foreground/80">{t("description")}</p>
               <div className="mt-7 flex flex-wrap gap-3">
                 <Button nativeButton={false} render={<Link href={shouldAddProducts ? "/dashboard/dodaj-produkty" : "/dashboard/co-ugotowac"} />} className="h-11 bg-surface-strong-foreground px-5 text-surface-strong hover:bg-surface-strong-foreground/90">

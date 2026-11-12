@@ -6,8 +6,8 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
 const palettes = [
-  { value: "blue", color: "#83bce8" },
   { value: "green", color: "#77b783" },
+  { value: "blue", color: "#83bce8" },
   { value: "violet", color: "#bb8dc8" },
 ] as const;
 
@@ -15,7 +15,7 @@ type Palette = (typeof palettes)[number]["value"];
 
 function currentPalette(): Palette {
   const value = document.documentElement.getAttribute("data-palette");
-  return value === "green" || value === "violet" ? value : "blue";
+  return value === "blue" || value === "violet" ? value : "green";
 }
 
 function subscribe(callback: () => void) {
@@ -25,7 +25,7 @@ function subscribe(callback: () => void) {
 
 export function ColorSettings() {
   const t = useTranslations("Settings.palette");
-  const selected = useSyncExternalStore(subscribe, currentPalette, () => "blue");
+  const selected = useSyncExternalStore(subscribe, currentPalette, () => "green");
 
   function choose(value: Palette) {
     document.documentElement.setAttribute("data-palette", value);

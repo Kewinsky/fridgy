@@ -112,15 +112,15 @@ export function DashboardShell({
 
   if (pathname.startsWith("/dashboard/gotowanie/")) {
     return (
-      <main className="min-h-dvh bg-background px-4 py-6 text-foreground sm:px-7 sm:py-10">
+      <main className="dashboard-shell min-h-dvh bg-background px-4 py-6 text-foreground sm:px-7 sm:py-10">
         {children}
       </main>
     );
   }
 
   return (
-    <main className="min-h-dvh bg-background text-foreground">
-      <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border bg-card lg:flex">
+    <main className="dashboard-shell min-h-dvh bg-background text-foreground">
+      <aside className="dashboard-sidebar fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-border lg:flex">
         <Link href="/dashboard" className="flex h-20 items-center gap-1 px-7">
           <BrandIcon name="logo" className="size-12" />
           <BrandWordmark className="text-[1.65rem]" />
@@ -163,7 +163,7 @@ export function DashboardShell({
                 href={href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold transition-colors",
+                  "dashboard-nav-link flex h-11 items-center gap-3 px-3 text-sm font-semibold transition-colors",
                   active
                     ? "bg-secondary text-primary"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -188,7 +188,7 @@ export function DashboardShell({
       </aside>
 
       <div className="lg:pl-64">
-        <div className="mx-auto max-w-7xl px-4 py-6 pb-28 sm:px-7 lg:px-10 lg:py-9 lg:pb-12">
+        <div className="dashboard-content mx-auto max-w-7xl px-4 py-6 pb-28 sm:px-7 lg:px-10 lg:py-9 lg:pb-12">
           <div className="mb-5 max-w-sm lg:hidden">
             <HouseholdSwitcher
               currentId={householdId}
@@ -200,7 +200,7 @@ export function DashboardShell({
       </div>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-border bg-card px-1 pb-[env(safe-area-inset-bottom)] lg:hidden"
+        className="dashboard-mobile-nav fixed inset-x-0 bottom-0 z-40 grid grid-cols-6 border-t border-border bg-card px-1 pb-[env(safe-area-inset-bottom)] lg:hidden"
         aria-label={t("mobileNavigation")}
       >
         {mobileNavigation.map(({ href, shortLabelKey, icon: Icon }) => {

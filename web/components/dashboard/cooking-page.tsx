@@ -196,14 +196,14 @@ export function CookingPage() {
           </div>
           <details className="group app-card mt-5 overflow-hidden">
             <summary className="flex min-h-20 cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-secondary/40 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring group-open:border-b group-open:border-border group-open:bg-secondary/30 [&::-webkit-details-marker]:hidden">
-              <span className="font-extrabold">{t("optional.title")}</span>
+              <span className="marketing-display text-xl tracking-[-0.04em]">{t("optional.title")}</span>
               <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-card text-muted-foreground">
                 <ChevronDownIcon className="size-5 transition-transform duration-200 motion-reduce:transition-none group-open:rotate-180" aria-hidden="true" />
               </span>
             </summary>
             <div className="space-y-6 p-5">
               <div>
-                <h2 className="mb-3 font-bold">{t("questions.cuisine")}</h2>
+                <h2 className="marketing-display mb-3 text-xl">{t("questions.cuisine")}</h2>
                 <div className="flex flex-wrap gap-2">
                   {recipeCuisines.map((cuisine) => (
                     <Button
@@ -221,11 +221,11 @@ export function CookingPage() {
                 </div>
               </div>
               <div>
-                <h2 className="mb-3 font-bold">{t("questions.saved")}</h2>
+                <h2 className="marketing-display mb-3 text-xl">{t("questions.saved")}</h2>
                 <Chips options={savedRecipeOptions} value={savedRecipes} onChange={setSavedRecipes} getLabel={(value) => t(`options.saved.${value}`)} label={t("questions.saved")} />
               </div>
               <div>
-                <h2 className="font-bold">{t("optional.priorityTitle")}</h2>
+                <h2 className="marketing-display text-xl">{t("optional.priorityTitle")}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{t("optional.priorityHint")}</p>
                 {selectableProducts.length ? (
                   <>
@@ -261,7 +261,7 @@ export function CookingPage() {
                 ) : <p className="mt-3 text-sm text-muted-foreground">{t("optional.priorityEmpty")}</p>}
               </div>
               <div>
-                <label htmlFor="cooking-notes" className="mb-3 block font-bold">{t("optional.notesLabel")}</label>
+                <label htmlFor="cooking-notes" className="marketing-display mb-3 block text-xl">{t("optional.notesLabel")}</label>
                 <Textarea
                   id="cooking-notes"
                   maxLength={maxNotesLength}
