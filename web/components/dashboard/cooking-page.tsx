@@ -118,9 +118,12 @@ export function CookingPage() {
             </Button>
           </div>
           {loadingPhase ? (
-            <div className="mb-4 text-sm text-muted-foreground" role="status">
-              <p className="font-semibold text-foreground">{t("loadingSuggestions")}</p>
-              <p>{t("generationWait")}</p>
+            <div className="mb-4 flex items-center gap-3 text-sm text-muted-foreground" role="status">
+              <BrandIcon name="cooking_recipe" className="size-14" />
+              <div>
+                <p className="font-semibold text-foreground">{t("loadingSuggestions")}</p>
+                <p>{t("generationWait")}</p>
+              </div>
             </div>
           ) : null}
           {aiMessage ? (
@@ -129,7 +132,7 @@ export function CookingPage() {
               <p className="pt-1 text-sm leading-6">{aiMessage}</p>
             </section>
           ) : null}
-          {error ? <div role="alert" className="mb-4 flex items-center gap-3 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm font-semibold text-destructive"><BrandIcon name="warning" className="size-14" /><p>{t(`errors.${error}`)}</p></div> : null}
+          {error ? <div role="alert" className="mb-4 flex items-center gap-3 rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm font-semibold text-destructive"><BrandIcon name="error" className="size-14" /><p>{t(`errors.${error}`)}</p></div> : null}
           {partial ? <p role="status" className="mb-4 rounded-lg border border-border bg-muted p-4 text-sm">{t("partialNoShopping")}</p> : null}
           {recipes.length || loadingPhase ? (
             <div className="grid gap-4 lg:grid-cols-3">

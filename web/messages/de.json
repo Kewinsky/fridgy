@@ -533,8 +533,8 @@
     "generationNotice": "Diese Rezepte erstellt KI. Prüfe Zutaten und Produktetiketten vor dem Kochen.",
     "aiMessageLabel": "Nachricht von Fridgy",
     "showSuggestions": "Vorschläge anzeigen",
-    "loadingSuggestions": "Rezepte werden erstellt...",
-    "generationWait": "Plane etwa 1–2 Minuten ein. Die Suche nach weiteren passenden Ideen kann bis zu 5 Minuten dauern.",
+    "loadingSuggestions": "Wir suchen ein Rezept...",
+    "generationWait": "Das dauert normalerweise etwa 1–2 Minuten. Manchmal kann es bis zu 5 Minuten dauern.",
     "partialNoShopping": "Mit deinen Vorräten wurden weniger als 3 Rezepte gefunden. Erlaube Einkäufe für mehr Vorschläge.",
     "errors": {
       "unavailable": "Der KI-Dienst konnte die Anfrage nicht abschließen. Deine Antworten sind nicht die Ursache. Versuche es später erneut.",

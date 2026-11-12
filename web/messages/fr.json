@@ -533,8 +533,8 @@
     "generationNotice": "Ces recettes sont créées par IA. Vérifiez les ingrédients et les étiquettes avant de cuisiner.",
     "aiMessageLabel": "Message de Fridgy",
     "showSuggestions": "Afficher les suggestions",
-    "loadingSuggestions": "Génération des recettes...",
-    "generationWait": "Prévoyez environ 1 à 2 minutes. La recherche d'autres idées adaptées peut prendre jusqu'à 5 minutes.",
+    "loadingSuggestions": "Nous cherchons une recette...",
+    "generationWait": "Cela prend généralement 1 à 2 minutes. Parfois, cela peut prendre jusqu'à 5 minutes.",
     "partialNoShopping": "Moins de 3 recettes correspondent à votre stock. Autorisez les achats pour voir plus de propositions.",
     "errors": {
       "unavailable": "Le service IA n'a pas pu traiter la demande. Vos réponses n'en sont pas la cause. Réessayez plus tard.",
