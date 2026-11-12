@@ -38,7 +38,7 @@ import { getRecipeImageSrc } from "@/lib/recipe-image";
 import type { Locale } from "@/i18n/config";
 import { isCustomRecipe } from "@/lib/recipe-library";
 import { matchRecipeToInventory } from "@/lib/inventory-store";
-import { getRecipePreferenceConflicts } from "@/lib/recipe-preferences";
+import { getPotentialRecipeAllergens, getRecipePreferenceConflicts } from "@/lib/recipe-preferences";
 
 export function RecipeDetail({
   recipe,
@@ -59,6 +59,8 @@ export function RecipeDetail({
   const imageSrc = getRecipeImageSrc(recipe);
   const missing = getMissingIngredients(matchedRecipe);
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
+  const aiRecipe = "source" in recipe && recipe.source === "ai";
+  const displayedAllergens = aiRecipe ? getPotentialRecipeAllergens(matchedRecipe) : recipe.allergens;
   const difficulty = capitalizeDifficulty(recipe.difficulty);
   const preferences = useDashboardData();
   const conflicts = getRecipePreferenceConflicts(matchedRecipe, preferences, Object.fromEntries(
@@ -134,15 +136,16 @@ export function RecipeDetail({
 
           <section className="app-card p-5 sm:p-6">
             <h2 className="text-lg font-extrabold">{t("allergens.title")}</h2>
-            {recipe.allergens === undefined ? (
+            {displayedAllergens === undefined ? (
               <p className="mt-3 text-sm text-muted-foreground">{t("allergens.unknown")}</p>
-            ) : recipe.allergens.length ? (
+            ) : displayedAllergens.length ? (
               <div className="mt-3 flex flex-wrap gap-2">
-                {recipe.allergens.map((allergen) => <Badge key={allergen} variant="outline">{t(`allergens.options.${allergen}`)}</Badge>)}
+                {displayedAllergens.map((allergen) => <Badge key={allergen} variant={conflicts.matchingAllergens.includes(allergen) ? "destructive" : "outline"}>{t(`allergens.options.${allergen}`)}</Badge>)}
               </div>
             ) : (
-              <p className="mt-3 text-sm text-muted-foreground">{t("allergens.noneDeclared")}</p>
+              <p className="mt-3 text-sm text-muted-foreground">{aiRecipe ? t("allergens.unknown") : t("allergens.noneDeclared")}</p>
             )}
+            {aiRecipe ? <p className="mt-3 text-sm text-muted-foreground">{t("allergens.aiNotice")}</p> : null}
             {conflictReasons.length ? (
               <p className="mt-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm font-semibold text-destructive" role="alert">
                 {t("diet.conflict", { reason: conflictReasons.join(", ") })}

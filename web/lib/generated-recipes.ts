@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { StoredRecipe } from "./recipe-library.ts";
-import { cleanIngredientName } from "./demo-recipes.ts";
+import { cleanIngredientName, recipeAllergens } from "./demo-recipes.ts";
+import { getPotentialRecipeAllergens } from "./recipe-preferences.ts";
 
 const ingredientSchema = z.object({
   name: z.string().trim().min(1).max(150).transform(cleanIngredientName).pipe(z.string().min(1)),
@@ -23,6 +24,7 @@ export const generatedRecipeSchema = z.object({
   }),
   ingredients: z.array(ingredientSchema).min(1).max(40),
   steps: z.array(z.string().trim().min(1).max(1000)).min(1).max(30),
+  allergens: z.array(z.enum(recipeAllergens)).max(14).optional(),
 });
 
 export function prepareGeneratedRecipe(output: unknown, id: string, createdAt = new Date().toISOString()): StoredRecipe {
@@ -38,6 +40,9 @@ export function prepareGeneratedRecipe(output: unknown, id: string, createdAt = 
       amount: `${ingredient.quantity} ${ingredient.unit}`,
       available: false,
     })),
-    // shortcut: AI cannot verify product allergens, add verified product data before declaring any recipe safe.
+    allergens: getPotentialRecipeAllergens({
+      allergens: data.allergens,
+      ingredients: data.ingredients.map((ingredient) => ({ ...ingredient, amount: "", available: false })),
+    }),
   };
 }

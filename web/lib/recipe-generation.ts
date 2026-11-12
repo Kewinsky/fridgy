@@ -115,11 +115,12 @@ export async function requestModelRecipes(
         "Follow the meal, servings, time, cuisine, diet, excluded ingredients and shopping limit. If shopping is none and fewer sensible dishes are possible, return fewer recipes or an empty array instead of inventing a dish.",
         "If the meal is soup, suggest actual soups rather than other dishes.",
         "Tap water is always available. Do not list it as an ingredient or something to buy; mention it in the steps if needed. Salt and pepper may be mentioned as optional seasoning in steps but must not consume a shopping slot. Do not assume oil or other staples are available.",
-        "Avoid every listed allergy, related ingredients and derivatives. For each recipe, list any EU allergens that may be present in its ingredients. Do not claim allergen safety.",
+        "Prefer dishes without the user's listed allergies. If an allergen is essential to a recognizable dish, you may still suggest it, but clearly warn about that dish and the conflicting allergen in the message. Never suggest removing an essential ingredient as a safe substitution or claim a dish is safe for an allergic person.",
+        "For each recipe, tag every potential ingredient allergen using only the 14 codes in availableAllergens, including derivatives and allergens not selected by the user. An empty list does not prove safety.",
         "Ingredient quantities are totals for all requested servings. Check these totals against the inventory. Use only units from the schema.",
         "Each ingredient name must be only the food name. Never append shopping or availability labels such as 'do kupienia', and never use Markdown in ingredient names. The app determines what is missing.",
         "Estimate calories, protein, carbs and fat per serving from the listed quantities. These are estimates, not verified measurements.",
-        "Write a short, warm message to the user in the requested language, at most two sentences and 350 characters. Mention relevant limits honestly and suggest allowing shopping when stock is too restrictive. Do not mention an exact recipe count or assert exact missing items.",
+        "Write a short, clear message to the user in the requested language, at most 350 characters. If no suitable recipe is possible, explain the actual blocking constraints: stock, shopping limit, time, cuisine, diet or exclusions. Suggest a concrete change. If proposing a recipe with a listed allergy, name the conflict in this message. Do not invent missing items or claim safety.",
         "Never use the Unicode em dash (U+2014) in recipe text or the user message. Use the en dash (U+2013) wherever a dash is needed.",
         "Return cuisine values exactly as supplied in the input cuisines list when it is not empty. Write all recipe text in the requested language.",
       ].join(" "),
@@ -135,7 +136,9 @@ export async function requestModelRecipes(
     }),
     signal: AbortSignal.timeout(40000),
   });
-  if (!response.ok) throw new Error("AI service unavailable");
+  if (response.status === 429) throw new Error("AI_RATE_LIMIT");
+  if (response.status === 401 || response.status === 403) throw new Error("AI_CONFIGURATION");
+  if (!response.ok) throw new Error("AI_UNAVAILABLE");
   const result = (await response.json()) as {
     status?: string;
     output?: Array<{ content?: Array<{ type?: string; text?: string }> }>;
@@ -144,7 +147,7 @@ export async function requestModelRecipes(
     ?.flatMap((item) => item.content ?? [])
     .find((item) => item.type === "output_text")?.text;
   if (result.status !== "completed" || !text)
-    throw new Error("AI response incomplete");
+    throw new Error("AI_INCOMPLETE");
   return JSON.parse(text) as unknown;
 }
 
@@ -170,6 +173,7 @@ export function generationContext(
     notes: input.notes,
     diet: preferences.diet,
     allergies: preferences.allergies,
+    availableAllergens: recipeAllergens,
     excludedIngredients: preferences.excludedIngredients,
     inventory: availableProducts
       .slice(0, 100)
@@ -206,6 +210,7 @@ export function acceptedGeneratedRecipes(
   products: DemoProduct[],
   excludedIngredients: string,
   allergies: string,
+  strictAllergens = false,
 ) {
   const output = generationOutputSchema.parse(value);
   const excluded = excludedIngredients
@@ -238,7 +243,7 @@ export function acceptedGeneratedRecipes(
       )
     )
       return false;
-    if (getKnownAllergenConflicts({
+    if (strictAllergens && getKnownAllergenConflicts({
       allergens: recipe.allergens,
       ingredients: recipe.ingredients.map((ingredient) => ({ ...ingredient, amount: `${ingredient.quantity} ${ingredient.unit}`, available: false })),
     }, allergies).length) return false;
@@ -270,18 +275,28 @@ export async function collectGeneratedRecipes(
 ) {
   const suggestions: ReturnType<typeof acceptedGeneratedRecipes> = [];
   let message = "";
+  let shoppingBlocked = false;
   for (let attempt = 0; attempt < 3 && suggestions.length < 3; attempt += 1) {
     const nextInput = {
       ...input,
       excludeTitles: [...saved.map((recipe) => recipe.title).reverse(), ...input.excludeTitles, ...suggestions.map((recipe) => recipe.title)],
     };
     const context = generationContext(nextInput, products, preferences, saved, 3 - suggestions.length);
-    const output = generationOutputSchema.parse(await request(key, context));
-    if (!message) message = output.message;
+    let output;
+    try {
+      output = generationOutputSchema.parse(await request(key, context));
+    } catch (error) {
+      if (!suggestions.length) throw error;
+      break;
+    }
+    if (!message || !suggestions.length) message = output.message;
     const accepted = acceptedGeneratedRecipes(output, nextInput, products, preferences.excludedIngredients, preferences.allergies);
+    if (input.shopping !== "any" && accepted.length < output.recipes.length) {
+      shoppingBlocked ||= acceptedGeneratedRecipes(output, { ...nextInput, shopping: "any" }, products, preferences.excludedIngredients, preferences.allergies).length > accepted.length;
+    }
     suggestions.push(...accepted.slice(0, 3 - suggestions.length));
   }
-  return { recipes: suggestions, message };
+  return { recipes: suggestions, message, shoppingBlocked };
 }
 
 export async function requestDailyRecipe(
@@ -294,5 +309,5 @@ export async function requestDailyRecipe(
 ) {
   const context = generationContext(input, products, preferences, saved, 1);
   const output = await request(key, context);
-  return acceptedGeneratedRecipes(output, input, products, preferences.excludedIngredients, preferences.allergies)[0] ?? null;
+  return acceptedGeneratedRecipes(output, input, products, preferences.excludedIngredients, preferences.allergies, true)[0] ?? null;
 }

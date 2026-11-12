@@ -40,7 +40,7 @@ export function CookingPage() {
   const [notes, setNotes] = useState("");
   const [showRecipes, setShowRecipes] = useState(false);
   const [recipes, setRecipes] = useState<StoredRecipe[]>([]);
-  const [error, setError] = useState<"unavailable" | "emptyInventory" | "noMatches" | "notEnoughSuggestions" | "priorityUnavailable" | "failed" | null>(null);
+  const [error, setError] = useState<"unavailable" | "rateLimited" | "configuration" | "incomplete" | "emptyInventory" | "noMatches" | "shoppingLimit" | "priorityUnavailable" | "failed" | null>(null);
   const [partial, setPartial] = useState(false);
   const [aiMessage, setAiMessage] = useState<string | null>(null);
   const [loadingPhase, setLoadingPhase] = useState<"initial" | "more" | null>(null);
@@ -64,6 +64,7 @@ export function CookingPage() {
       }, householdId);
       if (result.error) {
         setError(result.error);
+        setAiMessage("message" in result && typeof result.message === "string" ? result.message : null);
       } else if (result.recipes) {
         setRecipes((current) => more ? [...current, ...result.recipes] : result.recipes);
         addRecipes(result.recipes);

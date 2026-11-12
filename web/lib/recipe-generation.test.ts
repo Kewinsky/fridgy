@@ -52,6 +52,8 @@ test("sends form answers and current stock to the model context", () => {
   assert.deepEqual(context.inventory, [{ name: "Marchew", quantity: 0.5, unit: "kg" }]);
   assert.equal(context.diet, "vegan");
   assert.equal(context.allergies, "milk,eggs");
+  assert.equal(context.availableAllergens.length, 14);
+  assert.ok(context.availableAllergens.includes("molluscs"));
   assert.deepEqual(context.priorityProducts, []);
 });
 
@@ -73,11 +75,11 @@ test("rejects suggestions that exceed time, shopping or excluded ingredient limi
   assert.deepEqual(acceptedGeneratedRecipes(modelOutput([recipe]), input, products, "marchew", ""), []);
 });
 
-test("filters declared and ingredient allergen conflicts without blocking other recipes", () => {
+test("keeps allergen conflicts in requested suggestions so the UI can warn the user", () => {
   const noShoppingLimit = { ...input, shopping: "any" as const };
   const milk = { ...recipe, title: "Mleczna zupa", allergens: ["milk"] };
   const cheese = { ...recipe, title: "Zupa z serem", ingredients: [{ name: "Ser", quantity: 100, unit: "g" }], allergens: [] };
-  assert.deepEqual(acceptedGeneratedRecipes(modelOutput([milk, cheese, recipe]), noShoppingLimit, products, "", "milk"), [recipe]);
+  assert.deepEqual(acceptedGeneratedRecipes(modelOutput([milk, cheese, recipe]), noShoppingLimit, products, "", "milk"), [milk, cheese, recipe]);
 });
 
 test("checks ingredient totals for the requested serving count", () => {
@@ -124,6 +126,35 @@ test("stops after three attempts when no-shopping constraints yield fewer recipe
   assert.deepEqual(result.recipes, [recipe]);
 });
 
+test("returns the model's final explanation when no recipe passes the limits", async () => {
+  let calls = 0;
+  const result = await collectGeneratedRecipes("key", input, products, { diet: "none", allergies: "", excludedIngredients: "" }, [], async () => {
+    calls += 1;
+    return modelOutput([], `Powód ${calls}: bez zakupów brakuje składników.`);
+  });
+  assert.deepEqual(result.recipes, []);
+  assert.equal(result.message, "Powód 3: bez zakupów brakuje składników.");
+  assert.equal(result.shoppingBlocked, false);
+});
+
+test("identifies when the shopping limit alone rejects a suggested recipe", async () => {
+  const missing = { ...recipe, ingredients: [{ name: "Jajka", quantity: 2, unit: "szt." }] };
+  const result = await collectGeneratedRecipes("key", input, products, { diet: "none", allergies: "eggs", excludedIngredients: "" }, [], async () => modelOutput([missing], "Brakuje jajek w zapasach."));
+  assert.deepEqual(result.recipes, []);
+  assert.equal(result.shoppingBlocked, true);
+});
+
+test("keeps valid recipes if a later refill request fails", async () => {
+  let calls = 0;
+  const result = await collectGeneratedRecipes("key", input, products, { diet: "none", allergies: "", excludedIngredients: "" }, [], async () => {
+    calls += 1;
+    if (calls > 1) throw new Error("AI_UNAVAILABLE");
+    return modelOutput([recipe], "Mam przepis z zapasów.");
+  });
+  assert.deepEqual(result.recipes, [recipe]);
+  assert.equal(result.message, "Mam przepis z zapasów.");
+});
+
 test("requests structured recipes and reads the model response", async () => {
   const context = generationContext(input, products, { diet: "none", allergies: "milk", excludedIngredients: "" }, []);
   const fakeFetch = (async (_url: string, options: RequestInit) => {
@@ -137,8 +168,17 @@ test("requests structured recipes and reads the model response", async () => {
     assert.match(body.instructions, /Priority products are a soft preference/);
     assert.match(body.instructions, /Start from a known dish/);
     assert.match(body.instructions, /Tap water is always available/);
+    assert.match(body.instructions, /14 codes in availableAllergens/);
+    assert.match(body.instructions, /actual blocking constraints/);
     assert.equal(body.store, false);
     return { ok: true, json: async () => ({ status: "completed", output: [{ content: [{ type: "output_text", text: JSON.stringify(modelOutput([recipe])) }] }] }) } as Response;
   }) as typeof fetch;
   assert.deepEqual(await requestModelRecipes("test-key", context, fakeFetch), modelOutput([recipe]));
+});
+
+test("distinguishes service limits and incomplete responses from recipe constraints", async () => {
+  const context = generationContext(input, products, { diet: "none", allergies: "", excludedIngredients: "" }, []);
+  await assert.rejects(requestModelRecipes("key", context, async () => ({ status: 429, ok: false }) as Response), /AI_RATE_LIMIT/);
+  await assert.rejects(requestModelRecipes("key", context, async () => ({ status: 401, ok: false }) as Response), /AI_CONFIGURATION/);
+  await assert.rejects(requestModelRecipes("key", context, async () => ({ status: 200, ok: true, json: async () => ({ status: "incomplete" }) }) as Response), /AI_INCOMPLETE/);
 });

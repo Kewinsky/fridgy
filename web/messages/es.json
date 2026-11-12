@@ -537,8 +537,12 @@
     "partialNoShopping": "Con tus existencias encontramos menos de 3 recetas. Permite comprar ingredientes para ver más opciones.",
     "errors": {
       "unavailable": "El servicio de IA no pudo ofrecer una receta. Inténtalo de nuevo.",
+      "rateLimited": "El servicio de IA ha alcanzado su límite de solicitudes. Espera un momento e inténtalo de nuevo.",
+      "configuration": "El servicio de IA no está bien configurado. Contacta con la administración de la aplicación.",
+      "incomplete": "El servicio de IA interrumpió la respuesta antes de terminar las recetas. Inténtalo de nuevo.",
       "emptyInventory": "No tienes productos disponibles. Añade productos o permite hacer compras.",
-      "noMatches": "Ninguna receta cumple tus requisitos. Inténtalo de nuevo.",
+      "noMatches": "Ninguna receta cumple tus requisitos. Lee la explicación anterior y cambia tus respuestas.",
+      "shoppingLimit": "Estas recetas necesitan productos que no tienes y tu límite de compra las excluye. Cambia el límite o añade productos a tus existencias.",
       "notEnoughSuggestions": "Tras revisar el tiempo, la cocina, las alergias y las existencias, no encontramos 3 recetas diferentes. Prueba con más tiempo, más cocinas o permite hacer compras.",
       "priorityUnavailable": "Algunos productos seleccionados ya no están disponibles o ha pasado su fecha estimada. Cambia tus respuestas y selecciónalos de nuevo.",
       "failed": "No pudimos guardar las recetas. Inténtalo de nuevo."
@@ -652,6 +656,7 @@
       "title": "Alérgenos en los ingredientes",
       "unknown": "No hay datos sobre alérgenos.",
       "noneDeclared": "No se indican alérgenos para los ingredientes de esta receta.",
+      "aiNotice": "Estos son posibles alérgenos detectados por la IA y los nombres de los ingredientes. Revisa los ingredientes y las etiquetas antes de cocinar.",
       "options": {
         "gluten": "Cereales con gluten",
         "crustaceans": "Crustáceos",

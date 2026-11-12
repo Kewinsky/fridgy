@@ -39,7 +39,12 @@ export function parseSelectedAllergens(value: string): RecipeAllergen[] {
 }
 
 export function getKnownAllergenConflicts(recipe: Pick<Recipe, "allergens" | "ingredients">, allergies: string): RecipeAllergen[] {
-  return parseSelectedAllergens(allergies).filter((allergen) =>
+  const selected = parseSelectedAllergens(allergies);
+  return getPotentialRecipeAllergens(recipe).filter((allergen) => selected.includes(allergen));
+}
+
+export function getPotentialRecipeAllergens(recipe: Pick<Recipe, "allergens" | "ingredients">): RecipeAllergen[] {
+  return recipeAllergens.filter((allergen) =>
     recipe.allergens?.includes(allergen) || recipe.ingredients.some((ingredient) =>
       allergenAliases[allergen].some((alias) => normalize(ingredient.name).includes(normalize(alias))),
     ),
@@ -48,11 +53,10 @@ export function getKnownAllergenConflicts(recipe: Pick<Recipe, "allergens" | "in
 
 export function getRecipePreferenceConflicts(recipe: Recipe, preferences: Preferences, allergenLabels?: Partial<Record<RecipeAllergen, string>>) {
   const requestedAllergens = entries(preferences.allergies);
+  const potentialAllergens = getPotentialRecipeAllergens(recipe);
   const matchingAllergens = recipeAllergens.filter((allergen) =>
     requestedAllergens.some((entry) => [...allergenAliases[allergen], allergen, allergenLabels?.[allergen] ?? ""].some((alias) => normalize(alias) === entry)) &&
-    (recipe.allergens?.includes(allergen) || recipe.ingredients.some((ingredient) =>
-      allergenAliases[allergen].some((alias) => normalize(ingredient.name).includes(normalize(alias))),
-    )),
+    potentialAllergens.includes(allergen),
   );
   const excluded = entries(preferences.excludedIngredients);
   const matchingIngredients = recipe.ingredients.filter((ingredient) =>

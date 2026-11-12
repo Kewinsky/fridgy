@@ -20,16 +20,17 @@ const output = {
   allergens: [],
 };
 
-test("validates AI output and never treats model allergen claims as verified", () => {
+test("validates AI output and keeps potential allergens without treating them as verified", () => {
   const recipe = prepareGeneratedRecipe(
     output,
     "3798a119-c64c-4a90-8a3b-aa0dfb2d62ba",
   );
-  assert.equal(recipe.allergens, undefined);
+  assert.deepEqual(recipe.allergens, []);
   assert.equal(recipe.calories, 120);
   assert.deepEqual(recipe.macros, { protein: 3, carbs: 24, fat: 2 });
   assert.equal(recipe.nutritionSource, "estimate");
   assert.equal(recipe.ingredients[0].amount, "100 g");
+  assert.deepEqual(prepareGeneratedRecipe({ ...output, allergens: ["eggs"], ingredients: [{ name: "Mleko", quantity: 100, unit: "ml" }] }, "3798a119-c64c-4a90-8a3b-aa0dfb2d62ba").allergens, ["eggs", "milk"]);
   assert.equal(prepareGeneratedRecipe({ ...output, ingredients: [{ name: "Marchew **— do kupienia**", quantity: 100, unit: "g" }] }, "3798a119-c64c-4a90-8a3b-aa0dfb2d62ba").ingredients[0].name, "Marchew");
   assert.throws(() =>
     prepareGeneratedRecipe(

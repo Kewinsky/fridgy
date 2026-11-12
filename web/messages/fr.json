@@ -537,8 +537,12 @@
     "partialNoShopping": "Moins de 3 recettes correspondent à votre stock. Autorisez les achats pour voir plus de propositions.",
     "errors": {
       "unavailable": "Le service IA n'a pas fourni de recette. Réessayez.",
+      "rateLimited": "Le service IA a atteint sa limite de demandes. Patientez un instant, puis réessayez.",
+      "configuration": "Le service IA est mal configuré. Contactez l'administrateur de l'application.",
+      "incomplete": "Le service IA a interrompu sa réponse avant de terminer les recettes. Réessayez.",
       "emptyInventory": "Vous n'avez aucun produit disponible. Ajoutez des produits ou autorisez les achats.",
-      "noMatches": "Aucune recette ne respecte vos critères. Réessayez.",
+      "noMatches": "Aucune recette ne respecte vos critères. Lisez l'explication ci-dessus et modifiez vos réponses.",
+      "shoppingLimit": "Ces recettes demandent des produits absents de votre stock et votre limite d'achat les exclut. Modifiez la limite ou ajoutez des produits.",
       "notEnoughSuggestions": "Après vérification du temps, de la cuisine, des allergies et du stock, nous n'avons pas trouvé 3 recettes différentes. Essayez plus de temps, plus de cuisines ou autorisez les achats.",
       "priorityUnavailable": "Certains produits sélectionnés ne sont plus disponibles ou leur date estimée est dépassée. Modifiez vos réponses et sélectionnez-les à nouveau.",
       "failed": "Les recettes n'ont pas pu être enregistrées. Réessayez."
@@ -652,6 +656,7 @@
       "title": "Allergènes dans les ingrédients",
       "unknown": "Aucune donnée sur les allergènes.",
       "noneDeclared": "Aucun allergène n'est indiqué pour les ingrédients de cette recette.",
+      "aiNotice": "Ce sont des allergènes potentiels repérés par l'IA et les noms des ingrédients. Vérifiez les ingrédients et les étiquettes avant de cuisiner.",
       "options": {
         "gluten": "Céréales contenant du gluten",
         "crustaceans": "Crustacés",

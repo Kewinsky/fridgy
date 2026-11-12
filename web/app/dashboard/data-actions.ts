@@ -168,11 +168,13 @@ export async function generateRecipes(input: GenerationInput, expectedHouseholdI
   let batch;
   try {
     batch = await collectGeneratedRecipes(key, validInput, dashboard.products, dashboard, dashboard.recipes);
-  } catch {
+  } catch (error) {
+    if (error instanceof Error && error.message === "AI_RATE_LIMIT") return { error: "rateLimited" as const };
+    if (error instanceof Error && error.message === "AI_CONFIGURATION") return { error: "configuration" as const };
+    if (error instanceof Error && error.message === "AI_INCOMPLETE") return { error: "incomplete" as const };
     return { error: "unavailable" as const };
   }
-  if (!batch.recipes.length) return { error: "noMatches" as const };
-  if (batch.recipes.length < 3 && validInput.shopping !== "none") return { error: "notEnoughSuggestions" as const };
+  if (!batch.recipes.length) return { error: batch.shoppingBlocked ? "shoppingLimit" as const : "noMatches" as const, message: batch.message };
   const recipes = batch.recipes.map((recipe) => prepareGeneratedRecipe(recipe, crypto.randomUUID()));
   const { error } = await supabase.from("recipes").insert(recipes.map((recipe) => ({
     user_id: userId, household_id: householdId, slug: recipe.slug, source: "ai", recipe, created_at: recipe.createdAt,

@@ -537,8 +537,12 @@
     "partialNoShopping": "Mit deinen Vorräten wurden weniger als 3 Rezepte gefunden. Erlaube Einkäufe für mehr Vorschläge.",
     "errors": {
       "unavailable": "Der KI-Dienst konnte kein Rezept liefern. Versuche es erneut.",
+      "rateLimited": "Der KI-Dienst hat sein Anfrage-Limit erreicht. Warte kurz und versuche es erneut.",
+      "configuration": "Der KI-Dienst ist nicht richtig eingerichtet. Wende dich an die App-Verwaltung.",
+      "incomplete": "Der KI-Dienst hat die Antwort vor dem Abschluss der Rezepte abgebrochen. Versuche es erneut.",
       "emptyInventory": "Du hast keine verfügbaren Vorräte. Füge Produkte hinzu oder erlaube Einkäufe.",
-      "noMatches": "Kein Rezept erfüllt deine Vorgaben. Versuche es erneut.",
+      "noMatches": "Kein Rezept erfüllt deine Vorgaben. Lies die Erklärung oben und ändere deine Antworten.",
+      "shoppingLimit": "Für diese Rezepte fehlen Produkte im Vorrat und dein Einkaufslimit schließt sie aus. Ändere das Limit oder ergänze deinen Vorrat.",
       "notEnoughSuggestions": "Nach Prüfung von Zeit, Küche, Allergien und Vorräten wurden keine 3 unterschiedlichen Rezepte gefunden. Wähle mehr Zeit oder Küchen oder erlaube Einkäufe.",
       "priorityUnavailable": "Einige ausgewählte Produkte sind nicht mehr verfügbar oder ihr geschätztes Verbrauchsdatum ist abgelaufen. Ändere deine Antworten und wähle sie erneut aus.",
       "failed": "Die Rezepte konnten nicht gespeichert werden. Versuche es erneut."
@@ -652,6 +656,7 @@
       "title": "Allergene in den Zutaten",
       "unknown": "Keine Angaben zu Allergenen verfügbar.",
       "noneDeclared": "Für die Zutaten dieses Rezepts sind keine Allergene angegeben.",
+      "aiNotice": "Dies sind mögliche Allergene, die KI und Zutatennamen erkannt haben. Prüfe vor dem Kochen Zutaten und Produktetiketten.",
       "options": {
         "gluten": "Glutenhaltiges Getreide",
         "crustaceans": "Krebstiere",

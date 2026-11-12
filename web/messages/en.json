@@ -537,8 +537,12 @@
     "partialNoShopping": "We found fewer than 3 recipes using your current stock. Allow shopping to see more options.",
     "errors": {
       "unavailable": "The AI service could not provide a recipe. Please try again.",
+      "rateLimited": "The AI service has reached its request limit. Wait a moment and try again.",
+      "configuration": "The AI service is not set up correctly. Contact the app administrator.",
+      "incomplete": "The AI service stopped before completing the recipes. Please try again.",
       "emptyInventory": "You have no available stock. Add products or allow shopping to generate recipes.",
-      "noMatches": "No recipe matched your requirements. Please try again.",
+      "noMatches": "No recipe matched your choices. Read the explanation above and change your answers.",
+      "shoppingLimit": "These recipes need products you do not have, and your shopping limit excludes them. Change the limit or add products to your stock.",
       "notEnoughSuggestions": "After checking the time, cuisine, allergies and available ingredients, we could not find 3 distinct recipes. Try more time, more cuisines or allow shopping.",
       "priorityUnavailable": "Some selected products are no longer available or their estimated use-by date has passed. Change your answers and select them again.",
       "failed": "We could not save the recipes. Please try again."
@@ -652,6 +656,7 @@
       "title": "Allergens in ingredients",
       "unknown": "No allergen data is available.",
       "noneDeclared": "No allergens are listed for this recipe's ingredients.",
+      "aiNotice": "These are potential allergens identified by AI and ingredient names. Check the ingredients and product labels before cooking.",
       "options": {
         "gluten": "Cereals containing gluten",
         "crustaceans": "Crustaceans",

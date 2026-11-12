@@ -537,8 +537,12 @@
     "partialNoShopping": "Z dostępnych zapasów udało się znaleźć mniej niż 3 przepisy. Pozostałe składniki możesz dokupić po zmianie odpowiedzi.",
     "errors": {
       "unavailable": "Nie udało się uzyskać przepisu z usługi AI. Spróbuj ponownie.",
+      "rateLimited": "Usługa AI osiągnęła limit żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "configuration": "Usługa AI nie jest poprawnie skonfigurowana. Skontaktuj się z administratorem aplikacji.",
+      "incomplete": "Usługa AI przerwała odpowiedź przed ukończeniem przepisów. Spróbuj ponownie.",
       "emptyInventory": "Nie masz dostępnych zapasów. Dodaj produkty albo pozwól na zakupy, aby wygenerować przepisy.",
-      "noMatches": "Nie udało się znaleźć przepisu zgodnego z Twoimi ograniczeniami. Spróbuj ponownie.",
+      "noMatches": "Nie znaleziono przepisu spełniającego wybrane warunki. Sprawdź wyjaśnienie powyżej i zmień odpowiedzi.",
+      "shoppingLimit": "Do tych propozycji brakuje produktów w zapasach, a wybrany limit zakupów je wyklucza. Zmień limit lub uzupełnij zapasy.",
       "notEnoughSuggestions": "Po sprawdzeniu czasu, kuchni, alergii i dostępnych składników nie udało się zebrać 3 różnych przepisów. Możesz wydłużyć czas, wybrać więcej kuchni lub pozwolić na zakupy.",
       "priorityUnavailable": "Wybrane produkty nie są już dostępne albo minął ich szacowany termin. Zmień odpowiedzi i wybierz je ponownie.",
       "failed": "Nie udało się zapisać przepisów. Spróbuj ponownie."
@@ -652,6 +656,7 @@
       "title": "Alergeny w składnikach",
       "unknown": "Brak danych o alergenach.",
       "noneDeclared": "W składnikach tego przepisu nie oznaczono alergenów.",
+      "aiNotice": "To tylko potencjalne alergeny rozpoznane przez AI i nazwy składników. Sprawdź skład oraz etykiety produktów przed gotowaniem.",
       "options": {
         "gluten": "Zboża z glutenem",
         "crustaceans": "Skorupiaki",
