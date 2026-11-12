@@ -33,9 +33,9 @@ export const difficultyMessageKeys: Record<string, string> = {
   "Własny przepis": "custom",
 };
 
-export function capitalizeDifficulty(value: string) {
-  const difficulty = value.trim();
-  return difficulty ? difficulty[0].toLocaleUpperCase("pl") + difficulty.slice(1) : difficulty;
+export function capitalizeLabel(value: string) {
+  const label = value.trim();
+  return label ? label[0].toLocaleUpperCase("pl") + label.slice(1) : label;
 }
 
 export function isCuisine(value: string): value is Cuisine {

@@ -9,6 +9,7 @@ import { FinishCookingDialog } from "@/components/dashboard/finish-cooking-dialo
 import { MeasureDictionary } from "@/components/dashboard/measure-dictionary";
 import { BrandIcon } from "@/components/brand-icon";
 import {
+  capitalizeLabel,
   cuisineMessageKeys,
   isCuisine,
 } from "@/components/dashboard/recipe-options";
@@ -35,6 +36,7 @@ export function CookingModePage({ slug }: { slug: string }) {
   const recipe = sourceRecipe
     ? localizeDemoRecipe(sourceRecipe, locale)
     : undefined;
+  const cuisine = recipe ? capitalizeLabel(recipe.cuisine) : "";
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(
     () => new Set(),
   );
@@ -109,9 +111,9 @@ export function CookingModePage({ slug }: { slug: string }) {
             {recipeT("servings", { count: recipe.servings })}
           </Badge>
           <Badge variant="outline">
-            {isCuisine(recipe.cuisine)
-              ? recipeT(`cuisineOptions.${cuisineMessageKeys[recipe.cuisine]}`)
-              : recipe.cuisine}
+            {isCuisine(cuisine)
+              ? recipeT(`cuisineOptions.${cuisineMessageKeys[cuisine]}`)
+              : cuisine}
           </Badge>
         </div>
 

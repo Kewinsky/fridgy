@@ -15,7 +15,7 @@ import {
 } from "@/components/dashboard/add-recipe-dialog";
 import { FavoriteRecipeButton } from "@/components/dashboard/recipe-actions";
 import { RecipeImage } from "@/components/dashboard/recipe-image";
-import { capitalizeDifficulty, difficultyMessageKeys } from "@/components/dashboard/recipe-options";
+import { capitalizeLabel, difficultyMessageKeys } from "@/components/dashboard/recipe-options";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Recipe } from "@/lib/demo-recipes";
@@ -44,7 +44,7 @@ export function RecipeCard({
   const displayRecipe = localizeDemoRecipe(recipe, useLocale() as Locale);
   const suggestion = variant === "suggestion";
   const customRecipe = isCustomRecipe(recipe) ? recipe : null;
-  const difficulty = capitalizeDifficulty(recipe.difficulty);
+  const difficulty = capitalizeLabel(recipe.difficulty);
   const imageSrc = getRecipeImageSrc(recipe);
   let href = `/dashboard/co-ugotowac/${recipe.slug}`;
   if (customRecipe || recipe.slug.startsWith("ai-")) href = `/dashboard/moje-przepisy/${recipe.slug}`;
