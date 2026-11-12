@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
-import {
-  ArrowLeftIcon,
-  ScanLineIcon,
-  SparklesIcon,
-} from "lucide-react";
+import { ArrowLeftIcon, ScanLineIcon, SparklesIcon } from "lucide-react";
 
 import { LoginForm } from "@/components/auth/login-form";
-import { BrandIcon, BrandWordmark } from "@/components/brand-icon";
-import { LanguageSwitcher } from "@/components/language-switcher";
+import { PublicShell } from "@/components/marketing/public-shell";
 import { createClient } from "@/lib/supabase/server";
 import { safeAuthPath } from "@/lib/auth-next";
 
@@ -37,63 +33,28 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const initialError = params.error ? t("errors.oauth") : undefined;
 
   return (
-    <main className="grid min-h-dvh lg:grid-cols-[0.9fr_1.1fr]">
-      <section className="relative hidden overflow-hidden bg-surface-strong p-10 text-surface-strong-foreground lg:flex lg:flex-col">
-        <div className="strong-grid absolute inset-0" />
-        <Link
-          href="/"
-          className="relative flex items-center gap-1"
-        >
-          <BrandIcon name="logo" className="size-12" />
-          <BrandWordmark className="text-[1.65rem]" />
-        </Link>
-
-        <div className="relative my-auto max-w-lg py-12">
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-surface-strong-accent">
-            {t("eyebrow")}
-          </p>
-          <h2 className="mt-4 text-5xl font-extrabold leading-tight tracking-[-0.045em]">
-            {t("sideTitle")}
-          </h2>
-          <div className="mt-10 space-y-4 text-surface-strong-foreground/75">
-            <p className="flex items-center gap-3">
-              <ScanLineIcon
-                className="size-5 text-surface-strong-accent"
-                aria-hidden="true"
-              />
-              {t("receiptBenefit")}
-            </p>
-            <p className="flex items-center gap-3">
-              <SparklesIcon
-                className="size-5 text-surface-strong-accent"
-                aria-hidden="true"
-              />
-              {t("ideasBenefit")}
-            </p>
+    <PublicShell showStart={false}>
+      <div className="marketing-container grid min-h-[calc(100dvh-80px)] items-center gap-10 py-10 lg:grid-cols-[1fr_0.9fr] lg:gap-20 lg:py-20">
+        <section className="order-2 lg:order-1">
+          <p className="marketing-kicker">{t("eyebrow")}</p>
+          <h2 className="marketing-display mt-4 max-w-xl text-[clamp(2.8rem,5vw,5.3rem)] leading-[1.02] tracking-[-0.065em]">{t("sideTitle")}</h2>
+          <div className="marketing-login-photo mt-9">
+            <Image src="/recipes/miska-z-ciecierzyca.webp" alt="" fill sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
+            <div className="marketing-hero-shade" />
+            <div className="absolute inset-x-0 bottom-0 space-y-3 p-6 text-sm font-semibold text-white sm:p-8">
+              <p className="flex items-center gap-3"><ScanLineIcon className="size-5 shrink-0 text-[#d1ebbc]" aria-hidden="true" />{t("receiptBenefit")}</p>
+              <p className="flex items-center gap-3"><SparklesIcon className="size-5 shrink-0 text-[#d1ebbc]" aria-hidden="true" />{t("ideasBenefit")}</p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="flex min-h-dvh flex-col p-5 sm:p-8 lg:p-10">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="flex min-h-11 items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeftIcon className="size-4" aria-hidden="true" />
-            {t("home")}
-          </Link>
-          <div className="flex items-center gap-2">
-            <LanguageSwitcher compact />
-          </div>
-        </div>
-
-        <div className="my-auto w-full py-12">
-          <div className="app-card mx-auto max-w-md p-6 sm:p-8">
+        <section className="order-1 lg:order-2">
+          <div className="marketing-login-form mx-auto w-full max-w-lg">
+            <Link href="/" className="mb-8 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-[#55735a] hover:text-[#203a2b]"><ArrowLeftIcon className="size-4" aria-hidden="true" />{t("home")}</Link>
             <LoginForm initialError={initialError} nextPath={nextPath} />
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </div>
+    </PublicShell>
   );
 }

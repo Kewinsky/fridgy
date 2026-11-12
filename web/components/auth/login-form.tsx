@@ -244,7 +244,7 @@ export function LoginForm({ initialError, nextPath = "/dashboard" }: LoginFormPr
       <Button
         type="button"
         variant="outline"
-        className="h-12 w-full text-base"
+        className="marketing-auth-google h-12 w-full text-base"
         disabled={pending}
         onClick={signInWithGoogle}
       >

@@ -1,4 +1,13 @@
 .marketing {
+  --background: #f6f5ee;
+  --foreground: #203a2b;
+  --primary: #28553c;
+  --primary-foreground: #fffef8;
+  --muted: #e8eee4;
+  --muted-foreground: #5b6b5e;
+  --border: #dce3d6;
+  --input: #cbd8c7;
+  --ring: #739c69;
   background: #f6f5ee;
   color: #203a2b;
 }
@@ -200,6 +209,65 @@
   border-color: #214432;
   background: #214432;
   color: #fffef8;
+}
+
+.marketing-login-photo {
+  position: relative;
+  overflow: hidden;
+  min-height: 440px;
+  border-radius: 180px 180px 22px 22px;
+  background: #38452b;
+}
+
+.marketing-login-form {
+  border: 1px solid #dce3d6;
+  border-radius: 24px;
+  background: #fffef8;
+  padding: clamp(26px, 4vw, 48px);
+  box-shadow: 0 20px 60px rgb(32 58 43 / 7%);
+}
+
+.marketing-login-form h1 {
+  color: #203a2b;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  font-weight: 500;
+  letter-spacing: -0.05em;
+}
+
+.marketing-login-form [data-slot="input"] {
+  border-color: #cbd8c7;
+  border-radius: 12px;
+  background: #fff;
+  color: #203a2b;
+}
+
+.marketing-login-form [data-slot="input"]:focus-visible {
+  border-color: #739c69;
+  box-shadow: 0 0 0 3px rgb(115 156 105 / 25%);
+}
+
+.marketing-login-form [data-slot="button"][type="submit"] {
+  border-radius: 999px;
+  background: #28553c;
+  color: #fffef8;
+  font-weight: 700;
+}
+
+.marketing-login-form [data-slot="button"][type="submit"]:hover {
+  background: #1c3e2b;
+}
+
+.marketing-login-form .marketing-auth-google {
+  border-color: #cbd8c7;
+  border-radius: 999px;
+  background: transparent;
+  color: #28553c;
+  font-weight: 700;
+}
+
+.marketing-login-form .marketing-auth-google:hover {
+  background: #e8eee4;
 }
 
 .marketing-billing-option {

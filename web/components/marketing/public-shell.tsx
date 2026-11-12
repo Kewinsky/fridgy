@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { BrandIcon, BrandWordmark } from "@/components/brand-icon";
 import { LanguageSwitcher } from "@/components/language-switcher";
 
-export async function PublicShell({ children }: { children: ReactNode }) {
+export async function PublicShell({ children, showStart = true }: { children: ReactNode; showStart?: boolean }) {
   const t = await getTranslations("Marketing");
   return (
     <div className="marketing min-h-dvh">
@@ -23,9 +23,11 @@ export async function PublicShell({ children }: { children: ReactNode }) {
           </nav>
           <div className="flex items-center gap-2 sm:gap-3">
             <LanguageSwitcher compact />
-            <Link href="/login" className="marketing-button marketing-button-small">
-              {t("start")}<ArrowUpRightIcon className="size-4" aria-hidden="true" />
-            </Link>
+            {showStart ? (
+              <Link href="/login" className="marketing-button marketing-button-small">
+                {t("start")}<ArrowUpRightIcon className="size-4" aria-hidden="true" />
+              </Link>
+            ) : null}
           </div>
         </div>
       </header>
