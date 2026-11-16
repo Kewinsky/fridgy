@@ -461,6 +461,14 @@
     "restoreSelected": "Restore selected",
     "selectProduct": "Select {name}",
     "productCount": "{count, plural, one {# product} other {# products}}",
+    "sort": {
+      "label": "Sort products",
+      "default": "Default order",
+      "nameAsc": "Name: A–Z",
+      "nameDesc": "Name: Z–A",
+      "expiryAsc": "Use-by: soonest",
+      "expiryDesc": "Use-by: latest"
+    },
     "pagination": {
       "rowsPerPage": "Per page",
       "range": "{start}–{end} of {count}",

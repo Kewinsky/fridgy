@@ -204,7 +204,7 @@ export function PreferenceCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className={`app-card grid items-center gap-5 p-5 md:grid-cols-2 ${className}`}>
+    <section className={`app-card grid items-start gap-5 p-5 md:grid-cols-2 ${className}`}>
       <div className="min-w-0">
         <h3 className="text-sm font-medium">{title}</h3>
         {description ? <p className="mt-1 text-xs leading-5 text-muted-foreground">{description}</p> : null}
@@ -220,12 +220,14 @@ export function SettingsDropdown({
   value: controlledValue,
   onValueChange,
   options,
+  widthClassName,
 }: {
   ariaLabel: string;
   defaultValue?: string;
   value?: string;
   onValueChange?: (value: string) => void;
   options: Array<{ value: string; label: string }>;
+  widthClassName?: string;
 }) {
   const [localValue, setValue] = useState(defaultValue ?? options[0]?.value ?? "");
   const value = controlledValue ?? localValue;
@@ -239,7 +241,7 @@ export function SettingsDropdown({
             <Button
               type="button"
               variant="outline"
-              className="h-11 w-fit max-w-full justify-between px-3 font-normal"
+              className={`h-11 max-w-full justify-between px-3 font-normal ${widthClassName ?? "w-fit"}`}
               aria-label={ariaLabel}
             >
               <span className="truncate">{selectedLabel}</span>

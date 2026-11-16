@@ -461,6 +461,14 @@
     "restoreSelected": "Ausgewählte wiederherstellen",
     "selectProduct": "{name} auswählen",
     "productCount": "{count, plural, one {# Produkt} other {# Produkte}}",
+    "sort": {
+      "label": "Produkte sortieren",
+      "default": "Standardreihenfolge",
+      "nameAsc": "Produktname: A–Z",
+      "nameDesc": "Produktname: Z–A",
+      "expiryAsc": "Datum: frühestes zuerst",
+      "expiryDesc": "Datum: spätestes zuerst"
+    },
     "pagination": {
       "rowsPerPage": "Pro Seite",
       "range": "{start}–{end} von {count}",

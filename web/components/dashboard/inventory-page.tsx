@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import {
+  ArrowDownUpIcon,
   CheckCheckIcon,
   CheckIcon,
   ChefHatIcon,
@@ -70,6 +71,7 @@ import {
 import { cn } from "@/lib/utils";
 import { paginate } from "@/lib/pagination";
 import { matchesInventoryFilters } from "@/lib/inventory-filters";
+import { inventorySorts, sortInventoryProducts, type InventorySort } from "@/lib/inventory-sort";
 import { mergeShoppingItems } from "@/lib/shopping-list";
 
 const locations = ["Lodówka", "Zamrażarka", "Spiżarnia"] as const;
@@ -99,6 +101,7 @@ export function InventoryPage({
   );
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [sortMode, setSortMode] = useState<InventorySort>("default");
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
   const [expandedProductId, setExpandedProductId] = useState<string | null>(
@@ -134,7 +137,7 @@ export function InventoryPage({
   const consumedCount = products.length - activeProducts.length;
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase(locale);
-    return products.filter(
+    const matched = products.filter(
       (product) =>
         matchesInventoryFilters(
           product,
@@ -147,6 +150,7 @@ export function InventoryPage({
           .name.toLocaleLowerCase(locale)
           .includes(normalizedQuery),
     );
+    return sortInventoryProducts(matched, sortMode, locale);
   }, [
     locale,
     products,
@@ -154,6 +158,7 @@ export function InventoryPage({
     selectedCategories,
     selectedFreshness,
     selectedLocations,
+    sortMode,
     tab,
   ]);
   const {
@@ -605,27 +610,38 @@ export function InventoryPage({
             className="app-card px-5"
             aria-busy={tableLoading}
           >
-            <div className="flex items-center justify-between border-b border-border py-4">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border py-4">
               <h2 className="flex flex-wrap items-baseline gap-x-2 font-extrabold">
                 {listTitle}
                 <span className="text-xs font-normal text-muted-foreground">
                   ({t("productCount", { count: filtered.length })})
                 </span>
               </h2>
-              {tab === "active" ? (
-                <Button
-                  variant={editing ? "secondary" : "outline"}
-                  className="h-11"
-                  onClick={toggleEditing}
-                >
-                  {editing ? (
-                    <XIcon aria-hidden="true" />
-                  ) : (
-                    <PencilIcon aria-hidden="true" />
-                  )}
-                  {editing ? t("cancel") : t("edit")}
-                </Button>
-              ) : null}
+              <div className="flex flex-wrap items-center gap-2">
+                <DropdownMenu>
+                  <DropdownMenuTrigger render={<Button type="button" variant="outline" className="h-11" aria-label={t("sort.label")} />}>
+                    <ArrowDownUpIcon aria-hidden="true" /> {t(`sort.${sortMode}`)} <ChevronDownIcon aria-hidden="true" />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="min-w-56">
+                    {inventorySorts.map((value) => (
+                      <DropdownMenuItem key={value} onClick={() => { setSortMode(value); setPage(1); }}>
+                        <span className="flex-1">{t(`sort.${value}`)}</span>
+                        {sortMode === value ? <CheckIcon aria-hidden="true" /> : null}
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                {tab === "active" ? (
+                  <Button
+                    variant={editing ? "secondary" : "outline"}
+                    className="h-11"
+                    onClick={toggleEditing}
+                  >
+                    {editing ? <XIcon aria-hidden="true" /> : <PencilIcon aria-hidden="true" />}
+                    {editing ? t("cancel") : t("edit")}
+                  </Button>
+                ) : null}
+              </div>
             </div>
             {tableLoading ? (
               <InventoryTableSkeleton />

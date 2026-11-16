@@ -58,7 +58,7 @@ export default async function SettingsPage() {
       <SettingsTabs
         general={
           <div className="space-y-5">
-            <section className="app-card grid items-center gap-5 p-5 md:grid-cols-2">
+            <section className="app-card grid items-start gap-5 p-5 md:grid-cols-2">
               <div className="min-w-0">
                 <h2 className="text-sm font-medium">{t("language")}</h2>
                 <p className="mt-1 text-xs leading-5 text-muted-foreground">{t("languageDescription")}</p>
@@ -67,7 +67,7 @@ export default async function SettingsPage() {
                 <LanguageSwitcher />
               </div>
             </section>
-            <section className="app-card grid items-center gap-5 p-5 md:grid-cols-2">
+            <section className="app-card grid items-start gap-5 p-5 md:grid-cols-2">
               <div className="min-w-0">
                 <h2 className="text-sm font-medium">{t("theme")}</h2>
                 <p className="mt-1 text-xs leading-5 text-muted-foreground">{t("themeDescription")}</p>
@@ -76,7 +76,7 @@ export default async function SettingsPage() {
                 <ThemeSettings />
               </div>
             </section>
-            <section className="app-card grid items-center gap-5 p-5 md:grid-cols-2">
+            <section className="app-card grid items-start gap-5 p-5 md:grid-cols-2">
               <div className="min-w-0">
                 <h2 className="text-sm font-medium">{t("palette.title")}</h2>
                 <p className="mt-1 text-xs leading-5 text-muted-foreground">{t("palette.description")}</p>

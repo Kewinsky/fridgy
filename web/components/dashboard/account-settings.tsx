@@ -660,7 +660,7 @@ function SettingsCard({
   children: React.ReactNode;
 }) {
   return (
-    <section className="app-card grid items-center gap-5 p-5 md:grid-cols-2">
+    <section className="app-card grid items-start gap-5 p-5 md:grid-cols-2">
       <div className="min-w-0">
         <h3 className="text-sm font-medium">{title}</h3>
         <p className="mt-1 text-xs leading-5 text-muted-foreground">{description}</p>

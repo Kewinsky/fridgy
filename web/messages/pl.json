@@ -538,6 +538,14 @@
     "restoreSelected": "Przywróć zaznaczone",
     "selectProduct": "Zaznacz {name}",
     "productCount": "{count, plural, one {# produkt} few {# produkty} other {# produktów}}",
+    "sort": {
+      "label": "Sortuj produkty",
+      "default": "Domyślna kolejność",
+      "nameAsc": "Nazwa: A–Z",
+      "nameDesc": "Nazwa: Z–A",
+      "expiryAsc": "Termin: najbliższy",
+      "expiryDesc": "Termin: najdalszy"
+    },
     "pagination": {
       "rowsPerPage": "Na stronie",
       "range": "{start}–{end} z {count}",

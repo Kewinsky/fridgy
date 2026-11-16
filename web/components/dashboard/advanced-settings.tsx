@@ -3,15 +3,17 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { Trash2Icon } from "lucide-react";
+import { ChevronDownIcon, Trash2Icon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { resetDemoData, saveProfileSetting, type ProfileSettings } from "@/app/dashboard/settings-actions";
 
 import { PreferenceCard, SettingsDropdown } from "@/components/dashboard/preference-settings";
+import { ProductRowDetails } from "@/components/dashboard/product-row-details";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { inventoryViews } from "@/lib/inventory-view";
+import { demoProducts } from "@/lib/demo-data";
 import {
   Dialog,
   DialogClose,
@@ -59,8 +61,15 @@ export function AdvancedSettings({ version, initialSettings, isHouseholdOwner }:
           ariaLabel={t("inventoryView.title")}
           value={settings.inventory_view}
           onValueChange={(value) => void save("inventory_view", value as ProfileSettings["inventory_view"])}
+          widthClassName="w-52"
           options={inventoryViews.map((value) => ({ value, label: t(`inventoryView.options.${value}`) }))}
         />
+        <div className="mt-4 rounded-lg border border-border px-3">
+          <div className={`flex min-w-0 items-center gap-3 ${settings.inventory_view === "compact" ? "py-2.5" : "py-3.5"}`}>
+            <ProductRowDetails product={{ ...demoProducts[9], estimatedUseBy: "2030-04-10", isDemo: true }} view={settings.inventory_view} />
+            {settings.inventory_view === "compact" ? <ChevronDownIcon className="size-4 shrink-0 text-muted-foreground" aria-hidden="true" /> : null}
+          </div>
+        </div>
       </PreferenceCard>
 
       {isHouseholdOwner ? (

@@ -17,6 +17,7 @@ export function ThemeSettings() {
       ariaLabel={settingsT("theme")}
       value={theme ?? "system"}
       onValueChange={setTheme}
+      widthClassName="w-48"
       options={themes.map((value) => ({ value, label: t(value) }))}
     />
   );
