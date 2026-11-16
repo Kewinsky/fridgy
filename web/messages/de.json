@@ -203,15 +203,6 @@
           "never": "Nicht abziehen",
           "ask": "Immer nachfragen"
         }
-      },
-      "receipt": {
-        "title": "Produkte vom Kassenbon",
-        "description": "Wähle, was nach dem Scannen eines Kassenbons geschieht.",
-        "label": "Nach dem Scannen",
-        "options": {
-          "automatic": "Automatisch hinzufügen",
-          "review": "Zuerst Prüfung verlangen"
-        }
       }
     },
     "account": {

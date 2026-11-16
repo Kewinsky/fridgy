@@ -203,15 +203,6 @@
           "never": "Do not deduct",
           "ask": "Always ask"
         }
-      },
-      "receipt": {
-        "title": "Receipt products",
-        "description": "Choose what happens after a receipt is scanned.",
-        "label": "After scanning",
-        "options": {
-          "automatic": "Add automatically",
-          "review": "Require review first"
-        }
       }
     },
     "account": {

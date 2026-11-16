@@ -280,15 +280,6 @@
           "never": "Nie odejmuj",
           "ask": "Zawsze pytaj"
         }
-      },
-      "receipt": {
-        "title": "Produkty z paragonu",
-        "description": "Wybierz, co ma się wydarzyć po odczytaniu paragonu.",
-        "label": "Po zeskanowaniu",
-        "options": {
-          "automatic": "Dodaj automatycznie",
-          "review": "Najpierw wymagaj weryfikacji"
-        }
       }
     },
     "account": {

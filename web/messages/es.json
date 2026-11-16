@@ -203,15 +203,6 @@
           "never": "No descontar",
           "ask": "Preguntar siempre"
         }
-      },
-      "receipt": {
-        "title": "Productos del recibo",
-        "description": "Elige qué sucede después de escanear un recibo.",
-        "label": "Después de escanear",
-        "options": {
-          "automatic": "Añadir automáticamente",
-          "review": "Exigir revisión primero"
-        }
       }
     },
     "account": {

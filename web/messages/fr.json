@@ -203,15 +203,6 @@
           "never": "Ne pas déduire",
           "ask": "Toujours demander"
         }
-      },
-      "receipt": {
-        "title": "Produits du reçu",
-        "description": "Choisissez ce qui se passe après la lecture d'un reçu.",
-        "label": "Après la lecture",
-        "options": {
-          "automatic": "Ajouter automatiquement",
-          "review": "Demander une vérification"
-        }
       }
     },
     "account": {

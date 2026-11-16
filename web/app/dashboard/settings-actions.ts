@@ -18,7 +18,6 @@ const profileSettings = z.object({
   allergies: z.string().max(500).refine((value) => !value || value.split(",").every((allergen) => recipeAllergens.includes(allergen as typeof recipeAllergens[number]))),
   excluded_ingredients: z.string().max(500),
   deduction_mode: z.enum(["always", "never", "ask"]),
-  receipt_mode: z.enum(["automatic", "review"]),
   date_format: z.enum(["DD.MM.YYYY", "DD/MM/YYYY", "YYYY-MM-DD"]),
   inventory_view: z.enum(inventoryViews),
   preferred_cuisines: z.array(z.string().max(50)).max(20),
@@ -31,7 +30,6 @@ const preferenceSettings = profileSettings.pick({
   allergies: true,
   excluded_ingredients: true,
   deduction_mode: true,
-  receipt_mode: true,
 });
 export type PreferenceSettingsValues = z.infer<typeof preferenceSettings>;
 

@@ -35,7 +35,6 @@ function getPreferences(settings: ProfileSettings): PreferenceSettingsValues {
     allergies: parseSelectedAllergens(settings.allergies).join(","),
     excluded_ingredients: settings.excluded_ingredients,
     deduction_mode: settings.deduction_mode,
-    receipt_mode: settings.receipt_mode,
   };
 }
 
@@ -169,20 +168,6 @@ export function PreferenceSettings({ initialSettings }: { initialSettings: Profi
           />
         </PreferenceCard>
 
-        <PreferenceCard
-          title={t("receipt.title")}
-          description={t("receipt.description")}
-        >
-          <SettingsDropdown
-            ariaLabel={t("receipt.label")}
-            value={settings.receipt_mode}
-            onValueChange={(value) => setSettings((current) => ({ ...current, receipt_mode: value as PreferenceSettingsValues["receipt_mode"] }))}
-            options={(["automatic", "review"] as const).map((value) => ({
-              value,
-              label: t(`receipt.options.${value}`),
-            }))}
-          />
-        </PreferenceCard>
       </div>
       <div className="mt-5 flex justify-end gap-2">
         <Button type="button" variant="outline" className="h-11" disabled={!hasChanges || isPending} onClick={() => setSettings(savedSettings)}>{t("cancel")}</Button>
