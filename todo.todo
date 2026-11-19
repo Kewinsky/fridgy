@@ -1,16 +1,16 @@
 # Fridgy – lista przed produkcją
 
-Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supabase i testów. `[ ]` oznacza zadanie otwarte. P0 blokuje publiczne uruchomienie danej funkcji; P1 to warunek stabilnego produktu. Zadania mobilne obowiązują przed wydaniem aplikacji mobilnej.
+Stan na 2026-11-19. Lista powstała z przeglądu kodu web, mobile, migracji Supabase i testów. `[ ]` oznacza zadanie otwarte. P0 blokuje publiczne uruchomienie danej funkcji; P1 to warunek stabilnego produktu. Zadania mobilne obowiązują przed wydaniem aplikacji mobilnej.
 
 ## Co dziś jest demonstracją lub nie ma pełnej logiki
 
 - **Zapasy i lista zakupów:** zapisują się w Supabase i można je edytować. Przy dodawaniu domostwa użytkownik wybiera pusty start lub kilka oznaczonych danych testowych, które właściciel może później usunąć.
 - **Przepisy:** sześć przepisów w `web/lib/demo-recipes.ts` nadal zasila część widoków. Przepisy własne i AI, ulubione oraz historia są przypisane do domostwa i wspólne dla jego członków. Włączenie danych demonstracyjnych dodaje zapasy, zakupy i – przy pierwszym włączeniu na koncie – trzy przepisy w „Moje”: śniadanie, obiad i deser. Czysty start nie dodaje tych danych.
 - **Pulpit:** pokazuje aktywne domostwo, dzienny pomysł AI, produkty z bliskim terminem i zużyte produkty do ponownego zakupu.
-- **„Co ugotować?”:** wysyła odpowiedzi formularza, liczbę porcji, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Późniejsze skalowanie przepisu nie jest planowane; nadal brakuje wspólnego źródła przepisów dla pulpitu.
-- **Dodawanie z paragonu:** zdjęcie jest analizowane przez AI, a rozpoznane produkty można poprawić przed dodaniem do zapasów. AI szacuje datę użycia na podstawie produktu i miejsca przechowywania; termin z opakowania trzeba zweryfikować. Skan wymaga klucza OpenAI. Limity żądań są zaplanowane osobno.
+- **„Co ugotować?”:** wysyła odpowiedzi formularza, liczbę porcji, zapasy i preferencje do AI. Wygenerowane przepisy można później otworzyć z historii. Pulpit zapisuje dzienny pomysł AI w tym samym źródle przepisów. Późniejsze skalowanie przepisu nie jest planowane.
+- **Dodawanie z paragonu:** zdjęcie jest analizowane przez AI, a rozpoznane produkty można poprawić przed dodaniem do zapasów. AI szacuje datę użycia na podstawie produktu i miejsca przechowywania; termin z opakowania trzeba zweryfikować. Skan wymaga klucza OpenAI. Brakuje limitu liczby żądań, a interfejs utrzymuje ekran analizy przez co najmniej 4,8 sekundy także po otrzymaniu odpowiedzi.
 - **Import przepisu z linku:** próbuje odczytać publiczny opis z Instagrama, Facebooka, TikToka lub YouTube i przygotowuje edytowalny przepis do zapisania w „Moje”. Gdy opis jest niedostępny lub nie zawiera składników i kroków, pokazuje odpowiedni komunikat. Nie analizuje filmu ani dźwięku; zdjęcie użytkownik dodaje sam.
-- **Ustawienia:** format daty wpływa na widok terminów produktów, kalendarz i historię gotowania. Waluta i cena z paragonu zostały usunięte. Dni powiadomień, tryb paragonu i zgody zapisują się, ale nie mają podłączonego działania. Preferowane kuchnie istnieją w profilu, lecz nie są używane.
+- **Ustawienia:** format daty wpływa na widok terminów produktów, kalendarz i historię gotowania. Waluta, cena z paragonu oraz zgody na analitykę i personalizację zostały usunięte. Dni powiadomień zapisują się, ale nie uruchamiają wysyłki. Kolumny trybu paragonu i preferowanych kuchni nadal istnieją w schemacie, choć nie są używane przez interfejs; kuchnię wybiera się podczas szukania przepisu.
 - **Mobile:** zawiera tylko ekran „Ready for development” i konfigurację klienta Supabase (`mobile/src/app/index.tsx`).
 
 ## Funkcje produktu
@@ -21,16 +21,19 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - [x] Ustalić źródło przepisów poza sześcioma pozycjami w kodzie: katalog, przepisy użytkownika i/lub generowanie. Zapewnić zapis, ponowne otwarcie i historię przepisów wygenerowanych; inaczej link i historia mogą prowadzić do nieistniejącego dania.
 - [x] Dodać oznaczenie rodzaju posiłku do przepisów albo obsłużyć je w generatorze. Obecne przepisy nie mają tej cechy, więc pytanie o śniadanie/obiad/kolację nie może ich wiarygodnie filtrować.
 - [x] Przekazywać wybraną liczbę porcji do AI i używać ilości składników z wygenerowanego przepisu przy wyliczaniu braków oraz sugerowanych odjęć. Późniejsze skalowanie zapisanego przepisu nie jest planowane.
-- [x] Podłączyć skan paragonu do OCR/analizy obrazu z rzeczywistym przesyłaniem pliku, obsługą błędów i ekranem korekty przed zapisem. Usunąć podstawianie przykładowych produktów i pozorny postęp analizy.
+- [x] Podłączyć skan paragonu do analizy obrazu z rzeczywistym przesyłaniem pliku, obsługą błędów i ekranem korekty przed zapisem. Usunąć podstawianie przykładowych produktów.
 - [x] Wdrożyć import przepisu z URL dla publicznych opisów postów na Instagramie, Facebooku, TikToku i YouTube: pobranie opisu, ekstrakcję, edytowalny podgląd, obsługę błędów i zapis. Film, dźwięk i miniatura nie są importowane.
 - [x] Oznaczyć testowe produkty, zakupy i przepisy. Usunięcie danych testowych kasuje rekordy `is_demo = true` w bieżącym domostwie oraz przykładowe przepisy użytkownika. Edytowany rekord demo pozostaje testowy.
 - [x] Usunąć nieużywaną walutę i ceny z paragonów; zastosować wybrany format daty w zapasach, na pulpicie, w kalendarzu i historii gotowania. Migracja usuwa kolumnę waluty i stare ceny z zapisanych paragonów.
+- [x] Dodać kod dołączenia do domostwa, prośbę o dostęp, zatwierdzanie lub odrzucanie przez właściciela, zmianę kodu i podgląd domowników.
+- [x] Wymagać przekazania własności domostwa innemu członkowi przed usunięciem konta właściciela, gdy w domostwie pozostają inni członkowie. Blokować usunięcie konta do czasu przekazania własności.
+- [x] Usunąć nieużywane zgody na analitykę i personalizację z ustawień oraz profilu.
+- [x] Dodać linki z formularza logowania do stron zasad korzystania i prywatności.
 
 ### Web – do zrobienia (P1)
 
 - [ ] Wprowadzić wysyłanie powiadomień o terminach produktów albo usunąć ustawienie dni powiadomień. Dodać zgody na kanał, strefę czasową, harmonogram, deduplikację i rezygnację.
-- [ ] Podłączyć preferowane kuchnie i zgodę na personalizację do doboru przepisów.
-- [ ] Doprowadzić zapraszanie domowników do końca: wysyłać zaproszenie lub jasno opisać ręczne udostępnienie linku; umożliwić podgląd i odwołanie zaproszeń oraz obsłużyć wygasłe linki.
+- [ ] Usunąć nieużywane kolumny `preferred_cuisines` i `receipt_mode` z profilu po sprawdzeniu, czy żaden klient ich nie odczytuje.
 - [ ] Poprawić dopasowanie składników do zapasów: odmiany nazw, języki, jednostki i przeliczenia, produkty o podobnych nazwach oraz kilka opakowań tego samego składnika. Pokazać użytkownikowi, czego system nie dopasował.
 
 ### Mobile – jeśli wchodzi do pierwszego wydania
@@ -45,18 +48,17 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 
 - [x] Przy integracji AI sprawdzać dane na serwerze: limit długości uwag, dozwolone wartości odpowiedzi, limit kosztu i czasu żądania. Przekazywać uwagi jako dane użytkownika, nie instrukcje systemowe; walidować strukturę i skład każdej odpowiedzi przed pokazaniem lub zapisaniem.
 - [x] Ograniczyć pobieranie dla importu przepisów do znanych domen HTTPS, odrzucać przekierowania oraz ograniczyć rozmiar odpowiedzi i czas żądania. Przed obsługą dowolnych stron WWW potrzebna będzie osobna kontrola adresów i DNS.
-- [ ] Traktować alergie i wymagania diety jako twarde ograniczenia rekomendacji. Nie proponować dań z wykrytym konfliktem; przy brakujących lub niepewnych danych jasno pokazać „nie można potwierdzić”, bez obietnicy bezpieczeństwa. Obecna strona „Co ugotować?” tylko przesuwa konflikty na koniec listy.
+- [ ] Ustalić i przetestować sposób prezentacji konfliktów z alergiami i dietą. Zgodnie z decyzją produktu AI może zaproponować danie z alergenem, gdy jest on istotnym składnikiem; taki przepis musi mieć wyraźne ostrzeżenie i nie może być przedstawiany jako bezpieczny. Przy brakujących lub niepewnych danych pokazać, że zgodności nie można potwierdzić.
 - [ ] Zbudować wiarygodne dane o składnikach, alergenach i diecie dla wszystkich typów przepisów, także własnych i generowanych. Nie wywodzić bezpieczeństwa wyłącznie z nazwy potrawy; uwzględnić skład konkretnych produktów i ostrzeżenie o kontakcie z alergenami.
 - [ ] Przetestować RLS i uprawnienia Supabase dla dwóch gospodarstw i kilku domowników, w tym dostęp do zapasów, paragonów, przepisów, zdjęć, zaproszeń i funkcji SQL `security definer`. Testować bezpośrednie żądania do API, nie tylko ukryte przyciski.
 - [ ] Dodać limity nadużyć dla logowania, zaproszeń, analiz paragonów, generowania AI i wysyłania plików; ograniczyć koszt, liczbę żądań i rozmiar danych na użytkownika.
 - [ ] Walidować przesyłane obrazy na zaufanej granicy, usuwać zbędne metadane i bezpiecznie obsługiwać uszkodzone pliki. Obecna kontrola sygnatury obrazu przepisu i zdjęcia profilu działa w przeglądarce, którą można ominąć.
-- [ ] Przetestować usuwanie konta na Supabase z kilkoma domami i domownikami. Kod wymaga przekazania własności wspólnego domu, zachowuje jego przepisy i przenosi ich obrazy, a prywatne pliki usuwa po skasowaniu konta. Zweryfikować także sprzątanie Storage przy awarii usługi.
+- [ ] Przetestować na Supabase przekazanie własności i usuwanie konta właściciela z kilkoma domami oraz domownikami. Potwierdzić, że usunięcie konta jest blokowane, dopóki własność każdego współdzielonego domostwa nie zostanie przekazana. Zweryfikować zachowanie współdzielonych przepisów, ich obrazów oraz sprzątanie Storage przy awarii usługi.
 
 ## P1 – spójność danych i jakość
 
-- [ ] Sprawić, by zgoda na analitykę faktycznie sterowała zbieraniem danych; bez analityki usunąć martwe ustawienie.
-- [ ] Usunąć ryzyko nadpisania zmian przy równoczesnej pracy domowników i kart przeglądarki. Aktualizacje zapasów, listy zakupów i całej biblioteki przepisów używają lokalnej kopii stanu; potrzebne są operacje atomowe lub kontrola wersji.
-- [ ] Zastąpić demonstracyjne wartości odżywcze danymi ze wskazanym źródłem albo nie pokazywać ich jako pewnych. Sprawdzić ich zmianę po przeskalowaniu porcji.
+- [ ] Usunąć ryzyko nadpisania zmian przy równoczesnej pracy domowników i kart przeglądarki. Aktualizacje zapasów i listy zakupów korzystają z lokalnej kopii stanu; potrzebne są operacje atomowe lub kontrola wersji.
+- [ ] Zastąpić demonstracyjne wartości odżywcze danymi ze wskazanym źródłem albo wyraźnie oznaczyć je jako szacunkowe.
 - [x] Uzupełnić tłumaczenia w pięciu językach i sprawdzać w teście klucze, identyczne angielskie wpisy oraz zmienne interpolacji. Przetłumaczyć tytuły, składniki i kroki sześciu przepisów demonstracyjnych oraz trzech niezmienionych przepisów testowych; wyświetlać jednostki w języku interfejsu bez zmiany zapisanych danych. Treści przepisów dodanych lub zmienionych przez użytkownika pozostają w języku autora.
 - [ ] Sprawdzić eksport danych użytkownika: kompletność, poprawność po imporcie, zakres danych współdzielonego domu i bezpieczne pobieranie. Udokumentować zasady przechowywania i usuwania danych.
 
@@ -74,7 +76,7 @@ Stan na 2026-11-10. Lista powstała z przeglądu kodu web, mobile, migracji Supa
 - [ ] Przygotować powtarzalne wdrożenie migracji, kopie zapasowe oraz próbę odtworzenia danych. Zweryfikować środowisko produkcyjne Supabase, Storage, OAuth i zmienne środowiskowe.
 - [ ] Dodać monitoring błędów i metryki jakości dla OCR/AI, zapisów, zaproszeń i synchronizacji; nie wysyłać treści paragonów, alergii ani tokenów do logów bez potrzeby.
 - [ ] Przeprowadzić przegląd konfiguracji produkcyjnej: domeny przekierowań, nagłówki bezpieczeństwa, polityka treści, sekrety, zależności, limity Storage i plan reakcji na incydent.
-- [ ] Dodać działające linki do zasad korzystania i informacji o prywatności przed zbieraniem danych. Obecny tekst przy logowaniu mówi o akceptacji zasad, ale nie prowadzi do dokumentu.
+- [ ] Uzupełnić treść zasad korzystania i informacji o prywatności przed zbieraniem danych. Linki z formularza logowania już prowadzą do tych stron, ale dokumenty zawierają tekst zastępczy.
 
 ## Mobile – przed wydaniem aplikacji mobilnej
 
