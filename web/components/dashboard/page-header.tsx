@@ -3,12 +3,10 @@ import type { ReactNode } from "react";
 export function PageHeader({
   eyebrow,
   title,
-  description,
   actions,
 }: {
   eyebrow?: string;
   title: string;
-  description?: string;
   actions?: ReactNode;
 }) {
   return (
@@ -20,11 +18,6 @@ export function PageHeader({
           </p>
         ) : null}
         <h1 className="marketing-display text-[clamp(2.5rem,4vw,4rem)] leading-[1.02] tracking-[-0.06em]">{title}</h1>
-        {description ? (
-          <p className="mt-3 max-w-2xl text-base leading-7 text-muted-foreground">
-            {description}
-          </p>
-        ) : null}
       </div>
       {actions ? <div className="flex shrink-0 gap-2">{actions}</div> : null}
     </header>

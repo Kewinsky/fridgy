@@ -37,7 +37,6 @@ export function RecipeLibraryPage() {
       <PageHeader
         eyebrow={t("eyebrow")}
         title={t("title")}
-        description={t("description")}
         actions={isHouseholdOwner ? <AddRecipeDialog /> : null}
       />
 

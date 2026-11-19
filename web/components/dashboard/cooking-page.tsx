@@ -94,7 +94,6 @@ export function CookingPage() {
       <PageHeader
         eyebrow={t("eyebrow")}
         title={t("title")}
-        description={t("description")}
         actions={
           <Button nativeButton={false} render={<Link href="/dashboard/moje-przepisy" />} variant="outline" className="h-11">
             <BookOpenCheckIcon aria-hidden="true" /> {t("myRecipes")}

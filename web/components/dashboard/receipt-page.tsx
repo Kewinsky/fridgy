@@ -226,7 +226,6 @@ export function ReceiptPage() {
         <PageHeader
           eyebrow={t("manual.eyebrow")}
           title={t("analysis.title")}
-          description={t("analysis.description")}
         />
         <section className={receiptCardClassName} aria-label={t("analysis.title")}>
           <div className="mx-auto flex w-full max-w-md flex-1 flex-col items-center justify-center text-center">
@@ -257,7 +256,6 @@ export function ReceiptPage() {
         <PageHeader
           eyebrow={t("review.eyebrow")}
           title={t("review.title")}
-          description={t("review.description")}
           actions={
             <Button
               variant="outline"
@@ -465,7 +463,6 @@ export function ReceiptPage() {
       <PageHeader
         eyebrow={t("manual.eyebrow")}
         title={t("manual.title")}
-        description={t("manual.description")}
       />
       <section className={receiptCardClassName}>
         <div

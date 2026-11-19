@@ -38,9 +38,10 @@ import type { DemoProduct, StorageLocation } from "@/lib/demo-data";
 
 const locations: StorageLocation[] = ["Lodówka", "Zamrażarka", "Spiżarnia"];
 
-function validQuantity(value: string) {
+function validQuantity(value: string, requirePositive: boolean) {
+  if (!value.trim()) return false;
   const quantity = Number(value.replace(",", "."));
-  return Number.isFinite(quantity) && quantity > 0;
+  return Number.isFinite(quantity) && (requirePositive ? quantity > 0 : quantity >= 0);
 }
 
 export function ProductEditDialog({
@@ -64,30 +65,31 @@ export function ProductEditDialog({
   );
   const [location, setLocation] = useState<StorageLocation>(product.storageLocation);
   const [estimatedUseBy, setEstimatedUseBy] = useState(product.estimatedUseBy);
-  const [validationAttempted, setValidationAttempted] = useState(false);
+  const [validationAttempted, setValidationAttempted] = useState<"save" | "restore" | null>(null);
   const [isPending, startTransition] = useTransition();
-  const invalidName = validationAttempted && !name.trim();
-  const invalidQuantity = validationAttempted && !validQuantity(quantity);
-  const invalidUnit = validationAttempted && !unit.trim();
-  const invalidCategory = validationAttempted && !category.trim();
-  const invalidDate = validationAttempted && !estimatedUseBy;
-  let submitLabel = t("save");
-  if (product.status === "consumed") submitLabel = t("restore");
-  if (isPending) submitLabel = common("saving");
+  const invalidName = validationAttempted !== null && !name.trim();
+  const invalidQuantity = validationAttempted !== null && !validQuantity(quantity, product.status === "active" || validationAttempted === "restore");
+  const invalidUnit = validationAttempted !== null && !unit.trim();
+  const invalidCategory = validationAttempted !== null && !category.trim();
+  const invalidDate = validationAttempted !== null && !estimatedUseBy;
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    save(false);
+  }
+
+  function save(restore: boolean) {
     const parsedQuantity = Number(quantity.replace(",", "."));
 
     const firstInvalid = [
       !name.trim() && "product-name",
-      !validQuantity(quantity) && "product-quantity",
+      !validQuantity(quantity, product.status === "active" || restore) && "product-quantity",
       !unit.trim() && "product-unit",
       !category.trim() && "product-category",
       !estimatedUseBy && "product-date",
     ].find(Boolean);
     if (firstInvalid) {
-      setValidationAttempted(true);
+      setValidationAttempted(restore ? "restore" : "save");
       document.getElementById(firstInvalid)?.focus();
       return;
     }
@@ -101,7 +103,7 @@ export function ProductEditDialog({
         category: category.trim(),
         storageLocation: location,
         estimatedUseBy,
-        status: "active",
+        status: restore ? "active" : product.status,
       });
     });
   }
@@ -110,8 +112,8 @@ export function ProductEditDialog({
     <Dialog open onOpenChange={(open) => { if (!open && !isPending) onClose(); }}>
       <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>{t(product.status === "consumed" ? "restoreTitle" : "title")}</DialogTitle>
-          <DialogDescription>{t(product.status === "consumed" ? "restoreDescription" : "description")}</DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <form id="edit-product-form" onSubmit={submit} className="grid gap-4" noValidate>
@@ -196,7 +198,10 @@ export function ProductEditDialog({
 
         <DialogFooter>
           <Button type="button" variant="outline" className="h-11" disabled={isPending} onClick={onClose}>{t("cancel")}</Button>
-          <Button type="submit" form="edit-product-form" className="h-11" disabled={isPending} aria-busy={isPending}>{submitLabel}</Button>
+          {product.status === "consumed" ? (
+            <Button type="button" variant="outline" className="h-11" disabled={isPending} onClick={() => save(true)}>{t("restore")}</Button>
+          ) : null}
+          <Button type="submit" form="edit-product-form" className="h-11" disabled={isPending} aria-busy={isPending}>{isPending ? common("saving") : t("save")}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

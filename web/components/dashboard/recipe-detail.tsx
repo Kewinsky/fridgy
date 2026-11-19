@@ -78,7 +78,6 @@ export function RecipeDetail({
       <PageHeader
         eyebrow={eyebrow ?? t("recipe")}
         title={displayRecipe.title}
-        description={displayRecipe.description}
         actions={
           <Button
             nativeButton={false}

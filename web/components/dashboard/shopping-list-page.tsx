@@ -83,7 +83,6 @@ export function ShoppingListPage() {
       <PageHeader
         eyebrow={t("eyebrow")}
         title={t("title")}
-        description={t("description")}
         actions={
           <>
             <Button variant="outline" className="h-11" onClick={copyList}>

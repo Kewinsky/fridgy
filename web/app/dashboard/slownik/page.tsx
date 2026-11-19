@@ -13,7 +13,7 @@ export default async function MeasureDictionaryPage() {
   const t = await getTranslations("MeasureDictionary");
   return (
     <div>
-      <PageHeader eyebrow={t("eyebrow")} title={t("title")} description={t("description")} />
+      <PageHeader eyebrow={t("eyebrow")} title={t("title")} />
       <div className="app-card max-w-5xl p-4 sm:p-6"><MeasureDictionary /></div>
     </div>
   );

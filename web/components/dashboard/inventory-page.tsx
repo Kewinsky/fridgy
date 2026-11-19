@@ -16,6 +16,7 @@ import {
   RotateCcwIcon,
   SearchIcon,
   ShoppingCartPlusIcon,
+  SlidersHorizontalIcon,
   Trash2Icon,
   XIcon,
 } from "lucide-react";
@@ -102,6 +103,7 @@ export function InventoryPage({
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [sortMode, setSortMode] = useState<InventorySort>("default");
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
   const [expandedProductId, setExpandedProductId] = useState<string | null>(
@@ -135,6 +137,11 @@ export function InventoryPage({
     (product) => product.status === "active",
   );
   const consumedCount = products.length - activeProducts.length;
+  const activeControlCount =
+    selectedLocations.length +
+    selectedCategories.length +
+    selectedFreshness.length +
+    (sortMode === "default" ? 0 : 1);
   const filtered = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase(locale);
     const matched = products.filter(
@@ -150,6 +157,7 @@ export function InventoryPage({
           .name.toLocaleLowerCase(locale)
           .includes(normalizedQuery),
     );
+    if (tab === "consumed") return matched;
     return sortInventoryProducts(matched, sortMode, locale);
   }, [
     locale,
@@ -171,13 +179,6 @@ export function InventoryPage({
   const allVisibleSelected =
     visibleProducts.length > 0 &&
     visibleProducts.every((product) => selectedIds.has(product.id));
-  let listTitle = t("title");
-  if (tab === "consumed") listTitle = t("tabs.consumed");
-  else if (selectedLocations.length === 1)
-    listTitle = t(
-      `locations.${storageLocationMessageKeys[selectedLocations[0]]}`,
-    );
-
   function goToPage(nextPage: number) {
     setPage(nextPage);
     listRef.current?.scrollIntoView({ block: "start" });
@@ -222,6 +223,7 @@ export function InventoryPage({
     if (value !== "active" && value !== "consumed") return;
     setTab(value);
     clearFilters();
+    setFiltersOpen(false);
     setEditing(false);
     setSelectedIds(new Set());
     const url = new URL(window.location.href);
@@ -310,6 +312,7 @@ export function InventoryPage({
         current.filter((product) => !ids.has(product.id)),
       );
       setSelectedIds(new Set());
+      setEditing(false);
       toast.success(dashboardT("consumedMoved"));
     } catch {
       toast.error(dashboardT("consumedRemovalFailed"));
@@ -341,6 +344,7 @@ export function InventoryPage({
         ),
       );
       setSelectedIds(new Set());
+      setEditing(false);
       toast.success(
         t(selected.length === 1 ? "toasts.restored" : "toasts.restoredMany"),
       );
@@ -378,7 +382,7 @@ export function InventoryPage({
       return next;
     });
     toast.success(
-      t(original?.status === "consumed" ? "toasts.restored" : "toasts.saved"),
+      t(original?.status === "consumed" && updatedProduct.status === "active" ? "toasts.restored" : "toasts.saved"),
     );
   }
 
@@ -387,7 +391,6 @@ export function InventoryPage({
       <PageHeader
         eyebrow={t("eyebrow")}
         title={t("title")}
-        description={t("description", { count: activeProducts.length })}
         actions={
           <Button
             nativeButton={false}
@@ -401,104 +404,38 @@ export function InventoryPage({
       />
 
       <Tabs value={tab} onValueChange={changeTab} className="mb-5">
-        <TabsScrollableList aria-label={t("tabs.label")}>
-          <TabsTrigger value="active" className="h-9 px-4">
-            {t("tabs.active")}{" "}
-            <span className="tabular-nums">{activeProducts.length}</span>
-          </TabsTrigger>
-          <TabsTrigger value="consumed" className="h-9 px-4">
-            {t("tabs.consumed")}{" "}
-            <span className="tabular-nums">{consumedCount}</span>
-          </TabsTrigger>
-        </TabsScrollableList>
+        <div className="flex flex-col gap-3 lg:flex-row-reverse lg:items-center lg:justify-between">
+          <label className="relative block w-full lg:w-80 lg:shrink-0">
+            <span className="sr-only">{t("search")}</span>
+            <SearchIcon
+              className="absolute left-3 top-3 size-5 text-muted-foreground"
+              aria-hidden="true"
+            />
+            <Input
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                setPage(1);
+              }}
+              placeholder={t("searchPlaceholder")}
+              className="h-11 pl-10"
+            />
+          </label>
+          <div className="min-w-0">
+            <TabsScrollableList aria-label={t("tabs.label")}>
+              <TabsTrigger value="active" className="h-9 px-4">
+                {t("tabs.active")}{" "}
+                <span className="tabular-nums">{activeProducts.length}</span>
+              </TabsTrigger>
+              <TabsTrigger value="consumed" className="h-9 px-4">
+                {t("tabs.consumed")}{" "}
+                <span className="tabular-nums">{consumedCount}</span>
+              </TabsTrigger>
+            </TabsScrollableList>
+          </div>
+        </div>
         <TabsContent value={tab} className="pt-3">
-          <section
-            className="app-card mb-5 p-3"
-            aria-label={t("filters.label")}
-          >
-            <label className="relative block">
-              <span className="sr-only">{t("search")}</span>
-              <SearchIcon
-                className="absolute left-3 top-3 size-5 text-muted-foreground"
-                aria-hidden="true"
-              />
-              <Input
-                value={query}
-                onChange={(event) => {
-                  setQuery(event.target.value);
-                  setPage(1);
-                }}
-                placeholder={t("searchPlaceholder")}
-                className="h-11 pl-10"
-              />
-            </label>
-            {tab === "active" ? (
-              <>
-                <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                  <InventoryFilter
-                    label={t("filters.location")}
-                    allLabel={t("all")}
-                    options={locationFilters}
-                    selected={selectedLocations}
-                    onToggle={toggleLocation}
-                  />
-                  <InventoryFilter
-                    label={t("filters.category")}
-                    allLabel={t("all")}
-                    options={categoryFilters}
-                    selected={selectedCategories}
-                    onToggle={toggleCategory}
-                    searchPlaceholder={t("filters.searchCategory")}
-                    emptyLabel={t("filters.noCategory")}
-                  />
-                  <InventoryFilter
-                    label={t("filters.freshness")}
-                    allLabel={t("all")}
-                    options={freshnessFilters}
-                    selected={selectedFreshness}
-                    onToggle={toggleFreshness}
-                  />
-                </div>
-                {query ||
-                selectedLocations.length ||
-                selectedCategories.length ||
-                selectedFreshness.length ? (
-                  <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
-                    {selectedLocations.map((value) => (
-                      <FilterChip
-                        key={value}
-                        label={`${t("filters.location")}: ${t(`locations.${storageLocationMessageKeys[value]}`)}`}
-                        onRemove={() => toggleLocation(value)}
-                      />
-                    ))}
-                    {selectedCategories.map((value) => (
-                      <FilterChip
-                        key={value}
-                        label={`${t("filters.category")}: ${t(`categories.${productCategoryMessageKeys[value]}`)}`}
-                        onRemove={() => toggleCategory(value)}
-                      />
-                    ))}
-                    {selectedFreshness.map((value) => (
-                      <FilterChip
-                        key={value}
-                        label={`${t("filters.freshness")}: ${t(`freshness.${value}`)}`}
-                        onRemove={() => toggleFreshness(value)}
-                      />
-                    ))}
-                    <Button
-                      variant="ghost"
-                      className="h-11 text-sm"
-                      onClick={clearFilters}
-                    >
-                      {t("filters.clear")}
-                    </Button>
-                  </div>
-                ) : null}
-              </>
-            ) : null}
-          </section>
-
-          {editing || tab === "consumed" ? (
+          {editing ? (
             <section
               className="app-card mb-5 flex flex-col gap-3 p-4 sm:flex-row sm:items-center"
               aria-label={t("bulk.label")}
@@ -609,18 +546,47 @@ export function InventoryPage({
             ref={listRef}
             className="app-card px-5"
             aria-busy={tableLoading}
+            aria-label={tab === "active" ? t("title") : t("tabs.consumed")}
           >
-            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border py-4">
-              <h2 className="flex flex-wrap items-baseline gap-x-2 font-extrabold">
-                {listTitle}
-                <span className="text-xs font-normal text-muted-foreground">
-                  ({t("productCount", { count: filtered.length })})
-                </span>
-              </h2>
-              <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center justify-end gap-2 border-b border-border py-4">
+              {tab === "active" ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-11"
+                  aria-expanded={filtersOpen}
+                  aria-controls="inventory-table-controls"
+                  onClick={() => setFiltersOpen((open) => !open)}
+                >
+                  <SlidersHorizontalIcon aria-hidden="true" />
+                  {t("filters.label")}
+                  {activeControlCount > 0 ? (
+                    <span className="rounded-full bg-secondary px-2 text-xs tabular-nums">
+                      {activeControlCount}
+                    </span>
+                  ) : null}
+                  <ChevronDownIcon
+                    className={cn("transition-transform", filtersOpen && "rotate-180")}
+                    aria-hidden="true"
+                  />
+                </Button>
+              ) : null}
+              <Button
+                variant={editing ? "secondary" : "outline"}
+                className="h-11"
+                onClick={toggleEditing}
+              >
+                {editing ? <XIcon aria-hidden="true" /> : <PencilIcon aria-hidden="true" />}
+                {editing ? t("cancel") : t("edit")}
+              </Button>
+            </div>
+            <div id="inventory-table-controls" hidden={tab !== "active" || !filtersOpen} className="border-b border-border py-4">
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
                 <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button type="button" variant="outline" className="h-11" aria-label={t("sort.label")} />}>
-                    <ArrowDownUpIcon aria-hidden="true" /> {t(`sort.${sortMode}`)} <ChevronDownIcon aria-hidden="true" />
+                  <DropdownMenuTrigger render={<Button type="button" variant="outline" className="h-11 w-full min-w-0 justify-between" aria-label={`${t("sort.label")}: ${t(`sort.${sortMode}`)}`} />}>
+                    <ArrowDownUpIcon aria-hidden="true" />
+                    <span className="min-w-0 flex-1 truncate text-left">{t(`sort.${sortMode}`)}</span>
+                    <ChevronDownIcon aria-hidden="true" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="min-w-56">
                     {inventorySorts.map((value) => (
@@ -632,22 +598,68 @@ export function InventoryPage({
                   </DropdownMenuContent>
                 </DropdownMenu>
                 {tab === "active" ? (
-                  <Button
-                    variant={editing ? "secondary" : "outline"}
-                    className="h-11"
-                    onClick={toggleEditing}
-                  >
-                    {editing ? <XIcon aria-hidden="true" /> : <PencilIcon aria-hidden="true" />}
-                    {editing ? t("cancel") : t("edit")}
-                  </Button>
+                  <>
+                    <InventoryFilter
+                      label={t("filters.location")}
+                      allLabel={t("all")}
+                      options={locationFilters}
+                      selected={selectedLocations}
+                      onToggle={toggleLocation}
+                    />
+                    <InventoryFilter
+                      label={t("filters.category")}
+                      allLabel={t("all")}
+                      options={categoryFilters}
+                      selected={selectedCategories}
+                      onToggle={toggleCategory}
+                      searchPlaceholder={t("filters.searchCategory")}
+                      emptyLabel={t("filters.noCategory")}
+                    />
+                    <InventoryFilter
+                      label={t("filters.freshness")}
+                      allLabel={t("all")}
+                      options={freshnessFilters}
+                      selected={selectedFreshness}
+                      onToggle={toggleFreshness}
+                    />
+                  </>
                 ) : null}
               </div>
+              {tab === "active" &&
+              Boolean(query || selectedLocations.length || selectedCategories.length || selectedFreshness.length) ? (
+                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
+                  {selectedLocations.map((value) => (
+                    <FilterChip
+                      key={value}
+                      label={`${t("filters.location")}: ${t(`locations.${storageLocationMessageKeys[value]}`)}`}
+                      onRemove={() => toggleLocation(value)}
+                    />
+                  ))}
+                  {selectedCategories.map((value) => (
+                    <FilterChip
+                      key={value}
+                      label={`${t("filters.category")}: ${t(`categories.${productCategoryMessageKeys[value]}`)}`}
+                      onRemove={() => toggleCategory(value)}
+                    />
+                  ))}
+                  {selectedFreshness.map((value) => (
+                    <FilterChip
+                      key={value}
+                      label={`${t("filters.freshness")}: ${t(`freshness.${value}`)}`}
+                      onRemove={() => toggleFreshness(value)}
+                    />
+                  ))}
+                  <Button variant="ghost" className="h-11 text-sm" onClick={clearFilters}>
+                    {t("filters.clear")}
+                  </Button>
+                </div>
+              ) : null}
             </div>
             {tableLoading ? (
               <InventoryTableSkeleton />
             ) : filtered.length ? (
               visibleProducts.map((product) =>
-                editing || tab === "consumed" ? (
+                editing ? (
                   <label
                     key={product.id}
                     htmlFor={`select-${product.id}`}

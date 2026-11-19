@@ -53,7 +53,6 @@ export default async function SettingsPage() {
       <PageHeader
         eyebrow={t("eyebrow")}
         title={t("title")}
-        description={t("description")}
       />
       <SettingsTabs
         general={
