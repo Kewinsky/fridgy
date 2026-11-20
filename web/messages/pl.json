@@ -51,82 +51,84 @@
     "mainNav": "Nawigacja główna",
     "footerNav": "Nawigacja w stopce",
     "howItWorks": "Jak to działa",
-    "features": "Możliwości",
     "pricing": "Cennik",
     "start": "Zacznij",
     "contact": "Kontakt",
     "about": "O nas",
     "privacy": "Prywatność",
     "terms": "Regulamin",
-    "footerText": "Mniej marnowania, więcej dobrego jedzenia. Jedna spokojniejsza kuchnia.",
-    "footerNote": "Zrobione z myślą o codziennym gotowaniu.",
-    "heroEyebrow": "Mniej chaosu w kuchni",
     "heroTitleOne": "Zjedz to,",
     "heroTitleTwo": "co już masz.",
-    "heroText": "Fridgy zamienia zakupy w uporządkowane zapasy i podpowiada, co ugotować, zanim jedzenie się zmarnuje.",
-    "startFree": "Zacznij z Fridgy",
-    "seeHow": "Zobacz, jak to działa",
-    "heroNote": "Bez hasła. Zaloguj się kodem e-mail lub kontem Google.",
-    "heroImageAlt": "Szakszuka z ciecierzycą na patelni",
-    "heroVisualLabel": "Od zakupów do kolacji",
-    "heroVisualText": "Dobry pomysł zaczyna się od tego, co jest w domu.",
-    "floatTitle": "Pomysł na dziś",
-    "floatText": "Z produktów, które już masz",
-    "bandLabel": "Trzy kroki korzystania z Fridgy",
-    "bandHome": "Jedno domostwo",
-    "bandReceipt": "Jeden skan paragonu",
-    "bandCook": "Więcej pomysłów na obiad",
-    "stepsEyebrow": "Jak to działa",
-    "stepsTitle": "Trzy kroki do spokojniejszej kuchni.",
-    "stepsIntro": "Zacznij od swojego domostwa. Reszta układa się naturalnie.",
-    "stepOneTitle": "Stwórz domostwo",
-    "stepOneText": "Zbierz domowe zapasy w jednym miejscu i korzystaj z nich wspólnie z bliskimi.",
-    "stepTwoTitle": "Dodaj paragon",
-    "stepTwoText": "Zrób zdjęcie paragonu, sprawdź rozpoznane produkty i dodaj je do zapasów.",
-    "stepThreeTitle": "Ugotuj danie",
-    "stepThreeText": "Wybierz przepis dopasowany do produktów, które już czekają w Twojej kuchni.",
-    "featuresEyebrow": "Więcej możliwości",
-    "featuresTitle": "Małe rzeczy, które robią dużą różnicę.",
-    "featuresIntro": "Fridgy pomaga w codziennych decyzjach, od półki w lodówce po listę zakupów.",
-    "featureDatesTitle": "Wiesz, co się kończy",
-    "featureDatesText": "Sprawdzaj terminy przydatności i wykorzystuj produkty, zanim będzie za późno.",
-    "featureListTitle": "Zakupy bez zgadywania",
-    "featureListText": "Prowadź wspólną listę zakupów i dopisuj to, czego brakuje do wybranego dania.",
-    "featureDietTitle": "Przepisy po Twojemu",
-    "featureDietText": "Dopasuj pomysły do diety, alergii i produktów, których nie chcesz jeść.",
+    "heroTitleThree": "co czeka w lodówce.",
+    "heroTitleFour": "co masz pod ręką.",
     "pricingEyebrow": "Cennik",
     "pricingTitle": "Wybierz plan dla swojej kuchni.",
     "pricingText": "Zacznij bez opłat. Gdy będziesz potrzebować więcej, wybierz Premium dla całego domostwa.",
-    "pricingBillingLabel": "Okres rozliczeniowy",
-    "pricingMonthly": "Miesięcznie",
-    "pricingYearly": "Rocznie",
-    "pricingMonthlyShort": "mies.",
-    "pricingYearlyShort": "rok",
-    "pricingFreeTitle": "Na dobry początek",
-    "pricingFreeText": "Podstawowe narzędzia do planowania jedzenia w jednej kuchni.",
-    "pricingPremiumTitle": "Więcej dla domostwa",
-    "pricingPremiumText": "Więcej skanów, pomysłów i miejsca dla domowników.",
-    "pricingRecipes": "Własne przepisy",
-    "pricingAi": "Propozycje przepisów AI",
-    "pricingScans": "Skany paragonów",
-    "pricingMembers": "Osoby w domostwie",
-    "pricingDailyIdea": "Pomysł na danie dnia",
-    "pricingFive": "5 zapisanych",
-    "pricingUnlimited": "Bez limitu",
-    "pricingFiveTotal": "5 łącznie",
-    "pricingThirtyMonthly": "30 miesięcznie",
-    "pricingTwoMonthly": "2 miesięcznie",
-    "pricingTwentyMonthly": "20 miesięcznie",
-    "pricingOne": "1 osoba",
-    "pricingSix": "Do 6 osób",
-    "pricingNo": "Niedostępny",
-    "pricingYes": "Codziennie",
-    "pricingFreeAction": "Zacznij za darmo",
-    "pricingPremiumAction": "Premium wkrótce",
-    "pricingDisclaimer": "To planowana oferta. Płatności i limity nie są jeszcze aktywne; teraz możesz korzystać z Fridgy bez opłat.",
-    "ctaEyebrow": "Czas na dobry plan",
-    "ctaTitle": "Twoja kuchnia może działać prościej.",
-    "ctaText": "Zacznij od tego, co masz. Fridgy pomoże Ci zrobić z tego coś dobrego."
+    "heroEyebrow": "Twój pomysł na dzisiejszy obiad",
+    "heroText": "Fridgy zamienia zakupy w zapasy i podpowiada, co ugotować z tego, co masz.",
+    "startFree": "Zacznij za darmo",
+    "seeHow": "Zobacz Fridgy w akcji",
+    "demoEyebrow": "Od zakupów do obiadu",
+    "demoTitle": "Jeden paragon. Pomysł na obiad.",
+    "demoDescription": "Przejdź przez trzy kroki i zobacz, jak Fridgy łączy zakupy z gotowaniem.",
+    "demoStepsLabel": "Kroki podglądu aplikacji",
+    "playPreview": "Odtwórz podgląd",
+    "pausePreview": "Wstrzymaj podgląd",
+    "demo": {
+      "receipt": {
+        "title": "Dodaj paragon",
+        "description": "Sprawdź rozpoznane produkty i zatwierdź zakupy."
+      },
+      "inventory": {
+        "title": "Zobacz swoje zapasy",
+        "description": "Wiesz, co masz i co wykorzystać najpierw."
+      },
+      "recipe": {
+        "title": "Wybierz, co ugotujesz",
+        "description": "Dopasuj przepis do produktów z Twojej kuchni."
+      }
+    },
+    "faqTitle": "Zanim zajrzysz do lodówki.",
+    "allQuestions": "Wszystkie pytania i odpowiedzi",
+    "ctaTitle": "Dobry obiad zaczyna się w Twojej lodówce.",
+    "preview": {
+      "inventoryTitle": "Twoje zapasy",
+      "inventoryDescription": "Wykorzystaj je w swojej kuchni.",
+      "spinach": "Szpinak",
+      "pasta": "Makaron",
+      "cream": "Śmietanka",
+      "useFirst": "Zużyj najpierw",
+      "inventoryHint": "Wybierz składniki do dzisiejszego obiadu.",
+      "receiptTitle": "Twoje zakupy",
+      "receiptReady": "Gotowe do sprawdzenia",
+      "fromYourKitchen": "Z Twoich zapasów",
+      "recipeTitle": "Makaron ze szpinakiem",
+      "cookAction": "Co dziś ugotować?"
+    },
+    "footerText": "Zapasy, zakupy i przepisy dla Twojej kuchni.",
+    "footerNote": "Wykorzystaj jedzenie z pomysłem.",
+    "walkthrough": {
+      "receipt": "Paragon",
+      "inventory": "Twoje zapasy",
+      "recipe": "Przepis",
+      "scanComplete": "Paragon rozpoznany",
+      "review": "Sprawdź produkty",
+      "tomatoes": "Pomidory",
+      "zucchini": "Cukinia",
+      "chickpeas": "Ciecierzyca",
+      "save": "Zapisz {count} produkty",
+      "reviewed": "Zapisano do zapasów",
+      "updated": "Zapasy zaktualizowane",
+      "fridge": "Lodówka",
+      "useFirst": "Zużyj najpierw",
+      "days": "Za {count} dni",
+      "freshness": "Zacznij od produktów z krótkim terminem.",
+      "matched": "Dopasowany do Twoich zapasów",
+      "recipeTitle": "Gulasz z ciecierzycą",
+      "ingredientsReady": "{count} z {count} składników masz w domu",
+      "available": "Masz",
+      "openRecipe": "Przejdź do przepisu"
+    }
   },
   "PublicPages": {
     "back": "Wróć na stronę główną",
@@ -146,9 +148,7 @@
     "faqMore": "Nie znalazłeś odpowiedzi?",
     "contactEyebrow": "Kontakt",
     "contactTitle": "Porozmawiajmy o Fridgy.",
-    "contactIntro": "Masz pytanie, pomysł lub problem z aplikacją? Strona kontaktowa jest gotowa. Adres do korespondencji zostanie dodany przed publikacją.",
-    "contactPending": "Adres kontaktowy w przygotowaniu",
-    "contactPendingText": "Nie podajemy jeszcze adresu, którego nie możemy obsługiwać. Do czasu jego uzupełnienia zajrzyj do odpowiedzi na częste pytania.",
+    "contactIntro": "Masz pytanie, pomysł lub problem z Fridgy? Napisz do nas – chętnie pomożemy.",
     "contactFaq": "Przejdź do FAQ",
     "aboutEyebrow": "O Fridgy",
     "aboutTitle": "Mniej wyrzucania. Więcej gotowania.",
@@ -156,14 +156,10 @@
     "aboutBody": "Łączymy zapasy, terminy przydatności, listę zakupów i pomysły na dania w jednym miejscu. Dzięki temu łatwiej zobaczyć, co już masz, i zaplanować następny posiłek bez zbędnych zakupów.",
     "privacyEyebrow": "Informacje prawne",
     "privacyTitle": "Polityka prywatności",
-    "privacyIntro": "Pełna polityka prywatności zostanie opublikowana przed uruchomieniem produkcyjnym.",
-    "privacyPendingTitle": "Dokument wymaga uzupełnienia",
-    "privacyPendingText": "Przed publikacją podamy dane administratora, cele i podstawy przetwarzania danych, okresy przechowywania, odbiorców danych oraz sposób korzystania z praw użytkownika.",
+    "privacyIntro": "Jak przetwarzamy Twoje dane, korzystamy z usług dostawców i chronimy Twoje prawa.",
     "termsEyebrow": "Informacje prawne",
     "termsTitle": "Regulamin",
-    "termsIntro": "Pełny regulamin zostanie opublikowany przed uruchomieniem produkcyjnym.",
-    "termsPendingTitle": "Dokument wymaga uzupełnienia",
-    "termsPendingText": "Przed publikacją podamy dane usługodawcy, zasady konta i domostw, zakres usługi, zasady zgłaszania problemów oraz warunki zakończenia korzystania z Fridgy."
+    "termsIntro": "Zasady korzystania z Fridgy, planów subskrypcyjnych oraz prawa i obowiązki użytkowników."
   },
   "Navigation": {
     "overview": "Przegląd",
@@ -230,7 +226,11 @@
     "palette": {
       "title": "Paleta kolorów",
       "description": "Wybierz kolor aplikacji. Ustawienie zapisuje się w tej przeglądarce.",
-      "options": { "blue": "Błękit", "green": "Zieleń", "violet": "Fiolet" }
+      "options": {
+        "blue": "Błękit",
+        "green": "Zieleń",
+        "violet": "Fiolet"
+      }
     },
     "householdUi": {
       "title": "Twoje domostwo",
@@ -239,9 +239,7 @@
       "owner": "Właściciel",
       "member": "Członek",
       "ownerRights": "Możesz zarządzać zapasami i listą zakupów, zapraszać domowników oraz zmienić nazwę domu. Właściciel nie może opuścić domostwa.",
-      "memberRights": "Możesz zarządzać wspólnymi zapasami i listą zakupów, przeglądać przepisy domowników oraz edytować własne. Opuszczanie domostwa nie jest jeszcze dostępne.",
-      "leave": "Opuść domostwo",
-      "leaveSoon": "Opuszczenie domostwa będzie dostępne po dodaniu obsługi w bazie."
+      "leave": "Opuść domostwo"
     },
     "preferences": {
       "cancel": "Anuluj",
@@ -361,7 +359,6 @@
           "success": "Domownik został usunięty."
         }
       },
-
       "sessions": {
         "title": "Aktywne sesje",
         "description": "Zakończ sesje Fridgy na pozostałych urządzeniach.",
@@ -390,7 +387,11 @@
       "inventoryView": {
         "title": "Wygląd listy zapasów",
         "description": "Wybierz, ile informacji pokazujemy przy każdym produkcie.",
-        "options": { "readable": "Czytelny", "compact": "Kompaktowy", "detailed": "Szczegółowy" }
+        "options": {
+          "readable": "Czytelny",
+          "compact": "Kompaktowy",
+          "detailed": "Szczegółowy"
+        }
       },
       "regional": {
         "title": "Format daty",
@@ -518,7 +519,11 @@
     "all": "Wszystkie",
     "eyebrow": "To, co masz w domu",
     "title": "Moje zapasy",
-    "tabs": { "label": "Status produktów", "active": "Dostępne", "consumed": "Zużyte" },
+    "tabs": {
+      "label": "Status produktów",
+      "active": "Dostępne",
+      "consumed": "Zużyte"
+    },
     "description": "{count, plural, one {# aktywny produkt} few {# aktywne produkty} other {# aktywnych produktów}}",
     "cook": "Co ugotować?",
     "search": "Szukaj produktu",
@@ -872,14 +877,21 @@
     "noData": "Brak danych",
     "search": "Szukaj przepisu",
     "searchPlaceholder": "Szukaj przepisu lub składnika...",
-    "noSearchResults": { "title": "Nie znaleziono przepisów", "description": "Spróbuj wpisać inną nazwę dania lub składnika." },
+    "noSearchResults": {
+      "title": "Nie znaleziono przepisów",
+      "description": "Spróbuj wpisać inną nazwę dania lub składnika."
+    },
     "tabs": {
       "favorites": "Ulubione",
       "custom": "Moje",
       "history": "Historia"
     },
     "historyRetention": "Wygenerowane przepisy, których nie dodano do ulubionych, są usuwane po 7 dniach.",
-    "historyExpiry": { "days": "Zniknie za {count} dni", "tomorrow": "Zniknie jutro", "today": "Znika dzisiaj" },
+    "historyExpiry": {
+      "days": "Zniknie za {count} dni",
+      "tomorrow": "Zniknie jutro",
+      "today": "Znika dzisiaj"
+    },
     "emptyFavorites": {
       "title": "Brak ulubionych",
       "description": "Dodaj sercem przepisy, do których chcesz szybko wracać."
@@ -1107,6 +1119,345 @@
       "code": "Kod błędu: {code}",
       "retry": "Spróbuj ponownie",
       "overview": "Przegląd"
+    }
+  },
+  "Billing": {
+    "planAndBilling": "Plan i płatności",
+    "monthly": "Miesięcznie",
+    "yearly": "Rocznie",
+    "monthlyShort": "mies.",
+    "yearlyShort": "rok",
+    "billingPeriod": "Okres rozliczeniowy",
+    "currentPlan": "Obecny plan",
+    "premiumDescription": "Więcej pomysłów i wygody dla całego domostwa.",
+    "freeDescription": "Podstawowe narzędzia do codziennego zarządzania zapasami.",
+    "annualNote": "Płatność za cały rok. To około {amount} miesięcznie.",
+    "monthlyNote": "Płatność co miesiąc. Możesz wyłączyć odnowienie w dowolnej chwili.",
+    "freeNote": "Bez opłat, bez karty i bez terminu zakończenia.",
+    "features": {
+      "recipes": "Własne przepisy",
+      "ai": "Propozycje przepisów AI",
+      "scans": "Skany paragonów",
+      "members": "Osoby w domostwie"
+    },
+    "unlimited": "Bez limitu",
+    "periods": {
+      "recipes": "zapisanych jednocześnie",
+      "ai": "miesięcznie",
+      "scans": "miesięcznie",
+      "members": "łącznie z właścicielem",
+      "lifetime": "łącznie, bez odnowienia"
+    },
+    "dailyIdea": "Pomysł na danie dnia",
+    "dailyIncluded": "Codziennie dla Twojego domostwa",
+    "premiumOnly": "Dostępny w Premium",
+    "choosePremium": "Wybierz Premium",
+    "startTrial": "Wypróbuj przez {days} dni",
+    "startFree": "Zacznij za darmo",
+    "yourFreePlan": "Korzystasz z planu Free",
+    "freeAfterCancel": "Free po zakończeniu Premium",
+    "pricingNote": "Ceny w PLN. Jeden plan obejmuje jedno domostwo. Trial: {days} dni bez karty, potem Free, jeśli nie wybierzesz płatnego planu.",
+    "usageUnknown": "Brak danych",
+    "usageValue": "Wykorzystano {used} z {limit}",
+    "savedLimit": "Limit zapisanych przepisów",
+    "lifetimeLimit": "Pula jednorazowa, bez odnowienia",
+    "monthlyLimit": "Wspólna pula miesięczna domostwa",
+    "householdLimit": "Wlicza właściciela domostwa",
+    "resetOn": "Odnowienie: {date}",
+    "limitReached": "Limit został osiągnięty. Sprawdź dostępne opcje.",
+    "limitNear": "Zbliżasz się do limitu tej funkcji.",
+    "seePremium": "Poznaj Premium",
+    "manage": "Zarządzaj planem",
+    "details": "Szczegóły planu",
+    "fixPayment": "Sprawdź płatność",
+    "ownerOnly": "Planem i płatnościami zarządza właściciel domostwa. Poproś go o zmianę planu lub sprawdzenie płatności.",
+    "sharedPlan": "Ten plan i limity dotyczą całego domostwa. Płatnościami zarządza właściciel.",
+    "nextPayment": "Następna płatność",
+    "trialEnds": "Koniec okresu próbnego",
+    "accessUntil": "Dostęp do Premium do",
+    "noRenewal": "Odnowienie płatności",
+    "noCharge": "Bez opłat",
+    "notApplicable": "Nie dotyczy",
+    "dateUnknown": "Data niedostępna",
+    "amount": "Kwota za okres",
+    "trialNote": "Przez {days} dni masz limity Premium. Trial nie odnawia się automatycznie. Bez zakupu subskrypcji domostwo przejdzie na Free.",
+    "cancelRenewal": "Wyłącz odnowienie",
+    "resume": "Wznów Premium",
+    "usageTitle": "Wykorzystanie planu",
+    "usageDescription": "Jedna wspólna pula dla wszystkich osób w tym domostwie.",
+    "resetExplanation": "Limity miesięczne odnawiają się w rocznicę rozpoczęcia okresu rozliczeniowego, także przy płatności rocznej. Niewykorzystana pula nie przechodzi dalej. Przepisy i osoby to limity bieżącego stanu.",
+    "compareTitle": "Wybierz plan dla swojej kuchni",
+    "oneHousehold": "Każde domostwo ma własny plan i osobne limity.",
+    "paymentTitle": "Metoda płatności",
+    "cardExpires": "Ważna do {date}",
+    "noCard": "Brak zapisanej metody płatności. Plan Free i okres próbny nie wymagają karty.",
+    "managePayment": "Zarządzaj płatnościami",
+    "invoicesTitle": "Historia płatności",
+    "noInvoices": "Jeszcze nie ma płatności",
+    "invoicesNote": "Po zakupie planu znajdziesz tutaj rachunki i ich statusy.",
+    "openInvoice": "Otwórz",
+    "openInvoiceLabel": "Otwórz rachunek {id}",
+    "invoiceStatuses": {
+      "paid": "Opłacona",
+      "open": "Do zapłaty",
+      "void": "Anulowana"
+    },
+    "dataSafeTitle": "Twoje dane zostają z Tobą",
+    "dataKept": "Po przejściu na Free zachowasz zapisane przepisy, zapasy i listy zakupów. Obecni domownicy zachowają dostęp. Po przekroczeniu limitu Free dodawanie przepisów i zapraszanie osób wymaga zwolnienia miejsca lub Premium.",
+    "loading": "Wczytywanie informacji o planie…",
+    "loadErrorTitle": "Nie udało się wczytać planu",
+    "loadError": "Nie możemy teraz sprawdzić planu ani limitów. Twoje dane są zachowane. Spróbuj ponownie.",
+    "retry": "Spróbuj ponownie",
+    "back": "Wróć",
+    "working": "Przetwarzanie…",
+    "actionError": "Nie udało się wykonać operacji. Plan nie został zmieniony. Spróbuj ponownie.",
+    "checkoutNote": "Przed opłaceniem sprawdzisz podsumowanie i metodę płatności. Premium zostanie aktywowane po potwierdzeniu płatności.",
+    "pricingTitle": "Więcej dobrego w Twojej kuchni",
+    "pricingDescription": "Zacznij bez opłat. Wybierz Premium, gdy Twoje domostwo potrzebuje więcej.",
+    "faqTitle": "Warto wiedzieć przed wyborem",
+    "faq": {
+      "trial": {
+        "question": "Jak działa okres próbny?",
+        "answer": "Testujesz limity Premium bez karty. Po zakończeniu trialu domostwo przechodzi na Free, chyba że kupisz Premium. Nie pobieramy opłaty automatycznie."
+      },
+      "households": {
+        "question": "Czy Premium obejmuje wszystkie moje domostwa?",
+        "answer": "Nie. Każde domostwo ma osobną subskrypcję i limity wspólne dla jego członków. Właściciel zarządza płatnościami."
+      },
+      "cancel": {
+        "question": "Co się stanie po rezygnacji?",
+        "answer": "Premium pozostaje aktywne do końca opłaconego okresu. Potem domostwo przechodzi na Free. Zachowujesz dane i dostęp obecnych domowników."
+      },
+      "limits": {
+        "question": "Kiedy odnawiają się limity?",
+        "answer": "Miesięczna pula odnawia się w dniu cyklu rozliczeniowego, także w planie rocznym. Przepisy i osoby mają limit bieżącej liczby. Pula AI w Free jest jednorazowa."
+      }
+    },
+    "statuses": {
+      "free": {
+        "title": "Plan bezpłatny",
+        "description": "Korzystasz z podstawowych funkcji Fridgy."
+      },
+      "trialing": {
+        "title": "Okres próbny",
+        "description": "Masz dostęp do Premium. Po trialu wrócisz do Free, jeśli nie kupisz planu."
+      },
+      "trial_ending": {
+        "title": "Trial wkrótce się kończy",
+        "description": "Sprawdź datę zakończenia. Nie pobierzemy opłaty automatycznie."
+      },
+      "active": {
+        "title": "Premium aktywne",
+        "description": "Twoja subskrypcja jest aktywna."
+      },
+      "canceling": {
+        "title": "Odnowienie wyłączone",
+        "description": "Premium działa do końca opłaconego okresu. Potem przejdziesz na Free."
+      },
+      "expired": {
+        "title": "Premium wygasło",
+        "description": "Domostwo korzysta teraz z Free. Twoje dane i dostęp domowników zostały zachowane."
+      },
+      "past_due": {
+        "title": "Problem z płatnością",
+        "description": "Nie udało się odnowić płatności. Premium jest jeszcze dostępne. Sprawdź metodę płatności."
+      },
+      "unpaid": {
+        "title": "Płatność nieuregulowana",
+        "description": "Dostęp do Premium został wstrzymany. Ureguluj płatność, aby go przywrócić."
+      },
+      "incomplete": {
+        "title": "Oczekiwanie na płatność",
+        "description": "Zakup nie został zakończony. Premium zostanie aktywowane po potwierdzeniu płatności."
+      },
+      "incomplete_expired": {
+        "title": "Płatność wygasła",
+        "description": "Zakup nie został zakończony na czas. Wybierz plan ponownie, aby rozpocząć nową płatność."
+      },
+      "paused": {
+        "title": "Premium wstrzymane",
+        "description": "Subskrypcja jest wstrzymana. Wznów ją, aby ponownie korzystać z Premium."
+      },
+      "loading": {
+        "title": "Wczytywanie planu",
+        "description": "Sprawdzamy informacje o subskrypcji."
+      },
+      "error": {
+        "title": "Plan niedostępny",
+        "description": "Nie udało się pobrać informacji o subskrypcji."
+      }
+    },
+    "actions": {
+      "checkout": {
+        "title": "Wybierz Premium",
+        "description": "Kupujesz plan dla domostwa „{household}”. Limity będą wspólne dla wszystkich jego członków.",
+        "confirm": "Przejdź do płatności"
+      },
+      "trial": {
+        "title": "Rozpocznij okres próbny",
+        "description": "Domostwo „{household}” otrzyma Premium na {days} dni bez karty. Potem przejdzie na Free, jeśli nie kupisz planu.",
+        "confirm": "Rozpocznij okres próbny"
+      },
+      "cancel": {
+        "title": "Wyłączyć odnowienie Premium?",
+        "description": "Nie pobierzemy kolejnej opłaty. Premium pozostanie dostępne do końca opłaconego okresu.",
+        "confirm": "Wyłącz odnowienie"
+      },
+      "resume": {
+        "title": "Wznów subskrypcję",
+        "description": "Sprawdzisz warunki wznowienia przed potwierdzeniem. Dostęp przywrócimy po zatwierdzeniu operacji.",
+        "confirm": "Sprawdź warunki wznowienia"
+      },
+      "payment": {
+        "title": "Zarządzaj płatnością",
+        "description": "Przejdź do bezpiecznego zarządzania metodą płatności i rozliczeniami domostwa.",
+        "confirm": "Otwórz zarządzanie płatnościami"
+      },
+      "interval": {
+        "title": "Zmień okres rozliczeniowy",
+        "description": "Przed zatwierdzeniem sprawdzisz datę zmiany i kwotę rozliczenia. Obecny okres pozostaje aktywny do potwierdzenia zmiany.",
+        "confirm": "Sprawdź warunki zmiany"
+      },
+      "retry": {
+        "title": "Odśwież informacje o planie",
+        "description": "Pobierz ponownie aktualne informacje o subskrypcji i dostępnych limitach.",
+        "confirm": "Spróbuj ponownie"
+      },
+      "invoice": {
+        "title": "Otwórz rachunek",
+        "description": "Przejdź do bezpiecznego podglądu dokumentu i opcji pobrania.",
+        "confirm": "Otwórz dokument"
+      }
+    },
+    "premiumEnded": "Premium zakończone"
+  },
+  "ContactForm": {
+    "title": "Napisz do nas",
+    "requiredNote": "Wszystkie pola są wymagane.",
+    "fields": {
+      "name": "Imię",
+      "email": "Adres e-mail",
+      "subject": "Temat wiadomości",
+      "message": "Twoja wiadomość"
+    },
+    "messageHint": "Opisz, w czym możemy pomóc.",
+    "privacy": "Informacje o przetwarzaniu danych znajdziesz w <link>polityce prywatności</link>.",
+    "send": "Wyślij wiadomość",
+    "sending": "Wysyłanie wiadomości…",
+    "successTitle": "Wiadomość wysłana",
+    "successDescription": "Dziękujemy za kontakt. Odpowiemy na podany adres e-mail.",
+    "sendAnother": "Napisz kolejną wiadomość",
+    "sendError": "Nie udało się wysłać wiadomości. Wpisana treść została zachowana. Spróbuj ponownie.",
+    "helpTitle": "Szukasz szybkiej odpowiedzi?",
+    "helpDescription": "W FAQ znajdziesz odpowiedzi na pytania o zapasy, przepisy i wspólne korzystanie z Fridgy.",
+    "errors": {
+      "required": "Uzupełnij to pole.",
+      "invalidEmail": "Wpisz poprawny adres e-mail.",
+      "tooLong": "Możesz wpisać maksymalnie {max} znaków.",
+      "messageShort": "Napisz co najmniej {min} znaków."
+    }
+  },
+  "Legal": {
+    "entityName": "Nazwa usługodawcy",
+    "address": "Adres do korespondencji",
+    "phone": "Telefon kontaktowy",
+    "taxId": "NIP / identyfikator podatkowy",
+    "registerId": "Numer rejestru",
+    "contact": "Kontakt e-mail",
+    "contactForm": "Formularz kontaktowy",
+    "contents": "Spis treści",
+    "updatedAt": "Ostatnia aktualizacja: {date}",
+    "privacy": {
+      "providerTitle": "Administrator danych i kontakt",
+      "providerDescription": "Administratorem danych osobowych przetwarzanych w związku z Fridgy jest {name}. W sprawach prywatności i realizacji swoich praw możesz skontaktować się z nami, korzystając z poniższych danych.",
+      "data": {
+        "title": "Jakie dane przetwarzamy",
+        "body": "Przetwarzamy e-mail, identyfikator konta, nazwę użytkownika i wybrane zdjęcie profilowe; członkostwo w domostwach; zapasy, listy zakupów, przepisy, zdjęcia potraw, ulubione i historię gotowania; preferencje żywieniowe oraz treść korespondencji. Podczas korzystania z usługi dostawcy infrastruktury przetwarzają także dane techniczne, takie jak adres IP i informacje o żądaniach. Przy logowaniu przez Google otrzymujemy dane udostępnione w ramach wybranego sposobu logowania."
+      },
+      "purposes": {
+        "title": "Cele i podstawy przetwarzania",
+        "body": "Prowadzenie konta, udostępnianie funkcji, obsługa zgłoszeń związanych z usługą i rozliczenia służą wykonaniu umowy (art. 6 ust. 1 lit. b RODO). Obowiązki podatkowe i inne wymagane prawem realizujemy na podstawie art. 6 ust. 1 lit. c. Bezpieczeństwo, przeciwdziałanie nadużyciom, obsługa ogólnych zapytań i ochrona roszczeń stanowią prawnie uzasadnione interesy administratora (art. 6 ust. 1 lit. f). Dane wymagające zgody przetwarzamy na podstawie udzielonej zgody; możesz ją wycofać."
+      },
+      "preferences": {
+        "title": "Dobrowolne preferencje i alergie",
+        "body": "Dane wymagane do konta i zamówienia są potrzebne do świadczenia wybranej usługi; pozostałe informacje, w tym preferencje żywieniowe, podajesz dobrowolnie. Informacje o alergiach mogą ujawniać dane o zdrowiu. Przetwarzanie takich danych wymaga wyraźnej zgody zgodnie z art. 9 ust. 2 lit. a RODO. Preferencje możesz usunąć w ustawieniach lub <contact>kontaktując się z nami</contact>. Nie podawaj danych innych osób bez uprawnienia."
+      },
+      "sharing": {
+        "title": "Dane współdzielone w domostwie",
+        "body": "Zapasy, listy zakupów, przepisy, ulubione i historia gotowania są współdzielone w obrębie domostwa. Właściciel ma dostęp do danych członków potrzebnych do zarządzania domostwem, w tym nazwy użytkownika i e-maila. Indywidualne preferencje są przypisane do Twojego profilu. Usunięcie konta nie oznacza usunięcia wszystkich treści współdzielonych z innymi osobami; część treści może pozostać w domostwie, do którego została dodana."
+      },
+      "providers": {
+        "title": "Dostawcy usług i sztuczna inteligencja",
+        "body": "Korzystamy z dostawców infrastruktury, logowania, bazy danych, przechowywania plików, AI i płatności: {processors}. Otrzymują dane potrzebne do swojej roli. Funkcje AI przekazują wybrane zapasy, preferencje i polecenia, zdjęcie paragonu lub opis importowanego przepisu. Zdjęć paragonów nie zapisujemy w bibliotece plików Fridgy; zasady retencji u dostawców są odrębne. Płatności obsługuje operator płatności; Fridgy nie przechowuje pełnego numeru karty. Dane mogą być udostępniane uprawnionym organom, gdy wymaga tego prawo."
+      },
+      "transfers": {
+        "title": "Przekazywanie danych poza EOG",
+        "body": "Dostawcy lub ich podwykonawcy mogą przetwarzać dane poza Europejskim Obszarem Gospodarczym. Takie przekazanie wymaga podstaw przewidzianych w RODO, np. decyzji o odpowiednim stopniu ochrony lub standardowych klauzul umownych oraz wymaganych dodatkowych zabezpieczeń. Informacje o stosowanym mechanizmie i kopię odpowiednich zabezpieczeń możesz uzyskać, <contact>kontaktując się z administratorem</contact>."
+      },
+      "retention": {
+        "title": "Jak długo przechowujemy dane",
+        "body": "Dane konta i aktywności przechowujemy przez czas korzystania z usługi, a potem tylko w zakresie i przez okres potrzebny do obowiązków prawnych, rozliczeń lub ochrony roszczeń. Korespondencję przechowujemy przez obsługę sprawy i uzasadniony okres potrzebny do jej udokumentowania. Logi bezpieczeństwa i kopie zapasowe podlegają okresom wynikającym z ich celu i konfiguracji infrastruktury. Nieulubione przepisy AI są usuwane po 7 dniach podczas czyszczenia biblioteki. Usunięcie konta i współdzielonych treści odbywa się z uwzględnieniem praw innych domowników."
+      },
+      "storage": {
+        "title": "Cookies i pamięć przeglądarki",
+        "body": "Używamy mechanizmów sesji do logowania oraz zapisujemy wybrany język, motyw i paletę kolorów. Preferencja języka jest zapisywana w cookie na maksymalnie rok, a ustawienia wyglądu w pamięci lokalnej przeglądarki do ich zmiany lub usunięcia. Fridgy nie uruchamia reklamowych trackerów ani marketingowych cookies. Ustawienia pamięci możesz zmienić w przeglądarce; zablokowanie niezbędnych mechanizmów może uniemożliwić logowanie lub zapamiętywanie preferencji."
+      },
+      "rights": {
+        "title": "Twoje prawa i skargi",
+        "body": "W granicach RODO możesz żądać dostępu, sprostowania, usunięcia, ograniczenia przetwarzania i przeniesienia danych oraz wnieść sprzeciw. Wycofanie zgody nie wpływa na wcześniejsze zgodne z prawem przetwarzanie. <contact>Napisz do administratora</contact>; odpowiemy co do zasady w ciągu miesiąca, a o uzasadnionym przedłużeniu poinformujemy. Możesz złożyć skargę do <authority>Prezesa UODO</authority> lub właściwego organu nadzorczego. Fridgy nie podejmuje wobec Ciebie wyłącznie automatycznych decyzji wywołujących skutki prawne lub podobnie istotnie na Ciebie wpływających."
+      },
+      "changes": {
+        "title": "Zmiany polityki",
+        "body": "Aktualna wersja polityki jest dostępna pod tym adresem wraz z datą aktualizacji. O istotnych zmianach sposobu przetwarzania poinformujemy w aplikacji lub e-mailem przed ich zastosowaniem, a gdy wymaga tego prawo, uzyskamy odrębną zgodę. Zmiana dokumentu nie ogranicza Twoich praw dotyczących danych."
+      }
+    },
+    "terms": {
+      "providerTitle": "Usługodawca i kontakt",
+      "providerDescription": "Usługę Fridgy świadczy {name}, dalej „Usługodawca”. Poniższe dane służą do kontaktu, reklamacji, odstąpienia od umowy i spraw związanych z kontem.",
+      "service": {
+        "title": "Zakres usługi i wymagania",
+        "body": "Fridgy pomaga zarządzać domowymi zapasami, listą zakupów, przepisami i gotowaniem. Obejmuje współdzielone domostwa, import przepisów, analizę paragonów i propozycje AI zgodnie z wybranym planem. Do korzystania potrzebujesz internetu, aktualnej przeglądarki z JavaScript i niezbędnymi mechanizmami sesji oraz dostępu do e-maila lub obsługiwanego konta logowania. Informacje o przetwarzaniu danych opisuje <privacy>polityka prywatności</privacy>."
+      },
+      "account": {
+        "title": "Konto i zawarcie umowy",
+        "body": "Umowa o prowadzenie konta zostaje zawarta po jego utworzeniu i przyjęciu regulaminu. Podawaj prawidłowe dane i chroń dostęp do e-maila oraz konta logowania. Nie udostępniaj kodów logowania innym osobom. Musisz mieć zdolność do zawarcia umowy wymaganą przepisami; gdy konieczna jest zgoda przedstawiciela ustawowego, uzyskaj ją przed korzystaniem. Możesz bezpłatnie zachować regulamin przez zapis lub wydruk tej strony."
+      },
+      "households": {
+        "title": "Wspólne domostwa i role",
+        "body": "Dane dodane do domostwa są dostępne jego uprawnionym członkom. Właściciel zarządza członkostwem, planem i płatnościami oraz może przekazać rolę innej osobie. Każde domostwo ma osobny plan i wspólne limity. Zapraszaj wyłącznie osoby uprawnione do dostępu do wspólnych danych. Przed usunięciem konta właściciela domostwa z innymi członkami należy przekazać własność albo zakończyć członkostwo pozostałych osób."
+      },
+      "plans": {
+        "title": "Free, Premium i okres próbny",
+        "body": "Plan Free jest bezpłatny. Funkcje, ceny i limity Premium opisuje <pricing>cennik</pricing> widoczny przed zakupem. Trial trwa {trialDays} dni, ma limity Premium, nie wymaga karty i nie przechodzi automatycznie w płatną subskrypcję; bez zakupu domostwo wraca do Free. Limity miesięczne odnawiają się w dniu cyklu rozliczeniowego, także przy płatności rocznej, i nie kumulują się. Jednorazowa pula AI w Free nie odnawia się."
+      },
+      "billing": {
+        "title": "Płatności, odnowienie i rezygnacja",
+        "body": "Zakup Premium jest odrębną umową zawieraną po przedstawieniu ceny, okresu, zasad odnowienia i obowiązku zapłaty oraz potwierdzeniu zamówienia. Plan jest rozliczany miesięcznie albo rocznie i odnawia się zgodnie z zaakceptowanymi warunkami. W <settings>ustawieniach planu</settings> sprawdzisz daty i wyłączysz odnowienie. Dostęp trwa do końca opłaconego okresu. Po przejściu na Free dane i dostęp obecnych domowników pozostają; dodawanie ponad limity wymaga zwolnienia miejsca lub Premium. Problem z płatnością może prowadzić do wstrzymania Premium po przekazaniu informacji o problemie."
+      },
+      "withdrawal": {
+        "title": "Prawo odstąpienia od umowy",
+        "body": "Konsument zawierający umowę na odległość może co do zasady odstąpić od niej w ciągu 14 dni od zawarcia, bez podania przyczyny. Wystarczy jednoznaczne oświadczenie wysłane na dane Usługodawcy, także przez <contact>kontakt e-mail</contact>; formularz nie jest obowiązkowy. Skutki odstąpienia i zwrot należności określają właściwe przepisy. Samo wyłączenie odnowienia Premium nie oznacza odstąpienia od umowy. Te zasady nie ograniczają szerszych uprawnień wynikających z prawa właściwego dla konsumenta."
+      },
+      "content": {
+        "title": "Treści użytkownika i dozwolone korzystanie",
+        "body": "Zachowujesz prawa do własnych treści. Udzielasz Usługodawcy niewyłącznego uprawnienia do ich przechowywania, przetwarzania i udostępniania uprawnionym domownikom w zakresie potrzebnym do świadczenia usługi. Dodawaj wyłącznie treści, do których masz wymagane prawa, także przy imporcie z serwisów zewnętrznych. Zabronione są treści bezprawne, naruszanie prywatności, obchodzenie zabezpieczeń i limitów oraz zakłócanie działania aplikacji. Uzasadnione ograniczenie konta powinno być proporcjonalne, a jego przyczynę i możliwość wyjaśnienia sprawy przekażemy użytkownikowi, chyba że zabrania tego prawo."
+      },
+      "safety": {
+        "title": "AI, terminy produktów i odpowiedzialność",
+        "body": "Wyniki AI, szacowane terminy przydatności, wartości odżywcze i dopasowanie składników mogą zawierać błędy. Przed zatwierdzeniem sprawdź paragon, przepis, alergeny, ilości i terminy z opakowań oraz rzeczywisty stan żywności. Fridgy nie zastępuje oceny bezpieczeństwa żywności ani indywidualnej porady medycznej lub dietetycznej. Ograniczenia technologii nie wyłączają odpowiedzialności Usługodawcy za zgodność usługi z umową ani praw, których konsument nie może się zrzec."
+      },
+      "complaints": {
+        "title": "Reklamacje i zgodność z umową",
+        "body": "<contact>Zgłoś reklamację</contact>, opisując problem, czas wystąpienia, żądanie i dane do odpowiedzi. Nie wymagamy specjalnego formularza. Na reklamację konsumenta odpowiadamy w terminie 14 dni, o ile właściwe przepisy nie przewidują inaczej. Uprawnienia dotyczące usługi cyfrowej, w tym żądanie doprowadzenia do zgodności, obniżenia ceny lub odstąpienia w ustawowych przypadkach, wynikają z przepisów i nie są ograniczone regulaminem. Informacje o pozasądowym rozwiązywaniu sporów znajdziesz na stronie <consumer>UOKiK</consumer>; udział w danej procedurze ustala się według właściwych zasad."
+      },
+      "termination": {
+        "title": "Zakończenie korzystania i dane",
+        "body": "Możesz zakończyć korzystanie z konta, usunąć je w ustawieniach i wcześniej wyeksportować dostępne dane. Przy wspólnym domostwie obowiązują zasady dotyczące właściciela i zachowania treści innych osób. Wyłączenie odnowienia płatnego planu i usunięcie konta to odrębne czynności; przed zamknięciem konta uporządkuj aktywne rozliczenia. Nieulubione przepisy AI mogą zostać usunięte po 7 dniach. Ustawowe żądania dotyczące danych lub rozwiązania umowy możesz także zgłosić <contact>Usługodawcy</contact>."
+      },
+      "changes": {
+        "title": "Zmiany regulaminu i prawo właściwe",
+        "body": "Zmiany mogą wynikać z prawa, bezpieczeństwa lub zmian usługi. O zmianach wpływających na zawartą umowę poinformujemy z wyprzedzeniem na trwałym nośniku, podając przyczynę, datę i przysługujące prawa, w tym prawo zakończenia umowy, gdy jest wymagane. Nie zmieniamy wstecz ceny opłaconego okresu. Stosuje się prawo polskie, bez pozbawiania konsumenta obowiązkowej ochrony prawa jego miejsca zwykłego pobytu. Spory rozpoznaje sąd właściwy zgodnie z przepisami."
+      }
     }
   }
 }

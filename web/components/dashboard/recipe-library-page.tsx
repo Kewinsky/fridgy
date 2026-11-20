@@ -13,6 +13,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { AddRecipeDialog } from "@/components/dashboard/add-recipe-dialog";
 import { BrandIcon } from "@/components/brand-icon";
 import { PageHeader } from "@/components/dashboard/page-header";
+import { SubscriptionUsage } from "@/components/dashboard/subscription-usage";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { useRecipeLibrary } from "@/components/dashboard/use-recipe-library";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
@@ -40,6 +41,7 @@ export function RecipeLibraryPage() {
         actions={isHouseholdOwner ? <AddRecipeDialog /> : null}
       />
 
+      <SubscriptionUsage feature="recipes" compact />
       <Tabs defaultValue="favorites">
         <div className="flex flex-col gap-3 lg:flex-row-reverse lg:items-center lg:justify-between">
           <label className="relative block w-full lg:w-80 lg:shrink-0">

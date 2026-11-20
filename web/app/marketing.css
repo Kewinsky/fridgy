@@ -1,57 +1,83 @@
 .marketing {
-  --background: #f6f5ee;
-  --foreground: #203a2b;
-  --primary: #28553c;
-  --primary-foreground: #fffef8;
-  --muted: #e8eee4;
-  --muted-foreground: #5b6b5e;
-  --border: #dce3d6;
-  --input: #cbd8c7;
-  --ring: #739c69;
-  background: #f6f5ee;
-  color: #203a2b;
+  --background: #f8f9f5;
+  --foreground: #172d27;
+  --card: #ffffff;
+  --card-foreground: #172d27;
+  --popover: #ffffff;
+  --popover-foreground: #172d27;
+  --primary: #24583e;
+  --primary-foreground: #ffffff;
+  --secondary: #ece8ff;
+  --secondary-foreground: #30205c;
+  --muted: #eef0e9;
+  --muted-foreground: #5b6861;
+  --border: #dce3d8;
+  --input: #cbd5cb;
+  --ring: #7865df;
+  --marketing-purple: #6550f5;
+  --marketing-mint: #33efb3;
+  background: var(--background);
+  color: var(--foreground);
 }
 
-.marketing-container {
-  width: min(100% - 2.5rem, 1260px);
+.marketing-container,
+.marketing-page {
+  width: min(100% - 3rem, 1080px);
   margin-inline: auto;
 }
 
 .marketing-header {
-  position: relative;
-  z-index: 10;
-  border-bottom: 1px solid #e0e4d8;
-  background: rgb(246 245 238 / 93%);
-  backdrop-filter: blur(16px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: 88px;
+  padding-top: 12px;
+  pointer-events: none;
 }
 
+.marketing-navbar {
+  display: flex;
+  height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  border: 1px solid rgb(255 255 255 / 65%);
+  border-radius: 18px;
+  padding: 8px 14px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%), inset 0 -1px 0 rgb(255 255 255 / 25%), 0 8px 28px rgb(20 30 30 / 8%);
+  pointer-events: auto;
+}
+
+/* The dashboard shares this class; public typography is scoped below. */
 .marketing-display {
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 500;
 }
 
-.marketing-display-accent {
-  color: #7b9b6c;
-  font-style: italic;
+.marketing .marketing-display {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  letter-spacing: -0.055em;
 }
 
-.marketing-eyebrow,
 .marketing-kicker {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #547a57;
+  gap: 8px;
+  color: #4f6658;
   font-size: 0.73rem;
   font-weight: 800;
-  letter-spacing: 0.17em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
-.marketing-eyebrow-line {
-  display: inline-block;
-  width: 31px;
-  height: 1px;
-  background: currentColor;
+.marketing-kicker::before {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #9580ec;
+  content: "";
 }
 
 .marketing-button {
@@ -59,312 +85,308 @@
   min-height: 54px;
   align-items: center;
   justify-content: center;
-  gap: 14px;
-  border: 1px solid #28553c;
-  border-radius: 999px;
-  background: #28553c;
-  padding: 0 24px;
-  color: white;
-  font-size: 0.92rem;
-  font-weight: 700;
-  transition: background 180ms ease, color 180ms ease, transform 180ms ease;
-}
-
-.marketing-button:hover {
-  background: #1c3e2b;
-  transform: translateY(-2px);
-}
-
-.marketing-button:focus-visible,
-.marketing-billing-option:focus-visible,
-.marketing a:focus-visible,
-.marketing summary:focus-visible {
-  outline: 3px solid #a6c684;
-  outline-offset: 3px;
-}
-
-.marketing-button-small {
-  min-height: 42px;
-  gap: 8px;
-  padding-inline: 18px;
-  font-size: 0.82rem;
-}
-
-.marketing-button-outline {
-  background: transparent;
-  color: #28553c;
-}
-
-.marketing-button-outline:hover {
-  background: #e7eddf;
-}
-
-.marketing-nav-link,
-.marketing-footer nav a {
-  transition: color 180ms ease;
-}
-
-.marketing-nav-link:hover,
-.marketing-footer nav a:hover {
-  color: #77965e;
-}
-
-.marketing-hero-media {
-  position: relative;
-  min-width: 0;
-  padding: 0 14px 25px 0;
-}
-
-.marketing-hero-image {
-  position: relative;
-  overflow: hidden;
-  min-height: 520px;
-  border-radius: 210px 210px 24px 24px;
-  background: #38452b;
-}
-
-.marketing-hero-shade {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 34%, rgb(9 30 18 / 72%));
-}
-
-.marketing-float-card {
-  position: absolute;
-  right: -8px;
-  bottom: 88px;
-  display: flex;
-  min-width: 222px;
-  align-items: center;
   gap: 12px;
-  border: 1px solid #e4e9dc;
-  border-radius: 16px;
-  background: #fffef8;
-  padding: 12px 16px;
-  box-shadow: 0 18px 50px rgb(23 48 28 / 14%);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: #24583e;
+  padding: 0 25px;
+  color: white;
+  font-size: 0.96rem;
+  font-weight: 750;
+  text-align: center;
+  transition: background 180ms ease, transform 180ms ease;
 }
 
-.marketing-media-index {
-  position: absolute;
-  right: 19px;
-  bottom: 1px;
-  color: #788877;
-  font-size: 0.67rem;
-  font-weight: 800;
-  letter-spacing: 0.16em;
-}
+.marketing-button:hover { background: #153f2a; transform: translateY(-2px); }
+.marketing-button-small { min-height: 44px; gap: 8px; padding-inline: 18px; font-size: 0.84rem; }
+.marketing-button-outline { border-color: #ccd8c9; background: transparent; color: #24583e; }
+.marketing-button-outline:hover { background: #e9eee5; }
+.marketing-button-mint { background: var(--marketing-mint); color: #0c3730; }
+.marketing-button-mint:hover { background: #6cf6ca; }
+.marketing a:focus-visible,
+.marketing button:focus-visible,
+.marketing summary:focus-visible { outline: 3px solid #a692ef; outline-offset: 4px; }
+.marketing-nav-link { display: inline-flex; min-height: 44px; align-items: center; font-size: 0.85rem; font-weight: 650; white-space: nowrap; }
+.marketing-nav-link:hover,
+.marketing-footer nav a:hover { color: #6c54d6; }
+.marketing-mobile-menu [data-slot="dropdown-menu-item"] { min-height: 44px; font-weight: 650; }
 
-.marketing-band {
-  border-block: 1px solid #d9e3d3;
-  background: #ebf0e5;
-}
-
-.marketing-step-card {
-  min-height: 320px;
-  border: 1px solid #dce3d6;
-  border-radius: 18px;
-  background: #fffef8;
-  padding: 28px;
-  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
-}
-
-.marketing-step-card:hover {
-  transform: translateY(-4px);
-  border-color: #a5bea0;
-  box-shadow: 0 20px 50px rgb(32 58 43 / 8%);
-}
-
-.marketing-step-icon {
-  display: flex;
-  width: 64px;
-  height: 64px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 16px;
-  background: #e6eee0;
-  color: #315d3d;
-}
-
-.marketing-card-number {
-  font-family: Georgia, "Times New Roman", serif;
-  color: #b4c4b2;
-  font-size: 2.4rem;
-  line-height: 1;
-}
-
-.marketing-features {
-  background: #214432;
-  color: #f4f7ec;
-}
-
-.marketing-pricing-card {
-  border: 1px solid #dce3d6;
-  border-radius: 22px;
-  background: #fffef8;
-  padding: clamp(28px, 5vw, 48px);
-  box-shadow: 0 20px 50px rgb(32 58 43 / 5%);
-}
-
-.marketing-pricing-card-premium {
-  border-color: #214432;
-  background: #214432;
-  color: #fffef8;
-}
-
-.marketing-login-photo {
+.marketing-hero {
   position: relative;
   overflow: hidden;
-  min-height: 440px;
-  border-radius: 180px 180px 22px 22px;
-  background: #38452b;
+  margin-top: -88px;
+  background: var(--marketing-purple);
+  padding: 126px 0 80px;
+  color: white;
 }
 
-.marketing-login-form {
-  border: 1px solid #dce3d6;
-  border-radius: 24px;
-  background: #fffef8;
-  padding: clamp(26px, 4vw, 48px);
-  box-shadow: 0 20px 60px rgb(32 58 43 / 7%);
-}
-
-.marketing-login-form h1 {
-  color: #203a2b;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(2rem, 3vw, 2.6rem);
-  font-weight: 500;
-  letter-spacing: -0.05em;
-}
-
-.marketing-login-form [data-slot="input"] {
-  border-color: #cbd8c7;
-  border-radius: 12px;
-  background: #fff;
-  color: #203a2b;
-}
-
-.marketing-login-form [data-slot="input"]:focus-visible {
-  border-color: #739c69;
-  box-shadow: 0 0 0 3px rgb(115 156 105 / 25%);
-}
-
-.marketing-login-form [data-slot="button"][type="submit"] {
-  border-radius: 999px;
-  background: #28553c;
-  color: #fffef8;
-  font-weight: 700;
-}
-
-.marketing-login-form [data-slot="button"][type="submit"]:hover {
-  background: #1c3e2b;
-}
-
-.marketing-login-form .marketing-auth-google {
-  border-color: #cbd8c7;
-  border-radius: 999px;
-  background: transparent;
-  color: #28553c;
-  font-weight: 700;
-}
-
-.marketing-login-form .marketing-auth-google:hover {
-  background: #e8eee4;
-}
-
-.marketing-billing-option {
-  min-height: 42px;
-  border-radius: 999px;
-  padding: 0 19px;
-  color: #47654d;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 180ms ease, color 180ms ease;
-}
-
-.marketing-billing-option.is-active {
-  background: #fffef8;
-  color: #214432;
-  box-shadow: 0 2px 8px rgb(32 58 43 / 8%);
-}
-
-.marketing-cta {
-  position: relative;
-  overflow: hidden;
-  min-height: 430px;
-  border: 1px solid #d9e5cf;
-  border-radius: 28px;
-  background: #e8efdf;
-  padding: clamp(32px, 6vw, 76px);
-}
-
-.marketing-cta-art {
+.marketing-hero::after {
   position: absolute;
-  right: -40px;
-  bottom: -140px;
-  display: flex;
-  width: 470px;
-  height: 470px;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #bfd3b5;
-  border-radius: 50%;
-  box-shadow: 0 0 0 55px rgb(196 216 184 / 38%), 0 0 0 110px rgb(196 216 184 / 22%);
-  color: #b4caa5;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 21rem;
-  font-style: italic;
-  line-height: 1;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 28px;
+  background: var(--background);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  content: "";
 }
 
-.marketing-footer {
-  border-top: 1px solid #d8ded2;
-  background: #f0f2e9;
+.marketing-hero-grid { display: grid; min-height: 540px; align-items: center; gap: 30px; grid-template-columns: 0.96fr 1.04fr; }
+.marketing-hero-copy { position: relative; z-index: 2; padding-block: 24px; }
+.marketing-hero-eyebrow { display: flex; align-items: center; gap: 8px; color: #d7fff0; font-size: 0.85rem; font-weight: 700; }
+.marketing-hero-title { margin-top: 24px; font-size: clamp(3.4rem, 5.5vw, 5rem); line-height: 1.04; }
+.marketing-typed-line { position: relative; display: block; color: #d5ffb8; }
+.marketing-hero-description { max-width: 37ch; margin-top: 24px; color: #eeeaff; font-size: 1.075rem; line-height: 1.7; }
+.marketing-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin-top: 28px; }
+.marketing-watch-link { display: inline-flex; min-height: 48px; align-items: center; gap: 8px; font-size: 0.87rem; font-weight: 700; }
+.marketing-watch-link:hover { text-decoration: underline; text-underline-offset: 5px; }
+
+.marketing-collage { position: relative; min-width: 0; height: 530px; isolation: isolate; color: #20392c; }
+.marketing-collage-orbit { position: absolute; top: 38px; right: -20px; width: 450px; height: 450px; border: 1px solid #a798ff; border-radius: 50%; background: #7968ff; }
+.marketing-collage-phone { position: absolute; top: 24px; left: 24%; z-index: 2; width: 276px; border: 6px solid #182c27; border-radius: 34px; background: #f9faf4; padding: 9px 12px 12px; box-shadow: 15px 25px 0 rgb(33 24 109 / 22%); transform: rotate(7deg); }
+.preview-phone-speaker { width: 64px; height: 5px; margin: 0 auto 12px; border-radius: 8px; background: #1b3128; }
+.preview-phone-brand { display: flex; align-items: center; gap: 2px; padding-bottom: 16px; }
+.preview-phone-action { display: flex; min-height: 39px; align-items: center; justify-content: space-between; gap: 8px; margin-top: 12px; border-radius: 11px; background: #24583e; padding: 8px 11px; color: white; font-size: 11px; font-weight: 700; }
+.preview-phone-navigation { display: flex; justify-content: space-around; margin-top: 14px; color: #6a7f6e; }
+.preview-phone-navigation svg { width: 17px; height: 17px; }
+.preview-screen-heading { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 17px; font-weight: 800; }
+.preview-screen-description { margin-top: 4px; color: #6c7a6b; font-size: 11px; }
+.preview-stock-row { display: flex; min-height: 60px; align-items: center; gap: 9px; border-bottom: 1px solid #e3e8dc; font-size: 12px; }
+.preview-stock-row > div { min-width: 0; }
+.preview-stock-row strong { display: block; font-size: 12px; }
+.preview-stock-row > div > span { display: block; margin-top: 2px; color: #6e7868; font-size: 10px; }
+.preview-food-icon { display: flex; width: 34px; height: 36px; flex-shrink: 0; align-items: center; justify-content: center; border-radius: 10px; }
+.preview-food-spinach { background: #e1edcd; color: #4e753c; }
+.preview-food-pasta { background: #fff0cd; color: #a27724; }
+.preview-food-cream { background: #e4e9ff; color: #6a6f9f; }
+.preview-use-soon { max-width: 64px; margin-left: auto; border-radius: 5px; background: #fcf0d2; padding: 4px 5px; color: #795b20; font-size: 9px; font-weight: 700; text-align: center; }
+.preview-inventory-hint { display: flex; align-items: center; gap: 7px; margin-top: 12px; border-radius: 8px; background: #edf0e4; padding: 9px; color: #4d6645; font-size: 10px; line-height: 1.5; }
+.marketing-collage-receipt { position: absolute; top: 150px; left: 0; z-index: 3; width: 180px; transform: rotate(-11deg); }
+.preview-receipt { border: 1px solid #e1e4dc; border-radius: 8px 8px 18px 18px; background: #fffefb; padding: 22px 16px 16px; color: #2a3d30; box-shadow: 0 12px 32px rgb(38 30 66 / 9%); }
+.preview-receipt-heading { margin: 12px 0 16px; font-size: 11px; font-weight: 800; text-align: center; text-transform: uppercase; letter-spacing: 0.1em; }
+.preview-receipt-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; border-bottom: 1px dashed #d9dfd3; padding-block: 9px; font-size: 11px; }
+.preview-receipt-row svg { color: #4b7a4b; }
+.preview-receipt-barcode { display: block; height: 24px; margin: 18px 8px 12px; background: repeating-linear-gradient(90deg, #314237 0 2px, transparent 2px 4px, #314237 4px 5px, transparent 5px 8px); }
+.preview-receipt-status { display: flex; align-items: center; justify-content: center; gap: 6px; color: #52774a; font-size: 9px; font-weight: 700; }
+.marketing-collage-recipe { position: absolute; right: -10px; bottom: 10px; z-index: 4; width: 235px; transform: rotate(-5deg); }
+.preview-recipe { overflow: hidden; border: 4px solid white; border-radius: 18px; background: #fffefb; box-shadow: 0 14px 40px rgb(32 22 77 / 14%); }
+.preview-recipe-image { position: relative; height: 130px; }
+.preview-recipe-details { display: grid; gap: 5px; padding: 12px 10px; }
+.preview-recipe-tag { display: inline-flex; align-items: center; gap: 4px; color: #5f7754; font-size: 9px; font-weight: 700; }
+.preview-recipe-details > strong { color: #243d2a; font-size: 13px; line-height: 1.3; }
+.preview-recipe-time { display: flex; align-items: center; gap: 4px; color: #77816e; font-size: 10px; }
+
+.marketing-hero-eyebrow { animation: marketing-rise 600ms both; }
+.marketing-hero-title { animation: marketing-rise 700ms 80ms both; }
+.marketing-hero-description { animation: marketing-rise 650ms 180ms both; }
+.marketing-hero-actions { animation: marketing-rise 650ms 280ms both; }
+.marketing-collage-phone { animation: marketing-card-enter 800ms 120ms both, marketing-card-drift 3200ms 920ms ease-in-out; }
+.marketing-collage-receipt { animation: marketing-card-enter 850ms 250ms both, marketing-card-drift 3000ms 1100ms ease-in-out; }
+.marketing-collage-recipe { animation: marketing-card-enter 900ms 380ms both, marketing-card-drift 2800ms 1280ms ease-in-out; }
+@keyframes marketing-rise { from { opacity: 0; translate: 0 14px; } to { opacity: 1; translate: 0 0; } }
+@keyframes marketing-card-enter { from { opacity: 0; translate: 0 28px; scale: 0.96; } to { opacity: 1; translate: 0 0; scale: 1; } }
+@keyframes marketing-card-drift { 0%, 100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+
+.marketing-section { padding-block: 72px; scroll-margin-top: 92px; }
+.marketing-section-heading { max-width: 680px; margin-bottom: 32px; }
+.marketing-section-heading h2,
+.marketing-home-faq h2 { margin-top: 16px; font-size: clamp(2.2rem, 4.5vw, 3.5rem); line-height: 1.08; }
+.marketing-section-heading > p:last-child:not(.marketing-kicker) { max-width: 56ch; margin-top: 16px; color: #657267; font-size: 1rem; line-height: 1.7; }
+.marketing-product-demo,
+.marketing-video-frame { overflow: hidden; border: 1px solid #d9dfd5; border-radius: 24px; background: white; box-shadow: 0 20px 70px rgb(36 51 35 / 6%); }
+.marketing-video-frame video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #202528; }
+.demo-content { display: grid; line-height: 1.5; min-height: 405px; grid-template-columns: 0.95fr 1.05fr; }
+.demo-step-list { display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 14px; padding: 28px; }
+.demo-step { position: relative; overflow: hidden; display: flex; min-height: 88px; align-items: center; gap: 14px; border: 1px solid transparent; border-radius: 16px; padding: 14px; color: #647364; text-align: left; transition: background 160ms ease, border-color 160ms ease; }
+.demo-step-progress { position: absolute; right: 0; bottom: 0; left: 0; height: 3px; background: #e0d8ff; }
+.demo-step-timer { display: block; width: 100%; height: 100%; transform: scaleX(0); transform-origin: left; background: #7860e8; animation: demo-step-progress linear infinite; }
+.demo-step-timer.is-paused { animation-play-state: paused; }
+@keyframes demo-step-progress { to { transform: scaleX(1); } }
+.demo-step:hover { background: #f5f6f1; }
+.demo-step.is-active { border-color: #d9d0ff; background: #f2efff; color: #43317c; }
+.demo-step > span:nth-child(2) { min-width: 0; flex: 1; }
+.demo-step-number { align-self: flex-start; padding-top: 2px; color: #9c96b2; font-size: 11px; font-weight: 700; }
+.demo-step strong { display: block; font-size: 15px; font-weight: 750; }
+.demo-step small { display: block; margin-top: 5px; font-size: 12px; line-height: 1.6; }
+.demo-play-button { display: inline-flex; min-height: 44px; align-items: center; justify-content: flex-start; gap: 8px; align-self: flex-start; margin-left: 14px; color: #24583e; font-size: 12px; font-weight: 700; }
+.demo-screen { display: flex; min-height: 510px; min-width: 0; align-items: center; justify-content: center; border-left: 1px solid #e8e9e2; background: #eae5ff; padding: 28px; }
+.demo-ui { position: relative; width: 100%; max-width: 480px; min-width: 0; min-height: 450px; overflow: hidden; border: 1px solid #dce3d8; border-radius: 18px; background: #fff; color: #20392c; box-shadow: 0 20px 50px rgb(38 30 66 / 10%); }
+.demo-ui-toolbar { display: flex; height: 36px; align-items: center; gap: 7px; border-bottom: 1px solid #e8ece5; background: #f7f9f4; padding-inline: 20px; font-size: 11px; font-weight: 750; }
+.demo-ui-app-dot { width: 7px; height: 7px; border-radius: 50%; background: #24583e; }
+.demo-ui-toolbar-path { min-width: 0; overflow: hidden; color: #7d897e; font-weight: 500; text-overflow: ellipsis; white-space: nowrap; }
+.demo-ui-body { padding: 22px; }
+.demo-ui-eyebrow { display: flex; align-items: center; gap: 6px; color: #65825b; font-size: 11px; font-weight: 650; line-height: 1.5; }
+.demo-ui-eyebrow svg, .demo-ui-action svg, .demo-ui-note svg, .demo-ui-confirmation svg { width: 15px; height: 15px; flex-shrink: 0; }
+.demo-ui h3 { margin-top: 7px; font-size: 23px; font-weight: 780; letter-spacing: -0.04em; line-height: 1.2; }
+.demo-ui-product-list { display: grid; gap: 7px; margin-top: 18px; }
+.demo-ui-review-row { display: flex; min-height: 48px; align-items: center; gap: 10px; border: 1px solid #e0e7db; border-radius: 10px; padding: 10px 11px; font-size: 13px; }
+.demo-ui-checkbox { animation: demo-ui-checkbox 300ms both; animation-delay: var(--demo-delay); display: grid; width: 20px; height: 20px; flex-shrink: 0; place-items: center; border-radius: 5px; background: #24583e; color: #fff; }
+.demo-ui-checkbox svg { width: 14px; height: 14px; animation: demo-ui-check 300ms both; animation-delay: var(--demo-delay); }
+.demo-ui-amount { margin-left: auto; color: #7a8778; font-size: 11px; white-space: nowrap; }
+.demo-ui-sequence-0 { --demo-delay: 500ms; }
+.demo-ui-sequence-1 { --demo-delay: 1100ms; }
+.demo-ui-sequence-2 { --demo-delay: 1700ms; }
+.demo-ui-action { display: flex; min-height: 42px; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; border-radius: 10px; background: #24583e; padding: 10px; color: white; font-size: 12px; font-weight: 750; text-align: center; animation: demo-ui-press 450ms 2600ms both; }
+.demo-ui-confirmation { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 12px; color: #59774b; font-size: 11px; animation: demo-ui-reveal 350ms 3000ms both; }
+.demo-ui-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 7px; }
+.demo-ui-heading h3 { margin-top: 0; }
+.demo-ui-location { border-radius: 6px; background: #f0f4ec; padding: 4px 7px; color: #69835d; font-size: 10px; font-weight: 650; }
+.demo-ui-stock-row { display: flex; min-height: 66px; align-items: center; gap: 10px; border: 1px solid #e4e9df; border-radius: 12px; padding: 10px; animation: demo-ui-reveal 400ms both; animation-delay: var(--demo-delay); }
+.demo-ui-stock-row > div { min-width: 0; }
+.demo-ui-stock-row strong { display: block; font-size: 13px; }
+.demo-ui-stock-amount { display: block; margin-top: 2px; color: #8a9484; font-size: 10px; }
+.demo-ui-food { display: grid; width: 34px; height: 34px; flex-shrink: 0; place-items: center; border-radius: 9px; }
+.demo-ui-food svg { width: 18px; height: 18px; }
+.demo-ui-food-tomatoes { background: #fce9e0; color: #c06c49; }
+.demo-ui-food-zucchini { background: #eaf1df; color: #62804c; }
+.demo-ui-food-chickpeas { background: #fbefcf; color: #a5873f; }
+.demo-ui-expiry { max-width: 88px; margin-left: auto; border-radius: 7px; background: #fff3d7; padding: 5px 7px; color: #967126; font-size: 9px; text-align: center; }
+.demo-ui-expiry strong { margin-top: 1px; font-size: 11px; }
+.demo-ui-stock-check { width: 16px; height: 16px; flex-shrink: 0; margin-left: auto; color: #5b8450; }
+.demo-ui-note { display: flex; align-items: center; gap: 7px; margin-top: 16px; border-radius: 9px; background: #f0f5e9; padding: 10px; color: #6b825c; font-size: 11px; }
+.demo-ui-recipe-heading { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+.demo-ui-recipe-heading > div { min-width: 0; }
+.demo-ui-recipe-heading h3 { margin-top: 0; font-size: 22px; }
+.demo-ui-chef { display: grid; width: 48px; height: 56px; flex-shrink: 0; place-items: center; border-radius: 12px; background: #eee8ff; color: #7b66bc; }
+.demo-ui-chef svg { width: 28px; height: 28px; }
+.demo-ui-recipe-time { display: flex; align-items: center; gap: 4px; margin-top: 6px; color: #89937f; font-size: 11px; }
+.demo-ui-recipe-time svg { width: 13px; height: 13px; }
+.demo-ui-match { display: block; margin-top: 20px; border-radius: 9px; background: #eaf4df; padding: 10px; color: #577343; font-size: 12px; font-weight: 700; animation: demo-ui-reveal 400ms 1800ms both; }
+.demo-ui-ingredients { margin-top: 10px; }
+.demo-ui-ingredient { display: flex; min-height: 36px; align-items: center; gap: 7px; border-bottom: 1px solid #eef0e9; font-size: 12px; }
+.demo-ui-ingredient > svg { width: 14px; height: 14px; flex-shrink: 0; color: #66834f; animation: demo-ui-check 300ms both; animation-delay: var(--demo-delay); }
+.demo-ui-available { margin-left: auto; color: #91a083; font-size: 10px; }
+.demo-ui-cursor { position: absolute; top: 34%; left: 11%; pointer-events: none; animation: demo-ui-cursor 3700ms both; }
+.demo-ui-cursor svg { width: 24px; height: 24px; fill: white; stroke: #20392c; filter: drop-shadow(0 2px 2px rgb(0 0 0 / 18%)); }
+.demo-ui-inventory .demo-ui-cursor { animation-name: demo-ui-inventory-cursor; }
+.demo-ui-recipe .demo-ui-cursor { animation-name: demo-ui-recipe-cursor; }
+.demo-ui[data-playing="false"] * { animation: none; }
+.demo-ui[data-playing="false"] .demo-ui-cursor { display: none; }
+@keyframes demo-ui-checkbox { from { background: white; box-shadow: inset 0 0 0 1px #cbd8c4; } to { background: #24583e; box-shadow: none; } }
+@keyframes demo-ui-check { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+@keyframes demo-ui-reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes demo-ui-press { 50% { transform: scale(0.97); background: #173e2b; } }
+@keyframes demo-ui-cursor { 0% { opacity: 0; } 12% { opacity: 1; top: 34%; left: 11%; } 30% { top: 46%; left: 11%; } 48% { top: 58%; left: 11%; } 72%, 80% { opacity: 1; top: 72%; left: 72%; } 100% { opacity: 0; top: 87%; left: 83%; } }
+@keyframes demo-ui-inventory-cursor { 0% { opacity: 0; top: 85%; left: 90%; } 40%, 75% { opacity: 1; top: 36%; left: 75%; } 100% { opacity: 0; top: 36%; left: 75%; } }
+@keyframes demo-ui-recipe-cursor { 0% { opacity: 0; top: 30%; left: 90%; } 40%, 80% { opacity: 1; top: 80%; left: 72%; } 100% { opacity: 0; top: 90%; left: 82%; } }
+
+.marketing .subscription-pricing article { border-width: 1px; border-radius: 24px; background: #fff; }
+.marketing .subscription-pricing article[data-plan="premium"] { border: 2px solid #b3a3ee; background: #f0edff; }
+.marketing .subscription-pricing article h3 { font-size: 1.15rem; }
+.marketing .subscription-pricing article [data-slot="button"] { font-weight: 750; }
+.marketing-home-faq { display: grid; align-items: start; gap: 60px; grid-template-columns: 0.8fr 1.2fr; }
+.marketing-text-link { display: inline-flex; min-height: 44px; align-items: center; gap: 8px; margin-top: 18px; color: #24583e; font-size: 0.85rem; font-weight: 700; }
+.marketing-text-link:hover { text-decoration: underline; text-underline-offset: 4px; }
+.marketing-final-section { padding-block: 24px 90px; }
+.marketing-cta { display: grid; min-height: 360px; justify-items: center; align-content: center; border-radius: 28px; background: #183d31; padding: 80px 48px; color: #f8f4df; text-align: center; }
+.marketing-cta h2 { max-width: 19ch; font-size: clamp(2.6rem, 5.5vw, 4.5rem); line-height: 1.05; text-wrap: balance; }
+.marketing-cta .marketing-button { margin-top: 32px; }
+.marketing-cta[data-entered="true"] h2 { animation: marketing-rise 700ms both; }
+.marketing-cta[data-entered="true"] .marketing-button { animation: marketing-rise 600ms 180ms both; }
+.marketing-cta .marketing-button { position: relative; overflow: hidden; }
+.marketing-cta .marketing-button::after { position: absolute; inset: 0; background: linear-gradient(110deg, transparent 25%, rgb(255 255 255 / 35%) 50%, transparent 75%); content: ""; translate: -150% 0; pointer-events: none; }
+.marketing-cta[data-entered="true"] .marketing-button::after { animation: marketing-button-shine 900ms 650ms both; }
+.marketing-cta .marketing-button svg { transition: translate 180ms ease; }
+.marketing-cta .marketing-button:is(:hover, :focus-visible) svg { translate: 3px 0; }
+@keyframes marketing-button-shine { from { translate: -150% 0; } to { translate: 150% 0; } }
+
+.marketing-page { padding-block: 56px 90px; }
+.marketing-prose { color: #556257; font-size: 1rem; line-height: 1.85; }
+.marketing-prose > section { max-width: 76ch; margin-inline: auto; }
+.marketing-prose h2 { margin-top: 2.25rem; color: #243c2c; font-family: var(--font-sans); font-size: 1.35rem; font-weight: 750; letter-spacing: -0.025em; line-height: 1.3; }
+.marketing-prose p { margin-top: 0.9rem; }
+.marketing-info-card { border: 1px solid #dce3d8; border-radius: 24px; background: #fff; padding: clamp(24px, 4vw, 40px); }
+.marketing-about-grid { display: grid; align-items: center; gap: 42px; grid-template-columns: 0.9fr 1.1fr; }
+.marketing-about-photo { position: relative; overflow: hidden; height: 420px; border-radius: 26px; background: #e5ecda; }
+.marketing-about-copy p { max-width: 38ch; color: #526454; font-size: 1.15rem; line-height: 1.8; }
+.marketing-about-copy .marketing-button { margin-top: 28px; }
+.marketing-footer { border-top: 1px solid #dbd5e9; background: #eeeaf7; }
+.marketing-footer nav { font-size: 0.85rem; }
+.marketing-footer nav a { display: inline-flex; min-height: 32px; align-items: center; }
+.marketing-login-photo { position: relative; min-height: 400px; overflow: hidden; border-radius: 26px; background: #dfe9d3; }
+.marketing-hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgb(14 35 24 / 75%)); }
+.marketing-login-form { border: 1px solid #dce3d8; border-radius: 24px; background: white; padding: clamp(25px, 4vw, 42px); }
+.marketing-login-form h1 { color: #203a2b; font-family: var(--font-sans); font-size: clamp(2rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -0.05em; }
+.marketing-login-form [data-slot="input"] { border-color: #cbd8c7; border-radius: 12px; background: #fff; color: #203a2b; }
+.marketing-login-form [data-slot="input"]:focus-visible { border-color: #739c69; box-shadow: 0 0 0 3px rgb(115 156 105 / 25%); }
+.marketing-login-form [data-slot="button"][type="submit"] { border-radius: 999px; background: #24583e; color: #fff; font-weight: 750; }
+.marketing-login-form [data-slot="button"][type="submit"]:hover { background: #163d2a; }
+.marketing-login-form .marketing-auth-google { border-color: #cbd8c7; border-radius: 999px; background: transparent; color: #24583e; font-weight: 700; }
+.marketing-login-form .marketing-auth-google:hover { background: #edf2e8; }
+.marketing .animate-blink-cursor { animation: fridgy-cursor-blink 1.2s step-end infinite; }
+@keyframes fridgy-cursor-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+@media (max-width: 1023px) {
+  .marketing-hero-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .marketing-hero-title { font-size: clamp(2.7rem, 6.2vw, 4rem); }
+  .marketing-collage { height: 480px; }
+  .marketing-collage-phone { left: 12%; width: 250px; }
+  .marketing-collage-orbit { width: 370px; height: 370px; }
+  .marketing-collage-receipt { top: 180px; left: -12px; width: 155px; }
+  .marketing-collage-recipe { right: -8px; width: 205px; }
+  .demo-step-list { gap: 8px; padding: 18px; }
+  .demo-screen { padding: 22px; }
+  .marketing-home-faq { gap: 30px; }
 }
 
-.marketing-page {
-  width: min(100% - 2.5rem, 1000px);
-  margin-inline: auto;
-  padding-block: clamp(64px, 9vw, 116px);
+@media (max-width: 767px) {
+  .marketing-container, .marketing-page { width: min(100% - 2rem, 540px); }
+  .marketing-header { height: 80px; padding-top: 8px; }
+  .marketing-navbar { height: 60px; gap: 8px; border-radius: 16px; padding: 7px 10px; }
+  .marketing-navbar > a { gap: 0; }
+  .marketing-navbar > a img { width: 34px; height: 34px; }
+  .marketing-navbar > a span { font-size: 1.35rem; }
+  .marketing-hero { margin-top: -80px; padding: 102px 0 42px; }
+  .marketing-hero-grid { min-height: auto; grid-template-columns: 1fr; gap: 10px; }
+  .marketing-hero-copy { padding: 12px 0 0; }
+  .marketing-hero-eyebrow { font-size: 0.75rem; }
+  .marketing-hero-title { margin-top: 20px; font-size: clamp(3rem, 10.5vw, 4.3rem); }
+  .marketing-hero-description { max-width: 35ch; margin-top: 20px; font-size: 1rem; }
+  .marketing-hero-actions { gap: 10px 18px; margin-top: 23px; }
+  .marketing-button { min-height: 52px; font-size: 0.88rem; }
+  .marketing-button-small { min-height: 42px; font-size: 0.8rem; }
+  .marketing-collage { width: min(100%, 440px); height: 480px; margin: 18px auto 0; }
+  .marketing-collage-phone { left: 25%; width: 255px; }
+  .marketing-collage-orbit { top: 35px; right: 0; width: 360px; height: 360px; }
+  .marketing-collage-receipt { top: 160px; left: 0; width: 155px; }
+  .marketing-collage-recipe { right: 0; bottom: -5px; width: 205px; }
+  .marketing-section { padding-block: 46px; scroll-margin-top: 90px; }
+  .marketing-section-heading { margin-bottom: 25px; }
+  .marketing-section-heading h2, .marketing-home-faq h2 { font-size: clamp(2rem, 7vw, 2.65rem); }
+  .demo-content { grid-template-columns: 1fr; }
+  .marketing-home-faq, .marketing-about-grid { grid-template-columns: 1fr; gap: 22px; }
+  .demo-step-list { gap: 6px; padding: 14px; }
+  .demo-step { min-height: 65px; padding: 10px; }
+  .demo-step small { margin-top: 3px; font-size: 11px; }
+  .demo-step strong { font-size: 14px; }
+  .demo-screen { min-height: 500px; border-top: 1px solid #e3dff1; border-left: 0; padding: 16px; }
+  .marketing-home-faq h2 { max-width: 18ch; }
+  .marketing-final-section { padding-block: 16px 56px; }
+  .marketing-cta { min-height: 320px; padding: 52px 24px; }
+  .marketing-cta h2 { font-size: clamp(2.1rem, 8vw, 2.75rem); }
+  .marketing-page { padding-block: 32px 64px; }
+  .marketing-about-photo { height: 300px; }
+  .marketing-footer nav a { min-height: 44px; }
 }
 
-.marketing-prose {
-  color: #536357;
-  font-size: 1.06rem;
-  line-height: 1.8;
-}
-
-.marketing-prose h2 {
-  margin-top: 2rem;
-  color: #203a2b;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 1.6rem;
-  line-height: 1.25;
-}
-
-.marketing-prose p {
-  margin-top: 0.8rem;
-}
-
-.marketing-info-card {
-  border: 1px solid #dce3d6;
-  border-radius: 20px;
-  background: #fffef8;
-  padding: clamp(24px, 4vw, 40px);
-}
-
-@media (max-width: 640px) {
-  .marketing-container { width: min(100% - 2rem, 1260px); }
-  .marketing-hero-image { min-height: 420px; border-radius: 160px 160px 20px 20px; }
-  .marketing-float-card { right: 0; bottom: 60px; min-width: 0; }
-  .marketing-cta-art { opacity: 0.25; right: -230px; }
+@media (max-width: 419px) {
+  .marketing-nav-start { display: none; }
+  .marketing-collage { height: 465px; }
+  .marketing-collage-phone { left: 19%; width: 236px; }
+  .marketing-collage-orbit { width: 300px; height: 300px; right: 0; }
+  .marketing-collage-receipt { top: 173px; width: 135px; }
+  .marketing-collage-receipt .preview-receipt { padding: 18px 10px 12px; }
+  .marketing-collage-receipt .preview-receipt-heading { font-size: 9px; }
+  .marketing-collage-receipt .preview-receipt-row { font-size: 10px; }
+  .marketing-collage-receipt .preview-receipt-status { font-size: 8px; gap: 3px; }
+  .marketing-collage-recipe { width: 180px; }
+  .marketing-collage-recipe .preview-recipe-image { height: 108px; }
+  .marketing-collage .preview-use-soon { max-width: 55px; font-size: 8px; }
+  .marketing-collage .preview-stock-row { gap: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .marketing-button,
-  .marketing-billing-option,
-  .marketing-step-card,
-  .marketing-nav-link,
-  .marketing-footer nav a { transition: none; }
-  .marketing-button:hover,
-  .marketing-step-card:hover { transform: none; }
+  .demo-play-button, .demo-step-progress, .demo-ui-cursor { display: none; }
+  .marketing *, .marketing *::before, .marketing *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .marketing-button:hover { transform: none; }
 }

@@ -48,45 +48,118 @@
     "footer": "Gestiona tus alimentos en casa y desperdicia menos."
   },
   "Marketing": {
-    "mainNav": "Navegación principal", "footerNav": "Navegación del pie", "howItWorks": "Cómo funciona", "features": "Funciones", "pricing": "Precios", "start": "Empezar", "contact": "Contacto", "about": "Sobre nosotros", "privacy": "Privacidad", "terms": "Condiciones de uso",
-    "footerText": "Menos desperdicio, más comida rica. Una cocina más tranquila cada día.", "footerNote": "Pensado para cocinar cada día.",
-    "heroEyebrow": "Menos caos en la cocina", "heroTitleOne": "Come lo que", "heroTitleTwo": "ya tienes.", "heroText": "Fridgy organiza tus compras y te ayuda a cocinar antes de que se desperdicien los alimentos.",
-    "startFree": "Empieza con Fridgy", "seeHow": "Descubre cómo funciona", "heroNote": "Sin contraseña. Entra con un código por correo o con Google.",
-    "heroImageAlt": "Shakshuka con garbanzos en una sartén", "heroVisualLabel": "De la compra a la cena", "heroVisualText": "Una buena idea empieza con lo que ya hay en casa.", "floatTitle": "Idea de hoy", "floatText": "Con lo que ya tienes",
-    "bandLabel": "Fridgy en tres pasos", "bandHome": "Un hogar", "bandReceipt": "Un ticket escaneado", "bandCook": "Más ideas para cenar",
-    "stepsEyebrow": "Cómo funciona", "stepsTitle": "Tres pasos para una cocina más tranquila.", "stepsIntro": "Empieza por crear tu hogar. Lo demás viene solo.",
-    "stepOneTitle": "Crea un hogar", "stepOneText": "Guarda tus alimentos en un lugar y compártelos con las personas de tu hogar.",
-    "stepTwoTitle": "Añade un ticket", "stepTwoText": "Haz una foto del ticket, revisa los productos detectados y añádelos a tus existencias.",
-    "stepThreeTitle": "Cocina un plato", "stepThreeText": "Elige una receta según los productos que ya tienes en la cocina.",
-    "featuresEyebrow": "Más posibilidades", "featuresTitle": "Pequeños detalles que cambian mucho.", "featuresIntro": "Fridgy ayuda con las decisiones diarias, desde la nevera hasta la lista de la compra.",
-    "featureDatesTitle": "Úsalo a tiempo", "featureDatesText": "Consulta las fechas de caducidad y aprovecha los alimentos a tiempo.",
-    "featureListTitle": "Compra con un plan", "featureListText": "Comparte la lista de la compra y añade lo que falta para una receta.",
-    "featureDietTitle": "Recetas para ti", "featureDietText": "Adapta las ideas a tu dieta, alergias y alimentos que prefieres evitar.",
-    "pricingEyebrow": "Precios", "pricingTitle": "Elige un plan para tu cocina.", "pricingText": "Empieza sin pagar. Si necesitas más, elige Premium para todo tu hogar.",
-    "pricingBillingLabel": "Periodo de facturación", "pricingMonthly": "Mensual", "pricingYearly": "Anual", "pricingMonthlyShort": "mes", "pricingYearlyShort": "año",
-    "pricingFreeTitle": "Un buen comienzo", "pricingFreeText": "Las herramientas básicas para organizar la comida en casa.",
-    "pricingPremiumTitle": "Más para tu hogar", "pricingPremiumText": "Más escaneos, ideas y espacio para tu hogar.",
-    "pricingRecipes": "Recetas propias", "pricingAi": "Sugerencias de recetas con IA", "pricingScans": "Tickets escaneados", "pricingMembers": "Personas en el hogar", "pricingDailyIdea": "Idea de comida diaria",
-    "pricingFive": "5 guardadas", "pricingUnlimited": "Sin límite", "pricingFiveTotal": "5 en total", "pricingThirtyMonthly": "30 al mes", "pricingTwoMonthly": "2 al mes", "pricingTwentyMonthly": "20 al mes",
-    "pricingOne": "1 persona", "pricingSix": "Hasta 6 personas", "pricingNo": "No disponible", "pricingYes": "Cada día",
-    "pricingFreeAction": "Empezar gratis", "pricingPremiumAction": "Premium próximamente", "pricingDisclaimer": "Esta es una oferta prevista. Los pagos y límites aún no están activos; ahora puedes usar Fridgy sin pagar.",
-    "ctaEyebrow": "Es hora de organizarse", "ctaTitle": "Tu cocina puede ser más sencilla.", "ctaText": "Empieza con lo que tienes. Fridgy te ayudará a preparar algo rico."
+    "mainNav": "Navegación principal",
+    "footerNav": "Navegación del pie",
+    "howItWorks": "Cómo funciona",
+    "pricing": "Precios",
+    "start": "Empezar",
+    "contact": "Contacto",
+    "about": "Sobre nosotros",
+    "privacy": "Privacidad",
+    "terms": "Condiciones de uso",
+    "heroTitleOne": "Come lo que",
+    "heroTitleTwo": "ya tienes.",
+    "heroTitleThree": "tienes en la nevera.",
+    "heroTitleFour": "tienes a mano.",
+    "pricingEyebrow": "Precios",
+    "pricingTitle": "Elige un plan para tu cocina.",
+    "pricingText": "Empieza sin pagar. Si necesitas más, elige Premium para todo tu hogar.",
+    "heroEyebrow": "Tu idea para la cena de hoy",
+    "heroText": "Añade tus compras y encuentra recetas con los alimentos que ya tienes en casa.",
+    "startFree": "Empezar gratis",
+    "seeHow": "Ver Fridgy en acción",
+    "demoEyebrow": "De la compra a la cena",
+    "demoTitle": "Un recibo. Tu próxima comida.",
+    "demoDescription": "Explora tres pasos para ver cómo Fridgy conecta tus compras con la cocina.",
+    "demoStepsLabel": "Pasos de la vista previa",
+    "playPreview": "Reproducir vista previa",
+    "pausePreview": "Pausar vista previa",
+    "demo": {
+      "receipt": {
+        "title": "Añadir un recibo",
+        "description": "Revisa los productos reconocidos y confirma tus compras."
+      },
+      "inventory": {
+        "title": "Ver tu inventario",
+        "description": "Mira qué tienes y qué conviene usar primero."
+      },
+      "recipe": {
+        "title": "Elegir qué cocinar",
+        "description": "Encuentra una receta para los alimentos de tu cocina."
+      }
+    },
+    "faqTitle": "Antes de abrir la nevera.",
+    "allQuestions": "Todas las preguntas y respuestas",
+    "ctaTitle": "Una buena comida empieza en tu nevera.",
+    "preview": {
+      "inventoryTitle": "Tu inventario",
+      "inventoryDescription": "Aprovéchalos en tu cocina.",
+      "spinach": "Espinacas",
+      "pasta": "Macarrones",
+      "cream": "Nata",
+      "useFirst": "Usar primero",
+      "inventoryHint": "Elige ingredientes para la cena.",
+      "receiptTitle": "Tus compras",
+      "receiptReady": "Listo para revisar",
+      "fromYourKitchen": "Con tus alimentos",
+      "recipeTitle": "Pasta con espinacas",
+      "cookAction": "¿Qué cocinamos hoy?"
+    },
+    "footerText": "Inventario, compras y recetas para tu cocina.",
+    "footerNote": "Saca partido a tus alimentos.",
+    "walkthrough": {
+      "receipt": "Recibo",
+      "inventory": "Tus alimentos",
+      "recipe": "Receta",
+      "scanComplete": "Recibo reconocido",
+      "review": "Revisa los productos",
+      "tomatoes": "Tomates",
+      "zucchini": "Calabacín",
+      "chickpeas": "Garbanzos",
+      "save": "Guardar {count} productos",
+      "reviewed": "Añadidos a tus alimentos",
+      "updated": "Alimentos actualizados",
+      "fridge": "Nevera",
+      "useFirst": "Usar primero",
+      "days": "En {count} días",
+      "freshness": "Empieza por los alimentos que caducan pronto.",
+      "matched": "Según tus ingredientes",
+      "recipeTitle": "Guiso de garbanzos",
+      "ingredientsReady": "Tienes {count} de {count} ingredientes",
+      "available": "Lo tienes",
+      "openRecipe": "Ver receta"
+    }
   },
   "PublicPages": {
-    "back": "Volver al inicio", "faqEyebrow": "Ayuda", "faqTitle": "Preguntas que vale la pena hacer.", "faqIntro": "Respuestas claras para usar Fridgy cada día.",
-    "faqOneQ": "¿Cómo añado productos a Fridgy?", "faqOneA": "Escanea un ticket y confirma los productos detectados, o añádelos a mano.",
-    "faqTwoQ": "¿Puedo compartir mis existencias en casa?", "faqTwoA": "Sí. Crea un hogar e invita a otras personas. Podréis compartir existencias, lista de la compra y recetas.",
-    "faqThreeQ": "¿Fridgy sugiere recetas con lo que tengo?", "faqThreeA": "Sí. Las sugerencias tienen en cuenta las existencias del hogar. Revisa siempre los ingredientes antes de cocinar.",
-    "faqFourQ": "¿Puedo indicar mi dieta y alergias?", "faqFourA": "Sí. Indica tu dieta, alérgenos y alimentos excluidos en los ajustes.",
-    "faqFiveQ": "¿Cómo funciona la lista de la compra?", "faqFiveA": "Añade los productos necesarios a una lista compartida. También puedes añadir ingredientes que faltan para una receta.",
-    "faqMore": "¿Tienes otra pregunta?", "contactEyebrow": "Contacto", "contactTitle": "Hablemos de Fridgy.", "contactIntro": "¿Tienes una pregunta, idea o problema? Esta página está lista. Añadiremos una dirección de contacto activa antes del lanzamiento.",
-    "contactPending": "Dirección de contacto próximamente", "contactPendingText": "Aún no mostramos una dirección que no podamos atender. Mientras tanto, consulta las preguntas frecuentes.", "contactFaq": "Ir a preguntas frecuentes",
-    "aboutEyebrow": "Sobre Fridgy", "aboutTitle": "Tira menos. Cocina más.", "aboutIntro": "Fridgy nació de una idea sencilla: organizar la comida de casa debería ser más fácil.",
+    "back": "Volver al inicio",
+    "faqEyebrow": "Ayuda",
+    "faqTitle": "Preguntas que vale la pena hacer.",
+    "faqIntro": "Respuestas claras para usar Fridgy cada día.",
+    "faqOneQ": "¿Cómo añado productos a Fridgy?",
+    "faqOneA": "Escanea un ticket y confirma los productos detectados, o añádelos a mano.",
+    "faqTwoQ": "¿Puedo compartir mis existencias en casa?",
+    "faqTwoA": "Sí. Crea un hogar e invita a otras personas. Podréis compartir existencias, lista de la compra y recetas.",
+    "faqThreeQ": "¿Fridgy sugiere recetas con lo que tengo?",
+    "faqThreeA": "Sí. Las sugerencias tienen en cuenta las existencias del hogar. Revisa siempre los ingredientes antes de cocinar.",
+    "faqFourQ": "¿Puedo indicar mi dieta y alergias?",
+    "faqFourA": "Sí. Indica tu dieta, alérgenos y alimentos excluidos en los ajustes.",
+    "faqFiveQ": "¿Cómo funciona la lista de la compra?",
+    "faqFiveA": "Añade los productos necesarios a una lista compartida. También puedes añadir ingredientes que faltan para una receta.",
+    "faqMore": "¿Tienes otra pregunta?",
+    "contactEyebrow": "Contacto",
+    "contactTitle": "Hablemos de Fridgy.",
+    "contactIntro": "¿Tienes una pregunta, una idea o un problema con Fridgy? Escríbenos – estaremos encantados de ayudarte.",
+    "contactFaq": "Ir a preguntas frecuentes",
+    "aboutEyebrow": "Sobre Fridgy",
+    "aboutTitle": "Tira menos. Cocina más.",
+    "aboutIntro": "Fridgy nació de una idea sencilla: organizar la comida de casa debería ser más fácil.",
     "aboutBody": "Reunimos existencias, fechas de caducidad, listas de compra e ideas para comer en un solo lugar. Así ves lo que tienes y planeas la próxima comida sin compras innecesarias.",
-    "privacyEyebrow": "Información legal", "privacyTitle": "Política de privacidad", "privacyIntro": "La política completa se publicará antes del lanzamiento en producción.",
-    "privacyPendingTitle": "Este documento debe completarse", "privacyPendingText": "Antes del lanzamiento indicaremos el responsable, los fines y bases legales del tratamiento, los plazos de conservación, los destinatarios y cómo ejercer tus derechos.",
-    "termsEyebrow": "Información legal", "termsTitle": "Condiciones de uso", "termsIntro": "Las condiciones completas se publicarán antes del lanzamiento en producción.",
-    "termsPendingTitle": "Este documento debe completarse", "termsPendingText": "Antes del lanzamiento indicaremos el proveedor, las normas de cuentas y hogares, el alcance del servicio, cómo comunicar problemas y cómo dejar de usar Fridgy."
+    "privacyEyebrow": "Información legal",
+    "privacyTitle": "Política de privacidad",
+    "privacyIntro": "Cómo tratamos tus datos, utilizamos proveedores y respetamos tus derechos.",
+    "termsEyebrow": "Información legal",
+    "termsTitle": "Condiciones de uso",
+    "termsIntro": "Reglas de uso de Fridgy y sus suscripciones, derechos y obligaciones de los usuarios."
   },
   "Navigation": {
     "overview": "Resumen",
@@ -153,7 +226,11 @@
     "palette": {
       "title": "Paleta de colores",
       "description": "Elige los colores de la aplicación. Este ajuste se guarda en este navegador.",
-      "options": { "blue": "Azul", "green": "Verde", "violet": "Violeta" }
+      "options": {
+        "blue": "Azul",
+        "green": "Verde",
+        "violet": "Violeta"
+      }
     },
     "householdUi": {
       "title": "Tu hogar",
@@ -162,9 +239,7 @@
       "owner": "Propietario",
       "member": "Miembro",
       "ownerRights": "Puedes gestionar el inventario y las compras, invitar miembros y cambiar el nombre del hogar. El propietario no puede salir del hogar.",
-      "memberRights": "Puedes gestionar las existencias y las compras compartidas, ver las recetas de los miembros del hogar y editar las tuyas. Aún no es posible salir de un hogar.",
-      "leave": "Salir del hogar",
-      "leaveSoon": "Salir del hogar estará disponible cuando se añada soporte en el servidor."
+      "leave": "Salir del hogar"
     },
     "preferences": {
       "cancel": "Cancelar",
@@ -284,7 +359,6 @@
           "success": "Miembro eliminado."
         }
       },
-
       "sessions": {
         "title": "Sesiones activas",
         "description": "Cierra las sesiones de Fridgy en tus otros dispositivos.",
@@ -313,7 +387,11 @@
       "inventoryView": {
         "title": "Vista de la lista de productos",
         "description": "Elige cuánta información se muestra para cada producto.",
-        "options": { "readable": "Claro", "compact": "Compacto", "detailed": "Detallado" }
+        "options": {
+          "readable": "Claro",
+          "compact": "Compacto",
+          "detailed": "Detallado"
+        }
       },
       "regional": {
         "title": "Formato de fecha",
@@ -441,7 +519,11 @@
     "all": "Todos",
     "eyebrow": "Lo que tienes en casa",
     "title": "Mis provisiones",
-    "tabs": { "label": "Estado de los productos", "active": "Disponibles", "consumed": "Agotados" },
+    "tabs": {
+      "label": "Estado de los productos",
+      "active": "Disponibles",
+      "consumed": "Agotados"
+    },
     "description": "{count, plural, one {# producto activo} other {# productos activos}}",
     "cook": "¿Qué cocino?",
     "search": "Buscar productos",
@@ -795,14 +877,21 @@
     "noData": "Sin datos",
     "search": "Buscar recetas",
     "searchPlaceholder": "Buscar receta o ingrediente...",
-    "noSearchResults": { "title": "No se encontraron recetas", "description": "Prueba con otro plato o ingrediente." },
+    "noSearchResults": {
+      "title": "No se encontraron recetas",
+      "description": "Prueba con otro plato o ingrediente."
+    },
     "tabs": {
       "favorites": "Favoritos",
       "custom": "Míos",
       "history": "Historial"
     },
     "historyRetention": "Las recetas generadas que no se añaden a favoritos se eliminan tras 7 días.",
-    "historyExpiry": { "days": "Desaparece en {count} días", "tomorrow": "Desaparece mañana", "today": "Desaparece hoy" },
+    "historyExpiry": {
+      "days": "Desaparece en {count} días",
+      "tomorrow": "Desaparece mañana",
+      "today": "Desaparece hoy"
+    },
     "emptyFavorites": {
       "title": "Sin recetas favoritas",
       "description": "Marca con el corazón las recetas que quieras volver a ver."
@@ -1030,6 +1119,345 @@
       "code": "Código de error: {code}",
       "retry": "Intentar de nuevo",
       "overview": "Resumen"
+    }
+  },
+  "Billing": {
+    "planAndBilling": "Plan y facturación",
+    "monthly": "Mensual",
+    "yearly": "Anual",
+    "monthlyShort": "mes",
+    "yearlyShort": "año",
+    "billingPeriod": "Periodo de facturación",
+    "currentPlan": "Plan actual",
+    "premiumDescription": "Más ideas y comodidad para todo tu hogar.",
+    "freeDescription": "Lo esencial para gestionar tus alimentos cada día.",
+    "annualNote": "Pago anual. Aproximadamente {amount} al mes.",
+    "monthlyNote": "Pago mensual. Cancela la renovación cuando quieras.",
+    "freeNote": "Sin pagos, sin tarjeta y sin fecha de fin.",
+    "features": {
+      "recipes": "Recetas propias",
+      "ai": "Sugerencias de recetas con IA",
+      "scans": "Escaneos de recibos",
+      "members": "Personas del hogar"
+    },
+    "unlimited": "Sin límite",
+    "periods": {
+      "recipes": "guardadas a la vez",
+      "ai": "al mes",
+      "scans": "al mes",
+      "members": "incluido el propietario",
+      "lifetime": "en total, sin renovación"
+    },
+    "dailyIdea": "Idea de plato del día",
+    "dailyIncluded": "Cada día para tu hogar",
+    "premiumOnly": "Incluido en Premium",
+    "choosePremium": "Elegir Premium",
+    "startTrial": "Probar durante {days} días",
+    "startFree": "Empezar gratis",
+    "yourFreePlan": "Estás en el plan Free",
+    "freeAfterCancel": "Free al terminar Premium",
+    "pricingNote": "Precios en PLN. Un plan cubre un hogar. Prueba Premium {days} días sin tarjeta y después pasa a Free si no contratas un plan.",
+    "usageUnknown": "Sin datos",
+    "usageValue": "Usados {used} de {limit}",
+    "savedLimit": "Límite de recetas guardadas",
+    "lifetimeLimit": "Cupo único, sin renovación",
+    "monthlyLimit": "Cupo mensual compartido del hogar",
+    "householdLimit": "Incluye al propietario del hogar",
+    "resetOn": "Se renueva el {date}",
+    "limitReached": "Has alcanzado el límite. Consulta tus opciones.",
+    "limitNear": "Te acercas al límite de esta función.",
+    "seePremium": "Descubrir Premium",
+    "manage": "Gestionar plan",
+    "details": "Detalles del plan",
+    "fixPayment": "Revisar pago",
+    "ownerOnly": "El propietario del hogar gestiona el plan y los pagos. Pídele que cambie el plan o revise un pago.",
+    "sharedPlan": "Este plan y sus límites cubren todo el hogar. El propietario gestiona los pagos.",
+    "nextPayment": "Próximo pago",
+    "trialEnds": "Fin de la prueba",
+    "accessUntil": "Acceso Premium hasta",
+    "noRenewal": "Renovación del pago",
+    "noCharge": "Sin coste",
+    "notApplicable": "No corresponde",
+    "dateUnknown": "Fecha no disponible",
+    "amount": "Importe por periodo",
+    "trialNote": "Tienes los límites de Premium durante {days} días. La prueba no se renueva automáticamente. Sin suscripción, tu hogar pasa a Free.",
+    "cancelRenewal": "Cancelar renovación",
+    "resume": "Reanudar Premium",
+    "usageTitle": "Uso del plan",
+    "usageDescription": "Un cupo compartido para todas las personas del hogar.",
+    "resetExplanation": "Los cupos mensuales se renuevan en la fecha del ciclo de facturación, también en planes anuales. El cupo no utilizado no se acumula. Los límites de recetas y personas se aplican al total actual.",
+    "compareTitle": "Elige un plan para tu cocina",
+    "oneHousehold": "Cada hogar tiene su propio plan y límites separados.",
+    "paymentTitle": "Método de pago",
+    "cardExpires": "Caduca en {date}",
+    "noCard": "No hay un método de pago guardado. Free y la prueba no requieren tarjeta.",
+    "managePayment": "Gestionar pagos",
+    "invoicesTitle": "Historial de pagos",
+    "noInvoices": "Aún no hay pagos",
+    "invoicesNote": "Tus facturas y su estado aparecerán aquí cuando contrates un plan.",
+    "openInvoice": "Abrir",
+    "openInvoiceLabel": "Abrir factura {id}",
+    "invoiceStatuses": {
+      "paid": "Pagada",
+      "open": "Pendiente de pago",
+      "void": "Anulada"
+    },
+    "dataSafeTitle": "Tus datos se conservan",
+    "dataKept": "Al pasar a Free, conservas recetas, inventario y listas de compra. Los miembros actuales mantienen el acceso. Por encima del límite Free, necesitas espacio o Premium para añadir recetas o invitar personas.",
+    "loading": "Cargando datos del plan…",
+    "loadErrorTitle": "No se pudo cargar tu plan",
+    "loadError": "No podemos consultar tu plan o límites ahora. Tus datos se conservan. Inténtalo de nuevo.",
+    "retry": "Volver a intentar",
+    "back": "Volver",
+    "working": "Procesando…",
+    "actionError": "No se pudo completar la operación. Tu plan no ha cambiado. Inténtalo de nuevo.",
+    "checkoutNote": "Revisa el total y el método de pago antes de pagar. Premium se activa tras confirmar el pago.",
+    "pricingTitle": "Más cosas buenas en tu cocina",
+    "pricingDescription": "Empieza gratis. Elige Premium cuando tu hogar necesite más.",
+    "faqTitle": "Antes de elegir",
+    "faq": {
+      "trial": {
+        "question": "¿Cómo funciona la prueba?",
+        "answer": "Prueba los límites de Premium sin tarjeta. Al finalizar, tu hogar pasa a Free si no contratas Premium. No se cobra automáticamente."
+      },
+      "households": {
+        "question": "¿Premium cubre todos mis hogares?",
+        "answer": "Cada hogar tiene su propia suscripción y límites compartidos entre sus miembros. El propietario gestiona los pagos."
+      },
+      "cancel": {
+        "question": "¿Qué pasa si cancelo?",
+        "answer": "Premium sigue activo hasta el final del periodo pagado. Después tu hogar pasa a Free. Se conservan los datos y el acceso de los miembros actuales."
+      },
+      "limits": {
+        "question": "¿Cuándo se renuevan los límites?",
+        "answer": "Los cupos mensuales se renuevan en la fecha del ciclo de facturación, también en planes anuales. Recetas y miembros tienen un límite del total actual. El cupo de IA de Free es único."
+      }
+    },
+    "statuses": {
+      "free": {
+        "title": "Plan gratuito",
+        "description": "Tienes acceso a las funciones básicas de Fridgy."
+      },
+      "trialing": {
+        "title": "Prueba activa",
+        "description": "Tienes acceso a Premium. Después pasarás a Free si no contratas un plan."
+      },
+      "trial_ending": {
+        "title": "La prueba termina pronto",
+        "description": "Consulta la fecha de fin. No se cobrará automáticamente."
+      },
+      "active": {
+        "title": "Premium está activo",
+        "description": "Tu suscripción está activa."
+      },
+      "canceling": {
+        "title": "Renovación cancelada",
+        "description": "Premium funciona hasta el final del periodo pagado. Después pasas a Free."
+      },
+      "expired": {
+        "title": "Premium ha caducado",
+        "description": "Tu hogar usa ahora Free. Los datos y el acceso de los miembros se han conservado."
+      },
+      "past_due": {
+        "title": "Pago atrasado",
+        "description": "El pago de renovación ha fallado. Premium sigue disponible. Revisa tu método de pago."
+      },
+      "unpaid": {
+        "title": "Pago sin abonar",
+        "description": "El acceso a Premium está suspendido. Completa el pago para recuperarlo."
+      },
+      "incomplete": {
+        "title": "Pago pendiente",
+        "description": "Tu compra no se ha completado. Premium se activa tras confirmar el pago."
+      },
+      "incomplete_expired": {
+        "title": "Sesión de pago caducada",
+        "description": "La compra no se completó a tiempo. Elige un plan de nuevo para iniciar otro pago."
+      },
+      "paused": {
+        "title": "Premium está en pausa",
+        "description": "La suscripción está en pausa. Reanúdala para volver a usar Premium."
+      },
+      "loading": {
+        "title": "Cargando plan",
+        "description": "Consultando los datos de la suscripción."
+      },
+      "error": {
+        "title": "Plan no disponible",
+        "description": "No se pudieron cargar los datos de la suscripción."
+      }
+    },
+    "actions": {
+      "checkout": {
+        "title": "Elegir plan Premium",
+        "description": "Estás contratando un plan para {household}. Todos los miembros comparten sus límites.",
+        "confirm": "Continuar al pago"
+      },
+      "trial": {
+        "title": "Iniciar prueba",
+        "description": "El hogar {household} tendrá Premium durante {days} días sin tarjeta. Después pasará a Free si no contratas un plan.",
+        "confirm": "Comenzar prueba"
+      },
+      "cancel": {
+        "title": "¿Cancelar la renovación de Premium?",
+        "description": "No habrá otro cobro de renovación. Premium seguirá disponible hasta el final del periodo pagado.",
+        "confirm": "Cancelar renovación"
+      },
+      "resume": {
+        "title": "Reanudar suscripción",
+        "description": "Revisa las condiciones antes de confirmar. El acceso se recupera tras la confirmación.",
+        "confirm": "Revisar condiciones de renovación"
+      },
+      "payment": {
+        "title": "Gestionar tu pago",
+        "description": "Accede a la gestión segura del método de pago y la facturación del hogar.",
+        "confirm": "Abrir ajustes de pago"
+      },
+      "interval": {
+        "title": "Cambiar periodo de facturación",
+        "description": "Revisa la fecha y el importe antes de confirmar. El periodo actual sigue activo hasta que se confirme el cambio.",
+        "confirm": "Revisar detalles del cambio"
+      },
+      "retry": {
+        "title": "Actualizar datos del plan",
+        "description": "Vuelve a consultar los datos de la suscripción y los límites disponibles.",
+        "confirm": "Volver a intentar"
+      },
+      "invoice": {
+        "title": "Abrir tu factura",
+        "description": "Accede a la vista segura del documento y a las opciones de descarga.",
+        "confirm": "Abrir documento"
+      }
+    },
+    "premiumEnded": "Fin de Premium"
+  },
+  "ContactForm": {
+    "title": "Envíanos un mensaje",
+    "requiredNote": "Todos los campos son obligatorios.",
+    "fields": {
+      "name": "Tu nombre",
+      "email": "Correo electrónico",
+      "subject": "Asunto del mensaje",
+      "message": "Tu mensaje"
+    },
+    "messageHint": "Cuéntanos cómo podemos ayudarte.",
+    "privacy": "Consulta cómo tratamos tus datos en nuestra <link>política de privacidad</link>.",
+    "send": "Enviar mensaje",
+    "sending": "Enviando mensaje…",
+    "successTitle": "Mensaje enviado",
+    "successDescription": "Gracias por escribirnos. Responderemos al correo electrónico que has indicado.",
+    "sendAnother": "Escribir otro mensaje",
+    "sendError": "No se pudo enviar tu mensaje. El texto se ha conservado. Inténtalo de nuevo.",
+    "helpTitle": "¿Buscas una respuesta rápida?",
+    "helpDescription": "En las preguntas frecuentes encontrarás respuestas sobre inventario, recetas y el uso compartido de Fridgy.",
+    "errors": {
+      "required": "Completa este campo.",
+      "invalidEmail": "Introduce un correo electrónico válido.",
+      "tooLong": "Utiliza un máximo de {max} caracteres.",
+      "messageShort": "Escribe al menos {min} caracteres."
+    }
+  },
+  "Legal": {
+    "entityName": "Nombre del prestador",
+    "address": "Dirección postal",
+    "phone": "Teléfono de contacto",
+    "taxId": "Identificador fiscal",
+    "registerId": "Número de registro",
+    "contact": "Contacto por correo electrónico",
+    "contactForm": "Formulario de contacto",
+    "contents": "Índice de contenidos",
+    "updatedAt": "Última actualización: {date}",
+    "privacy": {
+      "providerTitle": "Responsable de datos y contacto",
+      "providerDescription": "El responsable de los datos personales tratados en relación con Fridgy es {name}. Utiliza los datos de contacto siguientes para consultas de privacidad y solicitudes sobre tus derechos.",
+      "data": {
+        "title": "Qué datos tratamos",
+        "body": "Tratamos tu correo, identificador de cuenta, nombre e imagen de perfil elegidos, pertenencia a hogares, inventario, listas de compra, recetas, imágenes de platos, favoritos, historial de cocina, preferencias alimentarias y correspondencia. Los proveedores de infraestructura también tratan datos técnicos, como la IP y los datos de las solicitudes. Al iniciar sesión con Google recibimos los datos compartidos mediante ese método."
+      },
+      "purposes": {
+        "title": "Fines y bases jurídicas",
+        "body": "La gestión de la cuenta, las funciones, el soporte relacionado con el servicio y la facturación son necesarios para ejecutar el contrato (artículo 6.1.b del RGPD). Las obligaciones fiscales y legales se basan en el artículo 6.1.c. La seguridad, la prevención de abusos, las consultas generales y la defensa de reclamaciones son intereses legítimos del responsable (artículo 6.1.f). Los tratamientos que requieren consentimiento se basan en el consentimiento otorgado, que puedes retirar."
+      },
+      "preferences": {
+        "title": "Preferencias opcionales y alergias",
+        "body": "Los datos de cuenta y pedido son necesarios para el servicio elegido. El resto, incluidas las preferencias alimentarias, es opcional. Las alergias pueden revelar datos de salud, cuyo tratamiento requiere consentimiento explícito conforme al artículo 9.2.a del RGPD. Puedes eliminar las preferencias en ajustes o <contact>contactando con nosotros</contact>. No facilites datos de otras personas sin autorización."
+      },
+      "sharing": {
+        "title": "Datos compartidos en el hogar",
+        "body": "El inventario, las listas, las recetas, los favoritos y el historial de cocina se comparten en el hogar. El propietario accede a los datos necesarios para gestionarlo, incluidos nombres y correos de miembros. Las preferencias personales pertenecen a tu perfil. Eliminar una cuenta no elimina todo el contenido compartido; parte puede permanecer en el hogar donde se añadió."
+      },
+      "providers": {
+        "title": "Proveedores e inteligencia artificial",
+        "body": "Utilizamos proveedores de alojamiento, acceso, bases de datos, archivos, IA y pagos: {processors}. Reciben los datos necesarios para su función. La IA recibe inventario, preferencias e instrucciones seleccionados, la imagen de un recibo o la descripción de una receta importada. No guardamos las imágenes de recibos en la biblioteca de archivos de Fridgy; los proveedores tienen sus propias reglas de conservación. El operador gestiona los pagos; Fridgy no guarda números completos de tarjeta. Podemos facilitar datos a autoridades competentes cuando lo exija la ley."
+      },
+      "transfers": {
+        "title": "Transferencias fuera del EEE",
+        "body": "Los proveedores o sus subencargados pueden tratar datos fuera del Espacio Económico Europeo. Las transferencias requieren un mecanismo del RGPD, como una decisión de adecuación o cláusulas contractuales tipo y las garantías adicionales necesarias. Puedes solicitar detalles del mecanismo y una copia de las garantías <contact>contactando con el responsable</contact>."
+      },
+      "retention": {
+        "title": "Cuánto tiempo conservamos los datos",
+        "body": "Conservamos los datos de cuenta y actividad mientras usas el servicio y después solo lo necesario para obligaciones legales, contabilidad o reclamaciones. La correspondencia se conserva durante la gestión y un periodo justificado para documentarla. Los registros de seguridad y las copias siguen plazos según su finalidad y configuración. Las recetas de IA no favoritas se eliminan después de 7 días durante la limpieza de la biblioteca. La eliminación de cuentas y contenido compartido respeta los derechos de otros miembros."
+      },
+      "storage": {
+        "title": "Cookies y almacenamiento del navegador",
+        "body": "Usamos mecanismos de sesión para el acceso y guardamos idioma, tema y paleta elegidos. El idioma se guarda en una cookie durante un máximo de un año; la apariencia permanece en el almacenamiento local hasta cambiarla o borrarla. Fridgy no utiliza rastreadores publicitarios ni cookies de marketing. Puedes gestionar el almacenamiento en el navegador; bloquear mecanismos esenciales puede impedir el acceso o guardar preferencias."
+      },
+      "rights": {
+        "title": "Tus derechos y reclamaciones",
+        "body": "Según las condiciones del RGPD, puedes solicitar acceso, rectificación, supresión, limitación y portabilidad, y oponerte al tratamiento. Retirar el consentimiento no afecta al tratamiento lícito anterior. <contact>Escribe al responsable</contact>; normalmente respondemos en un mes e informamos de cualquier prórroga justificada. Puedes reclamar ante la <authority>autoridad polaca de protección de datos</authority> o la autoridad competente. Fridgy no toma decisiones exclusivamente automatizadas con efectos jurídicos o similares significativos sobre ti."
+      },
+      "changes": {
+        "title": "Cambios de la política",
+        "body": "La política vigente está disponible aquí con su fecha de actualización. Informaremos de cambios importantes del tratamiento en la aplicación o por correo antes de aplicarlos y obtendremos consentimiento separado cuando lo exija la ley. Los cambios no limitan tus derechos sobre los datos."
+      }
+    },
+    "terms": {
+      "providerTitle": "Prestador y contacto",
+      "providerDescription": "Fridgy es prestado por {name}, en adelante el Prestador. Los datos siguientes sirven para contacto, reclamaciones, desistimiento y cuestiones de cuenta.",
+      "service": {
+        "title": "Servicio y requisitos",
+        "body": "Fridgy ayuda a gestionar inventario, compras, recetas y cocina. Incluye hogares compartidos, importación de recetas, análisis de recibos y sugerencias de IA según el plan. Necesitas internet, un navegador actualizado con JavaScript y mecanismos de sesión esenciales, y acceso al correo o una cuenta compatible. El tratamiento de datos se explica en la <privacy>política de privacidad</privacy>."
+      },
+      "account": {
+        "title": "Cuenta y contrato",
+        "body": "El contrato de cuenta se celebra al crear la cuenta y aceptar estas condiciones. Facilita datos correctos y protege el acceso al correo y la cuenta de acceso. No compartas códigos. Debes tener la capacidad jurídica exigida y obtener antes el consentimiento del representante legal si es necesario. Puedes guardar o imprimir esta página gratuitamente."
+      },
+      "households": {
+        "title": "Hogares compartidos y roles",
+        "body": "Los datos añadidos al hogar están disponibles para sus miembros autorizados. El propietario gestiona miembros, plan y pagos y puede transferir su función. Cada hogar tiene su propio plan y límites compartidos. Invita solo a personas autorizadas a acceder a los datos. Antes de eliminar una cuenta propietaria con otros miembros, hay que transferir la propiedad o finalizar las demás pertenencias."
+      },
+      "plans": {
+        "title": "Free, Premium y prueba",
+        "body": "Free es gratuito. Las funciones, precios y límites de Premium aparecen en los <pricing>precios</pricing> antes de contratar. La prueba dura {trialDays} días con límites Premium, sin tarjeta ni conversión automática a pago; sin compra, el hogar vuelve a Free. Los cupos mensuales se renuevan en la fecha del ciclo, también en anual, sin acumularse. El cupo único de IA de Free no se renueva."
+      },
+      "billing": {
+        "title": "Pagos, renovación y cancelación",
+        "body": "Comprar Premium constituye un contrato separado tras mostrar precio, periodo, renovación y obligación de pago y confirmar el pedido. El plan se factura y renueva mensual o anualmente según las condiciones aceptadas. En los <settings>ajustes del plan</settings> puedes consultar fechas y cancelar la renovación. El acceso dura hasta finalizar el periodo pagado. Pasar a Free conserva datos y accesos existentes; añadir por encima del límite requiere espacio o Premium. Un problema de pago puede suspender Premium tras informar del problema."
+      },
+      "withdrawal": {
+        "title": "Derecho de desistimiento",
+        "body": "El consumidor que contrata a distancia puede, por regla general, desistir en 14 días desde la celebración sin justificarlo. Basta una declaración clara enviada al Prestador, también por <contact>correo electrónico</contact>; no es obligatorio un formulario especial. La ley aplicable regula los efectos y reembolsos. Cancelar la renovación de Premium no equivale por sí solo al desistimiento. Estas reglas no limitan derechos más amplios del consumidor según su ley aplicable."
+      },
+      "content": {
+        "title": "Contenido y uso permitido",
+        "body": "Conservas los derechos sobre tu contenido y otorgas al Prestador un derecho no exclusivo a almacenarlo, tratarlo y compartirlo con miembros autorizados para prestar el servicio. Añade solo contenido con los derechos necesarios, también al importarlo. Se prohíben contenido ilícito, vulneraciones de privacidad, eludir protecciones o límites e interferir en la aplicación. Las restricciones justificadas deben ser proporcionadas; explicaremos el motivo y cómo impugnarlas salvo prohibición legal."
+      },
+      "safety": {
+        "title": "IA, fechas alimentarias y responsabilidad",
+        "body": "Los resultados de IA, fechas estimadas, valores nutricionales y coincidencias de ingredientes pueden contener errores. Antes de confirmar, revisa recibos, recetas, alérgenos, cantidades, fechas del envase y el estado real de los alimentos. Fridgy no sustituye la evaluación de seguridad alimentaria ni el consejo médico o dietético individual. Las limitaciones tecnológicas no excluyen la responsabilidad del Prestador por conformidad contractual ni los derechos irrenunciables del consumidor."
+      },
+      "complaints": {
+        "title": "Reclamaciones y conformidad",
+        "body": "<contact>Envía una reclamación</contact> con el problema, cuándo ocurrió, tu solicitud y datos para responder. No exigimos un formulario especial. Respondemos a consumidores en 14 días salvo norma aplicable distinta. Los derechos legales sobre servicios digitales, incluida conformidad, reducción del precio o resolución cuando proceda, no se limitan por estas condiciones. <consumer>UOKiK</consumer> informa de resolución extrajudicial; la participación sigue las reglas de cada procedimiento."
+      },
+      "termination": {
+        "title": "Fin del uso y datos",
+        "body": "Puedes dejar de usar la cuenta, eliminarla en ajustes y exportar antes los datos disponibles. En hogares compartidos rigen las reglas del propietario y la protección del contenido ajeno. Cancelar la renovación y eliminar la cuenta son acciones separadas; resuelve la facturación activa antes del cierre. Las recetas de IA no favoritas pueden eliminarse tras 7 días. También puedes dirigir solicitudes legales sobre datos o terminación al <contact>Prestador</contact>."
+      },
+      "changes": {
+        "title": "Cambios y ley aplicable",
+        "body": "Los cambios pueden deberse a la ley, seguridad o modificaciones del servicio. Los que afecten a contratos vigentes se notificarán antes en soporte duradero, indicando motivo, fecha y derechos, incluida la terminación cuando proceda. No cambiamos retroactivamente el precio de periodos pagados. Se aplica la ley polaca sin privar de protección imperativa al consumidor según su residencia habitual. La competencia judicial se determina conforme a la ley."
+      }
     }
   }
 }

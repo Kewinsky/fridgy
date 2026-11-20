@@ -35,6 +35,7 @@ import {
 } from "@/app/dashboard/settings-actions";
 
 import { Button } from "@/components/ui/button";
+import { SubscriptionUsage } from "@/components/dashboard/subscription-usage";
 import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
@@ -289,6 +290,7 @@ export function AccountSettings({
               title={t("invite.title")}
               description={t("invite.description")}
             >
+              <SubscriptionUsage feature="members" compact />
               <div className="flex flex-wrap items-center justify-end gap-3">
                 <Button
                   type="button"

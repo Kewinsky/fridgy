@@ -17,6 +17,7 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 
 import { PageHeader } from "@/components/dashboard/page-header";
+import { SubscriptionUsage } from "@/components/dashboard/subscription-usage";
 import { BrandIcon } from "@/components/brand-icon";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
 import {
@@ -464,6 +465,7 @@ export function ReceiptPage() {
         eyebrow={t("manual.eyebrow")}
         title={t("manual.title")}
       />
+      <SubscriptionUsage feature="scans" compact />
       <section className={receiptCardClassName}>
         <div
           className="subtle-grid flex min-h-72 flex-1 flex-col items-center justify-center rounded-xl border border-dashed border-input bg-muted/30 px-5 py-8 text-center"

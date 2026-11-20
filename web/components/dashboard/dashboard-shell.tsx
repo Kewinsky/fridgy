@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import {
   ChefHatIcon,
+  CreditCardIcon,
   BookOpenCheckIcon,
   ChevronDownIcon,
   CirclePlusIcon,
@@ -22,6 +23,8 @@ import {
 import { signOut } from "@/app/dashboard/actions";
 import { BrandIcon, BrandWordmark } from "@/components/brand-icon";
 import { HouseholdSwitcher } from "@/components/dashboard/household-switcher";
+import { SubscriptionNavLink, SubscriptionStatusNotice } from "@/components/dashboard/subscription-status";
+import { billingSettingsPath } from "@/lib/subscription";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -177,6 +180,7 @@ export function DashboardShell({
         </nav>
 
         <div className="mt-auto border-t border-border p-4">
+          <SubscriptionNavLink />
           <ProfileMenu
             email={email}
             username={username}
@@ -195,6 +199,7 @@ export function DashboardShell({
               households={households}
             />
           </div>
+          {!pathname.startsWith("/dashboard/ustawienia") ? <SubscriptionStatusNotice compact /> : null}
           {children}
         </div>
       </div>
@@ -253,6 +258,7 @@ function ProfileMenu({
 }) {
   const t = useTranslations("Navigation");
   const pathname = usePathname();
+  const billingT = useTranslations("Billing");
   const active = pathname.startsWith("/dashboard/ustawienia");
 
   return (
@@ -323,6 +329,9 @@ function ProfileMenu({
           </DropdownMenuLabel>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
+        <DropdownMenuItem render={<Link href={billingSettingsPath} />}>
+          <CreditCardIcon aria-hidden="true" /> {billingT("planAndBilling")}
+        </DropdownMenuItem>
         {mobile ? (
           <DropdownMenuItem render={<Link href="/dashboard/slownik" />}>
             <ScaleIcon aria-hidden="true" /> {t("dictionary")}

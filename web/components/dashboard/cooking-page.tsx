@@ -8,6 +8,7 @@ import { BookOpenCheckIcon, CheckIcon, ChefHatIcon, ChevronDownIcon, RefreshCwIc
 import { generateRecipes } from "@/app/dashboard/data-actions";
 import { BrandIcon } from "@/components/brand-icon";
 import { PageHeader } from "@/components/dashboard/page-header";
+import { SubscriptionUsage } from "@/components/dashboard/subscription-usage";
 import { RecipeCard } from "@/components/dashboard/recipe-card";
 import { RecipeCardSkeleton } from "@/components/dashboard/recipe-card-skeleton";
 import { useDashboardData } from "@/components/dashboard/dashboard-data-provider";
@@ -101,6 +102,7 @@ export function CookingPage() {
         }
       />
 
+      <SubscriptionUsage feature="ai" compact />
       {showRecipes ? (
         <>
           <div className="mb-4 flex flex-wrap items-center justify-between gap-3">

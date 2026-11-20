@@ -6,6 +6,7 @@ import { AccountSettings } from "@/components/dashboard/account-settings";
 import { AdvancedSettings } from "@/components/dashboard/advanced-settings";
 import { PreferenceSettings } from "@/components/dashboard/preference-settings";
 import { SettingsTabs } from "@/components/dashboard/settings-tabs";
+import { SubscriptionSettings } from "@/components/dashboard/subscription-settings";
 import { ThemeSettings } from "@/components/dashboard/theme-settings";
 import { ColorSettings } from "@/components/dashboard/color-settings";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -55,6 +56,7 @@ export default async function SettingsPage() {
         title={t("title")}
       />
       <SettingsTabs
+        billing={<SubscriptionSettings />}
         general={
           <div className="space-y-5">
             <section className="app-card grid items-start gap-5 p-5 md:grid-cols-2">
