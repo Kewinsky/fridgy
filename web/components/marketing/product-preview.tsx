@@ -22,7 +22,6 @@ import {
 } from "lucide-react";
 
 import { BrandIcon, BrandWordmark } from "@/components/brand-icon";
-import { Safari } from "@/components/ui/safari";
 import { ProductWalkthrough } from "@/components/marketing/product-walkthrough";
 import { MARKETING_MEDIA } from "@/lib/marketing-media";
 import { cn } from "@/lib/utils";
@@ -170,7 +169,7 @@ export function ProductDemo() {
 
   if (MARKETING_MEDIA.demoVideo)
     return (
-      <Safari url="Fridgy" className="marketing-video-frame">
+      <div className="marketing-video-frame">
         <video
           controls
           playsInline
@@ -189,11 +188,11 @@ export function ProductDemo() {
             />
           ) : null}
         </video>
-      </Safari>
+      </div>
     );
 
   return (
-    <Safari url="Fridgy" className="marketing-product-demo">
+    <div className="marketing-product-demo">
       <div className="demo-content">
         <div
           className="demo-step-list"
@@ -265,6 +264,6 @@ export function ProductDemo() {
           <ProductWalkthrough step={step} playing={playing} />
         </div>
       </div>
-    </Safari>
+    </div>
   );
 }

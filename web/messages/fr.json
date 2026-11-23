@@ -388,9 +388,9 @@
         "title": "Affichage des stocks",
         "description": "Choisissez les informations affichées pour chaque produit.",
         "options": {
-          "readable": "Lisible",
-          "compact": "Vue condensée",
-          "detailed": "Détaillé"
+          "readable": "Condensé",
+          "compact": "Détaillé",
+          "detailed": "Tableau"
         }
       },
       "regional": {
@@ -534,6 +534,7 @@
     "restoreSelected": "Restaurer la sélection",
     "selectProduct": "Sélectionner {name}",
     "productCount": "{count, plural, one {# produit} other {# produits}}",
+    "columns": { "product": "Produit", "quantity": "Quantité", "category": "Catégorie", "location": "Emplacement", "status": "Statut", "date": "Date estimée" },
     "sort": {
       "label": "Trier les produits",
       "default": "Ordre par défaut",

@@ -388,9 +388,9 @@
         "title": "Inventory list layout",
         "description": "Choose how much information appears for each product.",
         "options": {
-          "readable": "Readable",
-          "compact": "Compact",
-          "detailed": "Detailed"
+          "readable": "Compact",
+          "compact": "Detailed",
+          "detailed": "Table"
         }
       },
       "regional": {
@@ -534,6 +534,7 @@
     "restoreSelected": "Restore selected",
     "selectProduct": "Select {name}",
     "productCount": "{count, plural, one {# product} other {# products}}",
+    "columns": { "product": "Product", "quantity": "Quantity", "category": "Category", "location": "Location", "status": "Status", "date": "Estimated use-by" },
     "sort": {
       "label": "Sort products",
       "default": "Default order",

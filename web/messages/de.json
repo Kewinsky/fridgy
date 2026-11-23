@@ -388,9 +388,9 @@
         "title": "Ansicht der Vorratsliste",
         "description": "Wähle, wie viele Informationen zu jedem Produkt angezeigt werden.",
         "options": {
-          "readable": "Übersichtlich",
-          "compact": "Kompakt",
-          "detailed": "Detailliert"
+          "readable": "Kompakt",
+          "compact": "Detailliert",
+          "detailed": "Tabelle"
         }
       },
       "regional": {
@@ -534,6 +534,7 @@
     "restoreSelected": "Ausgewählte wiederherstellen",
     "selectProduct": "{name} auswählen",
     "productCount": "{count, plural, one {# Produkt} other {# Produkte}}",
+    "columns": { "product": "Produkt", "quantity": "Menge", "category": "Kategorie", "location": "Lagerort", "status": "Zustand", "date": "Geschätztes Datum" },
     "sort": {
       "label": "Produkte sortieren",
       "default": "Standardreihenfolge",

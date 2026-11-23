@@ -388,9 +388,9 @@
         "title": "Wygląd listy zapasów",
         "description": "Wybierz, ile informacji pokazujemy przy każdym produkcie.",
         "options": {
-          "readable": "Czytelny",
-          "compact": "Kompaktowy",
-          "detailed": "Szczegółowy"
+          "readable": "Kompaktowy",
+          "compact": "Szczegółowy",
+          "detailed": "Tabela"
         }
       },
       "regional": {
@@ -534,6 +534,7 @@
     "restoreSelected": "Przywróć zaznaczone",
     "selectProduct": "Zaznacz {name}",
     "productCount": "{count, plural, one {# produkt} few {# produkty} other {# produktów}}",
+    "columns": { "product": "Produkt", "quantity": "Ilość", "category": "Kategoria", "location": "Miejsce", "status": "Status", "date": "Szacowany termin" },
     "sort": {
       "label": "Sortuj produkty",
       "default": "Domyślna kolejność",

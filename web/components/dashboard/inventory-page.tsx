@@ -31,8 +31,11 @@ import {
   type ProductCategory,
 } from "@/components/dashboard/product-category-options";
 import { ProductEditDialog } from "@/components/dashboard/product-edit-dialog";
-import { FreshnessLabel } from "@/components/dashboard/freshness-label";
-import { ProductRowDetails } from "@/components/dashboard/product-row-details";
+import {
+  ProductRowDetails,
+  ProductTableCells,
+  ProductTableHead,
+} from "@/components/dashboard/product-row-details";
 import {
   StorageLocationIcon,
   storageLocationMessageKeys,
@@ -72,7 +75,11 @@ import {
 import { cn } from "@/lib/utils";
 import { paginate } from "@/lib/pagination";
 import { matchesInventoryFilters } from "@/lib/inventory-filters";
-import { inventorySorts, sortInventoryProducts, type InventorySort } from "@/lib/inventory-sort";
+import {
+  inventorySorts,
+  sortInventoryProducts,
+  type InventorySort,
+} from "@/lib/inventory-sort";
 import { mergeShoppingItems } from "@/lib/shopping-list";
 
 const locations = ["Lodówka", "Zamrażarka", "Spiżarnia"] as const;
@@ -106,9 +113,6 @@ export function InventoryPage({
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [editing, setEditing] = useState(false);
   const [productToEdit, setProductToEdit] = useState<DemoProduct | null>(null);
-  const [expandedProductId, setExpandedProductId] = useState<string | null>(
-    null,
-  );
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [pending, setPending] = useState(false);
   const [tableLoading, setTableLoading] = useState(
@@ -382,7 +386,11 @@ export function InventoryPage({
       return next;
     });
     toast.success(
-      t(original?.status === "consumed" && updatedProduct.status === "active" ? "toasts.restored" : "toasts.saved"),
+      t(
+        original?.status === "consumed" && updatedProduct.status === "active"
+          ? "toasts.restored"
+          : "toasts.saved",
+      ),
     );
   }
 
@@ -548,7 +556,7 @@ export function InventoryPage({
             aria-busy={tableLoading}
             aria-label={tab === "active" ? t("title") : t("tabs.consumed")}
           >
-            <div className="flex flex-wrap items-center justify-end gap-2 border-b border-border py-4">
+            <div className="flex flex-wrap items-center justify-end gap-2 py-4">
               {tab === "active" ? (
                 <Button
                   type="button"
@@ -566,7 +574,10 @@ export function InventoryPage({
                     </span>
                   ) : null}
                   <ChevronDownIcon
-                    className={cn("transition-transform", filtersOpen && "rotate-180")}
+                    className={cn(
+                      "transition-transform",
+                      filtersOpen && "rotate-180",
+                    )}
                     aria-hidden="true"
                   />
                 </Button>
@@ -576,23 +587,50 @@ export function InventoryPage({
                 className="h-11"
                 onClick={toggleEditing}
               >
-                {editing ? <XIcon aria-hidden="true" /> : <PencilIcon aria-hidden="true" />}
+                {editing ? (
+                  <XIcon aria-hidden="true" />
+                ) : (
+                  <PencilIcon aria-hidden="true" />
+                )}
                 {editing ? t("cancel") : t("edit")}
               </Button>
             </div>
-            <div id="inventory-table-controls" hidden={tab !== "active" || !filtersOpen} className="border-b border-border py-4">
+            <div
+              id="inventory-table-controls"
+              hidden={tab !== "active" || !filtersOpen}
+              className="border-b border-border py-4"
+            >
               <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
                 <DropdownMenu>
-                  <DropdownMenuTrigger render={<Button type="button" variant="outline" className="h-11 w-full min-w-0 justify-between" aria-label={`${t("sort.label")}: ${t(`sort.${sortMode}`)}`} />}>
+                  <DropdownMenuTrigger
+                    render={
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-11 w-full min-w-0 justify-between"
+                        aria-label={`${t("sort.label")}: ${t(`sort.${sortMode}`)}`}
+                      />
+                    }
+                  >
                     <ArrowDownUpIcon aria-hidden="true" />
-                    <span className="min-w-0 flex-1 truncate text-left">{t(`sort.${sortMode}`)}</span>
+                    <span className="min-w-0 flex-1 truncate text-left">
+                      {t(`sort.${sortMode}`)}
+                    </span>
                     <ChevronDownIcon aria-hidden="true" />
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="min-w-56">
                     {inventorySorts.map((value) => (
-                      <DropdownMenuItem key={value} onClick={() => { setSortMode(value); setPage(1); }}>
+                      <DropdownMenuItem
+                        key={value}
+                        onClick={() => {
+                          setSortMode(value);
+                          setPage(1);
+                        }}
+                      >
                         <span className="flex-1">{t(`sort.${value}`)}</span>
-                        {sortMode === value ? <CheckIcon aria-hidden="true" /> : null}
+                        {sortMode === value ? (
+                          <CheckIcon aria-hidden="true" />
+                        ) : null}
                       </DropdownMenuItem>
                     ))}
                   </DropdownMenuContent>
@@ -626,7 +664,12 @@ export function InventoryPage({
                 ) : null}
               </div>
               {tab === "active" &&
-              Boolean(query || selectedLocations.length || selectedCategories.length || selectedFreshness.length) ? (
+              Boolean(
+                query ||
+                selectedLocations.length ||
+                selectedCategories.length ||
+                selectedFreshness.length,
+              ) ? (
                 <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
                   {selectedLocations.map((value) => (
                     <FilterChip
@@ -649,121 +692,138 @@ export function InventoryPage({
                       onRemove={() => toggleFreshness(value)}
                     />
                   ))}
-                  <Button variant="ghost" className="h-11 text-sm" onClick={clearFilters}>
+                  <Button
+                    variant="ghost"
+                    className="h-11 text-sm"
+                    onClick={clearFilters}
+                  >
                     {t("filters.clear")}
                   </Button>
                 </div>
               ) : null}
             </div>
             {tableLoading ? (
-              <InventoryTableSkeleton />
+              <InventoryTableSkeleton detailed={inventoryView === "detailed"} />
             ) : filtered.length ? (
-              visibleProducts.map((product) =>
-                editing ? (
-                  <label
-                    key={product.id}
-                    htmlFor={`select-${product.id}`}
-                    className={cn(
-                      "flex cursor-pointer items-center gap-3 border-b border-border py-3.5 pl-2 transition-colors last:border-0 hover:bg-muted sm:gap-4",
-                      selectedIds.has(product.id) && "bg-secondary/40",
-                    )}
-                  >
-                    <span className="flex size-11 shrink-0 items-center justify-center">
-                      <Checkbox
-                        id={`select-${product.id}`}
-                        checked={selectedIds.has(product.id)}
-                        disabled={pending}
-                        onCheckedChange={() => toggleProduct(product.id)}
-                      />
-                      <span className="sr-only">
-                        {t("selectProduct", { name: product.name })}
-                      </span>
-                    </span>
-                    <ProductRowDetails product={product} view={inventoryView} />
-                  </label>
-                ) : (
-                  <div
-                    key={product.id}
-                    className="border-b border-border last:border-0"
-                  >
-                    <Button
-                      type="button"
-                      variant="ghost"
+              inventoryView === "detailed" ? (
+                <div className="-mx-5 overflow-x-auto">
+                  <table className="w-full min-w-[880px] border-y border-collapse text-sm">
+                    <ProductTableHead />
+                    <tbody>
+                      {visibleProducts.map((product) => (
+                        <tr
+                          key={product.id}
+                          tabIndex={0}
+                          className={cn(
+                            "cursor-pointer transition-colors hover:bg-muted focus-visible:bg-muted focus-visible:outline-2 focus-visible:outline-ring",
+                            selectedIds.has(product.id) &&
+                              editing &&
+                              "bg-secondary/40",
+                          )}
+                          onClick={() => {
+                            if (editing) toggleProduct(product.id);
+                            else
+                              setProductToEdit(
+                                localizeDemoProduct(product, locale),
+                              );
+                          }}
+                          onKeyDown={(event) => {
+                            if (
+                              event.target !== event.currentTarget ||
+                              (event.key !== "Enter" && event.key !== " ")
+                            )
+                              return;
+                            event.preventDefault();
+                            if (editing) toggleProduct(product.id);
+                            else
+                              setProductToEdit(
+                                localizeDemoProduct(product, locale),
+                              );
+                          }}
+                        >
+                          <ProductTableCells
+                            product={product}
+                            selection={
+                              editing ? (
+                                <Checkbox
+                                  checked={selectedIds.has(product.id)}
+                                  disabled={pending}
+                                  aria-label={t("selectProduct", {
+                                    name: localizeDemoProduct(product, locale)
+                                      .name,
+                                  })}
+                                  onClick={(event) => event.stopPropagation()}
+                                  onCheckedChange={() =>
+                                    toggleProduct(product.id)
+                                  }
+                                />
+                              ) : null
+                            }
+                          />
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ) : (
+                visibleProducts.map((product) =>
+                  editing ? (
+                    <label
+                      key={product.id}
+                      htmlFor={`select-${product.id}`}
                       className={cn(
-                        "h-auto w-full justify-start gap-3 rounded-none py-3.5 pr-0 pl-2 text-left whitespace-normal hover:bg-muted sm:gap-4",
-                        inventoryView === "compact" && "py-2.5",
+                        "flex cursor-pointer items-center gap-3 border-b border-border py-3.5 pl-2 transition-colors last:border-0 hover:bg-muted sm:gap-4",
+                        selectedIds.has(product.id) && "bg-secondary/40",
                       )}
-                      aria-expanded={
-                        inventoryView === "compact"
-                          ? expandedProductId === product.id
-                          : undefined
-                      }
-                      aria-controls={
-                        inventoryView === "compact" &&
-                        expandedProductId === product.id
-                          ? `product-details-${product.id}`
-                          : undefined
-                      }
-                      onClick={() => {
-                        if (inventoryView === "compact")
-                          setExpandedProductId((current) =>
-                            current === product.id ? null : product.id,
-                          );
-                        else
-                          setProductToEdit(
-                            localizeDemoProduct(product, locale),
-                          );
-                      }}
                     >
+                      <span className="flex size-11 shrink-0 items-center justify-center">
+                        <Checkbox
+                          id={`select-${product.id}`}
+                          checked={selectedIds.has(product.id)}
+                          disabled={pending}
+                          onCheckedChange={() => toggleProduct(product.id)}
+                        />
+                        <span className="sr-only">
+                          {t("selectProduct", { name: product.name })}
+                        </span>
+                      </span>
                       <ProductRowDetails
                         product={product}
                         view={inventoryView}
                       />
-                      {inventoryView === "compact" ? (
-                        <ChevronDownIcon
-                          className={cn(
-                            "size-4 shrink-0 text-muted-foreground transition-transform",
-                            expandedProductId === product.id && "rotate-180",
-                          )}
-                          aria-hidden="true"
-                        />
-                      ) : null}
-                    </Button>
-                    {inventoryView === "compact" &&
-                    expandedProductId === product.id ? (
-                      <div
-                        id={`product-details-${product.id}`}
-                        className="flex flex-wrap items-center justify-between gap-3 pb-3 pl-2 sm:pl-5"
+                    </label>
+                  ) : (
+                    <div key={product.id} className="border-b border-border">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        className={cn(
+                          "h-auto w-full justify-start gap-3 rounded-none py-3.5 pr-0 pl-2 text-left whitespace-normal hover:bg-muted sm:gap-4",
+                        )}
+                        onClick={() =>
+                          setProductToEdit(localizeDemoProduct(product, locale))
+                        }
                       >
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                          <span>
-                            {t(
-                              `locations.${storageLocationMessageKeys[product.storageLocation]}`,
-                            )}
-                          </span>
-                          <FreshnessLabel date={product.estimatedUseBy} />
-                        </div>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          onClick={() =>
-                            setProductToEdit(
-                              localizeDemoProduct(product, locale),
-                            )
-                          }
-                        >
-                          <PencilIcon aria-hidden="true" /> {t("edit")}
-                        </Button>
-                      </div>
-                    ) : null}
-                  </div>
-                ),
+                        <ProductRowDetails
+                          product={product}
+                          view={inventoryView}
+                        />
+                      </Button>
+                    </div>
+                  ),
+                )
               )
             ) : (
               <div className="py-16 text-center">
                 <BrandIcon
-                  name={query || selectedLocations.length || selectedCategories.length || selectedFreshness.length ? "search" : "no_results"}
+                  name={
+                    query ||
+                    selectedLocations.length ||
+                    selectedCategories.length ||
+                    selectedFreshness.length
+                      ? "search"
+                      : "no_results"
+                  }
                   className="mx-auto size-20"
                 />
                 <p className="mt-3 font-bold">
@@ -779,7 +839,7 @@ export function InventoryPage({
               </div>
             )}
             {filtered.length > 0 && !tableLoading ? (
-              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border py-4 text-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 py-4 text-sm">
                 <div className="flex items-center gap-3">
                   <span className="text-muted-foreground">
                     {t("pagination.rowsPerPage")}
@@ -999,7 +1059,32 @@ function FilterChip({
   );
 }
 
-function InventoryTableSkeleton() {
+function InventoryTableSkeleton({ detailed }: { detailed: boolean }) {
+  if (detailed)
+    return (
+      <div aria-hidden="true" className="-mx-5 overflow-x-auto">
+        <table className="w-full min-w-[880px] border-y border-collapse text-sm">
+          <ProductTableHead />
+          <tbody>
+            {Array.from({ length: 5 }, (_, index) => (
+              <tr key={index}>
+                {["w-36", "w-16", "w-24", "w-24", "w-28", "w-24"].map(
+                  (width, column) => (
+                    <td
+                      key={column}
+                      className="border-b border-r border-border px-4 py-4 last:border-r-0"
+                    >
+                      <Skeleton className={`h-4 ${width}`} />
+                    </td>
+                  ),
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+
   return (
     <div aria-hidden="true">
       {Array.from({ length: 5 }, (_, index) => (
