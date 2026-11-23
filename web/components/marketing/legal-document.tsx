@@ -57,45 +57,21 @@ export async function LegalDocument({ kind }: { kind: "privacy" | "terms" }) {
       title={publicT(`${kind}Title`)}
       intro={publicT(`${kind}Intro`)}
     >
-      <p className="mb-6 text-sm text-muted-foreground">
-        {t("updatedAt", {
-          date: new Intl.DateTimeFormat(locale, {
-            dateStyle: "long",
-            timeZone: "Europe/Warsaw",
-          }).format(new Date(`${config.legalUpdatedAt}T12:00:00Z`)),
-        })}
+      <p className="mx-auto mb-6 max-w-[76ch] text-muted-foreground">
+        <span className="text-sm">
+          {t("updatedAt", {
+            date: new Intl.DateTimeFormat(locale, {
+              dateStyle: "long",
+              timeZone: "Europe/Warsaw",
+            }).format(new Date(`${config.legalUpdatedAt}T12:00:00Z`)),
+          })}
+        </span>
       </p>
-      <nav
-        aria-label={t("contents")}
-        className="mb-8 rounded-2xl border border-border bg-secondary/40 p-5 sm:p-6"
-      >
-        <h2 className="font-bold">{t("contents")}</h2>
-        <ol className="mt-3 grid list-inside list-decimal gap-x-6 gap-y-2 text-sm leading-6 sm:grid-cols-2">
-          <li>
-            <a
-              href="#legal-provider"
-              className="text-primary underline-offset-4 hover:underline"
-            >
-              {documentT("providerTitle")}
-            </a>
-          </li>
-          {sections[kind].map((section) => (
-            <li key={section}>
-              <a
-                href={`#legal-${section}`}
-                className="text-primary underline-offset-4 hover:underline"
-              >
-                {documentT(`${section}.title`)}
-              </a>
-            </li>
-          ))}
-        </ol>
-      </nav>
-      <article className="marketing-info-card marketing-prose break-words">
+      <article className="marketing-prose break-words">
         <section id="legal-provider" className="scroll-mt-8">
           <h2 className="!mt-0">1. {documentT("providerTitle")}</h2>
           <p>{documentT("providerDescription", { name: config.entityName })}</p>
-          <dl className="mt-5 space-y-3 rounded-xl border border-border bg-secondary/25 p-4 text-sm sm:p-5">
+          <dl className="mt-5 space-y-3 text-sm">
             {details.map(({ label, value }) => (
               <div
                 key={label}

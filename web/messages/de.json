@@ -131,7 +131,6 @@
     }
   },
   "PublicPages": {
-    "back": "Zurück zur Startseite",
     "faqEyebrow": "Hilfe",
     "faqTitle": "Gute Fragen, klare Antworten.",
     "faqIntro": "Das Wichtigste zur täglichen Nutzung von Fridgy.",
@@ -154,6 +153,7 @@
     "aboutTitle": "Weniger wegwerfen. Mehr kochen.",
     "aboutIntro": "Fridgy entstand aus einer einfachen Idee: Lebensmittel zu Hause sollten leichter zu verwalten sein.",
     "aboutBody": "Wir verbinden Vorräte, Haltbarkeitsdaten, Einkaufslisten und Essensideen an einem Ort. So siehst du leichter, was vorhanden ist, und planst die nächste Mahlzeit ohne unnötige Einkäufe.",
+    "aboutPhotoAlt": "Zwei Personen räumen Einkäufe in Vorratsregal und Kühlschrank ein.",
     "privacyEyebrow": "Rechtliche Informationen",
     "privacyTitle": "Datenschutzerklärung",
     "privacyIntro": "Wie wir deine Daten verarbeiten, Dienstleister einsetzen und deine Rechte achten.",
@@ -468,7 +468,6 @@
       "householdChoice": "Wähle deinen Einstieg",
       "previewHousehold": "Dein Zuhause",
       "startButton": "Los geht's!",
-      "backHome": "Zurück zur Startseite",
       "stepsEyebrow": "Erste Schritte",
       "stepsTitle": "Richte deine Küche ein",
       "stepHousehold": "Haushalt erstellen oder beitreten",
@@ -1102,16 +1101,14 @@
     "notFound": {
       "label": "Fehler 404",
       "title": "Seite nicht gefunden",
-      "description": "Die Adresse hat sich möglicherweise geändert oder die Seite existiert nicht mehr. Kehre zur Startseite zurück und versuche es erneut.",
-      "action": "Zur Startseite"
+      "description": "Die Adresse hat sich möglicherweise geändert oder die Seite existiert nicht mehr. Prüfe die Adresse und versuche es erneut."
     },
     "page": {
       "label": "Etwas ist schiefgelaufen",
       "title": "Seite konnte nicht geöffnet werden",
-      "description": "Versuche es erneut. Falls das Problem bestehen bleibt, kehre zur Übersicht zurück.",
+      "description": "Versuche es erneut. Falls das Problem bestehen bleibt, lade die Seite später neu.",
       "code": "Fehlercode: {code}",
-      "retry": "Erneut versuchen",
-      "home": "Startseite"
+      "retry": "Erneut versuchen"
     },
     "dashboard": {
       "label": "Fehler im Dashboard",

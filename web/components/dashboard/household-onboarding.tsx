@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeftIcon, CheckIcon, ChefHatIcon, HomeIcon, ReceiptTextIcon, UsersIcon } from "lucide-react";
+import { CheckIcon, ChefHatIcon, HomeIcon, ReceiptTextIcon, UsersIcon } from "lucide-react";
 import { BrandIcon } from "@/components/brand-icon";
 import { useTranslations } from "next-intl";
 
@@ -83,9 +83,6 @@ export function HouseholdOnboarding() {
           </div> : null}
           <div className="space-y-4">
             {joining ? <JoinHouseholdForm /> : <HouseholdCreationForm onboarding onLoadingChange={setCreating} />}
-            {!creating ? <Button nativeButton={false} render={<Link href="/" />} variant="ghost" className="h-11 w-full">
-              <ArrowLeftIcon aria-hidden="true" /> {t("backHome")}
-            </Button> : null}
           </div>
         </DialogContent>
       </Dialog>

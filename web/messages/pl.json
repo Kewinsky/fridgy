@@ -131,7 +131,6 @@
     }
   },
   "PublicPages": {
-    "back": "Wróć na stronę główną",
     "faqEyebrow": "Pomoc",
     "faqTitle": "Pytania, które warto zadać.",
     "faqIntro": "Krótko i konkretnie o codziennym korzystaniu z Fridgy.",
@@ -154,6 +153,7 @@
     "aboutTitle": "Mniej wyrzucania. Więcej gotowania.",
     "aboutIntro": "Fridgy powstało z prostego pomysłu: domowe jedzenie powinno być łatwiejsze do ogarnięcia.",
     "aboutBody": "Łączymy zapasy, terminy przydatności, listę zakupów i pomysły na dania w jednym miejscu. Dzięki temu łatwiej zobaczyć, co już masz, i zaplanować następny posiłek bez zbędnych zakupów.",
+    "aboutPhotoAlt": "Domownicy odkładają zakupy do spiżarni i lodówki.",
     "privacyEyebrow": "Informacje prawne",
     "privacyTitle": "Polityka prywatności",
     "privacyIntro": "Jak przetwarzamy Twoje dane, korzystamy z usług dostawców i chronimy Twoje prawa.",
@@ -468,7 +468,6 @@
       "householdChoice": "Wybierz, jak zacząć",
       "previewHousehold": "Twój dom",
       "startButton": "Zaczynamy!",
-      "backHome": "Wróć na stronę główną",
       "stepsEyebrow": "Pierwsze kroki",
       "stepsTitle": "Przygotuj swoją kuchnię",
       "stepHousehold": "Utwórz lub dołącz do domostwa",
@@ -1102,16 +1101,14 @@
     "notFound": {
       "label": "Błąd 404",
       "title": "Nie znaleźliśmy tej strony",
-      "description": "Adres mógł się zmienić albo strona już nie istnieje. Wróć na stronę główną i spróbuj ponownie.",
-      "action": "Wróć na stronę główną"
+      "description": "Adres mógł się zmienić albo strona już nie istnieje. Sprawdź adres i spróbuj ponownie."
     },
     "page": {
       "label": "Coś poszło nie tak",
       "title": "Nie udało się otworzyć strony",
-      "description": "Spróbuj ponownie. Jeśli problem się powtarza, wróć na stronę główną.",
+      "description": "Spróbuj ponownie. Jeśli problem się powtarza, odśwież stronę później.",
       "code": "Kod błędu: {code}",
-      "retry": "Spróbuj ponownie",
-      "home": "Strona główna"
+      "retry": "Spróbuj ponownie"
     },
     "dashboard": {
       "label": "Błąd dashboardu",

@@ -31,7 +31,7 @@ export function StatusPage({
         <h1 className="mt-2 text-3xl font-extrabold">{title}</h1>
         <p className="mt-3 text-sm leading-6 text-muted-foreground">{description}</p>
         {detail ? <p className="mt-2 text-xs text-muted-foreground">{detail}</p> : null}
-        <div className="mt-7 flex flex-col justify-center gap-2 sm:flex-row">{actions}</div>
+        {actions ? <div className="mt-7 flex flex-col justify-center gap-2 sm:flex-row">{actions}</div> : null}
       </section>
     </Container>
   );

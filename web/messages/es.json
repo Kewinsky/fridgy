@@ -131,7 +131,6 @@
     }
   },
   "PublicPages": {
-    "back": "Volver al inicio",
     "faqEyebrow": "Ayuda",
     "faqTitle": "Preguntas que vale la pena hacer.",
     "faqIntro": "Respuestas claras para usar Fridgy cada día.",
@@ -154,6 +153,7 @@
     "aboutTitle": "Tira menos. Cocina más.",
     "aboutIntro": "Fridgy nació de una idea sencilla: organizar la comida de casa debería ser más fácil.",
     "aboutBody": "Reunimos existencias, fechas de caducidad, listas de compra e ideas para comer en un solo lugar. Así ves lo que tienes y planeas la próxima comida sin compras innecesarias.",
+    "aboutPhotoAlt": "Dos personas guardan la compra en la despensa y el frigorífico.",
     "privacyEyebrow": "Información legal",
     "privacyTitle": "Política de privacidad",
     "privacyIntro": "Cómo tratamos tus datos, utilizamos proveedores y respetamos tus derechos.",
@@ -468,7 +468,6 @@
       "householdChoice": "Elige cómo empezar",
       "previewHousehold": "Tu hogar",
       "startButton": "¡Empecemos!",
-      "backHome": "Volver a la página de inicio",
       "stepsEyebrow": "Primeros pasos",
       "stepsTitle": "Prepara tu cocina",
       "stepHousehold": "Crear un hogar o unirse a uno",
@@ -1102,16 +1101,14 @@
     "notFound": {
       "label": "Error 404",
       "title": "Página no encontrada",
-      "description": "Puede que la dirección haya cambiado o que la página ya no exista. Vuelve al inicio e inténtalo de nuevo.",
-      "action": "Volver al inicio"
+      "description": "Puede que la dirección haya cambiado o que la página ya no exista. Comprueba la dirección e inténtalo de nuevo."
     },
     "page": {
       "label": "Algo ha salido mal",
       "title": "No se pudo abrir la página",
-      "description": "Inténtalo de nuevo. Si el problema continúa, vuelve al inicio.",
+      "description": "Inténtalo de nuevo. Si el problema continúa, recarga la página más tarde.",
       "code": "Código de error: {code}",
-      "retry": "Intentar de nuevo",
-      "home": "Inicio"
+      "retry": "Intentar de nuevo"
     },
     "dashboard": {
       "label": "Error del panel",

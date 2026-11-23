@@ -296,16 +296,14 @@
 .marketing-prose h2 { margin-top: 2.25rem; color: #243c2c; font-family: var(--font-sans); font-size: 1.35rem; font-weight: 750; letter-spacing: -0.025em; line-height: 1.3; }
 .marketing-prose p { margin-top: 0.9rem; }
 .marketing-info-card { border: 1px solid #dce3d8; border-radius: 24px; background: #fff; padding: clamp(24px, 4vw, 40px); }
-.marketing-about-grid { display: grid; align-items: center; gap: 42px; grid-template-columns: 0.9fr 1.1fr; }
-.marketing-about-photo { position: relative; overflow: hidden; height: 420px; border-radius: 26px; background: #e5ecda; }
+.marketing-about-grid { display: grid; align-items: center; gap: 42px; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+.marketing-about-photo { min-width: 0; overflow: hidden; height: 420px; border-radius: 26px; background: #e5ecda; }
 .marketing-about-copy p { max-width: 38ch; color: #526454; font-size: 1.15rem; line-height: 1.8; }
 .marketing-about-copy .marketing-button { margin-top: 28px; }
 .marketing-footer { border-top: 1px solid #dbd5e9; background: #eeeaf7; }
 .marketing-footer nav { font-size: 0.85rem; }
 .marketing-footer nav a { display: inline-flex; min-height: 32px; align-items: center; }
-.marketing-login-photo { position: relative; min-height: 400px; overflow: hidden; border-radius: 26px; background: #dfe9d3; }
 .marketing-hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 35%, rgb(14 35 24 / 75%)); }
-.marketing-login-form { border: 1px solid #dce3d8; border-radius: 24px; background: white; padding: clamp(25px, 4vw, 42px); }
 .marketing-login-form h1 { color: #203a2b; font-family: var(--font-sans); font-size: clamp(2rem, 3vw, 2.6rem); font-weight: 800; letter-spacing: -0.05em; }
 .marketing-login-form [data-slot="input"] { border-color: #cbd8c7; border-radius: 12px; background: #fff; color: #203a2b; }
 .marketing-login-form [data-slot="input"]:focus-visible { border-color: #739c69; box-shadow: 0 0 0 3px rgb(115 156 105 / 25%); }

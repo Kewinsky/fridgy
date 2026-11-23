@@ -131,7 +131,6 @@
     }
   },
   "PublicPages": {
-    "back": "Back to home",
     "faqEyebrow": "Help",
     "faqTitle": "Good questions to ask.",
     "faqIntro": "Clear answers about using Fridgy every day.",
@@ -154,6 +153,7 @@
     "aboutTitle": "Waste less. Cook more.",
     "aboutIntro": "Fridgy started with a simple idea: food at home should be easier to manage.",
     "aboutBody": "We bring inventory, expiry dates, shopping lists and meal ideas into one place. It is easier to see what you have and plan your next meal without extra shopping.",
+    "aboutPhotoAlt": "Household members put groceries away in the pantry and fridge.",
     "privacyEyebrow": "Legal information",
     "privacyTitle": "Privacy policy",
     "privacyIntro": "How we process your data, work with service providers and respect your rights.",
@@ -468,7 +468,6 @@
       "householdChoice": "Choose how to get started",
       "previewHousehold": "Your home",
       "startButton": "Let's go!",
-      "backHome": "Back to home page",
       "stepsEyebrow": "First steps",
       "stepsTitle": "Set up your kitchen",
       "stepHousehold": "Create or join a household",
@@ -1102,16 +1101,14 @@
     "notFound": {
       "label": "Error 404",
       "title": "We could not find this page",
-      "description": "The address may have changed or the page no longer exists. Return home and try again.",
-      "action": "Back to home"
+      "description": "The address may have changed or the page no longer exists. Check the address and try again."
     },
     "page": {
       "label": "Something went wrong",
       "title": "Could not open the page",
-      "description": "Try again. If the problem continues, return to the home page.",
+      "description": "Try again. If the problem continues, reload the page later.",
       "code": "Error code: {code}",
-      "retry": "Try again",
-      "home": "Home"
+      "retry": "Try again"
     },
     "dashboard": {
       "label": "Dashboard error",

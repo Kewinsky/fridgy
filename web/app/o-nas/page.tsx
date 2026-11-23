@@ -22,11 +22,12 @@ export default async function AboutPage() {
       <div className="marketing-about-grid">
         <div className="marketing-about-photo">
           <Image
-            src="/recipes/szakszuka-z-ciecierzyca.webp"
-            alt=""
-            fill
-            sizes="(max-width: 768px) 90vw, 460px"
-            className="object-cover"
+            src="/brand/about-household.jpg"
+            alt={t("aboutPhotoAlt")}
+            width={1672}
+            height={941}
+            sizes="(max-width: 767px) calc(100vw - 2rem), (max-width: 1128px) 65vw, 700px"
+            className="block h-full w-full object-cover"
           />
         </div>
         <div className="marketing-about-copy">

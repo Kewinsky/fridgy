@@ -131,7 +131,6 @@
     }
   },
   "PublicPages": {
-    "back": "Retour à l'accueil",
     "faqEyebrow": "Aide",
     "faqTitle": "Les bonnes questions à poser.",
     "faqIntro": "Des réponses simples pour utiliser Fridgy chaque jour.",
@@ -154,6 +153,7 @@
     "aboutTitle": "Moins jeter. Plus cuisiner.",
     "aboutIntro": "Fridgy est né d'une idée simple : mieux gérer les aliments à la maison.",
     "aboutBody": "Nous réunissons les réserves, les dates de péremption, la liste de courses et les idées de repas au même endroit. Vous voyez plus facilement ce que vous avez et préparez le prochain repas sans achats inutiles.",
+    "aboutPhotoAlt": "Deux personnes rangent les courses dans le garde-manger et le réfrigérateur.",
     "privacyEyebrow": "Informations légales",
     "privacyTitle": "Politique de confidentialité",
     "privacyIntro": "Comment nous traitons tes données, utilisons des prestataires et respectons tes droits.",
@@ -468,7 +468,6 @@
       "householdChoice": "Choisissez comment commencer",
       "previewHousehold": "Votre foyer",
       "startButton": "C'est parti !",
-      "backHome": "Retour à l'accueil",
       "stepsEyebrow": "Premières étapes",
       "stepsTitle": "Préparez votre cuisine",
       "stepHousehold": "Créer ou rejoindre un foyer",
@@ -1102,16 +1101,14 @@
     "notFound": {
       "label": "Erreur 404",
       "title": "Page introuvable",
-      "description": "L'adresse a peut-être changé ou la page n'existe plus. Revenez à l'accueil et réessayez.",
-      "action": "Retour à l'accueil"
+      "description": "L'adresse a peut-être changé ou la page n'existe plus. Vérifiez l'adresse et réessayez."
     },
     "page": {
       "label": "Une erreur est survenue",
       "title": "Impossible d'ouvrir la page",
-      "description": "Réessayez. Si le problème persiste, revenez à l'accueil.",
+      "description": "Réessayez. Si le problème persiste, rechargez la page plus tard.",
       "code": "Code d'erreur : {code}",
-      "retry": "Réessayer",
-      "home": "Accueil"
+      "retry": "Réessayer"
     },
     "dashboard": {
       "label": "Erreur du tableau de bord",
